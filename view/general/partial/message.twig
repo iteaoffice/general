@@ -1,0 +1,11 @@
+<h4 title="{{ translate("txt-facility") }}: {% for facility in message.facility %}{{ facility.label }}{% endfor %}">
+    {{ translate(message.getType(true)) }}
+    {{ message.lastUpdate|dateformatter|raw }}
+    <span class="label label-inverted">{{ message.lastUpdateBy }}</span>
+    {% if not mail %}
+        <button class="btn btn-warning btn-mini edit" rel="general-message-{{ message.id }}">
+            {{ translate("txt-edit") }}
+        </button>
+    {% endif %}
+</h4>
+<p>{{ message|texthighlighter|raw|nl2br }}</p>

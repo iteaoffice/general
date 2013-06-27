@@ -2,7 +2,7 @@
 
 namespace GeneralText\Controller;
 
-use Zend\Test\PhpUnit\Controller\AbstractHttpControllerTestCase;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 use General\Controller\StyleController;
 use General\Options;
