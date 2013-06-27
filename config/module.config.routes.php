@@ -21,7 +21,7 @@ return array(
                 ),
             ),
             'general' => array(
-                'type' => 'Literal',
+                'type' => 'Zend\Mvc\Router\Http\Literal',
                 'priority' => 1000,
                 'options' => array(
                     'route' => '/',
@@ -36,7 +36,7 @@ return array(
                 ),
             ),
             'style' => array(
-                'type' => 'Segment',
+                'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
                     'route' => '/style/[:type]/[:source]',
                     'defaults' => array(
@@ -48,7 +48,7 @@ return array(
             'zfcadmin' => array(
                 'child_routes' => array(
                     'general-manager' => array(
-                        'type' => 'Segment',
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
                         'priority' => 1000,
                         'options' => array(
                             'route' => '/general-manager',
@@ -60,7 +60,7 @@ return array(
                         'may_terminate' => true,
                         'child_routes' => array(
                             'messages' => array(
-                                'type' => 'Segment',
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
                                     'route' => '/messages.html',
                                     'defaults' => array(
@@ -69,7 +69,7 @@ return array(
                                 ),
                             ),
                             'message' => array(
-                                'type' => 'Segment',
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
                                     'route' => '/message/[:id].html',
                                     'constraints' => array(
@@ -81,7 +81,7 @@ return array(
                                 ),
                             ),
                             'new' => array(
-                                'type' => 'Segment',
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
                                     'route' => '/new/:entity',
                                     'defaults' => array(
@@ -90,7 +90,7 @@ return array(
                                 ),
                             ),
                             'edit' => array(
-                                'type' => 'Segment',
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
                                     'route' => '/edit/:entity/:id',
                                     'defaults' => array(
@@ -99,7 +99,7 @@ return array(
                                 ),
                             ),
                             'delete' => array(
-                                'type' => 'Segment',
+                                'type' => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
                                     'route' => '/delete/:entity/:id',
                                     'defaults' => array(

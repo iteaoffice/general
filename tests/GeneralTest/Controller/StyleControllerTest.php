@@ -1,6 +1,6 @@
 <?php
 
-namespace GeneralText\Controller;
+namespace GeneralTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -34,7 +34,7 @@ class StyleControllerTest extends AbstractHttpControllerTestCase
     public function setUp()
     {
         $this->setApplicationConfig(
-            include __DIR__ . '/../../../config/application.config.php'
+            include __DIR__ . '/../../config/application.config.php'
         );
         parent::setUp();
 
@@ -66,7 +66,7 @@ class StyleControllerTest extends AbstractHttpControllerTestCase
         $options = $serviceLocator->get('general_module_options');
 
         $this->assertEquals($response->getContent(),
-            file_get_contents($options->getStyleLocations()[0] . DIRECTORY_SEPARATOR
+            file_get_contents(__DIR__ . '/../../assets' . DIRECTORY_SEPARATOR
             . $options->getImageLocation() . DIRECTORY_SEPARATOR
             . $options->getImageNotFound()));
         $this->assertResponseStatusCode(200);

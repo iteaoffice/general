@@ -34,17 +34,7 @@ class Bootstrap
 
         static::initAutoloader();
 
-        // use ModuleManager to load this module and it's dependencies
-        $config = array(
-            'module_listener_options' => array(
-                'module_paths' => $zf2ModulePaths,
-            ),
-            'modules' => array(
-                'DoctrineModule',
-                'DoctrineORMModule',
-                'General',
-            )
-        );
+        $config = include 'config/application.config.php';
 
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', $config);
@@ -71,7 +61,6 @@ class Bootstrap
                 $zf2Path = $vendorPath . '/zendframework/zendframework/library';
             }
         }
-
 
 
         if (!$zf2Path) {
