@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<phpunit
+        bootstrap="./tests/Bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        verbose="true"
+        stopOnFailure="false"
+        processIsolation="false"
+        backupGlobals="false"
+        syntaxCheck="true"
+        >
+    <testsuite name="General Tests">
+        <directory>./tests</directory>
+    </testsuite>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <!--<log type="coverage-text" target="./log/report" charset="UTF-8" yui="true"-->
+        <!--highlight="true" lowUpperBound="50" highLowerBound="80" />-->
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="coverage-clover" target="./log/clover.xml"/>
+    </logging>
+</phpunit>

@@ -1,0 +1,40 @@
+{
+    "name": "debranova/general",
+    "type": "library",
+    "description": "General code for Debranova",
+    "keywords": ["general"],
+    "homepage": "http://debranova.org",
+    "authors": [
+        {
+            "name": "Johan van der Heide",
+            "email": "johan.van.der.heide@itea2.org"
+        },
+        {
+            "name": "Andre Hebben",
+            "email": "andre.hebben@artemis-ia.eu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "zendframework/zendframework": "dev-master"
+    },
+    "require-dev": {
+        "bjyoungblood/bjy-authorize": "dev-master",
+        "doctrine/doctrine-orm-module": "dev-master",
+        "gedmo/doctrine-extensions": "dev-master",
+        "phpunit/phpunit": "3.7.*",
+        "phpmd/phpmd": "1.4.*",
+        "phploc/phploc": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "General\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
