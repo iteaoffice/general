@@ -17,12 +17,12 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
-        "zendframework/zendframework": "dev-master"
-    },
-    "require-dev": {
+        "zendframework/zendframework": "dev-master",
         "bjyoungblood/bjy-authorize": "dev-master",
         "doctrine/doctrine-orm-module": "dev-master",
-        "gedmo/doctrine-extensions": "dev-master",
+        "gedmo/doctrine-extensions": "dev-master"
+    },
+    "require-dev": {
         "phpunit/phpunit": "3.7.*",
         "phpmd/phpmd": "1.4.*",
         "phploc/phploc": "*"
