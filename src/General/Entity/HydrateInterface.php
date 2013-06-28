@@ -19,5 +19,4 @@ interface HydrateInterface
     public function getArrayCopy();
 
     public function populate();
-
 }

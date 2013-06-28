@@ -75,6 +75,4 @@ class ModuleOptions extends AbstractOptions
     {
         return $this->imageNotFound;
     }
-
-
 }

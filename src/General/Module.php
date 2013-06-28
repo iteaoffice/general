@@ -86,5 +86,4 @@ class Module implements
     {
         // TODO: Implement onBootstrap() method.
     }
-
 }

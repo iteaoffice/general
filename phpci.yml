@@ -19,8 +19,6 @@ test:
     php_unit:
         config:
             - "phpunit.xml.dist"
-        directory:
-            - "tests/"
         run_from: "phpunit/"
     php_code_sniffer:
         standard: "PSR2"

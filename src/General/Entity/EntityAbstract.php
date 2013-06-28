@@ -56,5 +56,4 @@ abstract class EntityAbstract implements EntityInterface, InputFilterAwareInterf
                 return preg_replace_callback('/([A-Z])/', $underscore, lcfirst($this->get('entity_name')));
         }
     }
-
 }
