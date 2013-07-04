@@ -1,6 +1,6 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * Debranova copyright message placeholder
  *
  * @category    General
  * @package     Entity
@@ -25,7 +25,7 @@ use General\Entity\EntityAbstract;
 /**
  * Entity for the General
  *
- * @ORM\Table(name="gender")
+ * @ORM\Table(name="general.gender")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
@@ -36,7 +36,7 @@ use General\Entity\EntityAbstract;
 class Gender extends EntityAbstract implements ResourceInterface
 {
     /**
-     * @ORM\Column(name="gender_id",type="integer",nullable=false)
+     * @ORM\Column(name="gender_id",type="integer",length=10,nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -44,7 +44,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     private $id;
     /**
-     * @ORM\Column(name="gender",type="string",length=20)
+     * @ORM\Column(name="gender",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-gender"})
      * @var string
@@ -65,7 +65,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     private $salutation;
     /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"persist"}, mappedBy="gender")
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="gender")
      * @Annotation\Exclude()
      * @var \Contact\Entity\Contact[]
      */
@@ -169,7 +169,30 @@ class Gender extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'label',
+                        'name' => 'attention',
+                        'required' => true,
+                        'filters' => array(
+                            array('name' => 'StripTags'),
+                            array('name' => 'StringTrim'),
+                        ),
+                        'validators' => array(
+                            array(
+                                'name' => 'StringLength',
+                                'options' => array(
+                                    'encoding' => 'UTF-8',
+                                    'min' => 1,
+                                    'max' => 100,
+                                ),
+                            ),
+                        ),
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name' => 'salutation',
                         'required' => true,
                         'filters' => array(
                             array('name' => 'StripTags'),
@@ -204,7 +227,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     public function getArrayCopy()
     {
         return array(
-            'equipment' => $this->equipment
+            'contacts' => $this->contacts
         );
     }
 
@@ -214,25 +237,33 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \datetime $addDate
+     * @param string $attention
      */
-    public function setAddDate($addDate)
+    public function setAttention($attention)
     {
-        $this->addDate = $addDate;
+        $this->attention = $attention;
     }
 
     /**
-     * @return \datetime
+     * @return string
      */
-    public function getAddDate()
+    public function getAttention()
     {
-        return $this->addDate;
+        return $this->attention;
     }
 
     /**
-     * @return General[]
+     * @param \Contact\Entity\Contact[] $contacts
      */
-    public function getcontacts()
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+    }
+
+    /**
+     * @return \Contact\Entity\Contact[]
+     */
+    public function getContacts()
     {
         return $this->contacts;
     }
@@ -251,22 +282,6 @@ class Gender extends EntityAbstract implements ResourceInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param string $attention
-     */
-    public function setAttention($attention)
-    {
-        $this->attention = $attention;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttention()
-    {
-        return $this->attention;
     }
 
     /**

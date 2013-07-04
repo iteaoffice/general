@@ -1,4 +1,8 @@
 <?php
+namespace General;
+
+use Zend\Stdlib\ArrayUtils;
+
 /**
  * Japaveh Webdesign copyright message placeholder
  *
@@ -35,15 +39,16 @@ $config = array(
                     __DIR__ . '/../src/General/Entity/'
                 )
             ),
-            'orm_default' => array(
+            'orm_general' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\DriverChain',
                 'drivers' => array(
-                    'General\Entity' => 'general_annotation_driver',
+                    __NAMESPACE__ . '\Entity' => 'general_annotation_driver',
+                    'Contact\Entity' => 'general_annotation_driver'
                 )
             )
         ),
         'eventmanager' => array(
-            'orm_default' => array(
+            'orm_general' => array(
                 'subscribers' => array(
                     'Gedmo\Timestampable\TimestampableListener',
                     'Gedmo\Sluggable\SluggableListener',
@@ -61,7 +66,7 @@ $configFiles = array(
 );
 
 foreach ($configFiles as $configFile) {
-    $config = Zend\Stdlib\ArrayUtils::merge($config, include $configFile);
+    $config = ArrayUtils::merge($config, include $configFile);
 }
 
 return $config;

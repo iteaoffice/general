@@ -25,7 +25,7 @@ use General\Entity\EntityAbstract;
 /**
  * Entity for the General
  *
- * @ORM\Table(name="title")
+ * @ORM\Table(name="general.title")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
@@ -44,14 +44,14 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $id;
     /**
-     * @ORM\Column(name="title",type="string",length=20)
+     * @ORM\Column(name="title",type="string",length=20, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-title"})
      * @var string
      */
     private $name;
     /**
-     * @ORM\Column(name="attention",type="string",length=20)
+     * @ORM\Column(name="attention",type="string",length=20, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
      * @var string
@@ -109,7 +109,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return $this->label;
+        return $this->title;
     }
 
     /**
@@ -204,7 +204,7 @@ class Title extends EntityAbstract implements ResourceInterface
     public function getArrayCopy()
     {
         return array(
-            'equipment' => $this->equipment
+            'contacts' => $this->contacts
         );
     }
 
@@ -214,54 +214,35 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \datetime $addDate
+     * @param string $attention
      */
-    public function setAddDate($addDate)
+    public function setAttention($attention)
     {
-        $this->addDate = $addDate;
+        $this->attention = $attention;
     }
 
     /**
-     * @return \datetime
+     * @return string
      */
-    public function getAddDate()
+    public function getAttention()
     {
-        return $this->addDate;
+        return $this->attention;
     }
 
     /**
-     * @param Collections\Collection $equipment
+     * @param \Contact\Entity\Contact[] $contacts
      */
-    public function setEquipment(Collections\Collection $equipment)
+    public function setContacts($contacts)
     {
-        foreach ($equipment as $equipmentEntity) {
-            $equipmentEntity->general = $this;
-        }
-        $this->equipment = $equipment;
-    }
-
-    public function getEquipment()
-    {
-        return $this->equipment;
+        $this->contacts = $contacts;
     }
 
     /**
-     * @param Collections\Collection $messages
+     * @return \Contact\Entity\Contact[]
      */
-    public function setMessages(Collections\Collection $messages)
+    public function getContacts()
     {
-        foreach ($messages as $message) {
-            $message->general = $this;
-        }
-        $this->messages = $messages;
-    }
-
-    /**
-     * @return Message[]
-     */
-    public function getMessages()
-    {
-        return $this->messages;
+        return $this->contacts;
     }
 
     /**
@@ -281,38 +262,6 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param \datetime $lastUpdate
-     */
-    public function setLastUpdate($lastUpdate)
-    {
-        $this->lastUpdate = $lastUpdate;
-    }
-
-    /**
-     * @return \datetime
-     */
-    public function getLastUpdate()
-    {
-        return $this->lastUpdate;
-    }
-
-    /**
      * @param string $name
      */
     public function setName($name)
@@ -326,5 +275,21 @@ class Title extends EntityAbstract implements ResourceInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
     }
 }
