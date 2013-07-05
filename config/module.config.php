@@ -39,7 +39,7 @@ $config = array(
                     __DIR__ . '/../src/General/Entity/'
                 )
             ),
-            'orm_general' => array(
+            'orm_default' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\DriverChain',
                 'drivers' => array(
                     __NAMESPACE__ . '\Entity' => 'general_annotation_driver',

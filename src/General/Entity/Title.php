@@ -230,22 +230,6 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Contact\Entity\Contact[] $contacts
-     */
-    public function setContacts($contacts)
-    {
-        $this->contacts = $contacts;
-    }
-
-    /**
-     * @return \Contact\Entity\Contact[]
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    /**
      * @param int $id
      */
     public function setId($id)
