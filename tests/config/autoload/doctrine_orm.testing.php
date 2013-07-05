@@ -23,5 +23,13 @@ return array(
                 'configuration' => 'orm_default'
             ),
         ),
+        //Add the dependency to the Contact namespace here for testing purposes
+        'driver' => array(
+            'orm_default' => array(
+                'drivers' => array(
+                    'Contact\Entity' => 'general_annotation_driver'
+                )
+            )
+        )
     ),
 );
