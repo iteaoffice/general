@@ -40,6 +40,15 @@ class Bootstrap
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
         static::$serviceManager = $serviceManager;
+
+        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
+
+        //Create the schema
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
+        $mdFactory = $entityManager->getMetadataFactory();
+        $mdFactory->getAllMetadata();
+        $tool->dropDatabase();
+        $tool->createSchema($mdFactory->getAllMetadata());
     }
 
     public static function getServiceManager()

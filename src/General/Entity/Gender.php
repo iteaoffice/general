@@ -25,7 +25,7 @@ use General\Entity\EntityAbstract;
 /**
  * Entity for the General
  *
- * @ORM\Table(name="general.gender")
+ * @ORM\Table(name="gender")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
@@ -109,7 +109,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return $this->label;
+        return $this->name;
     }
 
     /**

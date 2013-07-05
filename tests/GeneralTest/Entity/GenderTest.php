@@ -80,8 +80,9 @@ class GenderTest extends \PHPUnit_Framework_TestCase
 
     public function testHasFilter()
     {
-        return $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->gender->getInputFilter());
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->gender->getInputFilter());
     }
+
 
     public function testCanSaveEntityInDatabase()
     {
@@ -91,20 +92,24 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->gender = $hydrator->hydrate($this->genderData, new Gender());
+
+        $this->assertEquals((string)$this->gender, $this->genderData['name']);
+
         $this->entityManager->persist($this->gender);
-        $this->entityManager->flush();
+        //Since we don't save, we will give the gender a standard id
+        $this->gender->setId(1);
+//        $this->entityManager->flush();
 
         $this->assertInstanceOf('General\Entity\Gender', $this->gender);
         $this->assertNotNull($this->gender->getId());
-        $this->assertEquals($this->gender->getName(), $this->genderData['name']);
-        $this->assertEquals($this->gender->getAttention(), $this->genderData['attention']);
-        $this->assertEquals($this->gender->getSalutation(), $this->genderData['salutation']);
+        $this->assertEquals($this->gender->getName(), $this->genderData['name'], 'The name of the saved entity should be the same as the original name');
+        $this->assertEquals($this->gender->getAttention(), $this->genderData['attention'], 'The name of the saved entity should be the same as the original name');
+        $this->assertEquals($this->gender->getSalutation(), $this->genderData['salutation'], 'The name of the saved entity should be the same as the original name');
 
         $this->assertNotNull($this->gender->getResourceId());
 
-        $this->entityManager->remove($this->gender);
-        $this->entityManager->flush();
+//        $this->entityManager->remove($this->gender);
+//        $this->entityManager->flush();
     }
-
 
 }

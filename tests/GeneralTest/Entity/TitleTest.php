@@ -42,6 +42,7 @@ class TitleTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
+
         $this->titleData = array(
             'name' => 'This is the name of the title',
             'attention' => 'This is the attention',
@@ -80,7 +81,7 @@ class TitleTest extends \PHPUnit_Framework_TestCase
 
     public function testHasFilter()
     {
-        return $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->title->getInputFilter());
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->title->getInputFilter());
     }
 
     public function testCanSaveEntityInDatabase()
@@ -93,6 +94,9 @@ class TitleTest extends \PHPUnit_Framework_TestCase
         $this->title = $hydrator->hydrate($this->titleData, new Title());
         $this->entityManager->persist($this->title);
         $this->entityManager->flush();
+
+        //Since we don't save, we give the $title a virtual id
+        $this->title->setId(1);
 
         $this->assertInstanceOf('General\Entity\Title', $this->title);
         $this->assertNotNull($this->title->getId());

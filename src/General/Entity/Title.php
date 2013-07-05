@@ -25,7 +25,7 @@ use General\Entity\EntityAbstract;
 /**
  * Entity for the General
  *
- * @ORM\Table(name="general.title")
+ * @ORM\Table(name="title")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
