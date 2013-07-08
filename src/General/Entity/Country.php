@@ -23,7 +23,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use General\Entity\EntityAbstract;
 
 /**
- * Entity for the Country
+ * Entity for the Country.
  *
  * @ORM\Table(name="country")
  * @ORM\Entity
