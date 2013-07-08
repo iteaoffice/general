@@ -14,6 +14,20 @@
             "email": "andre.hebben@artemis-ia.eu"
         }
     ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "debranova/contact",
+                "version": "master",
+                "source": {
+                    "type": "git",
+                    "url": "git@github.com:debranova/contact.git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
@@ -27,7 +41,8 @@
         "phpunit/phpunit": "3.7.*",
         "phpmd/phpmd": "1.4.*",
         "phploc/phploc": "*",
-        "satooshi/php-coveralls": "~0.6"
+        "satooshi/php-coveralls": "~0.6",
+        "debranova/contact": "master"
     },
     "autoload": {
         "psr-0": {

@@ -79,13 +79,13 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $vat;
     /**
-     * @ORM\OneToMany(targetEntity="General\Entity\Country", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      * @var \General\Entity\Eu[]
      */
     private $eu;
     /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      * @var \Contact\Entity\Address[]
      */

@@ -47,7 +47,7 @@ class Eu extends EntityAbstract implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="eu")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
-     * @Annotation\Options({"target_class":"General\Entity\Title"})
+     * @Annotation\Options({"target_class":"General\Entity\Eu"})
      * @Annotation\Attributes({"label":"txt-country", "required":"true","class":"span3"})
      * @var \General\Entity\Country
      */
