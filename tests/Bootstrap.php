@@ -5,7 +5,12 @@ namespace GeneralTest;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
+
 use Doctrine\ORM\Tools\SchemaValidator;
+use Doctrine\Common\DataFixtures\Loader;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+
 use RuntimeException;
 
 error_reporting(E_ALL | E_STRICT);
@@ -61,8 +66,19 @@ class Bootstrap
         $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
         $mdFactory = $entityManager->getMetadataFactory();
         $mdFactory->getAllMetadata();
+
+
         $tool->dropDatabase();
         $tool->createSchema($mdFactory->getAllMetadata());
+
+        $loader = new Loader();
+        $loader->addFixture(new LoadContactData());
+        $loader->addFixture(new LoadCountryData());
+
+        $purger = new ORMPurger();
+        $executor = new ORMExecutor($entityManager, $purger);
+        $executor->execute($loader->getFixtures());
+
     }
 
     public static function getServiceManager()
