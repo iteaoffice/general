@@ -32,7 +32,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     protected $countryData = array(
         'country' => 'This is a name of the country',
-        'cd' => 'CD-Code',
+        'cd' => 'XX',
         'iso3' => 'BEL',
         'numcode' => '123',
         'vat' => NULL

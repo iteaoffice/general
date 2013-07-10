@@ -72,8 +72,7 @@ class Bootstrap
         $tool->createSchema($mdFactory->getAllMetadata());
 
         $loader = new Loader();
-        $loader->addFixture(new LoadContactData());
-        $loader->addFixture(new LoadCountryData());
+        $loader->addFixture(new \GeneralTest\Fixture\LoadCountryData());
 
         $purger = new ORMPurger();
         $executor = new ORMExecutor($entityManager, $purger);

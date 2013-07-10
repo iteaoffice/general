@@ -44,11 +44,7 @@ class EuTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
-        $country = new Country();
-        $country->country = 'TestContry';
-        $country->cd = 'TestCountryCd';
-        $country->iso3 = 'TestIso3';
-        $country->numcode = 230;
+        $country = $this->entityManager->find("General\Entity\Country", 1);
 
         $this->euData = array(
             'country' => $country,
