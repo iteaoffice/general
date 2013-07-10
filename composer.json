@@ -30,7 +30,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.3.23",
         "zendframework/zendframework": "dev-master",
         "bjyoungblood/bjy-authorize": "dev-master",
         "doctrine/doctrine-orm-module": "dev-master",
