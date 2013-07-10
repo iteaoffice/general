@@ -42,7 +42,8 @@
         "phpmd/phpmd": "1.4.*",
         "phploc/phploc": "*",
         "satooshi/php-coveralls": "~0.6",
-        "debranova/contact": "master"
+        "debranova/contact": "master",
+        "doctrine/data-fixtures": "dev-master"
     },
     "autoload": {
         "psr-0": {
