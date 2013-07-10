@@ -9,9 +9,9 @@ build_settings:
 
 setup:
     mysql:
-        - "DROP DATABASE IF EXISTS phpci;"
-        - "CREATE DATABASE phpci;"
-        - "GRANT ALL PRIVILEGES ON phpci.* TO phpci@'localhost' IDENTIFIED BY 'test';"
+        - "DROP DATABASE IF EXISTS test;"
+        - "CREATE DATABASE test;"
+        - "GRANT ALL PRIVILEGES ON test.* TO phpci@'localhost' IDENTIFIED BY 'AB4VF';"
     composer:
         action: "install"
 
