@@ -14,8 +14,6 @@ namespace General;
 use Zend\ModuleManager\Feature; //Makes the module class more strict
 use Zend\EventManager\EventInterface;
 
-use General\Service\FormServiceAwareInterface;
-
 /**
  *
  */

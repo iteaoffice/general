@@ -47,7 +47,8 @@
     },
     "autoload": {
         "psr-0": {
-            "General\\": "src/"
+            "General\\": "src/",
+            "Contact\\": "vendor/debranova/contact/src/"
         }
     },
     "extra": {
