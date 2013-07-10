@@ -64,6 +64,7 @@ class Eu extends EntityAbstract implements ResourceInterface
      * Magic Getter
      *
      * @param $property
+     *
      * @return mixed
      */
     public function __get($property)
@@ -76,6 +77,7 @@ class Eu extends EntityAbstract implements ResourceInterface
      *
      * @param $property
      * @param $value
+     *
      * @return void
      */
     public function __set($property, $value)
@@ -107,6 +109,7 @@ class Eu extends EntityAbstract implements ResourceInterface
      * Set input filter
      *
      * @param  InputFilterInterface $inputFilter
+     *
      * @return void
      * @throws \Exception
      */
@@ -122,12 +125,12 @@ class Eu extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
 
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'since',
+                        'name'     => 'since',
                         'required' => true,
                     )
                 )
@@ -136,7 +139,7 @@ class Eu extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'country',
+                        'name'     => 'country',
                         'required' => true,
                     )
                 )
@@ -211,6 +214,4 @@ class Eu extends EntityAbstract implements ResourceInterface
     {
         return $this->since;
     }
-
-
 }

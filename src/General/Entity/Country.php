@@ -103,6 +103,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * Magic Getter
      *
      * @param $property
+     *
      * @return mixed
      */
     public function __get($property)
@@ -115,6 +116,7 @@ class Country extends EntityAbstract implements ResourceInterface
      *
      * @param $property
      * @param $value
+     *
      * @return void
      */
     public function __set($property, $value)
@@ -146,6 +148,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * Set input filter
      *
      * @param  InputFilterInterface $inputFilter
+     *
      * @return void
      * @throws \Exception
      */
@@ -161,24 +164,24 @@ class Country extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
 
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'country',
-                        'required' => true,
-                        'filters' => array(
+                        'name'       => 'country',
+                        'required'   => true,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 80,
+                                    'min'      => 1,
+                                    'max'      => 80,
                                 ),
                             ),
                         ),
@@ -189,19 +192,19 @@ class Country extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'cd',
-                        'required' => true,
-                        'filters' => array(
+                        'name'       => 'cd',
+                        'required'   => true,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 2,
+                                    'min'      => 1,
+                                    'max'      => 2,
                                 ),
                             ),
                         ),
@@ -212,19 +215,19 @@ class Country extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'iso3',
-                        'required' => false,
-                        'filters' => array(
+                        'name'       => 'iso3',
+                        'required'   => false,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 3,
+                                    'min'      => 1,
+                                    'max'      => 3,
                                 ),
                             ),
                         ),
@@ -235,19 +238,19 @@ class Country extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'numcode',
-                        'required' => true,
-                        'filters' => array(
+                        'name'       => 'numcode',
+                        'required'   => true,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 6,
+                                    'min'      => 1,
+                                    'max'      => 6,
                                 ),
                             ),
                         ),
@@ -258,19 +261,19 @@ class Country extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'vat',
-                        'required' => false,
-                        'filters' => array(
+                        'name'       => 'vat',
+                        'required'   => false,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 2,
+                                    'min'      => 1,
+                                    'max'      => 2,
                                 ),
                             ),
                         ),
@@ -430,6 +433,4 @@ class Country extends EntityAbstract implements ResourceInterface
     {
         return $this->vat;
     }
-
-
 }

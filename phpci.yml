@@ -4,14 +4,14 @@ build_settings:
         - "tests"
     mysql:
         host: "localhost"
-        user: "root"
+        user: "phpci"
         pass: "AB4VF"
 
 setup:
     mysql:
-        - "DROP DATABASE IF EXISTS test;"
-        - "CREATE DATABASE test;"
-        - "GRANT ALL PRIVILEGES ON test.* TO test@'localhost' IDENTIFIED BY 'test';"
+        - "DROP DATABASE IF EXISTS phpci;"
+        - "CREATE DATABASE phpci;"
+        - "GRANT ALL PRIVILEGES ON phpci.* TO phpci@'localhost' IDENTIFIED BY 'test';"
     composer:
         action: "install"
 
