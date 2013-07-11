@@ -21,6 +21,7 @@ test:
         config:
             - "phpunit.xml.dist"
         run_from: "phpunit/"
+        verbose: true
     php_code_sniffer:
         standard: "PSR2"
     php_cpd:
