@@ -15,18 +15,6 @@
         }
     ],
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "debranova/contact",
-                "version": "master",
-                "source": {
-                    "type": "git",
-                    "url": "git@github.com:debranova/contact.git",
-                    "reference": "master"
-                }
-            }
-        }
     ],
     "minimum-stability": "dev",
     "require": {
@@ -42,7 +30,7 @@
         "phpmd/phpmd": "1.4.*",
         "phploc/phploc": "*",
         "satooshi/php-coveralls": "~0.6",
-        "debranova/contact": "master",
+        "debranova/contact": "dev-master",
         "doctrine/data-fixtures": "dev-master"
     },
     "autoload": {
