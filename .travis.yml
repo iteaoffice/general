@@ -4,6 +4,10 @@ php:
   - 5.4
   - 5.5
 
+env:
+  - DEBRANOVA_ENV=testing
+  - DEBRANOVA_HOST=travis
+
 matrix:
   allow_failures:
     - php: 5.5
@@ -11,6 +15,7 @@ matrix:
 before_script:
   - curl -s https://getcomposer.org/installer | php && php composer.phar update --prefer-source --dev
   - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
+  - mysql -e 'create database myapp_test;'
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
