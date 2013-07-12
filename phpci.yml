@@ -17,6 +17,9 @@ setup:
         action: "install"
 
 test:
+    php_loc:
+    pdepend:
+        directory: "src"
     php_unit:
         config:
             - "phpunit.xml.dist"
