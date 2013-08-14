@@ -7,7 +7,9 @@
  */
 $settings = array(
     'style_locations' => array(
-        __DIR__ . '/../../../../styles/common'),
+        __DIR__ . '/../../../../styles/common',
+        __DIR__ . '/../../../../styles/' . DEBRANOVA_HOST
+    ),
     'image_not_found' => 'image_not_found.jpg'
 
 );
