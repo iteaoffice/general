@@ -8,100 +8,75 @@
  * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
  */
 return array(
-    'router' => array(
+    'router'       => array(
         'routes' => array(
-            'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+            'style'    => array(
+                'type'    => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route' => '/',
-                    'defaults' => array(
-                        'controller' => 'general-index',
-                        'action' => 'index',
-                    ),
-                ),
-            ),
-            'general' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'priority' => 1000,
-                'options' => array(
-                    'route' => '/',
-                    'defaults' => array(
-                        'controller' => 'general-index',
-                        'action' => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-
-                ),
-            ),
-            'style' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
-                'options' => array(
-                    'route' => '/style/[:type]/[:source]',
+                    'route'    => '/style/[:type]/[:source]',
                     'defaults' => array(
                         'controller' => 'general-style',
-                        'action' => 'display',
+                        'action'     => 'display',
                     ),
                 ),
             ),
             'zfcadmin' => array(
                 'child_routes' => array(
                     'general-manager' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Segment',
-                        'priority' => 1000,
-                        'options' => array(
-                            'route' => '/general-manager',
+                        'type'          => 'Zend\Mvc\Router\Http\Segment',
+                        'priority'      => 1000,
+                        'options'       => array(
+                            'route'    => '/general-manager',
                             'defaults' => array(
                                 'controller' => 'general-manager',
-                                'action' => 'index',
+                                'action'     => 'index',
                             ),
                         ),
                         'may_terminate' => true,
-                        'child_routes' => array(
+                        'child_routes'  => array(
                             'messages' => array(
-                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
-                                    'route' => '/messages.html',
+                                    'route'    => '/messages.html',
                                     'defaults' => array(
                                         'action' => 'messages',
                                     ),
                                 ),
                             ),
-                            'message' => array(
-                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'message'  => array(
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
-                                    'route' => '/message/[:id].html',
+                                    'route'       => '/message/[:id].html',
                                     'constraints' => array(
                                         'id' => '\d+',
                                     ),
-                                    'defaults' => array(
+                                    'defaults'    => array(
                                         'action' => 'message',
                                     ),
                                 ),
                             ),
-                            'new' => array(
-                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'new'      => array(
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
-                                    'route' => '/new/:entity',
+                                    'route'    => '/new/:entity',
                                     'defaults' => array(
                                         'action' => 'new',
                                     ),
                                 ),
                             ),
-                            'edit' => array(
-                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'edit'     => array(
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
-                                    'route' => '/edit/:entity/:id',
+                                    'route'    => '/edit/:entity/:id',
                                     'defaults' => array(
                                         'action' => 'edit',
                                     ),
                                 ),
                             ),
-                            'delete' => array(
-                                'type' => 'Zend\Mvc\Router\Http\Segment',
+                            'delete'   => array(
+                                'type'    => 'Zend\Mvc\Router\Http\Segment',
                                 'options' => array(
-                                    'route' => '/delete/:entity/:id',
+                                    'route'    => '/delete/:entity/:id',
                                     'defaults' => array(
                                         'action' => 'delete',
                                     ),
