@@ -36,7 +36,7 @@ class StyleController extends AbstractActionController implements ServiceLocator
             ->addHeaderLine("Pragma: public");
 
 
-        $options = $this->getServiceLocator()->get('general_module_options');
+        $options            = $this->getServiceLocator()->get('general_module_options');
         $requestedFileFound = false;
         foreach ($options->getStyleLocations() as $location) {
             $requestedFile = $location . DIRECTORY_SEPARATOR
@@ -60,6 +60,19 @@ class StyleController extends AbstractActionController implements ServiceLocator
                 }
             }
         }
+
+        /**
+         * Create a cache-version of the file
+         */
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
+        if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->getEvent()->getRouteMatch()->getParam('source'))) {
+            //Save a copy of the file in the caching-folder
+            file_put_contents(
+                $cacheDir . DIRECTORY_SEPARATOR . $this->getEvent()->getRouteMatch()->getParam('source'),
+                file_get_contents($requestedFile)
+            );
+        }
+
 
         $response->getHeaders()
             ->addHeaderLine('Content-Type: image/jpg')

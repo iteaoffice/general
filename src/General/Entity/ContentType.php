@@ -52,6 +52,11 @@ class ContentType
      */
     private $projectLogo;
     /**
+     * @ORM\OneToMany(targetEntity="Content\Entity\Image", cascade={"persist"}, mappedBy="contentType")
+     * @var \Content\Entity\Image[]
+     */
+    private $contentImage;
+    /**
      * @ORM\Column(name="gifimage",  type="blob")
      * @var string
      */
