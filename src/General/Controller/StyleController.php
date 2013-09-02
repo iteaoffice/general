@@ -9,7 +9,6 @@
  */
 namespace General\Controller;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
@@ -34,7 +33,6 @@ class StyleController extends AbstractActionController implements ServiceLocator
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public");
-
 
         $options            = $this->getServiceLocator()->get('general_module_options');
         $requestedFileFound = false;
@@ -73,10 +71,9 @@ class StyleController extends AbstractActionController implements ServiceLocator
             );
         }
 
-
         $response->getHeaders()
             ->addHeaderLine('Content-Type: image/jpg')
-            ->addHeaderLine('Content-Length: ' . (string)filesize($requestedFile));
+            ->addHeaderLine('Content-Length: ' . (string) filesize($requestedFile));
 
         $response->setContent(file_get_contents($requestedFile));
 

@@ -15,10 +15,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\Form\Annotation;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
-use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-
-use Gedmo\Mapping\Annotation as Gedmo;
 
 use General\Entity\EntityAbstract;
 
@@ -108,7 +105,7 @@ class Eu extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter
      *
-     * @param  InputFilterInterface $inputFilter
+     * @param InputFilterInterface $inputFilter
      *
      * @return void
      * @throws \Exception

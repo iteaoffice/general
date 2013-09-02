@@ -22,7 +22,7 @@ return array(
          * Zend\Acl\Assertion\AssertionInterface.
          * *if you use assertions, define them using the service manager!*
          */
-        'rule_providers' => array(
+        'rule_providers'     => array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     // allow guests and users (and admins, through inheritance)
@@ -31,20 +31,20 @@ return array(
                 ),
                 // Don't mix allow/deny rules if you are using role inheritance.
                 // There are some weird bugs.
-                'deny' => array( // ...
+                'deny'  => array( // ...
                 ),
             ),
         ),
         /* Currently, only controller and route guards exist
          */
-        'guards' => array(
+        'guards'             => array(
             /* If this guard is specified here (i.e. it is enabled), it will block
              * access to all routes unless they are specified here.
              */
             'BjyAuthorize\Guard\Route' => array(
                 array('route' => 'style', 'roles' => array()),
-                array('route' => 'home', 'roles' => array()),
-                array('route' => 'zfcadmin/general-manager/messages', 'roles' => array()),
+                array('route' => 'home', 'roles' => array())
+
             ),
         ),
     ),

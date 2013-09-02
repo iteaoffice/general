@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
  */
 return array(
-    'router'       => array(
+    'router' => array(
         'routes' => array(
             'style'    => array(
                 'type'    => 'Zend\Mvc\Router\Http\Segment',
@@ -89,9 +89,5 @@ return array(
 
         ),
     ),
-    'view_manager' => array(
-        'template_path_stack' => array(
-            __DIR__ . '/../view'
-        ),
-    ),
+
 );

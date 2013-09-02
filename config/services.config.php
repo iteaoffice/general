@@ -28,21 +28,10 @@ return array(
 
         'general_module_options' => function ($sm) {
             $config = $sm->get('Config');
+
             return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : array());
         },
 
 
-        'doctrine.connection.orm_general' => new DBALConnectionFactory('orm_general'),
-        'doctrine.configuration.orm_general' => new ORMConfigurationFactory('orm_general'),
-        'doctrine.entitymanager.orm_general' => new EntityManagerFactory('orm_general'),
-
-        'doctrine.driver.orm_general' => new DriverFactory('orm_general'),
-        'doctrine.eventmanager.orm_general' => new EventManagerFactory('orm_general'),
-        'doctrine.entity_resolver.orm_general' => new EntityResolverFactory('orm_general'),
-        'doctrine.sql_logger_collector.orm_general' => new SQLLoggerCollectorFactory('orm_general'),
-
-        'DoctrineORMModule\Form\Annotation\AnnotationBuilder' => function (ServiceLocatorInterface $sl) {
-            return new AnnotationBuilder($sl->get('doctrine.entitymanager.orm_general'));
-        },
     ),
 );

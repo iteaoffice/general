@@ -21,14 +21,14 @@ class ModuleOptions extends AbstractOptions
      */
     protected $imageNotFound = 'image_not_found.jpg';
 
-
     /**
-     * @param array $styleLocations
+     * @param  array         $styleLocations
      * @return ModuleOptions
      */
     public function setStyleLocations($styleLocations)
     {
         $this->styleLocations = $styleLocations;
+
         return $this;
     }
 
@@ -47,6 +47,7 @@ class ModuleOptions extends AbstractOptions
     public function setImageLocation($imageLocation)
     {
         $this->imageLocation = $imageLocation;
+
         return $this;
     }
 
@@ -65,6 +66,7 @@ class ModuleOptions extends AbstractOptions
     public function setImageNotFound($imageNotFound)
     {
         $this->imageNotFound = $imageNotFound;
+
         return $this;
     }
 

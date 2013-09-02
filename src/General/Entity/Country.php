@@ -18,8 +18,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-
 use General\Entity\EntityAbstract;
 
 /**
@@ -89,14 +87,20 @@ class Country extends EntityAbstract implements ResourceInterface
      * @Annotation\Exclude()
      * @var \Contact\Entity\Address[]
      */
-    private $addresses;
+    private $address;
+    /**
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Organisation", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \Contact\Entity\Organisation[]
+     */
+    private $organisation;
 
     /**
      * Class constructor
      */
     public function __construct()
     {
-        $this->addresses = new Collections\ArrayCollection();
+        $this->address = new Collections\ArrayCollection();
     }
 
     /**
@@ -147,7 +151,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter
      *
-     * @param  InputFilterInterface $inputFilter
+     * @param InputFilterInterface $inputFilter
      *
      * @return void
      * @throws \Exception
@@ -281,12 +285,10 @@ class Country extends EntityAbstract implements ResourceInterface
                 )
             );
 
-
             $this->inputFilter = $inputFilter;
         }
 
         return $this->inputFilter;
-
     }
 
     /**
@@ -297,29 +299,14 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getArrayCopy()
     {
         return array(
-            'addresses' => $this->addresses
+            'address'      => $this->address,
+            'organisation' => $this->organisation
         );
     }
 
     public function populate()
     {
         return $this->getArrayCopy();
-    }
-
-    /**
-     * @param \Contact\Entity\Address[] $addresses
-     */
-    public function setAddresses($addresses)
-    {
-        $this->addresses = $addresses;
-    }
-
-    /**
-     * @return \Contact\Entity\Address[]
-     */
-    public function getAddresses()
-    {
-        return $this->addresses;
     }
 
     /**
@@ -433,4 +420,21 @@ class Country extends EntityAbstract implements ResourceInterface
     {
         return $this->vat;
     }
+
+    /**
+     * @param \Contact\Entity\Address[] $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return \Contact\Entity\Address[]
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
 }
