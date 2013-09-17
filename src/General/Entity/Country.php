@@ -89,18 +89,26 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $address;
     /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Organisation", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\Organisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \Contact\Entity\Organisation[]
+     * @var \Organisation\Entity\Organisation[]
      */
     private $organisation;
+    /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\IctOrganisation", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \Organisation\Entity\IctOrganisation[]
+     */
+    private $ictOrganisation;
 
     /**
      * Class constructor
      */
     public function __construct()
     {
-        $this->address = new Collections\ArrayCollection();
+        $this->address         = new Collections\ArrayCollection();
+        $this->organisation    = new Collections\ArrayCollection();
+        $this->ictOrganisation = new Collections\ArrayCollection();
     }
 
     /**
@@ -437,4 +445,35 @@ class Country extends EntityAbstract implements ResourceInterface
         return $this->address;
     }
 
+    /**
+     * @param \Organisation\Entity\IctOrganisation[] $ictOrganisation
+     */
+    public function setIctOrganisation($ictOrganisation)
+    {
+        $this->ictOrganisation = $ictOrganisation;
+    }
+
+    /**
+     * @return \Organisation\Entity\IctOrganisation[]
+     */
+    public function getIctOrganisation()
+    {
+        return $this->ictOrganisation;
+    }
+
+    /**
+     * @param \Organisation\Entity\Organisation[] $organisation
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+    }
+
+    /**
+     * @return \Organisation\Entity\Organisation[]
+     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
 }

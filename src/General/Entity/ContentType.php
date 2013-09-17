@@ -81,6 +81,11 @@ class ContentType
      */
     private $contactDnd;
     /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
+     * @var \Organisation\Entity\Logo[]
+     */
+    private $organisationLogo;
+    /**
      * @ORM\Column(name="gifimage",  type="blob")
      * @var string
      */
@@ -91,13 +96,14 @@ class ContentType
      */
     public function __construct()
     {
-        $this->projectLogo  = new Collections\ArrayCollection();
-        $this->contentImage = new Collections\ArrayCollection();
-        $this->pressArticle = new Collections\ArrayCollection();
-        $this->programNna   = new Collections\ArrayCollection();
-        $this->programDoa   = new Collections\ArrayCollection();
-        $this->programDnd   = new Collections\ArrayCollection();
-        $this->contactDnd   = new Collections\ArrayCollection();
+        $this->projectLogo      = new Collections\ArrayCollection();
+        $this->contentImage     = new Collections\ArrayCollection();
+        $this->pressArticle     = new Collections\ArrayCollection();
+        $this->programNna       = new Collections\ArrayCollection();
+        $this->programDoa       = new Collections\ArrayCollection();
+        $this->programDnd       = new Collections\ArrayCollection();
+        $this->organisationLogo = new Collections\ArrayCollection();
+        $this->contactDnd       = new Collections\ArrayCollection();
     }
 
     /**
@@ -290,5 +296,21 @@ class ContentType
     public function getContactDnd()
     {
         return $this->contactDnd;
+    }
+
+    /**
+     * @param \Organisation\Entity\Logo[] $organisationLogo
+     */
+    public function setOrganisationLogo($organisationLogo)
+    {
+        $this->organisationLogo = $organisationLogo;
+    }
+
+    /**
+     * @return \Organisation\Entity\Logo[]
+     */
+    public function getOrganisationLogo()
+    {
+        return $this->organisationLogo;
     }
 }
