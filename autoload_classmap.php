@@ -12,6 +12,9 @@ return array(
   'General\Entity\Gender'              => __DIR__ . '/src/General/Entity/Gender.php',
   'General\Entity\HydrateInterface'    => __DIR__ . '/src/General/Entity/HydrateInterface.php',
   'General\Entity\Title'               => __DIR__ . '/src/General/Entity/Title.php',
+  'General\Entity\Vat'                 => __DIR__ . '/src/General/Entity/Vat.php',
+  'General\Entity\VatType'             => __DIR__ . '/src/General/Entity/VatType.php',
   'General\Module'                     => __DIR__ . '/src/General/Module.php',
   'General\Options\ModuleOptions'      => __DIR__ . '/src/General/Options/ModuleOptions.php',
+  'General\View\Helper\CountryMap'     => __DIR__ . '/src/General/View/Helper/CountryMap.php',
 );
