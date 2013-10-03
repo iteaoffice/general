@@ -75,7 +75,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @Annotation\Options({"label":"txt-vat"})
      * @var int
      */
-    private $vat;
+    private $countryVat;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
@@ -100,6 +100,12 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Organisation\Entity\IctOrganisation[]
      */
     private $ictOrganisation;
+    /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Vat", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Vat[]
+     */
+    private $vat;
 
     /**
      * Class constructor
@@ -109,6 +115,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->address         = new Collections\ArrayCollection();
         $this->organisation    = new Collections\ArrayCollection();
         $this->ictOrganisation = new Collections\ArrayCollection();
+        $this->vat             = new Collections\ArrayCollection();
     }
 
     /**
@@ -143,7 +150,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return $this->country;
+        return (string)$this->country;
     }
 
     /**
@@ -273,7 +280,7 @@ class Country extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name'       => 'vat',
+                        'name'       => 'countryVat',
                         'required'   => false,
                         'filters'    => array(
                             array('name' => 'StripTags'),
@@ -308,13 +315,38 @@ class Country extends EntityAbstract implements ResourceInterface
     {
         return array(
             'address'      => $this->address,
-            'organisation' => $this->organisation
+            'organisation' => $this->organisation,
+            'vat'          => $this->vat
         );
     }
 
     public function populate()
     {
         return $this->getArrayCopy();
+    }
+
+    /**
+     * New function needed to make the hydrator happy
+     *
+     * @param Collections\Collection $vatCollection
+     */
+    public function addVat(Collections\Collection $vatCollection)
+    {
+        foreach ($vatCollection as $vat) {
+            $this->vat->add($vat);
+        }
+    }
+
+    /**
+     * New function needed to make the hydrator happy
+     *
+     * @param Collections\Collection $vatCollection
+     */
+    public function removeVat(Collections\Collection $vatCollection)
+    {
+        foreach ($vatCollection as $vat) {
+            $this->vat->removeElement($vat);
+        }
     }
 
     /**
@@ -475,5 +507,21 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getOrganisation()
     {
         return $this->organisation;
+    }
+
+    /**
+     * @param int $countryVat
+     */
+    public function setCountryVat($countryVat)
+    {
+        $this->countryVat = $countryVat;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountryVat()
+    {
+        return $this->countryVat;
     }
 }

@@ -86,6 +86,11 @@ class ContentType
      */
     private $organisationLogo;
     /**
+     * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
+     * @var \Publication\Entity\Publication[]
+     */
+    private $publication;
+    /**
      * @ORM\Column(name="gifimage",  type="blob")
      * @var string
      */
@@ -104,6 +109,7 @@ class ContentType
         $this->programDnd       = new Collections\ArrayCollection();
         $this->organisationLogo = new Collections\ArrayCollection();
         $this->contactDnd       = new Collections\ArrayCollection();
+        $this->publication      = new Collections\ArrayCollection();
     }
 
     /**
@@ -312,5 +318,21 @@ class ContentType
     public function getOrganisationLogo()
     {
         return $this->organisationLogo;
+    }
+
+    /**
+     * @param \Publication\Entity\Publication[] $publication
+     */
+    public function setPublication($publication)
+    {
+        $this->publication = $publication;
+    }
+
+    /**
+     * @return \Publication\Entity\Publication[]
+     */
+    public function getPublication()
+    {
+        return $this->publication;
     }
 }
