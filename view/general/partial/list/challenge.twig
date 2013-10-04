@@ -1,0 +1,5 @@
+<h1>{{ translate("txt-challenges") }}</h1>
+
+{% for challenge in challenge %}
+    {{ challengeLink(challenge,'view','name') }}
+{% endfor %}

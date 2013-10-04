@@ -18,10 +18,10 @@ $config = array(
             'general-style' => 'General\Controller\StyleController',
         ),
     ),
-    'view_helpers'    => array(
-        'invokables' => array(
-            'country-map' => 'General\View\Helper\CountryMap'
-        )
+    'view_manager'    => array(
+        'template_path_stack' => array(
+            __DIR__ . '/../view'
+        ),
     ),
     'service_manager' => array(
         'factories'  => array(

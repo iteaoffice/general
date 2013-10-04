@@ -21,7 +21,8 @@ class Module implements
     Feature\AutoloaderProviderInterface,
     Feature\ServiceProviderInterface,
     Feature\ConfigProviderInterface,
-    Feature\BootstrapListenerInterface
+    Feature\BootstrapListenerInterface,
+    Feature\ViewHelperProviderInterface
 {
 
     public function getAutoloaderConfig()
@@ -57,6 +58,18 @@ class Module implements
     }
 
     /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
+    public function getViewHelperConfig()
+    {
+        return include __DIR__ . '/../../config/viewhelpers.config.php';
+    }
+
+
+    /**
      * @return array
      */
     public function getControllerConfig()
@@ -65,7 +78,7 @@ class Module implements
             'initializers' => array(
                 function ($instance, $sm) {
                     if ($instance instanceof FormServiceAwareInterface) {
-                        $sm = $sm->getServiceLocator();
+                        $sm          = $sm->getServiceLocator();
                         $formService = $sm->get('general_form_service');
                         $instance->setFormService($formService);
                     }
@@ -78,6 +91,7 @@ class Module implements
      * Listen to the bootstrap event
      *
      * @param  EventInterface $e
+     *
      * @return array
      */
     public function onBootstrap(EventInterface $e)
