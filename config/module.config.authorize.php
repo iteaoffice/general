@@ -7,6 +7,14 @@
  * @author      Johan van der Heide <info@japaveh.nl>
  * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
  */
+namespace News;
+
+use General\Entity\Country;
+use General\Entity\Challenge;
+
+$country   = new Country();
+$challenge = new Challenge();
+
 return array(
     'bjyauthorize' => array(
         // resource providers provide a list of resources that will be tracked
@@ -42,6 +50,8 @@ return array(
              * access to all routes unless they are specified here.
              */
             'BjyAuthorize\Guard\Route' => array(
+                array('route' => 'route-' . $country->get('underscore_full_entity_name'), 'roles' => array()),
+                array('route' => 'route-' . $challenge->get('underscore_full_entity_name'), 'roles' => array()),
                 array('route' => 'style', 'roles' => array()),
                 array('route' => 'home', 'roles' => array())
 
