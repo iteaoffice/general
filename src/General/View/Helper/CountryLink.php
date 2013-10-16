@@ -16,7 +16,7 @@ use Zend\View\Helper\AbstractHelper;
 use General\Entity\Country;
 
 /**
- * Create a link to an organisation
+ * Create a link to an country
  *
  * @category    General
  * @package     View
@@ -44,9 +44,9 @@ class CountryLink extends AbstractHelper
         $serverUrl = $this->view->plugin('serverUrl');
         $isAllowed = $this->view->plugin('isAllowed');
 
-//        if (!$isAllowed('organisation', $action)) {
+//        if (!$isAllowed('country', $action)) {
 //            if ($action === 'view' && $show === 'name') {
-//                return $organisationService;
+//                return $countryService;
 //            }
 //
 //            return '';
@@ -54,22 +54,21 @@ class CountryLink extends AbstractHelper
 
         switch ($action) {
             case 'new':
-                $router  = 'zfcadmin/organisation-manager/new';
-                $text    = sprintf($translate("txt-new-organisation"));
+                $router  = 'zfcadmin/country-manager/new';
+                $text    = sprintf($translate("txt-new-country"));
                 $country = new General();
                 break;
             case 'edit':
-                $router = 'zfcadmin/organisation-manager/edit';
-                $text   = sprintf($translate("txt-edit-organisation-%s"), $country);
+                $router = 'zfcadmin/country-manager/edit';
+                $text   = sprintf($translate("txt-edit-country-%s"), $country);
                 break;
             case 'view':
-                $router = 'route-10';
-                $text   = sprintf($translate("txt-view-organisation-%s"), $country);
+                $router = 'route-' . $country->get('underscore_full_entity_name');
+                $text   = sprintf($translate("txt-view-country-%s"), $country);
                 break;
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $action, __CLASS__));
         }
-
 
 
         $params = array(

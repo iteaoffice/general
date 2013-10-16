@@ -2,7 +2,7 @@
 /**
  * Japaveh Webdesign copyright message placeholder
  *
- * @category    Challenge
+ * @category    Country
  * @package     View
  * @subpackage  Helper
  * @author      Johan van der Heide <info@japaveh.nl>
@@ -17,23 +17,25 @@ use Zend\Paginator\Adapter\ArrayAdapter;
 use Zend\Paginator\Paginator;
 use Zend\Mvc\Router\Http\RouteMatch;
 
-use General\Entity\Challenge;
+use General\Entity\Country;
 use General\Service\GeneralService;
+
+use Contact\Service\ContactService;
 
 use Project\Service\ProjectService;
 
 use Content\Entity\Handler;
 
 /**
- * Class ChallengeHandler
- * @package Challenge\View\Helper
+ * Class CountryHandler
+ * @package Country\View\Helper
  */
-class ChallengeHandler extends AbstractHelper
+class CountryHandler extends AbstractHelper
 {
     /**
-     * @var Challenge
+     * @var Country
      */
-    protected $challenge;
+    protected $country;
     /**
      * @var GeneralService
      */
@@ -43,9 +45,17 @@ class ChallengeHandler extends AbstractHelper
      */
     protected $projectService;
     /**
+     * @var ContactService
+     */
+    protected $contactService;
+    /**
      * @var Handler
      */
     protected $handler;
+    /**
+     * @var CountryMap
+     */
+    protected $countryMap;
     /**
      * @var RouteMatch
      */
@@ -58,11 +68,12 @@ class ChallengeHandler extends AbstractHelper
     {
         $this->generalService = $helperPluginManager->getServiceLocator()->get('general_generic_service');
         $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
-        $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
+        $this->contactService = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
         $this->routeMatch     = $helperPluginManager->getServiceLocator()
             ->get('application')
             ->getMvcEvent()
             ->getRouteMatch();
+        $this->countryMap     = $helperPluginManager->get('countryMap');
     }
 
     /**
@@ -75,22 +86,34 @@ class ChallengeHandler extends AbstractHelper
 
         switch ($this->getHandler()->getHandler()) {
 
-            case 'challenge':
+            case 'country':
 
-                $this->getView()->headTitle()->append("Challenge");
-                $this->getView()->headTitle()->append($this->getChallenge()->getChallenge());
+                $this->getView()->headTitle()->append("Country");
+                $this->getView()->headTitle()->append($this->getCountry()->getCountry());
 
-                return $this->parseChallenge();
+                return $this->parseCountry();
                 break;
-            case 'challenge_list':
+
+            case 'country_map':
+                $countryMap = $this->countryMap;
+
+                return $countryMap->__invoke(array($this->getCountry()), $this->getCountry());
+                break;
+
+            case 'country_funder':
+
+                return $this->parseCountryFunderList($this->getCountry());
+                break;
+
+            case 'country_list':
 
                 $this->getView()->headTitle()->append('List');
                 $page = $this->routeMatch->getParam('page');
 
-                return $this->parseChallengeList($page);
+                return $this->parseCountryList($page);
                 break;
-            case 'challenge_project':
-                return $this->parseChallengeProjectList($this->getChallengeService());
+            case 'country_project':
+                return $this->parseCountryProjectList($this->getCountryService());
                 break;
 
             default:
@@ -103,35 +126,43 @@ class ChallengeHandler extends AbstractHelper
     /**
      * @return string
      */
-    public function parseChallengeList()
+    public function parseCountryList()
     {
-        $challenge = $this->generalService->findAll('challenge');
+        $country = $this->generalService->findAll('country');
 
-        return $this->getView()->render('general/partial/list/challenge',
-            array('challenge' => $challenge));
+        return $this->getView()->render('general/partial/list/country',
+            array('country' => $country));
     }
 
     /**
      * @return string
      */
-    public function parseChallenge()
+    public function parseCountry()
     {
-        return $this->getView()->render('general/partial/entity/challenge',
-            array('challenge' => $this->getChallenge()));
+        return $this->getView()->render('general/partial/entity/country',
+            array('country' => $this->getCountry()));
     }
 
     /**
-     * @param ChallengeService $challengeService
+     * @param CountryService $countryService
      *
      * @return string
      */
-    public function parseChallengeProjectList(ChallengeService $challengeService)
+    public function parseCountryProjectList(CountryService $countryService)
     {
-        $projects = $this->projectService->findProjectByChallenge($challengeService->getChallenge());
+        $projects = $this->projectService->findProjectByCountry($countryService->getCountry());
 
         return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
     }
 
+    /**
+     * @param Country $country
+     */
+    public function parseCountryFunderList(Country $country)
+    {
+        $funder = $this->contactService->findFundersByCountry($country);
+        var_dump($funder);
+    }
 
     /**
      * @param \Content\Entity\Handler $handler
@@ -150,42 +181,42 @@ class ChallengeHandler extends AbstractHelper
     }
 
     /**
-     * @param Challenge $challenge
+     * @param Country $country
      */
-    public function setChallenge($challenge)
+    public function setCountry($country)
     {
-        $this->challenge = $challenge;
+        $this->country = $country;
     }
 
     /**
-     * @return Challenge
+     * @return Country
      */
-    public function getChallenge()
+    public function getCountry()
     {
-        return $this->challenge;
+        return $this->country;
     }
 
     /**
      * @param $id
      *
-     * @return Challenge
+     * @return Country
      */
-    public function setChallengeId($id)
+    public function setCountryId($id)
     {
-        $this->setChallenge($this->generalService->findChallengeById($id));
+        $this->setCountry($this->generalService->findCountryById($id));
 
-        return $this->getChallenge();
+        return $this->getCountry();
     }
 
     /**
-     * @param $docRef
+     * @param $iso3
      *
-     * @return Challenge
+     * @return Country
      */
-    public function setChallengeDocRef($docRef)
+    public function setCountryIso3($iso3)
     {
-        $this->setChallenge($this->generalService->findEntityByDocRef('challenge', $docRef));
+        $this->setCountry($this->generalService->findCountryByIso3($iso3));
 
-        return $this->getChallenge();
+        return $this->getCountry();
     }
 }

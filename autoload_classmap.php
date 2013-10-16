@@ -24,6 +24,7 @@ return array(
   'General\Service\ServiceInterface'               => __DIR__ . '/src/General/Service/ServiceInterface.php',
   'General\View\Helper\ChallengeHandler'           => __DIR__ . '/src/General/View/Helper/ChallengeHandler.php',
   'General\View\Helper\ChallengeLink'              => __DIR__ . '/src/General/View/Helper/ChallengeLink.php',
+  'General\View\Helper\CountryHandler'             => __DIR__ . '/src/General/View/Helper/CountryHandler.php',
   'General\View\Helper\CountryLink'                => __DIR__ . '/src/General/View/Helper/CountryLink.php',
   'General\View\Helper\CountryMap'                 => __DIR__ . '/src/General/View/Helper/CountryMap.php',
 );

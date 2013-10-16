@@ -16,7 +16,7 @@ use Zend\View\Helper\AbstractHelper;
 use General\Entity\Challenge;
 
 /**
- * Create a link to an organisation
+ * Create a link to an challenge
  *
  * @category    General
  * @package     View
@@ -46,17 +46,17 @@ class ChallengeLink extends AbstractHelper
 
         switch ($action) {
             case 'new':
-                $router    = 'zfcadmin/organisation-manager/new';
-                $text      = sprintf($translate("txt-new-organisation"));
+                $router    = 'zfcadmin/challenge-manager/new';
+                $text      = sprintf($translate("txt-new-challenge"));
                 $challenge = new General();
                 break;
             case 'edit':
-                $router = 'zfcadmin/organisation-manager/edit';
-                $text   = sprintf($translate("txt-edit-organisation-%s"), $challenge);
+                $router = 'zfcadmin/challenge-manager/edit';
+                $text   = sprintf($translate("txt-edit-challenge-%s"), $challenge);
                 break;
             case 'view':
-                $router = 'route-11';
-                $text   = sprintf($translate("txt-view-organisation-%s"), $challenge);
+                $router = 'route-' . $challenge->get("underscore_full_entity_name");
+                $text   = sprintf($translate("txt-view-challenge-%s"), $challenge);
                 break;
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $action, __CLASS__));
@@ -95,13 +95,14 @@ class ChallengeLink extends AbstractHelper
         }
 
 
-        $uri = '<a href="%s" title="%s" class="%s">%s</a>';
+        $uri = '<a href="%s" title="%s" class="%s" style="color: #%s">%s</a>';
 
         return sprintf(
             $uri,
             $serverUrl->__invoke() . $url($router, $params),
             $text,
             implode($classes),
+            $challenge->getFrontColor(),
             implode($linkContent)
         );
     }
