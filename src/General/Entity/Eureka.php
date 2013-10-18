@@ -30,7 +30,7 @@ use General\Entity\EntityAbstract;
  * @category    General
  * @package     Entity
  */
-class Eu extends EntityAbstract
+class Eureka extends EntityAbstract
 {
     /**
      * @ORM\Column(name="eu_id",type="integer",length=10,nullable=false)
@@ -90,6 +90,16 @@ class Eu extends EntityAbstract
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**

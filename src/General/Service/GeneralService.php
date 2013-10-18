@@ -43,6 +43,16 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @return Entity\Country[]
+     */
+    public function findActiveCountries()
+    {
+        $countries = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findActive();
+
+        return $countries;
+    }
+
+    /**
      * @param $iso3
      *
      * @return null|Country

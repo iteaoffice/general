@@ -20,6 +20,52 @@ return array(
                     ),
                 ),
             ),
+            'assets'   => array(
+                'type'          => 'Literal',
+                'priority'      => 1000,
+                'options'       => array(
+                    'route'    => '/assets',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'country-flag' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => "/country-flag/[:iso3].[:ext]",
+                            'defaults' => array(
+                                'action' => 'display',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'country'  => array(
+                'type'          => 'Literal',
+                'priority'      => 1000,
+                'options'       => array(
+                    'route'    => '/organisation',
+                    'defaults' => array(
+                        'controller' => 'organisation-index',
+                        'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'flag' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/flag/[:iso3].[:ext]',
+                            'defaults' => array(
+                                'action' => 'flag',
+                            ),
+                        ),
+                    ),
+                )
+            ),
             'zfcadmin' => array(
                 'child_routes' => array(
                     'general-manager' => array(

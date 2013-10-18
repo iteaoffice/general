@@ -13,27 +13,24 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use General\Entity\EntityAbstract;
 
 /**
  * Entity for the General
  *
- * @ORM\Table(name="country_eu")
+ * @ORM\Table(name="country_itac")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
- * @Annotation\Name("country_eu")
+ * @Annotation\Name("country_itac")
  *
  * @category    General
  * @package     Entity
  */
-class Eu extends EntityAbstract
+class Itac extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="eu_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="itac_id",type="integer",length=10,nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -41,7 +38,7 @@ class Eu extends EntityAbstract
      */
     private $id;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="eu")
+     * @ORM\ManyToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="itac")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({"target_class":"General\Entity\Country"})

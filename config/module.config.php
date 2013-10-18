@@ -28,7 +28,7 @@ $config = array(
             'general-assertion' => 'General\Acl\Assertion\General',
         ),
         'invokables' => array(
-            'general_generic_service' => 'General\Service\GeneralService',
+            'general_general_service' => 'General\Service\GeneralService',
             'general_form_service'    => 'General\Service\FormService',
 
         )

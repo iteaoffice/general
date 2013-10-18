@@ -24,7 +24,7 @@ use General\Entity\EntityAbstract;
  * Entity for the Country.
  *
  * @ORM\Table(name="country")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Country")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
@@ -77,11 +77,23 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $countryVat;
     /**
-     * @ORM\OneToMany(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToOne(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \General\Entity\Eu[]
+     * @var \General\Entity\Eu
      */
     private $eu;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Eureka", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Eureka
+     */
+    private $eureka;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Eureka
+     */
+    private $itac;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
@@ -106,6 +118,18 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \General\Entity\Vat[]
      */
     private $vat;
+    /**
+     * @ORM\OneToMany(targetEntity="Program\Entity\Funder", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \Program\Entity\Funder[]
+     */
+    private $funder;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Flag", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Flag
+     */
+    private $flag;
 
     /**
      * Class constructor
@@ -116,6 +140,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->organisation    = new Collections\ArrayCollection();
         $this->ictOrganisation = new Collections\ArrayCollection();
         $this->vat             = new Collections\ArrayCollection();
+        $this->funder          = new Collections\ArrayCollection();
     }
 
     /**
@@ -523,5 +548,69 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getCountryVat()
     {
         return $this->countryVat;
+    }
+
+    /**
+     * @param \Program\Entity\Funder[] $funder
+     */
+    public function setFunder($funder)
+    {
+        $this->funder = $funder;
+    }
+
+    /**
+     * @return \Program\Entity\Funder[]
+     */
+    public function getFunder()
+    {
+        return $this->funder;
+    }
+
+    /**
+     * @param \General\Entity\Eureka $eureka
+     */
+    public function setEureka($eureka)
+    {
+        $this->eureka = $eureka;
+    }
+
+    /**
+     * @return \General\Entity\Eureka
+     */
+    public function getEureka()
+    {
+        return $this->eureka;
+    }
+
+    /**
+     * @param \General\Entity\Flag $flag
+     */
+    public function setFlag($flag)
+    {
+        $this->flag = $flag;
+    }
+
+    /**
+     * @return \General\Entity\Flag
+     */
+    public function getFlag()
+    {
+        return $this->flag;
+    }
+
+    /**
+     * @param \General\Entity\Eureka $itac
+     */
+    public function setItac($itac)
+    {
+        $this->itac = $itac;
+    }
+
+    /**
+     * @return \General\Entity\Eureka
+     */
+    public function getItac()
+    {
+        return $this->itac;
     }
 }

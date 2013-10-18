@@ -13,27 +13,25 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
 
 /**
  * Entity for the General
  *
- * @ORM\Table(name="country_eu")
+ * @ORM\Table(name="country_flag")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
- * @Annotation\Name("country_eu")
+ * @Annotation\Name("country_flag")
  *
  * @category    General
  * @package     Entity
  */
-class Eu extends EntityAbstract
+class Flag extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="eu_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="flag_id",type="integer",length=10,nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -41,21 +39,37 @@ class Eu extends EntityAbstract
      */
     private $id;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="eu")
+     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="flag")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
-     * @Annotation\Options({"target_class":"General\Entity\Country"})
+     * @Annotation\Options({"target_class":"General\Entity\Flag"})
      * @Annotation\Attributes({"label":"txt-country", "required":"true","class":"span3"})
      * @var \General\Entity\Country
      */
     private $country;
     /**
-     * @ORM\Column(name="date_since",type="date",nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\DateTime")
-     * @Annotation\Options({"label":"txt-since"})
-     * @var string
+     * @ORM\Column(name="object",type="blob",nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Options({"label":"txt-object"})
+     * @var resource
      */
-    private $since;
+    private $object;
+
+    /**
+     * Get the corresponding fileName of a file if it was cached
+     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
+     *
+     * @return string
+     * @todo: make the location variable (via the serviceManager?)
+     */
+    public function getCacheFileName()
+    {
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
+            DIRECTORY_SEPARATOR . 'country-flag';
+
+        return $cacheDir . DIRECTORY_SEPARATOR
+        . $this->getCountry()->getIso3() . '.png';
+    }
 
     /**
      * Magic Getter
@@ -83,16 +97,6 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * toString returns the name
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set input filter
      *
      * @param InputFilterInterface $inputFilter
@@ -117,16 +121,7 @@ class Eu extends EntityAbstract
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name'     => 'since',
-                        'required' => true,
-                    )
-                )
-            );
-
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'     => 'country',
+                        'name'     => 'object',
                         'required' => true,
                     )
                 )
@@ -186,18 +181,18 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * @param string $since
+     * @param resource $object
      */
-    public function setSince($since)
+    public function setObject($object)
     {
-        $this->since = $since;
+        $this->object = $object;
     }
 
     /**
-     * @return string
+     * @return resource
      */
-    public function getSince()
+    public function getObject()
     {
-        return $this->since;
+        return $this->object;
     }
 }

@@ -19,10 +19,10 @@ use Zend\Mvc\Router\Http\RouteMatch;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
-
+use Program\Service\ProgramService;
 use Contact\Service\ContactService;
-
 use Project\Service\ProjectService;
+
 
 use Content\Entity\Handler;
 
@@ -49,6 +49,10 @@ class CountryHandler extends AbstractHelper
      */
     protected $contactService;
     /**
+     * @var ProgramService
+     */
+    protected $programService;
+    /**
      * @var Handler
      */
     protected $handler;
@@ -66,9 +70,10 @@ class CountryHandler extends AbstractHelper
      */
     public function __construct(HelperPluginManager $helperPluginManager)
     {
-        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_generic_service');
+        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_general_service');
         $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
         $this->contactService = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
+        $this->programService = $helperPluginManager->getServiceLocator()->get('program_program_service');
         $this->routeMatch     = $helperPluginManager->getServiceLocator()
             ->get('application')
             ->getMvcEvent()
@@ -128,7 +133,7 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountryList()
     {
-        $country = $this->generalService->findAll('country');
+        $country = $this->generalService->findActiveCountries();
 
         return $this->getView()->render('general/partial/list/country',
             array('country' => $country));
@@ -157,11 +162,20 @@ class CountryHandler extends AbstractHelper
 
     /**
      * @param Country $country
+     *
+     * @return string
      */
     public function parseCountryFunderList(Country $country)
     {
-        $funder = $this->contactService->findFundersByCountry($country);
-        var_dump($funder);
+        $funder = $this->programService->findFunderByCountry($country);
+
+        /**
+         * Parse the organisationService in to have the these functions available in the view
+         */
+
+        return $this->getView()->render('program/partial/list/funder.twig', array(
+            'funder' => $funder,
+        ));
     }
 
     /**

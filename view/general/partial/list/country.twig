@@ -1,0 +1,20 @@
+<h1>{{ translate("txt-countries-in-itea") }}</h1>
+
+<div class="row">
+    {% for country in country %}
+        <div class="col-md-3">
+            <h3>{{ countryFlag(country, 30) }}{{ countryLink(country,'view','name') }}</h3>
+
+            {% if country.itac %}{{ translate("txt-itac") }}{% endif %} {% if country.eureka %}{{ translate("txt-eureka") }}{% endif %}
+
+            <dl>
+                <dt>{{ translate("txt-partners") }}</dt>
+                <dd>[@todo]</dd>
+                <dt>{{ translate("txt-projects") }}</dt>
+                <dd>[@todo]</dd>
+            </dl>
+
+
+        </div>
+    {% endfor %}
+</div>
