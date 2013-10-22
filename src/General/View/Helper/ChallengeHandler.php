@@ -107,7 +107,8 @@ class ChallengeHandler extends AbstractHelper
     {
         $challenge = $this->generalService->findAll('challenge');
 
-        return $this->getView()->render('general/partial/list/challenge',
+        return $this->getView()->render(
+            'general/partial/list/challenge',
             array('challenge' => $challenge));
     }
 
@@ -116,7 +117,8 @@ class ChallengeHandler extends AbstractHelper
      */
     public function parseChallenge()
     {
-        return $this->getView()->render('general/partial/entity/challenge',
+        return $this->getView()->render(
+            'general/partial/entity/challenge',
             array('challenge' => $this->getChallenge()));
     }
 
