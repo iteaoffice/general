@@ -91,7 +91,7 @@ class FormService implements ServiceLocatorAwareInterface
     public function getGeneralService()
     {
         if (null === $this->generalService) {
-            $this->generalService = $this->getServiceLocator()->get('general_generic_service');
+            $this->generalService = $this->getServiceLocator()->get('general_general_service');
         }
 
         return $this->generalService;

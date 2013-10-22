@@ -1,0 +1,25 @@
+<h2>{{ translate("txt-challenge-project-list") }}</h2>
+
+<div class="row">
+    {% for projectService in projects %}
+        <div class="col-sm-6 col-md-12">
+            <div class="thumbnail">
+
+                <h3>{{ projectLink(projectService,'view') }}</h3>
+
+                {{ projectLogo(projectService) }}
+
+                <div class="caption">
+
+
+                    <p>{{ projectService.project.description }}</p>
+
+                    {#<dl class="dl-horizontal">#}
+                    {#<dt>{{ translate("program-call") }}</dt>#}
+                    {#<dd>{{ project }}</dd>#}
+                    {#</dl>#}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -103,6 +103,6 @@ EOT;
         );
         $this->getView()->headScript()->appendScript(implode('', $html));
 
-        return '<div id="world-map-gdp" style="height: 340px"></div>';
+        return '<h3>Map</h3><div id="world-map-gdp" style="height: 340px"></div>';
     }
 }

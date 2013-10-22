@@ -27,6 +27,7 @@ class CountryFlag extends AbstractHelper
 
     /**
      * @param Country $country
+     * @param int     $width
      *
      * @return string
      */

@@ -18,7 +18,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Entity for the Country.
@@ -55,6 +55,13 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var string
      */
     private $country;
+    /**
+     * @ORM\Column(name="docRef",type="string",length=80, unique=true)
+     * @Gedmo\Slug(fields={"country"})
+     * @Annotation\Exclude()
+     * @var string
+     */
+    private $docRef;
     /**
      * @ORM\Column(name="iso3",type="string",length=20)
      * @Annotation\Type("\Zend\Form\Element\Text")
@@ -612,5 +619,21 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getItac()
     {
         return $this->itac;
+    }
+
+    /**
+     * @param string $docRef
+     */
+    public function setDocRef($docRef)
+    {
+        $this->docRef = $docRef;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocRef()
+    {
+        return $this->docRef;
     }
 }

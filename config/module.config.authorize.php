@@ -51,6 +51,8 @@ return array(
              */
             'BjyAuthorize\Guard\Route' => array(
                 array('route' => 'route-' . $country->get('underscore_full_entity_name'), 'roles' => array()),
+                array('route' => 'route-' . $country->get('underscore_full_entity_name') . '-project', 'roles' => array()),
+                array('route' => 'route-' . $country->get('underscore_full_entity_name') . '-organisation', 'roles' => array()),
                 array('route' => 'route-' . $challenge->get('underscore_full_entity_name'), 'roles' => array()),
                 array('route' => 'country/flag', 'roles' => array()),
                 array('route' => 'style', 'roles' => array()),

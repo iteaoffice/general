@@ -22,6 +22,7 @@ use General\Service\GeneralService;
 use Program\Service\ProgramService;
 use Contact\Service\ContactService;
 use Project\Service\ProjectService;
+use Organisation\Service\OrganisationService;
 
 
 use Content\Entity\Handler;
@@ -44,6 +45,10 @@ class CountryHandler extends AbstractHelper
      * @var ProjectService
      */
     protected $projectService;
+    /**
+     * @var OrganisationService
+     */
+    protected $organisationService;
     /**
      * @var ContactService
      */
@@ -70,15 +75,17 @@ class CountryHandler extends AbstractHelper
      */
     public function __construct(HelperPluginManager $helperPluginManager)
     {
-        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_general_service');
-        $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
-        $this->contactService = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
-        $this->programService = $helperPluginManager->getServiceLocator()->get('program_program_service');
-        $this->routeMatch     = $helperPluginManager->getServiceLocator()
+        $this->generalService      = $helperPluginManager->getServiceLocator()->get('general_general_service');
+        $this->projectService      = $helperPluginManager->getServiceLocator()->get('project_project_service');
+        $this->contactService      = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
+        $this->organisationService = $helperPluginManager->getServiceLocator()
+            ->get('organisation_organisation_service');
+        $this->programService      = $helperPluginManager->getServiceLocator()->get('program_program_service');
+        $this->routeMatch          = $helperPluginManager->getServiceLocator()
             ->get('application')
             ->getMvcEvent()
             ->getRouteMatch();
-        $this->countryMap     = $helperPluginManager->get('countryMap');
+        $this->countryMap          = $helperPluginManager->get('countryMap');
     }
 
     /**
@@ -117,8 +124,16 @@ class CountryHandler extends AbstractHelper
 
                 return $this->parseCountryList($page);
                 break;
+
+            case 'country_organisation':
+
+                $this->getView()->headTitle()->append('Organisations');
+
+                return $this->parseOrganisationList();
+                break;
+
             case 'country_project':
-                return $this->parseCountryProjectList($this->getCountryService());
+                return $this->parseCountryProjectList($this->getCountry());
                 break;
 
             default:
@@ -133,10 +148,10 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountryList()
     {
-        $country = $this->generalService->findActiveCountries();
+        $countries = $this->generalService->findActiveCountries();
 
         return $this->getView()->render('general/partial/list/country',
-            array('country' => $country));
+            array('countries' => $countries));
     }
 
     /**
@@ -144,18 +159,25 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountry()
     {
+        $projects      = $this->projectService->findProjectByCountry($this->getCountry());
+        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
+
         return $this->getView()->render('general/partial/entity/country',
-            array('country' => $this->getCountry()));
+            array(
+                'country'       => $this->getCountry(),
+                'projects'      => $projects,
+                'organisations' => $organisations,
+            ));
     }
 
     /**
-     * @param CountryService $countryService
+     * @param Country $country
      *
      * @return string
      */
-    public function parseCountryProjectList(CountryService $countryService)
+    public function parseCountryProjectList(Country $country)
     {
-        $projects = $this->projectService->findProjectByCountry($countryService->getCountry());
+        $projects = $this->projectService->findProjectByCountry($country);
 
         return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
     }
@@ -175,6 +197,24 @@ class CountryHandler extends AbstractHelper
 
         return $this->getView()->render('program/partial/list/funder.twig', array(
             'funder' => $funder,
+        ));
+    }
+
+    /**
+     * Create a list of organisations
+     *
+     * @return string
+     */
+    public function parseOrganisationList()
+    {
+        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
+
+        /**
+         * Parse the organisationService in to have the these functions available in the view
+         */
+
+        return $this->getView()->render('organisation/partial/list/organisation.twig', array(
+            'organisations' => $organisations,
         ));
     }
 
@@ -223,13 +263,13 @@ class CountryHandler extends AbstractHelper
     }
 
     /**
-     * @param $iso3
+     * @param $docRef
      *
      * @return Country
      */
-    public function setCountryIso3($iso3)
+    public function setCountryDocRef($docRef)
     {
-        $this->setCountry($this->generalService->findCountryByIso3($iso3));
+        $this->setCountry($this->generalService->findEntityByDocRef('country', $docRef));
 
         return $this->getCountry();
     }

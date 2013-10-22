@@ -56,7 +56,7 @@ class ChallengeHandler extends AbstractHelper
      */
     public function __construct(HelperPluginManager $helperPluginManager)
     {
-        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_generic_service');
+        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_general_service');
         $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
         $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
         $this->routeMatch     = $helperPluginManager->getServiceLocator()
@@ -90,7 +90,7 @@ class ChallengeHandler extends AbstractHelper
                 return $this->parseChallengeList($page);
                 break;
             case 'challenge_project':
-                return $this->parseChallengeProjectList($this->getChallengeService());
+                return $this->parseChallengeProjectList($this->getChallenge());
                 break;
 
             default:
@@ -121,13 +121,13 @@ class ChallengeHandler extends AbstractHelper
     }
 
     /**
-     * @param ChallengeService $challengeService
+     * @param Challenge $challenge
      *
      * @return string
      */
-    public function parseChallengeProjectList(ChallengeService $challengeService)
+    public function parseChallengeProjectList(Challenge $challenge)
     {
-        $projects = $this->projectService->findProjectByChallenge($challengeService->getChallenge());
+        $projects = $this->projectService->findProjectByChallenge($challenge);
 
         return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
     }

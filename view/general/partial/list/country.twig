@@ -1,7 +1,7 @@
 <h1>{{ translate("txt-countries-in-itea") }}</h1>
 
 <div class="row">
-    {% for country in country %}
+    {% for country in countries %}
         <div class="col-md-3">
             <h3>{{ countryFlag(country, 30) }}{{ countryLink(country,'view','name') }}</h3>
 
