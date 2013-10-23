@@ -22,7 +22,7 @@ use General\Entity\EntityAbstract;
 /**
  * Entity for the General
  *
- * @ORM\Table(name="country_eu")
+ * @ORM\Table(name="country_eureka")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("country_eu")
@@ -41,7 +41,7 @@ class Eureka extends EntityAbstract
      */
     private $id;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="eu")
+     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="eureka")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({"target_class":"General\Entity\Country"})

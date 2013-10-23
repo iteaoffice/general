@@ -77,11 +77,11 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $frontColor;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Project", cascade={"all"}, mappedBy="challenge")
+     * @ORM\OneToMany(targetEntity="Project\Entity\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Project[]
+     * @var \Project\Entity\Challenge[]
      */
-    private $project;
+    private $projectChallenge;
 
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="challenge")
@@ -96,7 +96,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->project = new Collections\ArrayCollection();
+        $this->projectChallenge = new Collections\ArrayCollection();
     }
 
     /**
@@ -366,18 +366,18 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Project[] $project
+     * @param \Project\Entity\Challenge[] $projectChallenge
      */
-    public function setProject($project)
+    public function setProjectChallenge($projectChallenge)
     {
-        $this->project = $project;
+        $this->projectChallenge = $projectChallenge;
     }
 
     /**
-     * @return \Project\Entity\Project[]
+     * @return \Project\Entity\Challenge[]
      */
-    public function getProject()
+    public function getProjectChallenge()
     {
-        return $this->project;
+        return $this->projectChallenge;
     }
 }

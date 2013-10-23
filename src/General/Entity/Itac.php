@@ -38,7 +38,7 @@ class Itac extends EntityAbstract
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="itac")
+     * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="itac")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({"target_class":"General\Entity\Country"})
