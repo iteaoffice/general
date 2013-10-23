@@ -33,7 +33,7 @@ use General\Entity\EntityAbstract;
 class Eureka extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="eu_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="eureka_id",type="integer",length=10,nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
