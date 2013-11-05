@@ -51,6 +51,11 @@ class ContentType
      */
     private $projectLogo;
     /**
+     * @ORM\Column(name="gifimage",  type="blob")
+     * @var string
+     */
+    private $image;
+    /**
      * @ORM\OneToMany(targetEntity="Content\Entity\Image", cascade={"persist"}, mappedBy="contentType")
      * @var \Content\Entity\Image[]
      */
@@ -81,6 +86,11 @@ class ContentType
      */
     private $contactDnd;
     /**
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
+     * @var \Contact\Entity\Photo[]
+     */
+    private $contactPhoto;
+    /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
      * @var \Organisation\Entity\Logo[]
      */
@@ -91,10 +101,11 @@ class ContentType
      */
     private $publication;
     /**
-     * @ORM\Column(name="gifimage",  type="blob")
-     * @var string
+     * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
+     * @var \Publication\Entity\Publication[]
      */
-    private $image;
+    private $badgeAttachment;
+
 
     /**
      * Class constructor
@@ -109,7 +120,9 @@ class ContentType
         $this->programDnd       = new Collections\ArrayCollection();
         $this->organisationLogo = new Collections\ArrayCollection();
         $this->contactDnd       = new Collections\ArrayCollection();
+        $this->contactPhoto     = new Collections\ArrayCollection();
         $this->publication      = new Collections\ArrayCollection();
+        $this->badgeAttachment  = new Collections\ArrayCollection();
     }
 
     /**
@@ -334,5 +347,21 @@ class ContentType
     public function getPublication()
     {
         return $this->publication;
+    }
+
+    /**
+     * @param \Contact\Entity\Photo[] $contactPhoto
+     */
+    public function setContactPhoto($contactPhoto)
+    {
+        $this->contactPhoto = $contactPhoto;
+    }
+
+    /**
+     * @return \Contact\Entity\Photo[]
+     */
+    public function getContactPhoto()
+    {
+        return $this->contactPhoto;
     }
 }

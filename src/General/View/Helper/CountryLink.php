@@ -58,7 +58,7 @@ class CountryLink extends AbstractHelper
             case 'new':
                 $router  = 'zfcadmin/country-manager/new';
                 $text    = sprintf($translate("txt-new-country"));
-                $country = new General();
+                $country = new Country();
                 break;
             case 'edit':
                 $router = 'zfcadmin/country-manager/edit';

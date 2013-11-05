@@ -102,6 +102,12 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @var \Invoice\Entity\FinancialRow[]
      */
     private $financialRow;
+    /**
+     * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
+     * @Annotation\Exclude()
+     * @var \Event\Entity\DeskCosts[]
+     */
+    private $deskCosts;
 
     /**
      * Class constructor
@@ -111,6 +117,7 @@ class Vat extends EntityAbstract implements ResourceInterface
         $this->type         = new Collections\ArrayCollection();
         $this->invoiceRow   = new Collections\ArrayCollection();
         $this->financialRow = new Collections\ArrayCollection();
+        $this->deskCosts    = new Collections\ArrayCollection();
     }
 
     /**
@@ -380,5 +387,21 @@ class Vat extends EntityAbstract implements ResourceInterface
     public function getFinancialRow()
     {
         return $this->financialRow;
+    }
+
+    /**
+     * @param \Event\Entity\DeskCosts[] $deskCosts
+     */
+    public function setDeskCosts($deskCosts)
+    {
+        $this->deskCosts = $deskCosts;
+    }
+
+    /**
+     * @return \Event\Entity\DeskCosts[]
+     */
+    public function getDeskCosts()
+    {
+        return $this->deskCosts;
     }
 }
