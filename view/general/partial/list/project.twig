@@ -1,25 +1,32 @@
-<h2>{{ translate("txt-challenge-project-list") }}</h2>
+<h2>{{ translate("txt-project-list") }}</h2>
 
 <div class="row">
     {% for projectService in projects %}
-        <div class="col-sm-6 col-md-12">
-            <div class="thumbnail">
+    <div class="col-md-3">
 
-                <h3>{{ projectLink(projectService,'view') }}</h3>
+        <div class="thumbnail">
 
-                {{ projectLogo(projectService) }}
+            <h4>{{ projectLink(projectService,'view') }}</h4>
 
-                <div class="caption">
+            {{ projectLogo(projectService, 'img-rounded') }}
+
+            <div class="caption">
 
 
-                    <p>{{ projectService.project.description }}</p>
+                <p>{{ projectService.project.title }}</p>
 
-                    {#<dl class="dl-horizontal">#}
-                    {#<dt>{{ translate("program-call") }}</dt>#}
-                    {#<dd>{{ project }}</dd>#}
-                    {#</dl>#}
-                </div>
+                {#<dl class="dl-horizontal">#}
+                {#<dt>{{ translate("program-call") }}</dt>#}
+                {#<dd>{{ project }}</dd>#}
+                {#</dl>#}
             </div>
         </div>
+
+    </div>
+    {% if loop.index is divisibleby(4) %}
+</div>
+<div class="row">
+    {% endif %}
+
     {% endfor %}
 </div>

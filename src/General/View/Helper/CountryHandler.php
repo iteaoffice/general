@@ -117,6 +117,11 @@ class CountryHandler extends AbstractHelper
                 return $this->parseCountryFunderList($this->getCountry());
                 break;
 
+            case 'country_metadata':
+
+                return $this->parseCountryMetadata($this->getCountry());
+                break;
+
             case 'country_list':
 
                 $this->getView()->headTitle()->append('List');
@@ -159,14 +164,12 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountry()
     {
-        $projects      = $this->projectService->findProjectByCountry($this->getCountry());
-        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
+
 
         return $this->getView()->render('general/partial/entity/country',
             array(
-                'country'       => $this->getCountry(),
-                'projects'      => $projects,
-                'organisations' => $organisations,
+                'country' => $this->getCountry(),
+
             ));
     }
 
@@ -180,6 +183,25 @@ class CountryHandler extends AbstractHelper
         $projects = $this->projectService->findProjectByCountry($country);
 
         return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return string
+     */
+    public function parseCountryMetadata(Country $country)
+    {
+        $projects      = $this->projectService->findProjectByCountry($this->getCountry());
+        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
+
+        return $this->getView()->render('general/partial/entity/country-metadata.twig',
+            array(
+                'country'       => $country,
+                'projects'      => $projects,
+                'organisations' => $organisations
+            )
+        );
     }
 
     /**
@@ -269,7 +291,13 @@ class CountryHandler extends AbstractHelper
      */
     public function setCountryDocRef($docRef)
     {
-        $this->setCountry($this->generalService->findEntityByDocRef('country', $docRef));
+        $country = $this->generalService->findEntityByDocRef('country', $docRef);
+
+        if (is_null($country)) {
+            return null;
+        }
+
+        $this->setCountry($country);
 
         return $this->getCountry();
     }
