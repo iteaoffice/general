@@ -20,7 +20,8 @@ $config = array(
     ),
     'view_manager'    => array(
         'template_path_stack' => array(
-            __DIR__ . '/../view'
+            __DIR__ . '/../view',
+            __DIR__ . '/../../../../data/mail/template'
         ),
     ),
     'service_manager' => array(

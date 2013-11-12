@@ -1,0 +1,55 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <base href="/">
+
+    <style type="text/css">
+        h1 {
+            font-size: 28px;
+            color: #e75113;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        dl {
+            margin-bottom: 50px;
+            background: #f2f6f5 repeat-x;
+            overflow: hidden;
+        }
+
+        p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+            margin-bottom: 5px
+        }
+
+        p {
+            line-height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<table width="600" border="0">
+    <tr>
+        {#<td colspan="3"><img src="{{ serverUrl() }}{{ basePath() }}/images/mail/header.png" alt="header"></td>#}
+    </tr>
+    <tr>
+        <td width="10"></td>
+        <td width="580" class="content">
+
+            {{ content|raw }}
+        </td>
+        <td width="10"></td>
+    </tr>
+    <tr>
+        {#<td colspan="3"><img src="{{ serverUrl() }}{{ basePath() }}/images/mail/footer.png" alt="footer"></td>#}
+    </tr>
+</table>
+
+
+<div id="footer">
+    <p>&copy; {{ "now"|date('Y') }} Email template DebraNova</p>
+</div>
+</body>
+</html>

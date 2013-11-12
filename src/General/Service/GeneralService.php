@@ -55,7 +55,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $iso3
      *
-     * @return null|Country
+     * @return null|Entity\Country
      * @throws \InvalidArgumentException
      */
     public function findCountryByIso3($iso3)
@@ -69,6 +69,23 @@ class GeneralService extends ServiceAbstract
         );
 
         return $entity;
+    }
+
+    /**
+     * @param $info
+     *
+     * @return Entity\WebInfo
+     * @throws \InvalidArgumentException
+     */
+    public function findWebInfoByInfo($info)
+    {
+        if (is_null($info)) {
+            throw new \InvalidArgumentException("A info-tag is required to find an entity");
+        }
+
+        return $this->getEntityManager()->getRepository($this->getFullEntityName('webInfo'))->findOneBy(
+            array('info' => $info)
+        );
     }
 
     /**

@@ -10,7 +10,7 @@
 return array(
     'router' => array(
         'routes' => array(
-            'style'    => array(
+            'style'        => array(
                 'type'    => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
                     'route'    => '/style/[:type]/[:source]',
@@ -20,7 +20,7 @@ return array(
                     ),
                 ),
             ),
-            'assets'   => array(
+            'assets'       => array(
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => array(
@@ -32,7 +32,7 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes'  => array(
-                    'country-flag' => array(
+                    'country-flag'      => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route'    => "/country-flag/[:iso3].[:ext]",
@@ -41,16 +41,25 @@ return array(
                             ),
                         ),
                     ),
+                    'content-type-icon' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => "/content-type-icon/[:hash].gif",
+                            'defaults' => array(
+                                'action' => 'display',
+                            ),
+                        ),
+                    ),
                 ),
             ),
-            'country'  => array(
+            'country'      => array(
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => array(
-                    'route'    => '/organisation',
+                    'route'    => '/country',
                     'defaults' => array(
-                        'controller' => 'organisation-index',
-                        'action'     => 'index',
+                        'controller' => 'general-index',
+                        'action'     => 'country',
                     ),
                 ),
                 'may_terminate' => true,
@@ -60,13 +69,36 @@ return array(
                         'options' => array(
                             'route'    => '/flag/[:iso3].[:ext]',
                             'defaults' => array(
-                                'action' => 'flag',
+                                'action' => 'country-flag',
                             ),
                         ),
                     ),
                 )
             ),
-            'zfcadmin' => array(
+            'content-type' => array(
+                'type'          => 'Literal',
+                'priority'      => 1000,
+                'options'       => array(
+                    'route'    => '/content-type',
+                    'defaults' => array(
+                        'controller' => 'general-index',
+                        'action'     => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'icon' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/icon/[:id].gif',
+                            'defaults' => array(
+                                'action' => 'content-type-icon',
+                            ),
+                        ),
+                    ),
+                )
+            ),
+            'zfcadmin'     => array(
                 'child_routes' => array(
                     'general-manager' => array(
                         'type'          => 'Zend\Mvc\Router\Http\Segment',

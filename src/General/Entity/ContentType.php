@@ -52,7 +52,7 @@ class ContentType
     private $projectLogo;
     /**
      * @ORM\Column(name="gifimage",  type="blob")
-     * @var string
+     * @var resource
      */
     private $image;
     /**
@@ -105,6 +105,21 @@ class ContentType
      * @var \Publication\Entity\Publication[]
      */
     private $badgeAttachment;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Result", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Result[]
+     */
+    private $result;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\WorkpackageDocument", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\WorkpackageDocument[]
+     */
+    private $workpackageDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Poster", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\WorkpackageDocument[]
+     */
+    private $poster;
 
 
     /**
@@ -112,18 +127,49 @@ class ContentType
      */
     public function __construct()
     {
-        $this->projectLogo      = new Collections\ArrayCollection();
-        $this->contentImage     = new Collections\ArrayCollection();
-        $this->pressArticle     = new Collections\ArrayCollection();
-        $this->programNna       = new Collections\ArrayCollection();
-        $this->programDoa       = new Collections\ArrayCollection();
-        $this->programDnd       = new Collections\ArrayCollection();
-        $this->organisationLogo = new Collections\ArrayCollection();
-        $this->contactDnd       = new Collections\ArrayCollection();
-        $this->contactPhoto     = new Collections\ArrayCollection();
-        $this->publication      = new Collections\ArrayCollection();
-        $this->badgeAttachment  = new Collections\ArrayCollection();
+        $this->projectLogo         = new Collections\ArrayCollection();
+        $this->contentImage        = new Collections\ArrayCollection();
+        $this->pressArticle        = new Collections\ArrayCollection();
+        $this->programNna          = new Collections\ArrayCollection();
+        $this->programDoa          = new Collections\ArrayCollection();
+        $this->programDnd          = new Collections\ArrayCollection();
+        $this->organisationLogo    = new Collections\ArrayCollection();
+        $this->contactDnd          = new Collections\ArrayCollection();
+        $this->contactPhoto        = new Collections\ArrayCollection();
+        $this->publication         = new Collections\ArrayCollection();
+        $this->badgeAttachment     = new Collections\ArrayCollection();
+        $this->result              = new Collections\ArrayCollection();
+        $this->workpackageDocument = new Collections\ArrayCollection();
+        $this->poster              = new Collections\ArrayCollection();
     }
+
+    /**
+     * Although an alternative does not have a clear hash, we can create one based on the id;
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return sha1($this->id . $this->contentType . $this->extension);
+    }
+
+    /**
+     * Get the corresponding fileName of a file if it was cached
+     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
+     *
+     * @return string
+     * @todo: make the location variable (via the serviceManager?)
+     */
+    public function getCacheFileName()
+    {
+
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR .
+            'assets' . DIRECTORY_SEPARATOR . 'content-type-icon';
+
+        return $cacheDir . DIRECTORY_SEPARATOR
+        . $this->getHash() . '.gif';
+    }
+
 
     /**
      * @param string $contentType
@@ -190,7 +236,7 @@ class ContentType
     }
 
     /**
-     * @param string $image
+     * @param resource $image
      */
     public function setImage($image)
     {
@@ -198,7 +244,7 @@ class ContentType
     }
 
     /**
-     * @return string
+     * @return resource
      */
     public function getImage()
     {
@@ -363,5 +409,69 @@ class ContentType
     public function getContactPhoto()
     {
         return $this->contactPhoto;
+    }
+
+    /**
+     * @param \Publication\Entity\Publication[] $badgeAttachment
+     */
+    public function setBadgeAttachment($badgeAttachment)
+    {
+        $this->badgeAttachment = $badgeAttachment;
+    }
+
+    /**
+     * @return \Publication\Entity\Publication[]
+     */
+    public function getBadgeAttachment()
+    {
+        return $this->badgeAttachment;
+    }
+
+    /**
+     * @param \Project\Entity\Result[] $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
+
+    /**
+     * @return \Project\Entity\Result[]
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param \Project\Entity\WorkpackageDocument[] $workpackageDocument
+     */
+    public function setWorkpackageDocument($workpackageDocument)
+    {
+        $this->workpackageDocument = $workpackageDocument;
+    }
+
+    /**
+     * @return \Project\Entity\WorkpackageDocument[]
+     */
+    public function getWorkpackageDocument()
+    {
+        return $this->workpackageDocument;
+    }
+
+    /**
+     * @param \Project\Entity\WorkpackageDocument[] $poster
+     */
+    public function setPoster($poster)
+    {
+        $this->poster = $poster;
+    }
+
+    /**
+     * @return \Project\Entity\WorkpackageDocument[]
+     */
+    public function getPoster()
+    {
+        return $this->poster;
     }
 }

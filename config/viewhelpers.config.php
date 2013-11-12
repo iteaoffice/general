@@ -22,9 +22,10 @@ return array(
             },
     ),
     'invokables' => array(
-        'countryMap'    => 'General\View\Helper\CountryMap',
-        'countryFlag'   => 'General\View\Helper\CountryFlag',
-        'countryLink'   => 'General\View\Helper\CountryLink',
-        'challengeLink' => 'General\View\Helper\ChallengeLink',
+        'countryMap'      => 'General\View\Helper\CountryMap',
+        'countryFlag'     => 'General\View\Helper\CountryFlag',
+        'countryLink'     => 'General\View\Helper\CountryLink',
+        'challengeLink'   => 'General\View\Helper\ChallengeLink',
+        'contentTypeIcon' => 'General\View\Helper\ContentTypeIcon',
     )
 );
