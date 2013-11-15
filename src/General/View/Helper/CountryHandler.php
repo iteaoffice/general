@@ -132,8 +132,6 @@ class CountryHandler extends AbstractHelper
 
             case 'country_organisation':
 
-                $this->getView()->headTitle()->append('Organisations');
-
                 return $this->parseOrganisationList();
                 break;
 
