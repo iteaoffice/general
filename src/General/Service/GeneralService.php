@@ -89,6 +89,25 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @param $contentTypeName
+     *
+     * @return null|\General\Entity\ContentType
+     * @throws \InvalidArgumentException
+     */
+    public function findContentTypeByContentTypeName($contentTypeName)
+    {
+        if (is_null($contentTypeName)) {
+            throw new \InvalidArgumentException("A content type name is required to find an entity");
+        }
+
+        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->findOneBy(
+            array('contentType' => $contentTypeName)
+        );
+
+        return $entity;
+    }
+
+    /**
      * @param $id
      *
      * @return \General\Entity\Challenge

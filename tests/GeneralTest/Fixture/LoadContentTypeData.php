@@ -15,8 +15,8 @@ class LoadContentTypeData implements FixtureInterface
     {
         $contentType = new \General\Entity\ContentType();
         $contentType->setDescription('This is another description');
-        $contentType->setContentType('TestContentType');
-        $contentType->setExtension('extension');
+        $contentType->setContentType('application/pdf');
+        $contentType->setExtension('pdf');
         $contentType->setImage(file_get_contents(__DIR__ . '/../../assets/img/image_not_found.jpg'));
 
         $manager->persist($contentType);
