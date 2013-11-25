@@ -18,7 +18,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
 
 /**
  * Entity for the General
@@ -108,6 +107,12 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @var \Event\Entity\DeskCosts[]
      */
     private $deskCosts;
+    /**
+     * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\OptionCosts", cascade={"persist"}, mappedBy="vat")
+     * @Annotation\Exclude()
+     * @var \Event\Entity\Meeting\OptionCosts[]
+     */
+    private $optionCosts;
 
     /**
      * Class constructor
@@ -118,6 +123,7 @@ class Vat extends EntityAbstract implements ResourceInterface
         $this->invoiceRow   = new Collections\ArrayCollection();
         $this->financialRow = new Collections\ArrayCollection();
         $this->deskCosts    = new Collections\ArrayCollection();
+        $this->optionCosts  = new Collections\ArrayCollection();
     }
 
     /**
@@ -403,5 +409,21 @@ class Vat extends EntityAbstract implements ResourceInterface
     public function getDeskCosts()
     {
         return $this->deskCosts;
+    }
+
+    /**
+     * @param \Event\Entity\Meeting\OptionCosts[] $optionCosts
+     */
+    public function setOptionCosts($optionCosts)
+    {
+        $this->optionCosts = $optionCosts;
+    }
+
+    /**
+     * @return \Event\Entity\Meeting\OptionCosts[]
+     */
+    public function getOptionCosts()
+    {
+        return $this->optionCosts;
     }
 }
