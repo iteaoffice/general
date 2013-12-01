@@ -120,6 +120,16 @@ class ContentType
      * @var \Project\Entity\WorkpackageDocument[]
      */
     private $poster;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Document", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Idea\Document[]
+     */
+    private $ideaDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Idea\Image[]
+     */
+    private $ideaImage;
 
 
     /**
@@ -141,6 +151,8 @@ class ContentType
         $this->result              = new Collections\ArrayCollection();
         $this->workpackageDocument = new Collections\ArrayCollection();
         $this->poster              = new Collections\ArrayCollection();
+        $this->ideaDocument        = new Collections\ArrayCollection();
+        $this->ideaImage           = new Collections\ArrayCollection();
     }
 
     /**
@@ -473,5 +485,37 @@ class ContentType
     public function getPoster()
     {
         return $this->poster;
+    }
+
+    /**
+     * @param \Project\Entity\Idea\Document[] $ideaDocument
+     */
+    public function setIdeaDocument($ideaDocument)
+    {
+        $this->ideaDocument = $ideaDocument;
+    }
+
+    /**
+     * @return \Project\Entity\Idea\Document[]
+     */
+    public function getIdeaDocument()
+    {
+        return $this->ideaDocument;
+    }
+
+    /**
+     * @param \Project\Entity\Idea\Image[] $ideaImage
+     */
+    public function setIdeaImage($ideaImage)
+    {
+        $this->ideaImage = $ideaImage;
+    }
+
+    /**
+     * @return \Project\Entity\Idea\Image[]
+     */
+    public function getIdeaImage()
+    {
+        return $this->ideaImage;
     }
 }

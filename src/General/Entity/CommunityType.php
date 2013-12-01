@@ -65,6 +65,15 @@ class CommunityType
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->type;
+    }
+
+
+    /**
      * @param \Contact\Entity\Community[] $community
      */
     public function setCommunity($community)

@@ -1,21 +1,29 @@
-<div class="page-header">
-    <h1>{{ translate("txt-countries-in-itea") }}</h1>
-</div>
+
+<h1>{{ translate("txt-countries-in-itea") }}</h1>
 
 <div class="row">
     {% for country in countries %}
+
         <div class="col-md-3">
-            <h3>{{ countryFlag(country, 30) }}{{ countryLink(country,'view','name') }}</h3>
+            <div class="thumbnail information-box">
+                <div class="information-box-header clearfix">
+                    <div class="pull-left">
+                        <h3 class="information-box-title">{{ countryLink(country,'view','name') }}</h3>
+                        {% if country.itac %}{{ translate("txt-itac") }}
+                        {% if country.eureka %} · {% endif %}
+                        {% endif %}
+                        {% if country.eureka %}{{ translate("txt-eureka") }}{% endif %}
+                    </div>
+                    <div class="pull-right">{{ countryFlag(country, 40) }}</div>
+                </div>
 
-            {% if country.itac %}{{ translate("txt-itac") }}{% endif %} {% if country.eureka %}{{ translate("txt-eureka") }}{% endif %}
-
-            <dl>
-                <dt>{{ translate("txt-partners") }}</dt>
-                <dd>[@todo]</dd>
-                <dt>{{ translate("txt-projects") }}</dt>
-                <dd>[@todo]</dd>
-            </dl>
-
+                <dl>
+                    <dt>{{ translate("txt-partners") }}</dt>
+                    <dd>[@todo]</dd>
+                    <dt>{{ translate("txt-projects") }}</dt>
+                    <dd>[@todo]</dd>
+                </dl>
+            </div>
 
         </div>
     {% endfor %}

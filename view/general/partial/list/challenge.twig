@@ -4,8 +4,15 @@
     {% for challenge in challenge %}
         <div class="col-md-6">
             <div class="well challenge-box">
-                <div class="well-label"
-                     style="background-color: #{{ challenge.backgroundColor }};">{{ challengeLink(challenge,'view','name') }}</div>
+                {% if challenge|lower == 'engineering' %}
+                    <h2 style="color: black !important; "><img width="50px" src="style/image/{{ challenge|lower }}.png">
+                        {{ challengeLink(challenge,'view','name') }}
+                    </h2>
+                {% else %}
+                    <div class="well-label"
+                         style="background-color: #{{ challenge.backgroundColor }}; color: #{{ challenge.frontColor }}">{{ challenge }}</div>
+                {% endif %}
+
                 {{ challenge.description[0:200]|striptags|raw }}
             </div>
         </div>

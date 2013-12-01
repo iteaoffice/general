@@ -18,7 +18,7 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 
 use Contact\Entity\Contact;
-use General\Entity\GeneralService;
+use General\Service\GeneralService;
 use General\Entity\WebInfo;
 use ZfcTwig\View\Renderer\TwigRenderer;
 
@@ -269,6 +269,9 @@ class EmailService
         return $content;
     }
 
+    /**
+     * @return string
+     */
     public function getTemplateLocation()
     {
         return 'template-' . $this->template->getId() . '.twig';

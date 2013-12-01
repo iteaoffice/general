@@ -10,6 +10,10 @@
 namespace General\Service;
 
 use General\Entity;
+use General\Options\ModuleOptions;
+use Zend\Http\Client;
+use Zend\Json\Json;
+use Zend\Http\Response;
 
 /**
  * GeneralService
@@ -18,6 +22,11 @@ use General\Entity;
  */
 class GeneralService extends ServiceAbstract
 {
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
+
     /**
      * @param $entity
      * @param $docRef
@@ -108,6 +117,31 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * Give the location of a user based on an IP address IPAddress of a person by checking an online service
+     *
+     * @return null|Entity\Country
+     */
+    public function findLocationByIPAddress()
+    {
+        $client = new Client();
+        $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
+
+
+        if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
+            /**
+             * We have the country, try to find the country in our database
+             */
+            $countryResult = Json::decode($client->send()->getContent());
+
+            return $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
+                array('cd' => $countryResult->country_code)
+            );
+        }
+
+        return $this->findEntityById('country', 0); //Unknown
+    }
+
+    /**
      * @param $id
      *
      * @return \General\Entity\Challenge
@@ -115,5 +149,31 @@ class GeneralService extends ServiceAbstract
     public function findChallengeById($id)
     {
         return $this->getEntityManager()->getRepository($this->getFullEntityName('challenge'))->find($id);
+    }
+
+    /**
+     * @param $options
+     *
+     * @return ModuleOptions
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * get options
+     *
+     * @return ModuleOptions
+     */
+    public function getOptions()
+    {
+        if (!$this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('general_module_options'));
+        }
+
+        return $this->options;
     }
 }

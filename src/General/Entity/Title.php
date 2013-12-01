@@ -18,8 +18,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
-
 /**
  * Entity for the General
  *
@@ -81,6 +79,7 @@ class Title extends EntityAbstract implements ResourceInterface
      * Magic Getter
      *
      * @param $property
+     *
      * @return mixed
      */
     public function __get($property)
@@ -93,6 +92,7 @@ class Title extends EntityAbstract implements ResourceInterface
      *
      * @param $property
      * @param $value
+     *
      * @return void
      */
     public function __set($property, $value)
@@ -107,7 +107,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return $this->title;
+        return (string)$this->name;
     }
 
     /**
@@ -124,6 +124,7 @@ class Title extends EntityAbstract implements ResourceInterface
      * Set input filter
      *
      * @param  InputFilterInterface $inputFilter
+     *
      * @return void
      * @throws \Exception
      */
@@ -139,24 +140,24 @@ class Title extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
 
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'name',
-                        'required' => true,
-                        'filters' => array(
+                        'name'       => 'name',
+                        'required'   => true,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 100,
+                                    'min'      => 1,
+                                    'max'      => 100,
                                 ),
                             ),
                         ),
@@ -167,19 +168,19 @@ class Title extends EntityAbstract implements ResourceInterface
             $inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'salutation',
-                        'required' => true,
-                        'filters' => array(
+                        'name'       => 'salutation',
+                        'required'   => true,
+                        'filters'    => array(
                             array('name' => 'StripTags'),
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
                             array(
-                                'name' => 'StringLength',
+                                'name'    => 'StringLength',
                                 'options' => array(
                                     'encoding' => 'UTF-8',
-                                    'min' => 1,
-                                    'max' => 100,
+                                    'min'      => 1,
+                                    'max'      => 100,
                                 ),
                             ),
                         ),
@@ -191,7 +192,6 @@ class Title extends EntityAbstract implements ResourceInterface
         }
 
         return $this->inputFilter;
-
     }
 
     /**

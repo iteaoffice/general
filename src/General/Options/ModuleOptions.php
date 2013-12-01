@@ -22,7 +22,15 @@ class ModuleOptions extends AbstractOptions
     protected $imageNotFound = 'image_not_found.jpg';
 
     /**
-     * @param  array         $styleLocations
+     * String of the GeoIP service
+     *
+     * @var string
+     */
+    protected $geoIpServiceURL = 'http://freegeoip.net/json/%s';
+
+    /**
+     * @param  array $styleLocations
+     *
      * @return ModuleOptions
      */
     public function setStyleLocations($styleLocations)
@@ -61,6 +69,7 @@ class ModuleOptions extends AbstractOptions
 
     /**
      * @param $imageNotFound
+     *
      * @return ModuleOptions
      */
     public function setImageNotFound($imageNotFound)
@@ -76,5 +85,25 @@ class ModuleOptions extends AbstractOptions
     public function getImageNotFound()
     {
         return $this->imageNotFound;
+    }
+
+    /**
+     * @param string $geoIpServiceURL
+     *
+     * @return ModuleOptions
+     */
+    public function setGeoIpServiceURL($geoIpServiceURL)
+    {
+        $this->geoIpServiceURL = $geoIpServiceURL;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeoIpServiceURL()
+    {
+        return $this->geoIpServiceURL;
     }
 }

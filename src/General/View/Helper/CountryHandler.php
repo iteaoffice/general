@@ -95,12 +95,13 @@ class CountryHandler extends AbstractHelper
     public function render()
     {
 
+        $translate = $this->getView()->plugin('translate');
 
         switch ($this->getHandler()->getHandler()) {
 
             case 'country':
 
-                $this->getView()->headTitle()->append("Country");
+                $this->getView()->headTitle()->append($translate("txt-country"));
                 $this->getView()->headTitle()->append($this->getCountry()->getCountry());
 
                 return $this->parseCountry();
@@ -124,7 +125,8 @@ class CountryHandler extends AbstractHelper
 
             case 'country_list':
 
-                $this->getView()->headTitle()->append('List');
+
+                $this->getView()->headTitle()->append($translate("txt-countries-in-itea"));
                 $page = $this->routeMatch->getParam('page');
 
                 return $this->parseCountryList($page);
