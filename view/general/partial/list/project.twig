@@ -5,6 +5,7 @@
     <div class="col-md-3">
 
         <div class="thumbnail information-box">
+
             <div class="information-box-header clearfix">
                 {{ projectService.project.number }}
                 <h3 class="information-box-title">
@@ -15,6 +16,18 @@
             <div class="information-box-image">
                 {{ projectLogo(projectService, 'img-rounded') }}
             </div>
+
+
+            <dl>
+                <dt>{{ translate("txt-program-call") }}</dt>
+                <dd>{{ callLink(projectService.project.call,'view') }}</dd>
+                <dt>{{ translate("txt-status") }}</dt>
+                <dd>{{ projectService.parseStatus() }}</dd>
+                <dt>{{ translate("txt-project-leader") }}</dt>
+                {% set contactService = contactServiceProxy(projectService.project.contact) %}
+                <dd>{{ contactService.parseFullname() }}</dd>
+            </dl>
+
         </div>
 
     </div>

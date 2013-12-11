@@ -47,24 +47,6 @@ class CountryMap extends AbstractHelper
         }
         $html[] = "};\n";
 
-//        $objCountryCollection = new CustomCollection(
-//            'SELECT country.country_cd ' .
-//            'FROM affiliation INNER ' .
-//            'JOIN organisation ON affiliation.organisation_id = organisation.organisation_id INNER ' .
-//            'JOIN country ON organisation.country_id = country.country_id ' .
-//            'WHERE (not country.country_id = 0) ' .
-//            ' AND  affiliation.date_end is null ' .
-//            ' AND  project_id in (SELECT project_id FROM project_version WHERE (approved=1) and (type_id = 2)) ' .
-//            ' AND  project_id not in (SELECT project_id FROM project_version WHERE type_id = 4) ' .
-//            'GROUP BY country.country_id, country.country ' .
-//            'ORDER BY country', 'country');
-//
-//        $html .= " var countries = [\n";
-//        foreach ($objCountryCollection->items() as $objCountry) {
-//            $html .= '"' . $objCountry->country_cd . '", ';
-//        }
-//        $html .= "];\n";
-
         if ($clickable) {
             $html[] = "var clickable = 1;";
         } else {
@@ -77,12 +59,18 @@ class CountryMap extends AbstractHelper
                 $(function(){
                     $('#world-map-gdp').vectorMap({
                         map: 'europe_mill_en',
+                        backgroundColor: 'transparent',
                         series: {
                             regions: [{
                                 values: gdpData,
                                 scale: ['$color', '$colorFaded'],
-                                normalizeFunction: 'polynomial'
+                                normalizeFunction: 'polynomial',
                             }]
+                        },
+                         regionStyle: {
+                          initial: {
+                            fill: '#C5C7CA'
+                          }
                         },
                         onRegionClick: function(e, code) {
                             if (clickable == 1 && jQuery.inArray(code, countries) != '-1')
