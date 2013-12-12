@@ -175,8 +175,8 @@ class ContentType
     public function getCacheFileName()
     {
 
-        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR .
-            'assets' . DIRECTORY_SEPARATOR . 'content-type-icon';
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
+            DIRECTORY_SEPARATOR . DEBRANOVA_HOST . DIRECTORY_SEPARATOR . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR
         . $this->getHash() . '.gif';

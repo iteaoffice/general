@@ -158,13 +158,12 @@ class EmailService
 
         $htmlView = $this->renderer->render(
             'email/' . $email->getHtmlLayoutName() . '.twig',
-            array('content' => $content)
+            array_merge_recursive(array('content' => $content), $templateVars)
         );
-
 
         $textView = $this->renderer->render(
             'email/' . $email->getTextLayoutName() . 'twig',
-            array('content' => $content)
+            array_merge_recursive(array('content' => $content), $templateVars)
         );
 
         if (!is_null($textView)) {
@@ -259,6 +258,7 @@ class EmailService
          * Grab the content from the template and save the .twig format in on the file server
          */
         file_put_contents(
+            $this->config['template_vars']['cache_location'] . DIRECTORY_SEPARATOR .
             $this->getTemplateLocation(), preg_replace('~\[(.*?)\]~', "{{ $1 }}", $this->template->getContent())
         );
 

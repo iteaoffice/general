@@ -10,21 +10,11 @@
 return array(
     'router' => array(
         'routes' => array(
-            'style'        => array(
-                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                'options' => array(
-                    'route'    => '/style/[:type]/[:source]',
-                    'defaults' => array(
-                        'controller' => 'general-style',
-                        'action'     => 'display',
-                    ),
-                ),
-            ),
             'assets'       => array(
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => array(
-                    'route'    => '/assets',
+                    'route'    => '/assets/' . DEBRANOVA_HOST,
                     'defaults' => array(
                         'controller' => 'index',
                         'action'     => 'index',
@@ -47,6 +37,16 @@ return array(
                             'route'    => "/content-type-icon/[:hash].gif",
                             'defaults' => array(
                                 'action' => 'display',
+                            ),
+                        ),
+                    ),
+                    'image'             => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => "/image/[:source]",
+                            'defaults' => array(
+                                'controller' => 'general-style',
+                                'action'     => 'display',
                             ),
                         ),
                     ),
