@@ -40,7 +40,7 @@ return array(
                             ),
                         ),
                     ),
-                    'image'             => array(
+                    'style-image'       => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route'    => "/style/image/[:source]",
