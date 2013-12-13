@@ -40,6 +40,16 @@ return array(
                             ),
                         ),
                     ),
+                    'image'             => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => "/style/image/[:source]",
+                            'defaults' => array(
+                                'controller' => 'general-style',
+                                'action'     => 'display',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'country'      => array(
