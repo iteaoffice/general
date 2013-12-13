@@ -63,7 +63,7 @@ class StyleController extends AbstractActionController implements ServiceLocator
          * Create a cache-version of the file
          */
         $cacheDir = __DIR__ . '/../../../../../../public/assets/' .
-            DEBRANOVA_HOST . DIRECTORY_SEPARATOR . 'image';
+            DEBRANOVA_HOST . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
         if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->getEvent()->getRouteMatch()->getParam('source'))) {
             //Save a copy of the file in the caching-folder
             file_put_contents(
