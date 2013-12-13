@@ -52,7 +52,7 @@ return array(
             'BjyAuthorize\Guard\Route' => array(
                 array('route' => 'content-type/icon', 'roles' => array()),
                 array('route' => 'country/flag', 'roles' => array()),
-                array('route' => 'assets/image', 'roles' => array()),
+                array('route' => 'assets/style-image', 'roles' => array()),
                 array('route' => 'home', 'roles' => array())
 
             ),
