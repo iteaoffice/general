@@ -16,7 +16,7 @@ return array(
                 'options'       => array(
                     'route'    => '/assets/' . DEBRANOVA_HOST,
                     'defaults' => array(
-                        'controller' => 'index',
+                        'controller' => 'general-index',
                         'action'     => 'index',
                     ),
                 ),
@@ -37,16 +37,6 @@ return array(
                             'route'    => "/content-type-icon/[:hash].gif",
                             'defaults' => array(
                                 'action' => 'display',
-                            ),
-                        ),
-                    ),
-                    'image'             => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => "/image/[:source]",
-                            'defaults' => array(
-                                'controller' => 'general-style',
-                                'action'     => 'display',
                             ),
                         ),
                     ),
