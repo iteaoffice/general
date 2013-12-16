@@ -76,6 +76,10 @@ class CountryLink extends AbstractHelper
                 $router = 'route-' . $country->get('underscore_full_entity_name') . '-organisation';
                 $text   = sprintf($translate("txt-view-organisation-for-country-%s"), $country);
                 break;
+            case 'view-article':
+                $router = 'route-' . $country->get('underscore_full_entity_name') . '-article';
+                $text   = sprintf($translate("txt-view-article-for-country-%s"), $country);
+                break;
             default:
                 throw new \InvalidArgumentException(sprintf("%s is an incorrect action for %s", $action, __CLASS__));
         }
@@ -106,6 +110,9 @@ class CountryLink extends AbstractHelper
                 break;
             case 'name':
                 $linkContent[] = $country;
+                break;
+            case 'more':
+                $linkContent[] = $translate("txt-read-more");
                 break;
             case 'custom':
                 if (empty($customShow)) {

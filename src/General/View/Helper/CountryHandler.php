@@ -13,12 +13,11 @@ namespace General\View\Helper;
 
 use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
-use Zend\Paginator\Adapter\ArrayAdapter;
-use Zend\Paginator\Paginator;
 use Zend\Mvc\Router\Http\RouteMatch;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
+use Content\Service\ArticleService;
 use Program\Service\ProgramService;
 use Contact\Service\ContactService;
 use Project\Service\ProjectService;
@@ -54,6 +53,10 @@ class CountryHandler extends AbstractHelper
      */
     protected $contactService;
     /**
+     * @var ArticleService
+     */
+    protected $articleService;
+    /**
      * @var ProgramService
      */
     protected $programService;
@@ -69,6 +72,10 @@ class CountryHandler extends AbstractHelper
      * @var RouteMatch
      */
     protected $routeMatch = null;
+    /**
+     * @var int
+     */
+    protected $limit = 5;
 
     /**
      * @param HelperPluginManager $helperPluginManager
@@ -77,6 +84,7 @@ class CountryHandler extends AbstractHelper
     {
         $this->generalService      = $helperPluginManager->getServiceLocator()->get('general_general_service');
         $this->projectService      = $helperPluginManager->getServiceLocator()->get('project_project_service');
+        $this->articleService      = $helperPluginManager->getServiceLocator()->get('content_article_service');
         $this->contactService      = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
         $this->organisationService = $helperPluginManager->getServiceLocator()
             ->get('organisation_organisation_service');
@@ -124,8 +132,6 @@ class CountryHandler extends AbstractHelper
                 break;
 
             case 'country_list':
-
-
                 $this->getView()->headTitle()->append($translate("txt-countries-in-itea"));
                 $page = $this->routeMatch->getParam('page');
 
@@ -133,12 +139,17 @@ class CountryHandler extends AbstractHelper
                 break;
 
             case 'country_organisation':
-
                 return $this->parseOrganisationList();
                 break;
 
             case 'country_project':
                 return $this->parseCountryProjectList($this->getCountry());
+                break;
+
+            case 'country_article':
+
+                return $this->parseCountryArticleList($this->getCountry());
+
                 break;
 
             default:
@@ -202,6 +213,26 @@ class CountryHandler extends AbstractHelper
                 'organisations' => $organisations
             )
         );
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return \Content\Entity\Article[]
+     */
+    public function parseCountryArticleList(Country $country)
+    {
+        $articles = $this->articleService->findArticlesByCountry($country, $this->getLimit());
+
+        /**
+         * Parse the organisationService in to have the these functions available in the view
+         */
+
+        return $this->getView()->render('general/partial/list/article.twig', array(
+            'country'  => $country,
+            'articles' => $articles,
+            'limit'    => $this->getLimit(),
+        ));
     }
 
     /**
@@ -279,7 +310,7 @@ class CountryHandler extends AbstractHelper
      */
     public function setCountryId($id)
     {
-        $this->setCountry($this->generalService->findCountryById($id));
+        $this->setCountry($this->generalService->findEntityById('country', $id));
 
         return $this->getCountry();
     }
@@ -300,5 +331,21 @@ class CountryHandler extends AbstractHelper
         $this->setCountry($country);
 
         return $this->getCountry();
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        return $this->limit;
     }
 }

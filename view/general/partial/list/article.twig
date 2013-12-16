@@ -1,0 +1,19 @@
+{% if  articles|length > 0 %}
+    <h3>{{ translate("txt-related-articles-for-%s")|format(country) }}</h3>
+    <ul class="list-group">
+        {% for article in articles if article.type.showInList %}
+            {% if article.type.highlight is constant("\\Content\\Entity\\ArticleType::HIGHLIGHT_YES") %}
+                <li class="list-group-item">
+                    {{ articleTypeIcon(article.type) }}
+                    {{ articleLink(article,'view-public','name') }}
+                </li>
+            {% endif %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-article-found"))|raw }}
+        {% endfor %}
+
+        {% if limit != 0 %}
+            {{ countryLink(country,'view-article', 'more') }}
+        {% endif %}
+    </ul>
+{% endif %}
