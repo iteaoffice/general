@@ -95,14 +95,13 @@ class ChallengeLink extends AbstractHelper
         }
 
 
-        $uri = '<a href="%s" title="%s" class="%s" style="color: #%s">%s</a>';
+        $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
         return sprintf(
             $uri,
             $serverUrl->__invoke() . $url($router, $params),
             $text,
             implode($classes),
-            $challenge->getFrontColor(),
             implode($linkContent)
         );
     }
