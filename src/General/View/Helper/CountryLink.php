@@ -115,7 +115,7 @@ class CountryLink extends AbstractHelper
                 $linkContent[] = $translate("txt-read-more");
                 break;
             case 'custom':
-                if (empty($customShow)) {
+                if (is_null($customShow)) {
                     throw new \InvalidArgumentException(sprintf("CustomShow cannot be empty"));
                 }
                 $linkContent[] = $customShow;

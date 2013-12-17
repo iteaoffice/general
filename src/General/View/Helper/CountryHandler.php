@@ -14,6 +14,10 @@ namespace General\View\Helper;
 use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Paginator\Paginator;
+
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
@@ -22,6 +26,7 @@ use Program\Service\ProgramService;
 use Contact\Service\ContactService;
 use Project\Service\ProjectService;
 use Organisation\Service\OrganisationService;
+use Organisation\Form\Search;
 
 
 use Content\Entity\Handler;
@@ -138,8 +143,18 @@ class CountryHandler extends AbstractHelper
                 return $this->parseCountryList($page);
                 break;
 
+            case 'country_list_itac':
+                $this->getView()->headTitle()->append($translate("txt-itac-countries-in-itea"));
+                $page = $this->routeMatch->getParam('page');
+
+                return $this->parseCountryListItac($page);
+                break;
+
             case 'country_organisation':
-                return $this->parseOrganisationList();
+
+                $page = $this->routeMatch->getParam('page');
+
+                return $this->parseOrganisationList($page);
                 break;
 
             case 'country_project':
@@ -160,6 +175,8 @@ class CountryHandler extends AbstractHelper
     }
 
     /**
+     * Create a list of all countries which are active (have projects)
+     *
      * @return string
      */
     public function parseCountryList()
@@ -171,12 +188,24 @@ class CountryHandler extends AbstractHelper
     }
 
     /**
+     * Create a list of countries which are member of the itac
+     *
+     * @return string
+     */
+    public function parseCountryListItac()
+    {
+        $countries = $this->generalService->findItacCountries();
+
+        return $this->getView()->render('general/partial/list/country-itac',
+            array('countries' => $countries));
+    }
+
+
+    /**
      * @return string
      */
     public function parseCountry()
     {
-
-
         return $this->getView()->render('general/partial/entity/country',
             array(
                 'country' => $this->getCountry(),
@@ -193,7 +222,13 @@ class CountryHandler extends AbstractHelper
     {
         $projects = $this->projectService->findProjectByCountry($country);
 
-        return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
+        return $this->getView()->render(
+            'general/partial/list/project.twig',
+            array(
+                'country'  => $country,
+                'projects' => $projects
+            )
+        );
     }
 
     /**
@@ -210,7 +245,7 @@ class CountryHandler extends AbstractHelper
             array(
                 'country'       => $country,
                 'projects'      => $projects,
-                'organisations' => $organisations
+                'organisations' => $organisations->getResult()
             )
         );
     }
@@ -256,18 +291,28 @@ class CountryHandler extends AbstractHelper
     /**
      * Create a list of organisations
      *
+     * @param int $page
+     *
      * @return string
      */
-    public function parseOrganisationList()
+    public function parseOrganisationList($page)
     {
-        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
+        $organisationQuery = $this->organisationService->findOrganisationByCountry($this->getCountry());
+
+        $searchForm = new Search();
+
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
 
         return $this->getView()->render('organisation/partial/list/organisation.twig', array(
-            'organisations' => $organisations,
+            'paginator' => $paginator,
+            'form'      => $searchForm
         ));
     }
 
