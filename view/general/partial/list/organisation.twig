@@ -1,0 +1,75 @@
+<div id="organisation-list">
+    <h1 id="title">{{ translate("txt-organisation-list-in-country-%s")|format(country) }}</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p class="lead">{{ translate("txt-organisation-list-explanation") }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <div id="throbber"></div>
+            {% do form.prepare() %}
+            {{ form().openTag(form)|raw }}
+            {{ formelement(form.get('search')) }}
+            {{ form().closeTag()|raw }}
+        </div>
+
+    </div>
+
+    {% if paginator.pageRange > 0 %}
+        <table class="table table-condensed table-striped table-hover">
+            <thead>
+            <tr>
+                <th>{{ translate("txt-organisation") }}</th>
+                <th>{{ translate("txt-country") }}</th>
+                <th>{{ translate("txt-type") }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for organisation in paginator.getCurrentItems() %}
+                <tr>
+                    {% set organisationService = organisationServiceProxy(organisation) %}
+                    <td>{{ organisationLink(organisationService,'view','name') }}</td>
+                    <td>{{ countryLink(organisation.country,'view','name') }}</td>
+                    <td>{{ organisation.type }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% include 'organisation/partial/pagination-control.twig' with {'paginator': paginator} %}
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#search").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: 'organisation/search',
+                    data: {
+                        max_rows: 12,
+                        search_item: request.term
+                    },
+                    success: function (data) {
+                        $("#organisation-list").html(data);
+                    },
+                    error: function (event, ui) {
+                        alert("Search Failed");
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                log(ui.item ?
+                        "Selected: " + ui.item.label :
+                        "Nothing selected, input was " + this.value);
+            },
+            search: function () {
+                var throb = new Throbber({color: '#00A651'});
+                throb.appendTo(document.getElementById('title'));
+                throb.start();
+            }
+        });
+    });
+</script>
