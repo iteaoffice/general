@@ -84,7 +84,6 @@ class ChallengeHandler extends AbstractHelper
                 break;
             case 'challenge_list':
 
-                $this->getView()->headTitle()->append($translate("txt-list"));
                 $page = $this->routeMatch->getParam('page');
 
                 return $this->parseChallengeList($page);

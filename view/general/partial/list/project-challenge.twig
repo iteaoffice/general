@@ -1,0 +1,23 @@
+{% if projects|length > 0 %}
+    <h3>{{ translate("txt-projects-with-challenge-%s")|format(challenge) }}</h3>
+
+    <div class="row">
+        {% for projectService in projects %}
+            <div class="col-md-6">
+                <div class="thumbnail information-box">
+
+                    <div class="information-box-header clearfix">
+                        {{ projectService.project.number }}
+                        <h3 class="information-box-title">
+                            {{ projectLink(projectService,'view','name-without-number') }}
+                        </h3>
+                    </div>
+
+                    <div class="information-box-image">
+                        {{ projectLogo(projectService, 'img-rounded') }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
