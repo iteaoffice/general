@@ -71,20 +71,20 @@ class ChallengeHandler extends AbstractHelper
      */
     public function render()
     {
-
+        $translate = $this->getView()->plugin('translate');
 
         switch ($this->getHandler()->getHandler()) {
 
             case 'challenge':
 
-                $this->getView()->headTitle()->append("Challenge");
+                $this->getView()->headTitle()->append($translate("txt-challenge"));
                 $this->getView()->headTitle()->append($this->getChallenge()->getChallenge());
 
                 return $this->parseChallenge();
                 break;
             case 'challenge_list':
 
-                $this->getView()->headTitle()->append('List');
+                $this->getView()->headTitle()->append($translate("txt-list"));
                 $page = $this->routeMatch->getParam('page');
 
                 return $this->parseChallengeList($page);
@@ -131,7 +131,12 @@ class ChallengeHandler extends AbstractHelper
     {
         $projects = $this->projectService->findProjectByChallenge($challenge);
 
-        return $this->getView()->render('general/partial/list/project.twig', array('projects' => $projects));
+        return $this->getView()->render('general/partial/list/project-challenge.twig',
+            array(
+                'projects'  => $projects,
+                'challenge' => $challenge
+            )
+        );
     }
 
 
