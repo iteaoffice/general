@@ -311,6 +311,7 @@ class CountryHandler extends AbstractHelper
          */
 
         return $this->getView()->render('general/partial/list/organisation.twig', array(
+            'country'   => $this->getCountry(),
             'paginator' => $paginator,
             'form'      => $searchForm
         ));
