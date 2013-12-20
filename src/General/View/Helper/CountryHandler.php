@@ -310,7 +310,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('organisation/partial/list/organisation.twig', array(
+        return $this->getView()->render('general/partial/list/organisation.twig', array(
             'paginator' => $paginator,
             'form'      => $searchForm
         ));
