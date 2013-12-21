@@ -1,9 +1,9 @@
-<h1>{{ translate("txt-itac-countries-in-itea") }}</h1>
+<h2>{{ translate("txt-itac-countries-in-itea") }}</h2>
 
 <div class="row">
-    {% for affiliation in countries %}
-        {#due to the structure of the query in Doctrine2 we are polling the countries via the affiliations#}
-        {% set country = affiliation.affiliation.organisation.country %}
+    {% for countryContainer in countries %}
+
+        {% set country = countryContainer.country %}
         <div class="col-md-3">
             <div class="thumbnail information-box">
                 <div class="information-box-header clearfix">
@@ -19,9 +19,9 @@
 
                 <dl>
                     <dt>{{ translate("txt-partners") }}</dt>
-                    <dd>{{ countryLink(country,'view-organisation', 'custom', affiliation.partners) }}</dd>
+                    <dd>{{ countryLink(country,'view-organisation', 'custom', countryContainer.partners) }}</dd>
                     <dt>{{ translate("txt-projects") }}</dt>
-                    <dd>{{ countryLink(country,'view-project', 'custom', affiliation.projects) }}</dd>
+                    <dd>{{ countryLink(country,'view-project', 'custom', countryContainer.projects) }}</dd>
                 </dl>
             </div>
 
