@@ -5,7 +5,6 @@
  */
 namespace General;
 
-use Zend\Mail\Message;
 use General\Service\GeneralService;
 
 class Email

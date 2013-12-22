@@ -1,11 +1,11 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    Content
  * @package     Service
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Service;
 
@@ -131,7 +131,6 @@ class GeneralService extends ServiceAbstract
     {
         $client = new Client();
         $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
-
 
         if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
             /**

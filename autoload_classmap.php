@@ -30,6 +30,7 @@ return array(
   'General\Service\GeneralService'            => __DIR__ . '/src/General/Service/GeneralService.php',
   'General\Service\ServiceAbstract'           => __DIR__ . '/src/General/Service/ServiceAbstract.php',
   'General\Service\ServiceInterface'          => __DIR__ . '/src/General/Service/ServiceInterface.php',
+  'General\Version\Version'                   => __DIR__ . '/src/General/Version/Version.php',
   'General\View\Helper\ChallengeHandler'      => __DIR__ . '/src/General/View/Helper/ChallengeHandler.php',
   'General\View\Helper\ChallengeLink'         => __DIR__ . '/src/General/View/Helper/ChallengeLink.php',
   'General\View\Helper\ContentTypeIcon'       => __DIR__ . '/src/General/View/Helper/ContentTypeIcon.php',

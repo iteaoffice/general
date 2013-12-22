@@ -133,7 +133,6 @@ class EmailService
             return new \InvalidArgumentException("There is no template set");
         }
 
-
         //Template Variables
         $templateVars = $this->config["template_vars"];
         $templateVars = array_merge($templateVars, $email->toArray());
@@ -230,7 +229,6 @@ class EmailService
         $body = new MimeMessage();
         $body->setParts(array($htmlContent, $textContent));
 
-
         /**
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -259,7 +257,7 @@ class EmailService
          */
         file_put_contents(
             $this->config['template_vars']['cache_location'] . DIRECTORY_SEPARATOR .
-            $this->getTemplateLocation(), preg_replace('~\[(.*?)\]~', "{{ $1 }}", $this->template->getContent())
+            $this->getTemplateLocation(), preg_replace('~\[(.*?)\]~', "{{ $1|raw }}", nl2br($this->template->getContent()))
         );
 
         $content = $this->renderer->render(

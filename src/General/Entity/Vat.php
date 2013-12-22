@@ -4,8 +4,8 @@
  *
  * @category    General
  * @package     Entity
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 ITEA
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Entity;
 
@@ -17,7 +17,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-
 
 /**
  * Entity for the General
@@ -158,7 +157,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->percentage . '%';
+        return (string) $this->percentage . '%';
     }
 
     /**
@@ -174,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter
      *
-     * @param  InputFilterInterface $inputFilter
+     * @param InputFilterInterface $inputFilter
      *
      * @return void
      * @throws \Exception
@@ -202,7 +201,6 @@ class Vat extends EntityAbstract implements ResourceInterface
                 )
             );
 
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -220,7 +218,6 @@ class Vat extends EntityAbstract implements ResourceInterface
                     )
                 )
             );
-
 
             $inputFilter->add(
                 $factory->createInput(

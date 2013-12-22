@@ -4,8 +4,8 @@
  *
  * @category    General
  * @package     Entity
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 ITEA
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Entity;
 
@@ -107,7 +107,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -123,7 +123,7 @@ class Title extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter
      *
-     * @param  InputFilterInterface $inputFilter
+     * @param InputFilterInterface $inputFilter
      *
      * @return void
      * @throws \Exception

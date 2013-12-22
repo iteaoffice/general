@@ -29,7 +29,7 @@ class ModuleOptions extends AbstractOptions
     protected $geoIpServiceURL = 'http://freegeoip.net/json/%s';
 
     /**
-     * @param  array $styleLocations
+     * @param array $styleLocations
      *
      * @return ModuleOptions
      */

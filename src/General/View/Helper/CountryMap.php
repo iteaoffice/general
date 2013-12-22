@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    General
  * @package     View
  * @subpackage  Helper
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -53,7 +53,6 @@ class CountryMap extends AbstractHelper
             $html[] = "var clickable = 0;";
         }
 
-
         $html[] = <<< EOT
 
                 $(function(){
@@ -73,8 +72,7 @@ class CountryMap extends AbstractHelper
                           }
                         },
                         onRegionClick: function(e, code) {
-                            if (clickable == 1 && jQuery.inArray(code, countries) != '-1')
-                            {
+                            if (clickable == 1 && jQuery.inArray(code, countries) != '-1') {
                                 window.location='?code=' + code;
                             }
                         },
@@ -83,7 +81,6 @@ class CountryMap extends AbstractHelper
                     });
                  });
 
-              
 EOT;
         $this->getView()->headScript()->appendFile(
             'assets/js/jvectormap.js',

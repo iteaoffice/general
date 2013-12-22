@@ -1,11 +1,11 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    Application
  * @package     Controller
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Controller;
 
@@ -53,7 +53,7 @@ class IndexController extends AbstractActionController implements ServiceLocator
 
             $response->getHeaders()
                 ->addHeaderLine('Content-Type: image/gif')
-                ->addHeaderLine('Content-Length: ' . (string)strlen($file));
+                ->addHeaderLine('Content-Length: ' . (string) strlen($file));
 
             $response->setContent($file);
 

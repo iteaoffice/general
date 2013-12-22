@@ -1,20 +1,18 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    Challenge
  * @package     View
  * @subpackage  Helper
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 
 namespace General\View\Helper;
 
 use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
-use Zend\Paginator\Adapter\ArrayAdapter;
-use Zend\Paginator\Paginator;
 use Zend\Mvc\Router\Http\RouteMatch;
 
 use General\Entity\Challenge;
@@ -137,7 +135,6 @@ class ChallengeHandler extends AbstractHelper
             )
         );
     }
-
 
     /**
      * @param \Content\Entity\Handler $handler

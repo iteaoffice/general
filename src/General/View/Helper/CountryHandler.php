@@ -1,12 +1,12 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    Country
  * @package     View
  * @subpackage  Helper
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -27,7 +27,6 @@ use Contact\Service\ContactService;
 use Project\Service\ProjectService;
 use Organisation\Service\OrganisationService;
 use Organisation\Form\Search;
-
 
 use Content\Entity\Handler;
 
@@ -127,12 +126,10 @@ class CountryHandler extends AbstractHelper
                 break;
 
             case 'country_funder':
-
                 return $this->parseCountryFunderList($this->getCountry());
                 break;
 
             case 'country_metadata':
-
                 return $this->parseCountryMetadata($this->getCountry());
                 break;
 
@@ -162,7 +159,6 @@ class CountryHandler extends AbstractHelper
                 break;
 
             case 'country_article':
-
                 return $this->parseCountryArticleList($this->getCountry());
 
                 break;
@@ -199,7 +195,6 @@ class CountryHandler extends AbstractHelper
         return $this->getView()->render('general/partial/list/country-itac',
             array('countries' => $countries));
     }
-
 
     /**
      * @return string

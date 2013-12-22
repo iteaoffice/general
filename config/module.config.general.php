@@ -25,18 +25,18 @@ return array(
             "html_layout_name" => "template",
             "text_layout_name" => "template_text",
             "from_email"       => "no-reply@debranova.org",
-            "from_name"        => "DebraNova Project",
+            "from_name"        => "ITEA office",
             "reply_to"         => "info@debranova.org",
             "reply_to_name"    => "Reply to"
         ),
         "emails"              => array(
-            "support" => "webmaster@debranova.org",
-            "admin"   => "webmaster@debranova.org"
+            "support" => "info@itea3.org",
+            "admin"   => "webmaster@itea3.org"
         ),
         'template_vars'       => array(
             "company"        => "ITEA 3",
             "slogan"         => "",
-            "baseUrl"        => "http://itea2.org",
+            "baseUrl"        => "http://itea3.org",
             "cache_location" => __DIR__ . '/../../../../data/mail/template',
         ),
         'relay'               => array(

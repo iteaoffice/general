@@ -4,16 +4,13 @@
  *
  * @category    Contact
  * @package     Repository
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-
-use Project\Entity\VersionType;
-use Project\Entity\Version;
 
 use General\Entity;
 
@@ -82,7 +79,6 @@ class Country extends EntityRepository
                 COUNT(DISTINCT aff2.project)
                 FROM Affiliation\Entity\Affiliation aff2
                 JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects');
-
 
         $queryBuilder->innerJoin('c.itac', 'itac');
 

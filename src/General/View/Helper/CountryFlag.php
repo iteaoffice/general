@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Japaveh Webdesign copyright message placeholder
+ * ITEA Office copyright message placeholder
  *
  * @category    General
  * @package     View
  * @subpackage  Helper
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   Copyright (c) 2004-2013 Japaveh Webdesign (http://japaveh.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -62,7 +62,6 @@ class CountryFlag extends AbstractHelper
             'ext'  => 'png',
             'iso3' => $country->getIso3(),
         );
-
 
         $image = sprintf(
             $imageUrl,
