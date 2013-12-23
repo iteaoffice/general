@@ -131,6 +131,7 @@ class ContentType
      */
     private $ideaImage;
 
+
     /**
      * Class constructor
      */
