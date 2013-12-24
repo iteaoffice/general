@@ -23,6 +23,7 @@ $config = array(
             __DIR__ . '/../view',
             __DIR__ . '/../../../../data/mail/template'
         ),
+        'template_map'        => include __DIR__ . '/../template_map.php',
     ),
     'service_manager' => array(
         'factories'  => array(
