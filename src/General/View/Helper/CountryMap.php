@@ -83,7 +83,7 @@ class CountryMap extends AbstractHelper
 
 EOT;
         $this->getView()->headScript()->appendFile(
-            'assets/js/jvectormap.js',
+            'assets/itea/js/jvectormap.js',
             'text/javascript'
         );
         $this->getView()->headScript()->appendScript(implode('', $html));
