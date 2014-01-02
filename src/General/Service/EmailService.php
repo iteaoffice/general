@@ -383,12 +383,14 @@ class EmailService
             array(
                 '~\[parent::getContact\(\)::firstname\]~',
                 '~\[parent::getContact\(\)::parseLastname\(\)\]~',
+                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
                 '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
                 '~\[parent::getContact\(\)::country\]~'
             ),
             array(
                 "[firstname]",
                 "[lastname]",
+                "[fullname]",
                 "[organisation]",
                 "[country]"
             ), $this->getMailing()->getMailHtml());
