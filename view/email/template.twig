@@ -15,14 +15,6 @@ body {
     width: 100% !important;
 }
 
-.ReadMsgBody {
-    width: 100%;
-}
-
-.ExternalClass {
-    width: 100%;
-}
-
 /* Force Hotmail to display emails at full width */
 body {
     -webkit-text-size-adjust: none;
@@ -34,6 +26,11 @@ body {
 body {
     margin: 0;
     padding: 0;
+    color: #707070;
+    font-family: Arial;
+    font-size: 11px;
+    line-height: 125%;
+    text-align: left;
 }
 
 img {
@@ -88,7 +85,7 @@ body, #backgroundTable {
 */
 h1, .h1 {
     /*@editable*/
-    color: #202020;
+    color: #00a651;
     display: block;
     /*@editable*/
     font-family: Arial;
@@ -114,7 +111,7 @@ h1, .h1 {
 */
 h2, .h2 {
     /*@editable*/
-    color: #404040;
+    color: #808285;
     display: block;
     /*@editable*/
     font-family: Arial;
@@ -140,7 +137,7 @@ h2, .h2 {
 */
 h3, .h3 {
     /*@editable*/
-    color: #606060;
+    color: #808285;
     display: block;
     /*@editable*/
     font-family: Arial;
@@ -166,7 +163,7 @@ h3, .h3 {
 */
 h4, .h4 {
     /*@editable*/
-    color: #808080;
+    color: #808285;
     display: block;
     /*@editable*/
     font-family: Arial;
@@ -217,21 +214,6 @@ h4, .h4 {
 
 /**
 * @tab Header
-* @section preheader link
-* @tip Set the styling for your email's preheader links. Choose a color that helps them stand out from your text.
-*/
-.preheaderContent div a:link, .preheaderContent div a:visited, /* Yahoo! Mail Override */
-.preheaderContent div a .yshortcuts /* Yahoo! Mail Override */                        {
-    /*@editable*/
-    color: #336699;
-    /*@editable*/
-    font-weight: normal;
-    /*@editable*/
-    text-decoration: underline;
-}
-
-/**
-* @tab Header
 * @section social bar style
 * @tip Set the background color and border for your email's footer social bar.
 */
@@ -252,7 +234,7 @@ h4, .h4 {
     /*@editable*/
     background-color: #FFFFFF;
     /*@editable*/
-    border-bottom: 5px solid #505050;
+    border-bottom: 1px solid #00a651;
 }
 
 /**
@@ -285,18 +267,13 @@ h4, .h4 {
 * @tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 */
 .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */
-.headerContent a .yshortcuts /* Yahoo! Mail Override */                        {
+.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                  {
     /*@editable*/
     color: #336699;
     /*@editable*/
     font-weight: normal;
     /*@editable*/
     text-decoration: underline;
-}
-
-#headerImage {
-    height: auto;
-    max-width: 600px !important;
 }
 
 /* /\/\/\/\/\/\/\/\/\/\ STANDARD STYLING: MAIN BODY /\/\/\/\/\/\/\/\/\/\ */
@@ -313,30 +290,11 @@ h4, .h4 {
 
 /**
 * @tab Body
-* @section body text
-* @tip Set the styling for your email's main content text. Choose a size and color that is easy to read.
-* @theme main
-*/
-.bodyContent div {
-    /*@editable*/
-    color: #505050;
-    /*@editable*/
-    font-family: Arial;
-    /*@editable*/
-    font-size: 14px;
-    /*@editable*/
-    line-height: 150%;
-    /*@editable*/
-    text-align: justify;
-}
-
-/**
-* @tab Body
 * @section body link
 * @tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
 */
 .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */
-.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                        {
+.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                  {
     /*@editable*/
     color: #336699;
     /*@editable*/
@@ -350,68 +308,6 @@ h4, .h4 {
     height: auto;
 }
 
-/* /\/\/\/\/\/\/\/\/\/\ STANDARD STYLING: SIDEBAR /\/\/\/\/\/\/\/\/\/\ */
-
-/**
-* @tab Sidebar
-* @section sidebar style
-* @tip Set the background color and border for your email's sidebar area.
-*/
-#templateSidebar {
-    /*@editable*/
-    background-color: #FDFDFD;
-}
-
-/**
-* @tab Sidebar
-* @section sidebar style
-* @tip Set the background color and border for your email's sidebar area.
-*/
-.sidebarContent {
-    /*@editable*/
-    border-right: 1px solid #DDDDDD;
-}
-
-/**
-* @tab Sidebar
-* @section sidebar text
-* @tip Set the styling for your email's sidebar text. Choose a size and color that is easy to read.
-*/
-.sidebarContent div {
-    /*@editable*/
-    color: #505050;
-    /*@editable*/
-    font-family: Arial;
-    /*@editable*/
-    font-size: 10px;
-    /*@editable*/
-    line-height: 150%;
-    /*@editable*/
-    text-align: left;
-}
-
-/**
-* @tab Sidebar
-* @section sidebar link
-* @tip Set the styling for your email's sidebar links. Choose a color that helps them stand out from your text.
-*/
-.sidebarContent div a:link, .sidebarContent div a:visited, /* Yahoo! Mail Override */
-.sidebarContent div a .yshortcuts /* Yahoo! Mail Override */                        {
-    /*@editable*/
-    color: #336699;
-    /*@editable*/
-    font-weight: normal;
-    /*@editable*/
-    text-decoration: underline;
-}
-
-.sidebarContent img {
-    display: inline;
-    height: auto;
-}
-
-/* /\/\/\/\/\/\/\/\/\/\ STANDARD STYLING: FOOTER /\/\/\/\/\/\/\/\/\/\ */
-
 /**
 * @tab Footer
 * @section footer style
@@ -420,28 +316,18 @@ h4, .h4 {
 */
 #templateFooter {
     /*@editable*/
-    background-color: #FAFAFA;
+    background-color: #fff;
     /*@editable*/
-    border-top: 3px solid #909090;
+    border-top: 2px solid #00a651;
 }
 
-/**
-* @tab Footer
-* @section footer text
-* @tip Set the styling for your email's footer text. Choose a size and color that is easy to read.
-* @theme footer
-*/
-.footerContent div {
-    /*@editable*/
-    color: #707070;
-    /*@editable*/
-    font-family: Arial;
-    /*@editable*/
-    font-size: 11px;
-    /*@editable*/
-    line-height: 125%;
-    /*@editable*/
-    text-align: left;
+.footerContent img {
+    display: inline;
+    padding: 0;
+}
+
+.footerContent td {
+    border-bottom: 2px solid #00a651;
 }
 
 /**
@@ -450,9 +336,9 @@ h4, .h4 {
 * @tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 */
 .footerContent div a:link, .footerContent div a:visited, /* Yahoo! Mail Override */
-.footerContent div a .yshortcuts /* Yahoo! Mail Override */                        {
+.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                  {
     /*@editable*/
-    color: #336699;
+    color: #00a651;
     /*@editable*/
     font-weight: normal;
     /*@editable*/
@@ -476,42 +362,7 @@ h4, .h4 {
     border: 0;
 }
 
-/**
-* @tab Footer
-* @section social bar style
-* @tip Set the background color and border for your email's footer social bar.
-*/
-#social div {
-    /*@editable*/
-    text-align: left;
-}
 
-/**
-* @tab Footer
-* @section utility bar style
-* @tip Set the background color and border for your email's footer utility bar.
-* @theme footer
-*/
-#utility {
-    /*@editable*/
-    background-color: #FAFAFA;
-    /*@editable*/
-    border-top: 0;
-}
-
-/**
-* @tab Footer
-* @section utility bar style
-* @tip Set the background color and border for your email's footer utility bar.
-*/
-#utility div {
-    /*@editable*/
-    text-align: left;
-}
-
-#monkeyRewards img {
-    max-width: 170px !important;
-}
 </style>
 </head>
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
@@ -519,52 +370,14 @@ h4, .h4 {
     <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
         <tr>
             <td align="center" valign="top">
-                <!-- // Begin Template Preheader \\ -->
-                <table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader">
-                    <tr>
-                        <td valign="top" class="preheaderContent">
-
-                            {#<!-- // Begin Module: Standard Preheader \ -->#}
-                            {#<table border="0" cellpadding="10" cellspacing="0" width="100%">#}
-                            {#<tr>#}
-                            {#<td valign="top">#}
-                            {#<div mc:edit="std_preheader_content">#}
-                            {#Use this area to offer a short teaser of your email's content. Text here#}
-                            {#will show in the preview area of some email clients.#}
-                            {#</div>#}
-                            {#</td>#}
-                            {#<!-- *|IFNOT:ARCHIVE_PAGE|* -->#}
-                            {#<td valign="top" width="170">#}
-                            {#<div mc:edit="std_preheader_links">#}
-                            {#Email not displaying correctly?<br/><a href="*|ARCHIVE|*" target="_blank">View#}
-                            {#it in your browser</a>.#}
-                            {#</div>#}
-                            {#</td>#}
-                            {#<!-- *|END:IF|* -->#}
-                            {#</tr>#}
-                            {#</table>#}
-                            <!-- // End Module: Standard Preheader \ -->
-
-                        </td>
-                    </tr>
-                </table>
-                <!-- // End Template Preheader \\ -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+                <table border="0" cellpadding="0" cellspacing="0" width="700" id="templateContainer">
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Header \\ -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
+                            <table border="0" cellpadding="0" cellspacing="0" width="700" id="templateHeader">
                                 <tr>
-                                    <td class="headerContent">
-                                        <img src="http://beta.itea3.org/style/image/logo-itea-transparent.jpg"
-                                             style="max-width:180px;" id="headerImage campaign-icon"
-                                             mc:label="header_image" mc:edit="header_image" mc:allowtext/>
-                                    </td>
-                                    <td class="headerContent" width="100%"
-                                        style="padding-left:10px; padding-right:20px;">
-                                        <div mc:edit="Header_content">
-                                            <h1>{{ header }}</h1>
-                                        </div>
+                                    <td class="headerContent" width="100%">
+                                        <h1>{{ header }}</h1>
                                     </td>
                                 </tr>
                             </table>
@@ -574,23 +387,11 @@ h4, .h4 {
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Body \\ -->
-                            <table border="0" cellpadding="10" cellspacing="0" width="600" id="templateBody">
+                            <table border="0" cellpadding="10" cellspacing="0" width="700" id="templateBody">
                                 <tr>
                                     <!-- // End Sidebar \\ -->
                                     <td valign="top" class="bodyContent">
-
-                                        <!-- // Begin Module: Standard Content \\ -->
-                                        <table border="0" cellpadding="10" cellspacing="0" width="100%">
-                                            <tr>
-                                                <td valign="top" style="padding-left:0;">
-                                                    <div mc:edit="std_content00">
-                                                        {{ content|raw }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!-- // End Module: Standard Content \\ -->
-
+                                        {{ content|raw }}
                                     </td>
                                 </tr>
                             </table>
@@ -600,42 +401,77 @@ h4, .h4 {
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Footer \\ -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateFooter">
+                            <table border="0" cellspacing="10" cellpadding="0" width="700" id="templateFooter">
                                 <tr>
-                                    <td valign="top" class="footerContent">
-
+                                    <td valign="bottom" class="footerContent">
                                         <!-- // Begin Module: Standard Footer \\ -->
-                                        <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+
                                             <tr>
-                                                <td colspan="2" valign="middle" id="social">
-                                                    <div mc:edit="std_social">
-                                                        &nbsp;<a href="http://twitter.com/itea2">Twitter</a> ·
-                                                        ·
-                                                        <a href="http://www.linkedin.com/groups?gid=2012287">Linked
-                                                            In</a>
-                                                    </div>
+                                                <td valign="top" width="400">
+                                                    <strong>{{ contact.getDislayName() }}</strong><br>
+                                                    {{ contact.position }}
+                                                    {% for note in contact.note if note.source == 'signature' %}
+                                                        <em>{{ note.note }}</em>
+                                                    {% endfor %}
+                                                </td>
+                                                <td valign="bottom" align="right" width="300">
+                                                    <a href="http://itea3.org"><img
+                                                                src="http://beta.itea3.org/assets/itea/style/image/logo-itea-email.jpg"></a>
+
                                                 </td>
                                             </tr>
+                                        </table>
+                                        <!-- // End Module: Standard Footer \\ -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="bottom">
+                                        <!-- // Begin Module: Standard Footer \\ -->
+                                        <table border="0" cellspacing="0" cellpadding="5" width="100%">
                                             <tr>
-                                                <td valign="top" width="350">
-                                                    <div mc:edit="std_footer">
-                                                        <em>{{ translate("txt-copyright") }} &copy; {{ now|date("Y") }}
-                                                            · {{ company|raw }}
-                                                        </em>
-                                                        <br/>
+                                                <td valign="top" width="20">
+
+                                                    <div class="abbreviations">
+                                                        E<br/>
+                                                        T<br/>
+                                                        W<br/>
+                                                        W<br/>
                                                     </div>
                                                 </td>
-                                                {#<td valign="top" width="190" id="monkeyRewards">#}
-                                                {#<div mc:edit="monkeyrewards">#}
-                                                {#*|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*#}
-                                                {#</div>#}
-                                                {#</td>#}
+
+                                                <td valign="top" width="290">
+                                                    <a style="color: #000; text-decoration: none;"
+                                                       href="mailto:{{ contact.email }}">{{ contact.email }}</a><br>
+                                                    +31 880 036 136<br>
+                                                    <a style="color: #000; text-decoration: none;"
+                                                       href="http://itea3.org">itea3.org</a><br>
+                                                    <a style="color: #000; text-decoration: none;"
+                                                       href="https://community.itea2.org">community.itea2.org</a>
+                                                </td>
+                                                <td valign="top" width="250">
+                                                    <strong>ITEA Office</strong>
+                                                    <br/>
+                                                    High Tech Campus 69-3<br/>
+                                                    5656 AG Eindhoven<br/>
+                                                    Netherlands<br/>
+                                                </td>
+                                                <td valign="top" width="250">
+                                                    <a style="color: #00a651; text-decoration: none;"
+                                                       href="http://twitter.com/ITEA2">{{ translate("txt-follow-on-twitter") }}</a><br/>
+                                                    <a style="color: #00a651; text-decoration: none;"
+                                                       href="http://www.linkedin.com/groups?gid=2012287">{{ translate("txt-linked-in-group") }}</a>
+                                                    <br><br>
+                                                    <a style="color: #808285; text-decoration: none;"
+                                                       href="http://itea3.org/email-disclaimer.html">{{ translate("txt-email-disclaimer") }}</a>
+                                                </td>
                                             </tr>
                                         </table>
                                         <!-- // End Module: Standard Footer \\ -->
                                     </td>
                                 </tr>
                             </table>
+
                             <!-- // End Template Footer \\ -->
                         </td>
                     </tr>

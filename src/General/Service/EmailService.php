@@ -236,7 +236,8 @@ class EmailService
         $textContent->type = 'text/plain';
 
         $body = new MimeMessage();
-        $body->setParts(array($htmlContent, $textContent));
+        //        $body->setParts(array($htmlContent, $textContent));
+        $body->setParts(array($htmlContent));
 
         /**
          * Set specific headers
