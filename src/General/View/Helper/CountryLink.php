@@ -41,10 +41,11 @@ class CountryLink extends AbstractHelper
         $customShow = null
     )
     {
-        $translate = $this->view->plugin('translate');
-        $url       = $this->view->plugin('url');
-        $serverUrl = $this->view->plugin('serverUrl');
-        $isAllowed = $this->view->plugin('isAllowed');
+        $translate   = $this->view->plugin('translate');
+        $url         = $this->view->plugin('url');
+        $serverUrl   = $this->view->plugin('serverUrl');
+        $isAllowed   = $this->view->plugin('isAllowed');
+        $countryFlag = $this->view->plugin('countryFlag');
 
 //        if (!$isAllowed('country', $action)) {
 //            if ($action === 'view' && $show === 'name') {
@@ -118,6 +119,9 @@ class CountryLink extends AbstractHelper
                     throw new \InvalidArgumentException(sprintf("CustomShow cannot be empty"));
                 }
                 $linkContent[] = $customShow;
+                break;
+            case 'flag':
+                $linkContent[] = $countryFlag($country, 40);
                 break;
             default:
                 $linkContent[] = $country;

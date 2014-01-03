@@ -18,6 +18,7 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 
 use Contact\Entity\Contact;
+use Contact\Service\ContactService;
 use Mailing\Entity\Mailing;
 use General\Entity\WebInfo;
 use ZfcTwig\View\Renderer\TwigRenderer;
@@ -52,6 +53,10 @@ class EmailService
      * @var Mailing
      */
     protected $mailing;
+    /**
+     * @var ContactService
+     */
+    protected $contactService;
 
     /**
      * __construct
@@ -145,6 +150,16 @@ class EmailService
         //Template Variables
         $templateVars = $this->config["template_vars"];
         $templateVars = array_merge($templateVars, $email->toArray());
+
+        /**
+         * Incorporate the contact in the templateVars
+         */
+        if (!is_null($this->getContactService())) {
+            $templateVars['attention']    = $this->getContactService()->parseAttention();
+            $templateVars['fullname']     = $this->getContactService()->parseFullName();
+            $templateVars['country']      = $this->getContactService()->parseCountry();
+            $templateVars['organisation'] = $this->getContactService()->parseOrganisation();
+        }
 
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
@@ -262,6 +277,16 @@ class EmailService
         $templateVars = $this->config["template_vars"];
         $templateVars = array_merge($templateVars, $email->toArray());
 
+        /**
+         * Incorporate the contact in the templateVars
+         */
+        if (!is_null($this->getContactService())) {
+            $templateVars['attention']    = $this->getContactService()->parseAttention();
+            $templateVars['fullname']     = $this->getContactService()->parseFullName();
+            $templateVars['country']      = $this->getContactService()->parseCountry();
+            $templateVars['organisation'] = $this->getContactService()->parseOrganisation();
+        }
+
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
             $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
@@ -274,7 +299,6 @@ class EmailService
 
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
-
 
         $content = $this->renderMailingContent($templateVars);
 
@@ -330,7 +354,8 @@ class EmailService
         $textContent->type = 'text/plain';
 
         $body = new MimeMessage();
-        $body->setParts(array($htmlContent, $textContent));
+        //$body->setParts(array($htmlContent, $textContent));
+        $body->setParts(array($htmlContent));
 
         /**
          * Set specific headers
@@ -379,6 +404,9 @@ class EmailService
      */
     private function renderMailingContent($templateVars)
     {
+        /**
+         * Replace first the content of the mailing with the required (new) shorttags
+         */
         $content = preg_replace(
             array(
                 '~\[parent::getContact\(\)::firstname\]~',
@@ -413,6 +441,7 @@ class EmailService
             $content
         );
 
+
         $content = $this->renderer->render(
             $this->getMailingTemplateLocation($this->getMailing()->getId()), $templateVars
         );
@@ -435,7 +464,7 @@ class EmailService
      */
     public function getMailingTemplateLocation($id)
     {
-        return 'template-mailing-' . $id . '.twig';
+        return 'template-mailing-content-' . $id . '.twig';
     }
 
     /**
@@ -464,5 +493,21 @@ class EmailService
         }
 
         return $this->mailing;
+    }
+
+    /**
+     * @param \Contact\Service\ContactService $contactService
+     */
+    public function setContactService($contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
+    /**
+     * @return \Contact\Service\ContactService
+     */
+    public function getContactService()
+    {
+        return $this->contactService;
     }
 }

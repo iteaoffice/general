@@ -236,7 +236,7 @@ class CountryHandler extends AbstractHelper
         $projects      = $this->projectService->findProjectByCountry($this->getCountry());
         $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
 
-        return $this->getView()->render('general/partial/entity/country-metadata.twig',
+        return $this->getView()->render('general/partial/entity/country-metadata',
             array(
                 'country'       => $country,
                 'projects'      => $projects,
@@ -258,7 +258,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('general/partial/list/article.twig', array(
+        return $this->getView()->render('general/partial/list/article', array(
             'country'  => $country,
             'articles' => $articles,
             'limit'    => $this->getLimit(),
@@ -278,7 +278,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('program/partial/list/funder.twig', array(
+        return $this->getView()->render('program/partial/list/funder', array(
             'funder' => $funder,
         ));
     }
@@ -288,10 +288,16 @@ class CountryHandler extends AbstractHelper
      *
      * @param int $page
      *
+     * @throws \InvalidArgumentException
+     *
      * @return string
      */
     public function parseOrganisationList($page)
     {
+        if (is_null($this->getCountry())) {
+            throw new \InvalidArgumentException("The country cannot be null");
+        }
+
         $organisationQuery = $this->organisationService->findOrganisationByCountry($this->getCountry());
 
         $searchForm = new Search();
@@ -305,7 +311,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('general/partial/list/organisation.twig', array(
+        return $this->getView()->render('general/partial/list/organisation', array(
             'country'   => $this->getCountry(),
             'paginator' => $paginator,
             'form'      => $searchForm

@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>{{ title }}</title>
+<title>{{ subject }}</title>
 <style type="text/css">
 /* Client-specific Styles */
 #outlook a {
@@ -26,9 +26,9 @@ body {
 body {
     margin: 0;
     padding: 0;
-    color: #707070;
+    color: black;
     font-family: Arial;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 125%;
     text-align: left;
 }
@@ -267,7 +267,7 @@ h4, .h4 {
 * @tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 */
 .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */
-.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                  {
+.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                          {
     /*@editable*/
     color: #336699;
     /*@editable*/
@@ -294,9 +294,9 @@ h4, .h4 {
 * @tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
 */
 .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */
-.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                  {
+.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                          {
     /*@editable*/
-    color: #336699;
+    color: #00a651;
     /*@editable*/
     font-weight: normal;
     /*@editable*/
@@ -336,7 +336,7 @@ h4, .h4 {
 * @tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 */
 .footerContent div a:link, .footerContent div a:visited, /* Yahoo! Mail Override */
-.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                  {
+.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                          {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -348,20 +348,6 @@ h4, .h4 {
 .footerContent img {
     display: inline;
 }
-
-/**
-* @tab Footer
-* @section social bar style
-* @tip Set the background color and border for your email's footer social bar.
-* @theme footer
-*/
-#social {
-    /*@editable*/
-    background-color: #FFFFFF;
-    /*@editable*/
-    border: 0;
-}
-
 
 </style>
 </head>
@@ -417,7 +403,7 @@ h4, .h4 {
                                                 </td>
                                                 <td valign="bottom" align="right" width="300">
                                                     <a href="http://itea3.org"><img
-                                                                src="http://beta.itea3.org/assets/itea/style/image/logo-itea-email.jpg"></a>
+                                                                src="http://itea3.org/assets/itea/style/image/logo-itea-email.jpg"></a>
 
                                                 </td>
                                             </tr>
@@ -442,7 +428,7 @@ h4, .h4 {
 
                                                 <td valign="top" width="290">
                                                     <a style="color: #000; text-decoration: none;"
-                                                       href="mailto:{{ contact.email }}">{{ contact.email }}</a><br>
+                                                       href="mailto:info@itea3.org">info@itea3.org</a><br>
                                                     +31 880 036 136<br>
                                                     <a style="color: #000; text-decoration: none;"
                                                        href="http://itea3.org">itea3.org</a><br>
@@ -458,7 +444,7 @@ h4, .h4 {
                                                 </td>
                                                 <td valign="top" width="250">
                                                     <a style="color: #00a651; text-decoration: none;"
-                                                       href="http://twitter.com/ITEA2">{{ translate("txt-follow-on-twitter") }}</a><br/>
+                                                       href="http://twitter.com/itea_3">{{ translate("txt-follow-on-twitter") }}</a><br/>
                                                     <a style="color: #00a651; text-decoration: none;"
                                                        href="http://www.linkedin.com/groups?gid=2012287">{{ translate("txt-linked-in-group") }}</a>
                                                     <br><br>
