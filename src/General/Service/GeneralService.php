@@ -87,6 +87,25 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @param $cd
+     *
+     * @return null|Entity\Country
+     * @throws \InvalidArgumentException
+     */
+    public function findCountryByCD($cd)
+    {
+        if (is_null($cd)) {
+            throw new \InvalidArgumentException("A name is required to find an entity");
+        }
+
+        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
+            array('cd' => strtoupper($cd))
+        );
+
+        return $entity;
+    }
+
+    /**
      * @param $info
      *
      * @return Entity\WebInfo

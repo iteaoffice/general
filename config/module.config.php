@@ -36,17 +36,24 @@ $config = array(
         )
     ),
     'asset_manager'   => array(
-        //@todo refactor to keep it here
         'resolver_configs' => array(
             'collections' => array(
-                'assets/js/jvectormap.js' => array(
+                'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js' => array(
+                    'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-1.1.1.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
-                    'js/jquery/jquery.mousewheel.min.js'
                 ),
             ),
             'paths'       => array(
                 __DIR__ . '/../public',
+            ),
+            'caching'     => array(
+                'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js' => array(
+                    'cache'   => 'FilePath', //Filesystem for development
+                    'options' => array(
+                        'dir' => __DIR__ . '/../../../public',
+                    ),
+                ),
             ),
         ),
     ),

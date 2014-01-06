@@ -73,6 +73,15 @@ return array(
                             ),
                         ),
                     ),
+                    'code' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/code/[:cd]',
+                            'defaults' => array(
+                                'action' => 'code',
+                            ),
+                        ),
+                    ),
                 )
             ),
             'content-type' => array(

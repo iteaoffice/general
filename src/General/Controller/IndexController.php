@@ -53,7 +53,7 @@ class IndexController extends AbstractActionController implements ServiceLocator
 
             $response->getHeaders()
                 ->addHeaderLine('Content-Type: image/gif')
-                ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+                ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
             $response->setContent($file);
 
@@ -67,6 +67,21 @@ class IndexController extends AbstractActionController implements ServiceLocator
              * readfile($config['file_config']['upload_dir'] . DIRECTORY_SEPARATOR . 'removed.jpg');
              */
         }
+    }
+
+    /**
+     * Redirect an old project to a new project
+     */
+    public function codeAction()
+    {
+        $country = $this->getGeneralService()->findCountryByCD(
+            $this->getEvent()->getRouteMatch()->getParam('cd')
+        );
+
+        $this->redirect()->toRoute(
+            'route-' . $country->get('underscore_full_entity_name'),
+            array('docRef' => $country->getDocRef())
+        )->setStatusCode(301);
     }
 
     /**

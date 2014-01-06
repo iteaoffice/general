@@ -34,6 +34,8 @@ class CountryMap extends AbstractHelper
      */
     public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true)
     {
+        $generalService = $this->view->getHelperPluginManager()->getServiceLocator()->get('general_general_service');
+        $allCountries   = $generalService->findAll('country');
 
         $color      = '#005C00';
         $colorFaded = '#009900';
@@ -46,6 +48,18 @@ class CountryMap extends AbstractHelper
             $html[] = ",\n";
         }
         $html[] = "};\n";
+
+        if ($clickable) {
+            $html[] = "var clickable = 1;";
+        } else {
+            $html[] = "var clickable = 0;";
+        }
+
+        $html[] = " var countries = [\n";
+        foreach ($allCountries as $country) {
+            $html[] = '"' . $country->getCd() . '", ';
+        }
+        $html[] = "];\n";
 
         if ($clickable) {
             $html[] = "var clickable = 1;";
@@ -73,7 +87,7 @@ class CountryMap extends AbstractHelper
                         },
                         onRegionClick: function(e, code) {
                             if (clickable == 1 && jQuery.inArray(code, countries) != '-1') {
-                                window.location='?code=' + code;
+                                window.location='/country/code/' + code;
                             }
                         },
                         onRegionLabelShow: function(e, el, code){
