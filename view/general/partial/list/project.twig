@@ -14,8 +14,9 @@
             </div>
 
             <div class="information-box-image">
-                <span></span>
-                {{ projectLogo(projectService, 'img-rounded') }}
+                {% if projectService.project.logo %}
+                    {{ projectLogo(projectService, 'img-rounded') }}
+                {% endif %}
             </div>
 
 
