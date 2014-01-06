@@ -4,7 +4,7 @@
     {% for affiliation in countries %}
         {#due to the structure of the query in Doctrine2 we are polling the countries via the affiliations#}
         {% set country = affiliation.affiliation.organisation.country %}
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <div class="thumbnail information-box">
                 <div class="information-box-header clearfix">
                     <div class="pull-left">

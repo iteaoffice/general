@@ -8,7 +8,7 @@
                     {{ challengeLink(challenge,'view','name') }}
                 </h3>
 
-                {{ challenge.description[0:200]|striptags|raw }}
+                {{ challenge.parseAbstract|raw }}
             </div>
         </div>
     {% endfor %}

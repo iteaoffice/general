@@ -275,6 +275,18 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * Auto-generate an abstract of a article-item
+     *
+     * @return string
+     */
+    public function parseAbstract()
+    {
+        $arrWords = explode(' ', strip_tags($this->description));
+
+        return implode(' ', array_slice($arrWords, 0, 40)) . '...';
+    }
+
+    /**
      * @param string $backgroundColor
      */
     public function setBackgroundColor($backgroundColor)

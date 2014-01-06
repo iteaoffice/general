@@ -123,6 +123,9 @@ class CountryLink extends AbstractHelper
             case 'flag':
                 $linkContent[] = $countryFlag($country, 40);
                 break;
+            case 'social':
+                return $serverUrl() . $url($router, $params);
+                break;
             default:
                 $linkContent[] = $country;
                 break;

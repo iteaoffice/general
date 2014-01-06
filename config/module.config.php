@@ -36,15 +36,13 @@ $config = array(
         )
     ),
     'asset_manager'   => array(
+        //@todo refactor to keep it here
         'resolver_configs' => array(
             'collections' => array(
-                'assets/js/jvectormap.js'  => array(
+                'assets/js/jvectormap.js' => array(
                     'js/jquery/jquery-jvectormap-1.1.1.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
                     'js/jquery/jquery.mousewheel.min.js'
-                ),
-                'assets/css/bootstrap.css' => array(
-                    'css/bootstrap-less.css'
                 ),
             ),
             'paths'       => array(

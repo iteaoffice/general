@@ -116,6 +116,15 @@ class CountryHandler extends AbstractHelper
                 $this->getView()->headTitle()->append($translate("txt-country"));
                 $this->getView()->headTitle()->append($this->getCountry()->getCountry());
 
+                $countryLink = $this->view->plugin('countryLink');
+                $this->getView()->headMeta()->setProperty('og:type', $translate("txt-country"));
+                $this->getView()->headMeta()->setProperty('og:title', $this->getCountry()->getCountry());
+                $this->getView()->headMeta()->setProperty('og:url', $countryLink->__invoke(
+                        $this->getCountry(), 'view', 'social'
+                    )
+                );
+
+
                 return $this->parseCountry();
                 break;
 
