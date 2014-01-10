@@ -234,7 +234,7 @@ h4, .h4 {
 * @tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 */
 .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */
-.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                                          {
+.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                                            {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -251,7 +251,7 @@ h4, .h4 {
 * @tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
 */
 .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */
-.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                                          {
+.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                                            {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -281,7 +281,7 @@ h4, .h4 {
 * @tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 */
 .footerContent div a:link, .footerContent div a:visited, /* Yahoo! Mail Override */
-.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                                          {
+.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                                            {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -331,50 +331,9 @@ h4, .h4 {
                                     <!-- // End Sidebar \\ -->
                                     <td valign="top" class="bodyContent">
                                         {#{{ content|raw }}#}
-                                        <h1>Itea Newsletter</h1>
+                                        <h1>Header</h1>
 
-                                        <p>
-
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae elit
-                                            velit. Suspendisse potenti. Nam non magna fringilla, vehicula enim sed,
-                                            bibendum lacus. Fusce at pharetra nisl. Ut orci lacus, tempus et euismod
-                                            vel, sodales vel lectus. Quisque eget justo eget enim malesuada dictum at
-                                            sit amet dui. Fusce dictum dignissim mauris, sed molestie massa rutrum sed.
-                                            Duis nec tempor ligula. In blandit id nulla quis luctus. Mauris vehicula
-                                            quis diam ac sagittis. Nunc faucibus viverra nisi sodales suscipit. Cras
-                                            vitae euismod nisi.
-
-                                            Morbi ornare suscipit pharetra. Nunc mollis tellus vel bibendum porttitor.
-                                            Cras tempor erat vel quam aliquet, ac semper libero posuere. Phasellus
-                                            dignissim convallis tempus. Sed porta nibh nec congue bibendum. Nam sed
-                                            facilisis dolor, nec posuere lacus. Donec auctor facilisis neque eget
-                                            pharetra. Aenean libero massa, tempus vitae nisi vitae, scelerisque
-                                            consequat nulla. Nam suscipit accumsan enim et porttitor.
-
-                                            Curabitur non dapibus nisl, at tincidunt metus. Nulla ipsum augue, blandit
-                                            ut cursus a, elementum ut dolor. Proin sagittis a mi et elementum. Sed ut
-                                            justo porta, suscipit nisi vel, placerat nisl. Curabitur faucibus tortor
-                                            nisl, feugiat egestas est luctus suscipit. Etiam vehicula felis non suscipit
-                                            lobortis. In hac habitasse platea dictumst. In sed nisl a orci viverra
-                                            condimentum sit amet vulputate mauris. Sed a vehicula sem. Donec quis metus
-                                            pellentesque, faucibus turpis eu, placerat quam. Nulla facilisi. Nullam id
-                                            tellus odio. Morbi et auctor urna. Morbi quis turpis sed augue placerat
-                                            sollicitudin. Quisque eu nunc velit.
-
-                                            Sed tempor varius turpis sed congue. Nullam a sem ut felis auctor tincidunt.
-                                            Nunc sodales rhoncus magna in vestibulum. Sed fringilla ante sem, nec
-                                            tristique libero consectetur non. Sed nulla ipsum, volutpat quis nulla id,
-                                            pellentesque pulvinar magna. Integer dapibus elit ut luctus feugiat.
-                                            Vestibulum luctus molestie tortor a posuere. Curabitur imperdiet tellus
-                                            tempor sollicitudin mattis. Curabitur ac elit accumsan nulla dapibus feugiat
-                                            et vitae est.
-
-                                            Sed ornare odio ut lacus malesuada commodo. Nullam ultrices diam felis, vel
-                                            ullamcorper lacus ultrices ut. Aenean vitae imperdiet augue. Mauris ipsum
-                                            libero, elementum id ipsum eget, ultricies viverra justo. Cras vulputate,
-                                            nunc tincidunt rhoncus convallis, erat tortor dignissim augue, in lacinia
-                                            nisi velit ac eros. Integer malesuada lacus eget elit accumsan, eget
-                                            molestie turpis gravida. Cras imperdiet feugiat venenatis. </p>
+                                        <p>Content </p>
                                     </td>
                                 </tr>
                             </table>
@@ -393,11 +352,7 @@ h4, .h4 {
 
                                             <tr>
                                                 <td valign="top" width="400">
-                                                    <strong>{{ contact.getDislayName() }}</strong><br>
-                                                    {{ contact.position }}
-                                                    {% for note in contact.note if note.source == 'signature' %}
-                                                        <em>{{ note.note }}</em>
-                                                    {% endfor %}
+
                                                 </td>
                                                 <td valign="bottom" align="right" width="300" style="padding: 0">
                                                     <a href="http://itea3.org"><img

@@ -127,7 +127,7 @@ class EmailService
                 $transport->setOptions($options);
             }
 
-            $transport->send($message);die();
+            $transport->send($message);
         }
     }
 
