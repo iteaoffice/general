@@ -64,7 +64,7 @@ table td {
 */
 body, #backgroundTable {
     /*@editable*/
-    background-color: #FAFAFA;
+    background-color: #FFF;
 }
 
 /**
@@ -181,37 +181,6 @@ h4, .h4 {
     text-align: left;
 }
 
-/* /\/\/\/\/\/\/\/\/\/\ STANDARD STYLING: PREHEADER /\/\/\/\/\/\/\/\/\/\ */
-
-/**
-* @tab Header
-* @section preheader style
-* @tip Set the background color for your email's preheader area.
-* @theme page
-*/
-#templatePreheader {
-    /*@editable*/
-    background-color: #FAFAFA;
-}
-
-/**
-* @tab Header
-* @section preheader text
-* @tip Set the styling for your email's preheader text. Choose a size and color that is easy to read.
-*/
-.preheaderContent div {
-    /*@editable*/
-    color: #707070;
-    /*@editable*/
-    font-family: Arial;
-    /*@editable*/
-    font-size: 10px;
-    /*@editable*/
-    line-height: 100%;
-    /*@editable*/
-    text-align: left;
-}
-
 /**
 * @tab Header
 * @section social bar style
@@ -233,8 +202,6 @@ h4, .h4 {
 #templateHeader {
     /*@editable*/
     background-color: #FFFFFF;
-    /*@editable*/
-    border-bottom: 1px solid #00a651;
 }
 
 /**
@@ -267,9 +234,9 @@ h4, .h4 {
 * @tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 */
 .headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */
-.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                           {
+.headerContent a .yshortcuts /* Yahoo! Mail Override */                                                                          {
     /*@editable*/
-    color: #336699;
+    color: #00a651;
     /*@editable*/
     font-weight: normal;
     /*@editable*/
@@ -280,21 +247,11 @@ h4, .h4 {
 
 /**
 * @tab Body
-* @section body style
-* @tip Set the background color for your email's body area.
-*/
-#templateContainer, .bodyContent {
-    /*@editable*/
-    background-color: #FDFDFD;
-}
-
-/**
-* @tab Body
 * @section body link
 * @tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
 */
 .bodyContent div a:link, .bodyContent div a:visited, /* Yahoo! Mail Override */
-.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                           {
+.bodyContent div a .yshortcuts /* Yahoo! Mail Override */                                                                          {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -308,26 +265,14 @@ h4, .h4 {
     height: auto;
 }
 
-/**
-* @tab Footer
-* @section footer style
-* @tip Set the background color and top border for your email's footer area.
-* @theme footer
-*/
-#templateFooter {
-    /*@editable*/
-    background-color: #fff;
-    /*@editable*/
-    border-top: 2px solid #00a651;
-}
-
 .footerContent img {
     display: inline;
     padding: 0;
 }
 
 .footerContent td {
-    border-bottom: 2px solid #00a651;
+    border-top: 1px solid #00a651;
+    border-bottom: 1px solid #00a651;
 }
 
 /**
@@ -336,7 +281,7 @@ h4, .h4 {
 * @tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 */
 .footerContent div a:link, .footerContent div a:visited, /* Yahoo! Mail Override */
-.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                           {
+.footerContent div a .yshortcuts /* Yahoo! Mail Override */                                                                          {
     /*@editable*/
     color: #00a651;
     /*@editable*/
@@ -347,6 +292,8 @@ h4, .h4 {
 
 .footerContent img {
     display: inline;
+    padding: 0;
+    margin: 0;
 }
 
 .abbreviations {
@@ -356,19 +303,20 @@ h4, .h4 {
 
 </style>
 </head>
+
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
 <center>
     <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
         <tr>
             <td align="center" valign="top">
-                <table border="0" cellpadding="0" cellspacing="0" width="700" id="templateContainer">
+                <table border="0" cellpadding="0" cellspacing="0" width="718" id="templateContainer">
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Header \\ -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="700" id="templateHeader">
+                            <table border="0" cellpadding="0" cellspacing="0" width="718" id="templateHeader">
                                 <tr>
                                     <td class="headerContent" width="100%">
-                                        <h1>{{ header }}</h1>
+                                        <img src="https://itea3.org/assets/itea/style/image/email-newsletter-header.jpg">
                                     </td>
                                 </tr>
                             </table>
@@ -378,11 +326,55 @@ h4, .h4 {
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Body \\ -->
-                            <table border="0" cellpadding="10" cellspacing="0" width="700" id="templateBody">
+                            <table border="0" cellpadding="10" cellspacing="0" width="620" id="templateBody">
                                 <tr>
                                     <!-- // End Sidebar \\ -->
                                     <td valign="top" class="bodyContent">
-                                        {{ content|raw }}
+                                        {#{{ content|raw }}#}
+                                        <h1>Itea Newsletter</h1>
+
+                                        <p>
+
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae elit
+                                            velit. Suspendisse potenti. Nam non magna fringilla, vehicula enim sed,
+                                            bibendum lacus. Fusce at pharetra nisl. Ut orci lacus, tempus et euismod
+                                            vel, sodales vel lectus. Quisque eget justo eget enim malesuada dictum at
+                                            sit amet dui. Fusce dictum dignissim mauris, sed molestie massa rutrum sed.
+                                            Duis nec tempor ligula. In blandit id nulla quis luctus. Mauris vehicula
+                                            quis diam ac sagittis. Nunc faucibus viverra nisi sodales suscipit. Cras
+                                            vitae euismod nisi.
+
+                                            Morbi ornare suscipit pharetra. Nunc mollis tellus vel bibendum porttitor.
+                                            Cras tempor erat vel quam aliquet, ac semper libero posuere. Phasellus
+                                            dignissim convallis tempus. Sed porta nibh nec congue bibendum. Nam sed
+                                            facilisis dolor, nec posuere lacus. Donec auctor facilisis neque eget
+                                            pharetra. Aenean libero massa, tempus vitae nisi vitae, scelerisque
+                                            consequat nulla. Nam suscipit accumsan enim et porttitor.
+
+                                            Curabitur non dapibus nisl, at tincidunt metus. Nulla ipsum augue, blandit
+                                            ut cursus a, elementum ut dolor. Proin sagittis a mi et elementum. Sed ut
+                                            justo porta, suscipit nisi vel, placerat nisl. Curabitur faucibus tortor
+                                            nisl, feugiat egestas est luctus suscipit. Etiam vehicula felis non suscipit
+                                            lobortis. In hac habitasse platea dictumst. In sed nisl a orci viverra
+                                            condimentum sit amet vulputate mauris. Sed a vehicula sem. Donec quis metus
+                                            pellentesque, faucibus turpis eu, placerat quam. Nulla facilisi. Nullam id
+                                            tellus odio. Morbi et auctor urna. Morbi quis turpis sed augue placerat
+                                            sollicitudin. Quisque eu nunc velit.
+
+                                            Sed tempor varius turpis sed congue. Nullam a sem ut felis auctor tincidunt.
+                                            Nunc sodales rhoncus magna in vestibulum. Sed fringilla ante sem, nec
+                                            tristique libero consectetur non. Sed nulla ipsum, volutpat quis nulla id,
+                                            pellentesque pulvinar magna. Integer dapibus elit ut luctus feugiat.
+                                            Vestibulum luctus molestie tortor a posuere. Curabitur imperdiet tellus
+                                            tempor sollicitudin mattis. Curabitur ac elit accumsan nulla dapibus feugiat
+                                            et vitae est.
+
+                                            Sed ornare odio ut lacus malesuada commodo. Nullam ultrices diam felis, vel
+                                            ullamcorper lacus ultrices ut. Aenean vitae imperdiet augue. Mauris ipsum
+                                            libero, elementum id ipsum eget, ultricies viverra justo. Cras vulputate,
+                                            nunc tincidunt rhoncus convallis, erat tortor dignissim augue, in lacinia
+                                            nisi velit ac eros. Integer malesuada lacus eget elit accumsan, eget
+                                            molestie turpis gravida. Cras imperdiet feugiat venenatis. </p>
                                     </td>
                                 </tr>
                             </table>
@@ -392,11 +384,12 @@ h4, .h4 {
                     <tr>
                         <td align="center" valign="top">
                             <!-- // Begin Template Footer \\ -->
-                            <table border="0" cellspacing="10" cellpadding="0" width="700" id="templateFooter">
+                            <table border="0" cellpadding="0" cellspacing="0" width="620" id="templateFooter">
                                 <tr>
                                     <td valign="bottom" class="footerContent">
                                         <!-- // Begin Module: Standard Footer \\ -->
-                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%"
+                                               style="padding: 0">
 
                                             <tr>
                                                 <td valign="top" width="400">
@@ -406,8 +399,8 @@ h4, .h4 {
                                                         <em>{{ note.note }}</em>
                                                     {% endfor %}
                                                 </td>
-                                                <td valign="bottom" align="right" width="300">
-                                                    <a href="https://itea3.org"><img
+                                                <td valign="bottom" align="right" width="300" style="padding: 0">
+                                                    <a href="http://itea3.org"><img
                                                                 src="https://itea3.org/assets/itea/style/image/logo-itea-email.png"></a>
 
                                                 </td>
@@ -436,9 +429,9 @@ h4, .h4 {
                                                        href="mailto:info@itea3.org">info@itea3.org</a><br>
                                                     +31 880 036 136<br>
                                                     <a style="color: #000; text-decoration: none;"
-                                                       href="https://itea3.org">itea3.org</a><br>
+                                                       href="http://itea3.org">itea3.org</a><br>
                                                     <a style="color: #000; text-decoration: none;"
-                                                       href="https://community.itea3.org">community.itea3.org</a>
+                                                       href="https://community.itea2.org">community.itea2.org</a>
                                                 </td>
                                                 <td valign="top" width="250">
                                                     <strong>ITEA Office</strong>
@@ -449,12 +442,12 @@ h4, .h4 {
                                                 </td>
                                                 <td valign="top" width="250">
                                                     <a style="color: #00a651; text-decoration: none;"
-                                                       href="https://twitter.com/itea_3">{{ translate("txt-follow-on-twitter") }}</a><br/>
+                                                       href="http://twitter.com/itea_3">{{ translate("txt-follow-on-twitter") }}</a><br/>
                                                     <a style="color: #00a651; text-decoration: none;"
                                                        href="http://www.linkedin.com/groups?gid=2012287">{{ translate("txt-linked-in-group") }}</a>
                                                     <br><br>
                                                     <a style="color: #808285; text-decoration: none;"
-                                                       href="https://itea3.org/email-disclaimer.html">{{ translate("txt-email-disclaimer") }}</a>
+                                                       href="http://itea3.org/email-disclaimer.html">{{ translate("txt-email-disclaimer") }}</a>
                                                 </td>
                                             </tr>
                                         </table>

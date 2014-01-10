@@ -127,7 +127,7 @@ class EmailService
                 $transport->setOptions($options);
             }
 
-            return $transport->send($message);
+            $transport->send($message);die();
         }
     }
 
@@ -243,7 +243,7 @@ class EmailService
         $message->setSubject(
             str_replace('[site]', $this->config["template_vars"]["company"], $this->template->getSubject())
         );
-
+        print ($email->getHtmlContent());
         $htmlContent       = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
 
