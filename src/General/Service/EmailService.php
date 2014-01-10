@@ -243,7 +243,7 @@ class EmailService
         $message->setSubject(
             str_replace('[site]', $this->config["template_vars"]["company"], $this->template->getSubject())
         );
-        print ($email->getHtmlContent());
+
         $htmlContent       = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
 
