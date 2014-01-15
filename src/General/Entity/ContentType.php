@@ -166,6 +166,17 @@ class ContentType
     }
 
     /**
+     * Return the name of the content type
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->contentType;
+    }
+
+
+    /**
      * Get the corresponding fileName of a file if it was cached
      * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
      *
