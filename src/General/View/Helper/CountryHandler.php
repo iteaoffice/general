@@ -124,7 +124,6 @@ class CountryHandler extends AbstractHelper
                     )
                 );
 
-
                 return $this->parseCountry();
                 break;
 

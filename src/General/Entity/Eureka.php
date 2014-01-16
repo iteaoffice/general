@@ -16,8 +16,6 @@ use Zend\Form\Annotation;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
-
 /**
  * Entity for the General
  *

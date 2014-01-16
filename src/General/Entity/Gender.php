@@ -18,8 +18,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
-use General\Entity\EntityAbstract;
-
 /**
  * Entity for the General
  *

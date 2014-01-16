@@ -50,7 +50,7 @@ class ModuleOptions extends AbstractOptions
 
     /**
      * @param string $imageLocation
-     * return ModuleOptions
+     *                              return ModuleOptions
      */
     public function setImageLocation($imageLocation)
     {

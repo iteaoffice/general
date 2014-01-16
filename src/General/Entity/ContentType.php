@@ -131,7 +131,6 @@ class ContentType
      */
     private $ideaImage;
 
-
     /**
      * Class constructor
      */
@@ -172,9 +171,8 @@ class ContentType
      */
     public function __toString()
     {
-        return (string)$this->contentType;
+        return (string) $this->contentType;
     }
-
 
     /**
      * Get the corresponding fileName of a file if it was cached

@@ -16,7 +16,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Title;
 use GeneralTest\Bootstrap;
 
-
 class TitleTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -36,12 +35,10 @@ class TitleTest extends \PHPUnit_Framework_TestCase
      */
     protected $title;
 
-
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
 
         $this->titleData = array(
             'name' => 'This is the name of the title',
@@ -108,6 +105,5 @@ class TitleTest extends \PHPUnit_Framework_TestCase
 
         $this->entityManager->remove($this->title);
     }
-
 
 }

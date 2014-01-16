@@ -15,7 +15,6 @@ use Zend\Authentication\AuthenticationService;
 
 use Doctrine\ORM\EntityManager;
 
-use General\Service\ServiceInterface;
 use General\Entity\EntityAbstract;
 
 /**

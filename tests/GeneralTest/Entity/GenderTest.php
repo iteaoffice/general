@@ -16,7 +16,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Gender;
 use GeneralTest\Bootstrap;
 
-
 class GenderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,7 +34,6 @@ class GenderTest extends \PHPUnit_Framework_TestCase
      * @var Gender
      */
     protected $gender;
-
 
     public function setUp()
     {
@@ -83,7 +81,6 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->gender->getInputFilter());
     }
 
-
     public function testCanSaveEntityInDatabase()
     {
         $hydrator = new DoctrineObject(
@@ -93,7 +90,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
 
         $this->gender = $hydrator->hydrate($this->genderData, new Gender());
 
-        $this->assertEquals((string)$this->gender, $this->genderData['name']);
+        $this->assertEquals((string) $this->gender, $this->genderData['name']);
 
         $this->entityManager->persist($this->gender);
         //Since we don't save, we will give the gender a standard id

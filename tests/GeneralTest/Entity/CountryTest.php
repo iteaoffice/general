@@ -16,7 +16,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Country;
 use GeneralTest\Bootstrap;
 
-
 class CountryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,7 +41,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      * @var Country
      */
     protected $country;
-
 
     public function setUp()
     {
@@ -84,7 +82,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->country->getInputFilter());
     }
 
-
     public function testCanSaveEntityInDatabase()
     {
         $hydrator = new DoctrineObject(
@@ -111,7 +108,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $this->country->country = $this->countryData['country'];
-        $this->assertEquals((string)$this->country, $this->countryData['country']);
+        $this->assertEquals((string) $this->country, $this->countryData['country']);
     }
 
 }

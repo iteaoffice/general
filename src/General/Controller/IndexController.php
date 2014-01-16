@@ -53,7 +53,7 @@ class IndexController extends AbstractActionController implements ServiceLocator
 
             $response->getHeaders()
                 ->addHeaderLine('Content-Type: image/gif')
-                ->addHeaderLine('Content-Length: ' . (string)strlen($file));
+                ->addHeaderLine('Content-Length: ' . (string) strlen($file));
 
             $response->setContent($file);
 

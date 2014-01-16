@@ -69,7 +69,7 @@ class CountryMap extends AbstractHelper
 
         $html[] = <<< EOT
 
-                $(function(){
+                $(function () {
                     $('#world-map-gdp').vectorMap({
                         map: 'europe_mill_en',
                         backgroundColor: 'transparent',
@@ -85,12 +85,12 @@ class CountryMap extends AbstractHelper
                             fill: '#C5C7CA'
                           }
                         },
-                        onRegionClick: function(e, code) {
+                        onRegionClick: function (e, code) {
                             if (clickable == 1 && jQuery.inArray(code, countries) != '-1') {
                                 window.location='/country/code/' + code;
                             }
                         },
-                        onRegionLabelShow: function(e, el, code){
+                        onRegionLabelShow: function (e, el, code) {
                         }
                     });
                  });

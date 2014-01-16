@@ -12,7 +12,6 @@ $settings = array(
     ),
     'image_not_found' => 'image_not_found.jpg',
 
-
 );
 
 /**

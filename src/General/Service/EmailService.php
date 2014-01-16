@@ -431,7 +431,6 @@ class EmailService
             ("{{ $1|raw }}"
             ), $content);
 
-
         /**
          * Grab the content from the template and save the .twig format in on the file server
          */
@@ -440,7 +439,6 @@ class EmailService
             $this->getMailingTemplateLocation($this->getMailing()->getId()),
             $content
         );
-
 
         $content = $this->renderer->render(
             $this->getMailingTemplateLocation($this->getMailing()->getId()), $templateVars

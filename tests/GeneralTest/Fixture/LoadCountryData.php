@@ -1,5 +1,5 @@
 <?php
-namespace GeneralTest\Fixture;
+namespace ContactTest\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;

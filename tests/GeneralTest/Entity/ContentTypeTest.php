@@ -9,15 +9,11 @@
  */
 namespace GeneralTest\Entity;
 
-use Zend\InputFilter\InputFilter;
-
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 use General\Entity\ContentType;
-use General\Entity\Country;
 
 use GeneralTest\Bootstrap;
-
 
 class ContentTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +33,6 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
      * @var ContentType
      */
     protected $contentType;
-
 
     public function setUp()
     {
@@ -63,7 +58,6 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $this->contentType->setId($id);
     }
-
 
     public function testCanSaveEntityInDatabase()
     {

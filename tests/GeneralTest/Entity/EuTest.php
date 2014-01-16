@@ -18,7 +18,6 @@ use General\Entity\Country;
 
 use GeneralTest\Bootstrap;
 
-
 class EuTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +36,6 @@ class EuTest extends \PHPUnit_Framework_TestCase
      * @var Eu
      */
     protected $eu;
-
 
     public function setUp()
     {

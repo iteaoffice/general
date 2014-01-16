@@ -48,7 +48,6 @@ class StyleControllerTest extends AbstractHttpControllerTestCase
 
     }
 
-
     public function testDisplayActionWithInvalidImage()
     {
         //Force the required action
@@ -72,6 +71,4 @@ class StyleControllerTest extends AbstractHttpControllerTestCase
         $this->assertResponseStatusCode(200);
     }
 
-
 }
-
