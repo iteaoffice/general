@@ -12,6 +12,9 @@ namespace General\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Program\Entity\Call\Call;
+use Project\Entity\Evaluation;
+
 use General\Entity;
 
 /**
@@ -51,6 +54,78 @@ class Country extends EntityRepository
         //Limit to only the active projects
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Call $call
+     *
+     * @return Entity\Country[]
+     */
+    public function findCountryByCall(Call $call)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('c');
+
+
+        $queryBuilder->from('General\Entity\Country', 'c');
+
+        $queryBuilder->join('c.organisation', 'o');
+        $queryBuilder->join('o.affiliation', 'a');
+        $queryBuilder->join('a.project', 'p');
+
+        //Remove the 0 country (unknown)
+        $queryBuilder->where('c.id <> 0');
+
+        $queryBuilder->addGroupBy('c.id');
+
+
+        //Limit to only the active projects
+        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
+        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+
+        $queryBuilder->andWhere('p.call = ?10');
+        $queryBuilder->setParameter(10, $call);
+
+        $queryBuilder->addOrderBy('c.iso3', 'ASC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Call            $call
+     * @param Evaluation\Type $type
+     *
+     * @return Entity\Country[]
+     */
+    public function findCountryByEvaluationTypeAndCall(Evaluation\Type $type, Call $call = null)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('c');
+        $queryBuilder->from('General\Entity\Country', 'c');
+
+        $queryBuilder->join('c.organisation', 'o');
+        $queryBuilder->join('o.affiliation', 'a');
+        $queryBuilder->join('a.project', 'p');
+        $queryBuilder->join('p.evaluation', 'e');
+
+        //Remove the 0 country (unknown)
+        $queryBuilder->where('c.id <> 0');
+
+        $queryBuilder->addGroupBy('c.id');
+        $queryBuilder->addOrderBy('c.country');
+
+        //Limit to only the active projects
+        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
+        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+
+        $queryBuilder->andWhere('p.call = ?10');
+        $queryBuilder->setParameter(10, $call);
+
+        $queryBuilder->andWhere('e.type = ?11');
+        $queryBuilder->setParameter(11, $type);
+
 
         return $queryBuilder->getQuery()->getResult();
     }

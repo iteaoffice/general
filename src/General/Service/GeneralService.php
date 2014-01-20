@@ -9,11 +9,14 @@
  */
 namespace General\Service;
 
-use General\Entity;
-use General\Options\ModuleOptions;
 use Zend\Http\Client;
 use Zend\Json\Json;
 use Zend\Http\Response;
+
+use General\Entity;
+use General\Options\ModuleOptions;
+use Program\Entity\Call\Call;
+use Project\Entity\Evaluation;
 
 /**
  * GeneralService
@@ -103,6 +106,36 @@ class GeneralService extends ServiceAbstract
         );
 
         return $entity;
+    }
+
+    /**
+     * Produce a list of countries active in a program call
+     *
+     * @param Call $call
+     * @param bool $onlyActive
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function findCountryByCall(Call $call, $onlyActive = true)
+    {
+        return $this->getEntityManager()->getRepository(
+            $this->getFullEntityName('country')
+        )->findCountryByCall($call, $onlyActive);
+    }
+
+    /**
+     * Produce a list of countries active in a call and evaluation type
+     *
+     * @param Evaluation\Type $type
+     * @param Call|null       $call
+     *
+     * @return Entity\Country[]
+     */
+    public function findCountryByEvaluationTypeAndCall(Evaluation\Type $type, Call $call = null)
+    {
+        return $this->getEntityManager()->getRepository(
+            $this->getFullEntityName('country')
+        )->findCountryByEvaluationTypeAndCall($call, $type);
     }
 
     /**

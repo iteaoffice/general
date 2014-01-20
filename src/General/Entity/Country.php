@@ -137,6 +137,12 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \General\Entity\Flag
      */
     private $flag;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Evaluation\Evaluation", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Evaluation\Evaluation[]
+     */
+    private $evaluation;
 
     /**
      * Class constructor
@@ -148,6 +154,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->ictOrganisation = new Collections\ArrayCollection();
         $this->vat             = new Collections\ArrayCollection();
         $this->funder          = new Collections\ArrayCollection();
+        $this->evaluation      = new Collections\ArrayCollection();
     }
 
     /**
@@ -182,7 +189,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->country;
+        return (string)$this->country;
     }
 
     /**
@@ -635,5 +642,21 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getDocRef()
     {
         return $this->docRef;
+    }
+
+    /**
+     * @param \Project\Entity\Evaluation\Evaluation[] $evaluation
+     */
+    public function setEvaluation($evaluation)
+    {
+        $this->evaluation = $evaluation;
+    }
+
+    /**
+     * @return \Project\Entity\Evaluation\Evaluation[]
+     */
+    public function getEvaluation()
+    {
+        return $this->evaluation;
     }
 }

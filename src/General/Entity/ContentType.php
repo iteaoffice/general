@@ -130,28 +130,40 @@ class ContentType
      * @var \Project\Entity\Idea\Image[]
      */
     private $ideaImage;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Idea\Image[]
+     */
+    private $projectDescriptionImage;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Document\Document[]
+     */
+    private $projectDocument;
 
     /**
      * Class constructor
      */
     public function __construct()
     {
-        $this->projectLogo         = new Collections\ArrayCollection();
-        $this->contentImage        = new Collections\ArrayCollection();
-        $this->pressArticle        = new Collections\ArrayCollection();
-        $this->programNna          = new Collections\ArrayCollection();
-        $this->programDoa          = new Collections\ArrayCollection();
-        $this->programDnd          = new Collections\ArrayCollection();
-        $this->organisationLogo    = new Collections\ArrayCollection();
-        $this->contactDnd          = new Collections\ArrayCollection();
-        $this->contactPhoto        = new Collections\ArrayCollection();
-        $this->publication         = new Collections\ArrayCollection();
-        $this->badgeAttachment     = new Collections\ArrayCollection();
-        $this->result              = new Collections\ArrayCollection();
-        $this->workpackageDocument = new Collections\ArrayCollection();
-        $this->poster              = new Collections\ArrayCollection();
-        $this->ideaDocument        = new Collections\ArrayCollection();
-        $this->ideaImage           = new Collections\ArrayCollection();
+        $this->projectLogo             = new Collections\ArrayCollection();
+        $this->contentImage            = new Collections\ArrayCollection();
+        $this->pressArticle            = new Collections\ArrayCollection();
+        $this->programNna              = new Collections\ArrayCollection();
+        $this->programDoa              = new Collections\ArrayCollection();
+        $this->programDnd              = new Collections\ArrayCollection();
+        $this->organisationLogo        = new Collections\ArrayCollection();
+        $this->contactDnd              = new Collections\ArrayCollection();
+        $this->contactPhoto            = new Collections\ArrayCollection();
+        $this->publication             = new Collections\ArrayCollection();
+        $this->badgeAttachment         = new Collections\ArrayCollection();
+        $this->result                  = new Collections\ArrayCollection();
+        $this->workpackageDocument     = new Collections\ArrayCollection();
+        $this->poster                  = new Collections\ArrayCollection();
+        $this->ideaDocument            = new Collections\ArrayCollection();
+        $this->ideaImage               = new Collections\ArrayCollection();
+        $this->projectDescriptionImage = new Collections\ArrayCollection();
+        $this->projectDocument         = new Collections\ArrayCollection();
     }
 
     /**
@@ -171,7 +183,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string) $this->contentType;
+        return (string)$this->contentType;
     }
 
     /**
@@ -525,5 +537,21 @@ class ContentType
     public function getIdeaImage()
     {
         return $this->ideaImage;
+    }
+
+    /**
+     * @param \Project\Entity\Idea\Image[] $projectDescriptionImage
+     */
+    public function setProjectDescriptionImage($projectDescriptionImage)
+    {
+        $this->projectDescriptionImage = $projectDescriptionImage;
+    }
+
+    /**
+     * @return \Project\Entity\Idea\Image[]
+     */
+    public function getProjectDescriptionImage()
+    {
+        return $this->projectDescriptionImage;
     }
 }
