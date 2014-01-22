@@ -13,9 +13,12 @@ use Zend\Http\Client;
 use Zend\Json\Json;
 use Zend\Http\Response;
 
+use Affiliation\Service\AffiliationService;
+
 use General\Entity;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
+use Project\Entity\Project;
 use Project\Entity\Evaluation;
 
 /**
@@ -112,15 +115,30 @@ class GeneralService extends ServiceAbstract
      * Produce a list of countries active in a program call
      *
      * @param Call $call
-     * @param bool $onlyActive
+     * @param int  $which
      *
      * @return \Doctrine\ORM\Query
      */
-    public function findCountryByCall(Call $call, $onlyActive = true)
+    public function findCountryByCall(Call $call, $which = AffiliationService::WHICH_ONLY_ACTIVE)
     {
         return $this->getEntityManager()->getRepository(
             $this->getFullEntityName('country')
-        )->findCountryByCall($call, $onlyActive);
+        )->findCountryByCall($call, $which);
+    }
+
+    /**
+     * Produce a list of countries active in a program call
+     *
+     * @param Project $project
+     * @param bool    $onlyActive
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function findCountryByProject(Project $project, $which = AffiliationService::WHICH_ONLY_ACTIVE)
+    {
+        return $this->getEntityManager()->getRepository(
+            $this->getFullEntityName('country')
+        )->findCountryByProject($project, $which);
     }
 
     /**

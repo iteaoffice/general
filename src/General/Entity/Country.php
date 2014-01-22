@@ -84,25 +84,25 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $countryVat;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToOne(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      * @var \General\Entity\Eu
      */
     private $eu;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Eureka", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToOne(targetEntity="General\Entity\Eureka", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      * @var \General\Entity\Eureka
      */
     private $eureka;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      * @var \General\Entity\Eureka
      */
     private $itac;
     /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      * @var \Contact\Entity\Address[]
      */
