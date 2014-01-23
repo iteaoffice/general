@@ -140,6 +140,11 @@ class ContentType
      * @var \Project\Entity\Document\Document[]
      */
     private $projectDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\VersionDocument", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\VersionDocument[]
+     */
+    private $versionDocument;
 
     /**
      * Class constructor
@@ -164,6 +169,7 @@ class ContentType
         $this->ideaImage               = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
         $this->projectDocument         = new Collections\ArrayCollection();
+        $this->versionDocument         = new Collections\ArrayCollection();
     }
 
     /**
@@ -553,5 +559,37 @@ class ContentType
     public function getProjectDescriptionImage()
     {
         return $this->projectDescriptionImage;
+    }
+
+    /**
+     * @param \Project\Entity\Document\Document[] $projectDocument
+     */
+    public function setProjectDocument($projectDocument)
+    {
+        $this->projectDocument = $projectDocument;
+    }
+
+    /**
+     * @return \Project\Entity\Document\Document[]
+     */
+    public function getProjectDocument()
+    {
+        return $this->projectDocument;
+    }
+
+    /**
+     * @param \Project\Entity\VersionDocument[] $versionDocument
+     */
+    public function setVersionDocument($versionDocument)
+    {
+        $this->versionDocument = $versionDocument;
+    }
+
+    /**
+     * @return \Project\Entity\VersionDocument[]
+     */
+    public function getVersionDocument()
+    {
+        return $this->versionDocument;
     }
 }
