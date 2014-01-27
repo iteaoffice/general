@@ -19,6 +19,8 @@ use Zend\Paginator\Paginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 
+use ZfcTwig\View\TwigRenderer;
+
 use General\Entity\Country;
 use General\Service\GeneralService;
 use Content\Service\ArticleService;
@@ -80,6 +82,10 @@ class CountryHandler extends AbstractHelper
      * @var int
      */
     protected $limit = 5;
+    /**
+     * @var TwigRenderer;
+     */
+    protected $zfcTwigRenderer;
 
     /**
      * @param HelperPluginManager $helperPluginManager
@@ -98,6 +104,10 @@ class CountryHandler extends AbstractHelper
             ->getMvcEvent()
             ->getRouteMatch();
         $this->countryMap          = $helperPluginManager->get('countryMap');
+        /**
+         * Load the TwigRenderer directly form the plugin manager to avoid a fallback to the standard PhpRenderer
+         */
+        $this->zfcTwigRenderer = $helperPluginManager->getServiceLocator()->get('ZfcTwigRenderer');
     }
 
     /**
@@ -187,7 +197,7 @@ class CountryHandler extends AbstractHelper
     {
         $countries = $this->generalService->findActiveCountries();
 
-        return $this->getView()->render('general/partial/list/country',
+        return $this->zfcTwigRenderer->render('general/partial/list/country',
             array('countries' => $countries));
     }
 
@@ -200,7 +210,7 @@ class CountryHandler extends AbstractHelper
     {
         $countries = $this->generalService->findItacCountries();
 
-        return $this->getView()->render('general/partial/list/country-itac',
+        return $this->zfcTwigRenderer->render('general/partial/list/country-itac',
             array('countries' => $countries));
     }
 
@@ -209,7 +219,7 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountry()
     {
-        return $this->getView()->render('general/partial/entity/country',
+        return $this->zfcTwigRenderer->render('general/partial/entity/country',
             array(
                 'country' => $this->getCountry(),
 
@@ -225,8 +235,8 @@ class CountryHandler extends AbstractHelper
     {
         $projects = $this->projectService->findProjectByCountry($country);
 
-        return $this->getView()->render(
-            'general/partial/list/project.twig',
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/project',
             array(
                 'country'  => $country,
                 'projects' => $projects
@@ -244,7 +254,7 @@ class CountryHandler extends AbstractHelper
         $projects      = $this->projectService->findProjectByCountry($this->getCountry());
         $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
 
-        return $this->getView()->render('general/partial/entity/country-metadata',
+        return $this->zfcTwigRenderer->render('general/partial/entity/country-metadata',
             array(
                 'country'       => $country,
                 'projects'      => $projects,
@@ -266,7 +276,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('general/partial/list/article', array(
+        return $this->zfcTwigRenderer->render('general/partial/list/article', array(
             'country'  => $country,
             'articles' => $articles,
             'limit'    => $this->getLimit(),
@@ -286,7 +296,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('program/partial/list/funder', array(
+        return $this->zfcTwigRenderer->render('program/partial/list/funder', array(
             'funder' => $funder,
         ));
     }
@@ -319,7 +329,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getView()->render('general/partial/list/organisation', array(
+        return $this->zfcTwigRenderer->render('general/partial/list/organisation', array(
             'country'   => $this->getCountry(),
             'paginator' => $paginator,
             'form'      => $searchForm

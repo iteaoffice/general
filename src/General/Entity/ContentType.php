@@ -145,6 +145,11 @@ class ContentType
      * @var \Project\Entity\VersionDocument[]
      */
     private $versionDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\VersionDocument[]
+     */
+    private $calendarDocument;
 
     /**
      * Class constructor
@@ -170,6 +175,7 @@ class ContentType
         $this->projectDescriptionImage = new Collections\ArrayCollection();
         $this->projectDocument         = new Collections\ArrayCollection();
         $this->versionDocument         = new Collections\ArrayCollection();
+        $this->calendarDocument        = new Collections\ArrayCollection();
     }
 
     /**
@@ -591,5 +597,21 @@ class ContentType
     public function getVersionDocument()
     {
         return $this->versionDocument;
+    }
+
+    /**
+     * @param \Project\Entity\VersionDocument[] $calendarDocument
+     */
+    public function setCalendarDocument($calendarDocument)
+    {
+        $this->calendarDocument = $calendarDocument;
+    }
+
+    /**
+     * @return \Project\Entity\VersionDocument[]
+     */
+    public function getCalendarDocument()
+    {
+        return $this->calendarDocument;
     }
 }

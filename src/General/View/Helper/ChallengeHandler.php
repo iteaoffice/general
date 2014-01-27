@@ -15,6 +15,8 @@ use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Mvc\Router\Http\RouteMatch;
 
+use ZfcTwig\View\TwigRenderer;
+
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 
@@ -48,6 +50,10 @@ class ChallengeHandler extends AbstractHelper
      * @var RouteMatch
      */
     protected $routeMatch = null;
+    /**
+     * @var TwigRenderer;
+     */
+    protected $zfcTwigRenderer;
 
     /**
      * @param HelperPluginManager $helperPluginManager
@@ -61,6 +67,11 @@ class ChallengeHandler extends AbstractHelper
             ->get('application')
             ->getMvcEvent()
             ->getRouteMatch();
+
+        /**
+         * Load the TwigRenderer directly form the plugin manager to avoid a fallback to the standard PhpRenderer
+         */
+        $this->zfcTwigRenderer = $helperPluginManager->getServiceLocator()->get('ZfcTwigRenderer');
     }
 
     /**
@@ -104,7 +115,7 @@ class ChallengeHandler extends AbstractHelper
     {
         $challenge = $this->generalService->findAll('challenge');
 
-        return $this->getView()->render(
+        return $this->zfcTwigRenderer->render(
             'general/partial/list/challenge',
             array('challenge' => $challenge));
     }
@@ -114,7 +125,7 @@ class ChallengeHandler extends AbstractHelper
      */
     public function parseChallenge()
     {
-        return $this->getView()->render(
+        return $this->zfcTwigRenderer->render(
             'general/partial/entity/challenge',
             array('challenge' => $this->getChallenge()));
     }
@@ -128,7 +139,7 @@ class ChallengeHandler extends AbstractHelper
     {
         $projects = $this->projectService->findProjectByChallenge($challenge);
 
-        return $this->getView()->render('general/partial/list/project-challenge.twig',
+        return $this->zfcTwigRenderer->render('general/partial/list/project-challenge',
             array(
                 'projects'  => $projects,
                 'challenge' => $challenge
