@@ -21,7 +21,7 @@ use Contact\Entity\Contact;
 use Contact\Service\ContactService;
 use Mailing\Entity\Mailing;
 use General\Entity\WebInfo;
-use ZfcTwig\View\Renderer\TwigRenderer;
+use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class EmailService
@@ -180,12 +180,12 @@ class EmailService
         $content = $this->renderContent($templateVars);
 
         $htmlView = $this->renderer->render(
-            'email/' . $email->getHtmlLayoutName() . '.twig',
+            'email/' . $email->getHtmlLayoutName(),
             array_merge_recursive(array('content' => $content), $templateVars)
         );
 
         $textView = $this->renderer->render(
-            'email/' . $email->getTextLayoutName() . 'twig',
+            'email/' . $email->getTextLayoutName(),
             array_merge_recursive(array('content' => $content), $templateVars)
         );
 
@@ -303,12 +303,12 @@ class EmailService
         $content = $this->renderMailingContent($templateVars);
 
         $htmlView = $this->renderer->render(
-            'email/' . $email->getHtmlLayoutName() . '.twig',
+            'email/' . $email->getHtmlLayoutName(),
             array_merge_recursive(array('content' => $content), $templateVars)
         );
 
         $textView = $this->renderer->render(
-            'email/' . $email->getTextLayoutName() . 'twig',
+            'email/' . $email->getTextLayoutName(),
             array_merge_recursive(array('content' => $content), $templateVars)
         );
 
