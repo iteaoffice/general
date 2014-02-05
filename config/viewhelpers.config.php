@@ -14,14 +14,18 @@ use General\View\Helper;
 
 return array(
     'factories'  => array(
-        'challengeHandler' => function ($sm) {
+        'challengeHandler'    => function ($sm) {
                 return new Helper\ChallengeHandler($sm);
             },
-        'countryHandler'   => function ($sm) {
+        'countryHandler'      => function ($sm) {
                 return new Helper\CountryHandler($sm);
+            },
+        'generalServiceProxy' => function ($sm) {
+                return new Helper\GeneralServiceProxy($sm);
             },
     ),
     'invokables' => array(
+
         'countryMap'      => 'General\View\Helper\CountryMap',
         'countryFlag'     => 'General\View\Helper\CountryFlag',
         'countryLink'     => 'General\View\Helper\CountryLink',

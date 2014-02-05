@@ -127,12 +127,10 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Produce a list of countries active in a program call
-     *
      * @param Project $project
-     * @param bool    $onlyActive
+     * @param int     $which
      *
-     * @return \Doctrine\ORM\Query
+     * @return Entity\Country[]
      */
     public function findCountryByProject(Project $project, $which = AffiliationService::WHICH_ONLY_ACTIVE)
     {
