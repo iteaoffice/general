@@ -467,10 +467,16 @@ class EmailService
 
     /**
      * @param $templateName
+     *
+     * @throws \Exception
      */
     public function setTemplate($templateName)
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
+
+        if (is_null($this->template)) {
+            throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
+        }
     }
 
     /**

@@ -106,18 +106,18 @@ class ContentType
      */
     private $badgeAttachment;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Result", cascade={"persist"}, mappedBy="contentType")
-     * @var \Project\Entity\Result[]
+     * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Result\Result[]
      */
     private $result;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\WorkpackageDocument", cascade={"persist"}, mappedBy="contentType")
-     * @var \Project\Entity\WorkpackageDocument[]
+     * @ORM\OneToMany(targetEntity="Project\Entity\Workpackage\Document", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Workpackage\Document[]
      */
     private $workpackageDocument;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Poster", cascade={"persist"}, mappedBy="contentType")
-     * @var \Project\Entity\WorkpackageDocument[]
+     * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Poster\Poster[]
      */
     private $poster;
     /**
@@ -141,13 +141,13 @@ class ContentType
      */
     private $projectDocument;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\VersionDocument", cascade={"persist"}, mappedBy="contentType")
-     * @var \Project\Entity\VersionDocument[]
+     * @ORM\OneToMany(targetEntity="Project\Entity\Version\Document", cascade={"persist"}, mappedBy="contentType")
+     * @var \Project\Entity\Version\Document[]
      */
     private $versionDocument;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
-     * @var \Project\Entity\VersionDocument[]
+     * @var \Calendar\Entity\Document[]
      */
     private $calendarDocument;
 
@@ -472,7 +472,7 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\Result[] $result
+     * @param \Project\Entity\Result\Result[] $result
      */
     public function setResult($result)
     {
@@ -480,7 +480,7 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\Result[]
+     * @return \Project\Entity\Result\Result[]
      */
     public function getResult()
     {
@@ -488,7 +488,7 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\WorkpackageDocument[] $workpackageDocument
+     * @param \Project\Entity\Workpackage\Document[] $workpackageDocument
      */
     public function setWorkpackageDocument($workpackageDocument)
     {
@@ -496,7 +496,7 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\WorkpackageDocument[]
+     * @return \Project\Entity\Workpackage\Document[]
      */
     public function getWorkpackageDocument()
     {
@@ -504,7 +504,7 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\WorkpackageDocument[] $poster
+     * @param \Project\Entity\Poster\Poster[] $poster
      */
     public function setPoster($poster)
     {
@@ -512,7 +512,7 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\WorkpackageDocument[]
+     * @return \Project\Entity\Poster\Poster[]
      */
     public function getPoster()
     {
@@ -584,7 +584,7 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\VersionDocument[] $versionDocument
+     * @param \Project\Entity\Version\Document[] $versionDocument
      */
     public function setVersionDocument($versionDocument)
     {
@@ -592,7 +592,7 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\VersionDocument[]
+     * @return \Project\Entity\Version\Document[]
      */
     public function getVersionDocument()
     {
@@ -600,7 +600,7 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\VersionDocument[] $calendarDocument
+     * @param \Project\Entity\Version\Document[] $calendarDocument
      */
     public function setCalendarDocument($calendarDocument)
     {
@@ -608,7 +608,7 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\VersionDocument[]
+     * @return \Project\Entity\Version\Document[]
      */
     public function getCalendarDocument()
     {

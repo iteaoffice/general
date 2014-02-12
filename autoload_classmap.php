@@ -38,4 +38,5 @@ return array(
   'General\View\Helper\CountryHandler'        => __DIR__ . '/src/General/View/Helper/CountryHandler.php',
   'General\View\Helper\CountryLink'           => __DIR__ . '/src/General/View/Helper/CountryLink.php',
   'General\View\Helper\CountryMap'            => __DIR__ . '/src/General/View/Helper/CountryMap.php',
+  'General\View\Helper\GeneralServiceProxy'   => __DIR__ . '/src/General/View/Helper/GeneralServiceProxy.php',
 );

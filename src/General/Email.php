@@ -5,6 +5,7 @@
  */
 namespace General;
 
+use Contact\Entity\Contact;
 use General\Service\GeneralService;
 use Contact\Service\ContactService;
 
@@ -58,11 +59,9 @@ class Email
      */
     public function addTo($var, $user = null)
     {
-        if (is_object($var)) {
-            //to[email] = UserObject
-            $this->to[$var->getEmail()] = $var;
+        if ($var instanceof Contact) {
+            $this->to[$var->getEmail()] = $var->getDisplayName();
         } else {
-            //to[email] = user_name
             $this->to[$var] = $user;
         }
     }
