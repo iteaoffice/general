@@ -45,6 +45,7 @@ class Country extends EntityRepository
         $queryBuilder->from('Affiliation\Entity\Affiliation', 'a');
 
         $queryBuilder->join('a.organisation', 'o');
+        $queryBuilder->join('a.project', 'p');
         $queryBuilder->join('o.country', 'c');
 
         //Remove the 0 country (unknown)

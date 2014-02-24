@@ -150,6 +150,11 @@ class ContentType
      * @var \Calendar\Entity\Document[]
      */
     private $calendarDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
+     * @var \Affiliation\Entity\Loi[]
+     */
+    private $loi;
 
     /**
      * Class constructor
@@ -176,6 +181,7 @@ class ContentType
         $this->projectDocument         = new Collections\ArrayCollection();
         $this->versionDocument         = new Collections\ArrayCollection();
         $this->calendarDocument        = new Collections\ArrayCollection();
+        $this->loi                     = new Collections\ArrayCollection();
     }
 
     /**
@@ -613,5 +619,21 @@ class ContentType
     public function getCalendarDocument()
     {
         return $this->calendarDocument;
+    }
+
+    /**
+     * @param \Affiliation\Entity\Loi[] $loi
+     */
+    public function setLoi($loi)
+    {
+        $this->loi = $loi;
+    }
+
+    /**
+     * @return \Affiliation\Entity\Loi[]
+     */
+    public function getLoi()
+    {
+        return $this->loi;
     }
 }
