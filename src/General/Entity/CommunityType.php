@@ -12,6 +12,11 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\Form\Annotation;
+
 /**
  * Entity for the Community Type.
  *
@@ -21,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @category    General
  * @package     Entity
  */
-class CommunityType
+class CommunityType extends EntityAbstract
 {
     /**
      * @ORM\Column(name="type_id", type="integer", nullable=false)
@@ -65,11 +70,126 @@ class CommunityType
     }
 
     /**
+     * Magic Getter
+     *
+     * @param $property
+     *
+     * @return mixed
+     */
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    /**
+     * Magic Setter
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return void
+     */
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
-        return (string) $this->type;
+        return (string)$this->type;
+    }
+
+    /**
+     * Set input filter
+     *
+     * @param InputFilterInterface $inputFilter
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        throw new \Exception("Setting an inputFilter is currently not supported");
+    }
+
+    /**
+     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
+     */
+    public function getInputFilter()
+    {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            $factory     = new InputFactory();
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name'     => 'type',
+                        'required' => true,
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name'     => 'regularExpression',
+                        'required' => true,
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name'     => 'link',
+                        'required' => true,
+                    )
+                )
+            );
+
+            $inputFilter->add(
+                $factory->createInput(
+                    array(
+                        'name'     => 'image',
+                        'required' => false,
+                    )
+                )
+            );
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
+    }
+
+    /**
+     * Needed for the hydration of form elements
+     *
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        return array(
+            'id'                => $this->id,
+            'type'              => $this->type,
+            'regularExpression' => $this->regularExpression,
+            'link'              => $this->link,
+            'image'             => $this->image,
+        );
+    }
+
+    /**
+     * Function needed for the population of forms
+     *
+     * @return array
+     */
+    public function populate()
+    {
+        return $this->getArrayCopy();
     }
 
     /**

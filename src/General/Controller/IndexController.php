@@ -35,39 +35,73 @@ class IndexController extends AbstractActionController implements ServiceLocator
      */
     public function contentTypeIconAction()
     {
-        $this->layout(false);
         $response = $this->getResponse();
 
         $contentType = $this->getGeneralService()->findEntityById('content-type',
             $this->getEvent()->getRouteMatch()->getParam('id')
         );
 
+        if (is_null($contentType)) {
+            return $this->notFoundAction();
+        }
+
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public");
 
-        if (!is_null($contentType)) {
 
-            $file = stream_get_contents($contentType->getImage());
+        $file = stream_get_contents($contentType->getImage());
 
-            $response->getHeaders()
-                ->addHeaderLine('Content-Type: image/gif')
-                ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+        $response->getHeaders()
+            ->addHeaderLine('Content-Type: image/gif')
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
-            $response->setContent($file);
+        $response->setContent($file);
 
-            return $response;
-        } else {
-            $response->getHeaders()
-                ->addHeaderLine('Content-Type: image/jpg');
-            $response->setStatusCode(404);
-            /**
-             * $config = $this->getServiceLocator()->get('config');
-             * readfile($config['file_config']['upload_dir'] . DIRECTORY_SEPARATOR . 'removed.jpg');
-             */
-        }
+        return $response;
     }
+
+    /**
+     * Display an icon of a country
+     */
+    public function countryFlagAction()
+    {
+        $country = $this->getGeneralService()->findCountryByIso3(
+            strtolower($this->getEvent()->getRouteMatch()->getParam('iso3'))
+        );
+
+        $response = $this->getResponse();
+
+        /**
+         * Return the response when no iso3 can be found
+         */
+        if (is_null($country)) {
+            return $response;
+        }
+
+        $file = stream_get_contents($country->getFlag()->getObject());
+
+        /**
+         * Create a cache-version of the file
+         */
+        if (!file_exists($country->getFlag()->getCacheFileName())) {
+            //Save a copy of the file in the caching-folder
+            file_put_contents($country->getFlag()->getCacheFileName(), $file);
+        }
+
+        $response->getHeaders()
+            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
+            ->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Content-Type: image/png')
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
+
+        $response->setContent($file);
+
+        return $response;
+    }
+
 
     /**
      * Redirect an old project to a new project

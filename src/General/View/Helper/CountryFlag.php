@@ -43,13 +43,8 @@ class CountryFlag extends AbstractHelper
         /**
          * Check if the file is cached and if so, pull it from the assets-folder
          */
-        $router = 'country/flag';
-        if (file_exists($flag->getCacheFileName())) {
-            /**
-             * The file exists, but is it not updated?
-             */
-            $router = 'assets/country-flag';
-        } else {
+        $router = 'assets/country-flag';
+        if (!file_exists($flag->getCacheFileName())) {
             file_put_contents(
                 $flag->getCacheFileName(),
                 is_resource($flag->getObject()) ? stream_get_contents($flag->getObject()) : $flag->getObject()
@@ -60,7 +55,7 @@ class CountryFlag extends AbstractHelper
 
         $params = array(
             'ext'  => 'png',
-            'iso3' => $country->getIso3(),
+            'iso3' => strtolower($country->getIso3()),
         );
 
         $image = sprintf(

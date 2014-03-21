@@ -6,14 +6,18 @@
             <p class="lead">{{ translate("txt-organisation-list-explanation") }}</p>
         </div>
 
-        <div class="col-md-6">
-            <div id="throbber"></div>
-            {% do form.prepare() %}
-            {{ form().openTag(form)|raw }}
-            {{ formelement(form.get('search')) }}
-            {{ form().closeTag()|raw }}
+        <div class="col-sm-6">
+            <div class="pull-right">
+                <form class="form-inline" role="form" id="organisationSearch">
+                    <div class="form-group">
+                        <label class="sr-only" for="search-box">{{ translate("txt-search") }}</label>
+                        <input type="search" class="form-control col-md-12" id="search" name="q"
+                               placeholder="{{ translate("txt-search-organisation-in-%s-country")|format(country) }}">
+                    </div>
+                    <input type="submit" value="{{ translate("txt-search") }}" class="btn btn-primary">
+                </form>
+            </div>
         </div>
-
     </div>
 
     {% if paginator.pageRange > 0 %}
@@ -42,34 +46,23 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
-        $("#search").autocomplete({
-            source: function (request, response) {
+    $("#organisationSearch").on('submit', function (e) {
+                e.preventDefault();
                 $.ajax({
                     url: 'organisation/search',
                     data: {
                         max_rows: 12,
-                        search_item: request.term
+                        country: {{ country.id }},
+                        search_item: $("#search").val()
                     },
                     success: function (data) {
                         $("#organisation-list").html(data);
+                        $("#throbber").remove();
                     },
                     error: function (event, ui) {
                         alert("Search Failed");
                     }
                 });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                log(ui.item ?
-                        "Selected: " + ui.item.label :
-                        "Nothing selected, input was " + this.value);
-            },
-            search: function () {
-                var throb = new Throbber({color: '#00A651'});
-                throb.appendTo(document.getElementById('title'));
-                throb.start();
             }
-        });
-    });
+    );
 </script>

@@ -17,17 +17,18 @@ return array(
                     'route'    => '/assets/' . DEBRANOVA_HOST,
                     'defaults' => array(
                         'controller' => 'general-index',
-                        'action'     => 'index',
                     ),
                 ),
-                'may_terminate' => true,
+                'may_terminate' => false,
                 'child_routes'  => array(
                     'country-flag'      => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route'    => "/country-flag/[:iso3].[:ext]",
                             'defaults' => array(
-                                'action' => 'display',
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => 'general-index',
+                                'action'     => 'country-flag',
                             ),
                         ),
                     ),
@@ -36,7 +37,9 @@ return array(
                         'options' => array(
                             'route'    => "/content-type-icon/[:hash].gif",
                             'defaults' => array(
-                                'action' => 'display',
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => 'general-index',
+                                'action'     => 'content-type-icon',
                             ),
                         ),
                     ),
@@ -45,6 +48,7 @@ return array(
                         'options' => array(
                             'route'    => "/style/image/[:source]",
                             'defaults' => array(
+                                //Explicitly add the controller here as the assets are collected
                                 'controller' => 'general-style',
                                 'action'     => 'display',
                             ),
@@ -64,15 +68,6 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes'  => array(
-                    'flag' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/flag/[:iso3].[:ext]',
-                            'defaults' => array(
-                                'action' => 'country-flag',
-                            ),
-                        ),
-                    ),
                     'code' => array(
                         'type'    => 'Segment',
                         'options' => array(

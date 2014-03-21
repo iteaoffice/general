@@ -54,6 +54,8 @@ return array(
                 array('route' => 'country/flag', 'roles' => array()),
                 array('route' => 'country/code', 'roles' => array()),
                 array('route' => 'assets/style-image', 'roles' => array()),
+                array('route' => 'assets/country-flag', 'roles' => array()),
+                array('route' => 'assets/content-type-icon', 'roles' => array()),
                 array('route' => 'home', 'roles' => array())
 
             ),

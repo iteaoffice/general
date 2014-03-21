@@ -318,8 +318,6 @@ class CountryHandler extends AbstractHelper
 
         $organisationQuery = $this->organisationService->findOrganisationByCountry($this->getCountry());
 
-        $searchForm = new Search();
-
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
@@ -332,7 +330,6 @@ class CountryHandler extends AbstractHelper
         return $this->zfcTwigRenderer->render('general/partial/list/organisation', array(
             'country'   => $this->getCountry(),
             'paginator' => $paginator,
-            'form'      => $searchForm
         ));
     }
 

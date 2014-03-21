@@ -16,6 +16,7 @@ use Zend\Authentication\AuthenticationService;
 use Doctrine\ORM\EntityManager;
 
 use General\Entity\EntityAbstract;
+use General\Entity\Country;
 
 /**
  * ServiceAbstract
@@ -52,7 +53,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      * @param $entity
      * @param $id
      *
-     * @return null|object
+     * @return null|Country|Gender
      */
     public function findEntityById($entity, $id)
     {
