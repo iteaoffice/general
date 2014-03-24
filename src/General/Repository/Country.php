@@ -74,7 +74,6 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
 
-
         $queryBuilder->from('General\Entity\Country', 'c');
 
         $queryBuilder->join('c.organisation', 'o');
@@ -98,7 +97,6 @@ class Country extends EntityRepository
             default:
                 throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
         }
-
 
         //        //Limit to only the active projects
         //        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
@@ -124,7 +122,6 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
-
 
         $queryBuilder->from('General\Entity\Country', 'c');
 
@@ -152,7 +149,6 @@ class Country extends EntityRepository
 
         $queryBuilder->andWhere('a.project = ?1');
         $queryBuilder->setParameter(1, $project);
-
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -189,7 +185,6 @@ class Country extends EntityRepository
 
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
-
 
         return $queryBuilder->getQuery()->getResult();
     }

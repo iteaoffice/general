@@ -189,7 +189,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->country;
+        return (string) $this->country;
     }
 
     /**

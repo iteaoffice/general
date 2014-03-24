@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Factory as InputFactory;
-use Zend\Form\Annotation;
 
 /**
  * Entity for the Community Type.
@@ -99,7 +98,7 @@ class CommunityType extends EntityAbstract
      */
     public function __toString()
     {
-        return (string)$this->type;
+        return (string) $this->type;
     }
 
     /**
