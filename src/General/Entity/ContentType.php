@@ -71,10 +71,15 @@ class ContentType
      */
     private $programNna;
     /**
-     * @ORM\OneToMany(targetEntity="Program\Entity\ProgramDoa", cascade={"persist"}, mappedBy="contentType")
-     * @var \Program\Entity\ProgramDoa[]
+     * @ORM\OneToMany(targetEntity="Program\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
+     * @var \Program\Entity\Doa[]
      */
     private $programDoa;
+    /**
+     * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
+     * @var \Affiliation\Entity\Doa[]
+     */
+    private $affiliationDoa;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
      * @var \Program\Entity\Dnd[]
@@ -201,7 +206,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string) $this->contentType;
+        return (string)$this->contentType;
     }
 
     /**
@@ -382,7 +387,7 @@ class ContentType
     }
 
     /**
-     * @param \Program\Entity\ProgramDoa[] $programDoa
+     * @param \Program\Entity\Doa[] $programDoa
      */
     public function setProgramDoa($programDoa)
     {
@@ -390,11 +395,27 @@ class ContentType
     }
 
     /**
-     * @return \Program\Entity\ProgramDoa[]
+     * @return \Program\Entity\Doa[]
      */
     public function getProgramDoa()
     {
         return $this->programDoa;
+    }
+
+    /**
+     * @return \Affiliation\Entity\Doa[]
+     */
+    public function getAffiliationDoa()
+    {
+        return $this->affiliationDoa;
+    }
+
+    /**
+     * @param \Affiliation\Entity\Doa[] $affiliationDoa
+     */
+    public function setAffiliationDoa($affiliationDoa)
+    {
+        $this->affiliationDoa = $affiliationDoa;
     }
 
     /**
