@@ -37,7 +37,7 @@ class GeneralService extends ServiceAbstract
      * @param $entity
      * @param $docRef
      *
-     * @return null|object
+     * @return null|Entity\Challenge|Entity\Country
      * @throws \InvalidArgumentException
      */
     public function findEntityByDocRef($entity, $docRef)
