@@ -11,7 +11,7 @@ before_script:
   - composer self-update
   - composer install --dev --prefer-source;
   - wget https://scrutinizer-ci.com/ocular.phar
-  - mysql -e "create database IF NOT EXISTS test;" -uroot
+  - mysql -e "create database IF NOT EXISTS myapp_test;" -uroot
 
 script:
   - ./vendor/bin/phpunit
