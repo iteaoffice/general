@@ -1,4 +1,4 @@
-<phpunit bootstrap="GeneralTest/Bootstrap.php"
+<phpunit bootstrap="tests/GeneralTest/Bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -10,7 +10,7 @@
          syntaxCheck="true"
         >
     <testsuite name="ZfcUser Test Suite">
-        <directory>./GeneralTest</directory>
+        <directory>./tests/GeneralTest</directory>
     </testsuite>
 
     <php>
