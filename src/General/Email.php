@@ -9,6 +9,33 @@ use Contact\Entity\Contact;
 use General\Service\GeneralService;
 use Contact\Service\ContactService;
 
+/**
+ * Class Email
+ * @package General
+ *
+ * @method string getHtmlLayoutName()
+ * @method void setHtmlLayoutName($name)
+ * @method string getTextLayoutName()
+ * @method void setTextLayoutName($name)
+ * @method string getHtmlContent()
+ * @method void setHtmlContent($htmlContent)
+ * @method string getTextContent()
+ * @method void setTextContent($textContent)
+ * @method array getTo()
+ * @method void setTo($to)
+ * @method array getCc()
+ * @method void setCc($cc)
+ * @method array getBcc()
+ * @method void setBcc($bcc)
+ * @method string getFrom()
+ * @method void setFrom($from)
+ * @method string getFromName()
+ * @method void setFromName($fromName)
+ * @method string getReplyTo()
+ * @method void setReplyTo($replyTo)
+ * @method string getReplyToName()
+ * @method void setReplyToName($replyToName)
+ */
 class Email
 {
 

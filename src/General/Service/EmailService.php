@@ -57,6 +57,10 @@ class EmailService
      * @var ContactService
      */
     protected $contactService;
+    /**
+     * @var array
+     */
+    protected $templateVars = array();
 
     /**
      * __construct
@@ -148,18 +152,9 @@ class EmailService
         }
 
         //Template Variables
-        $templateVars = $this->config["template_vars"];
-        $templateVars = array_merge($templateVars, $email->toArray());
+        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
 
-        /**
-         * Incorporate the contact in the templateVars
-         */
-        if (!is_null($this->getContactService())) {
-            $templateVars['attention']    = $this->getContactService()->parseAttention();
-            $templateVars['fullname']     = $this->getContactService()->parseFullName();
-            $templateVars['country']      = $this->getContactService()->parseCountry();
-            $templateVars['organisation'] = $this->getContactService()->parseOrganisation();
-        }
+        $this->updateTemplateVarsWithContactService();
 
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
@@ -177,16 +172,16 @@ class EmailService
             $email->setFromName($this->config["defaults"]["from_name"]);
         }
 
-        $content = $this->renderContent($templateVars);
+        $content = $this->renderContent($this->templateVars);
 
         $htmlView = $this->renderer->render(
             'email/' . $email->getHtmlLayoutName(),
-            array_merge_recursive(array('content' => $content), $templateVars)
+            array_merge_recursive(array('content' => $content), $this->templateVars)
         );
 
         $textView = $this->renderer->render(
             'email/' . $email->getTextLayoutName(),
-            array_merge_recursive(array('content' => $content), $templateVars)
+            array_merge_recursive(array('content' => $content), $this->templateVars)
         );
 
         if (!is_null($textView)) {
@@ -274,18 +269,9 @@ class EmailService
     private function prepareMailing(Email $email)
     {
         //Template Variables
-        $templateVars = $this->config["template_vars"];
-        $templateVars = array_merge($templateVars, $email->toArray());
+        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
 
-        /**
-         * Incorporate the contact in the templateVars
-         */
-        if (!is_null($this->getContactService())) {
-            $templateVars['attention']    = $this->getContactService()->parseAttention();
-            $templateVars['fullname']     = $this->getContactService()->parseFullName();
-            $templateVars['country']      = $this->getContactService()->parseCountry();
-            $templateVars['organisation'] = $this->getContactService()->parseOrganisation();
-        }
+        $this->updateTemplateVarsWithContactService();
 
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
@@ -300,16 +286,16 @@ class EmailService
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
 
-        $content = $this->renderMailingContent($templateVars);
+        $content = $this->renderMailingContent($this->templateVars);
 
         $htmlView = $this->renderer->render(
             'email/' . $email->getHtmlLayoutName(),
-            array_merge_recursive(array('content' => $content), $templateVars)
+            array_merge_recursive(array('content' => $content), $this->templateVars)
         );
 
         $textView = $this->renderer->render(
             'email/' . $email->getTextLayoutName(),
-            array_merge_recursive(array('content' => $content), $templateVars)
+            array_merge_recursive(array('content' => $content), $this->templateVars)
         );
 
         if (!is_null($textView)) {
@@ -374,11 +360,11 @@ class EmailService
     /**
      * Render the content twig-wise
      *
-     * @param $templateVars
+     * @param $this ->templateVars
      *
      * @return null|string
      */
-    private function renderContent($templateVars)
+    private function renderContent()
     {
         /**
          * Grab the content from the template and save the .twig format in on the file server
@@ -389,7 +375,7 @@ class EmailService
         );
 
         $content = $this->renderer->render(
-            $this->getTemplateLocation(), $templateVars
+            $this->getTemplateLocation(), $this->templateVars
         );
 
         return $content;
@@ -398,11 +384,9 @@ class EmailService
     /**
      * Render the content twig-wise
      *
-     * @param $templateVars
-     *
      * @return null|string
      */
-    private function renderMailingContent($templateVars)
+    private function renderMailingContent()
     {
         /**
          * Replace first the content of the mailing with the required (new) shorttags
@@ -441,11 +425,12 @@ class EmailService
         );
 
         $content = $this->renderer->render(
-            $this->getMailingTemplateLocation($this->getMailing()->getId()), $templateVars
+            $this->getMailingTemplateLocation($this->getMailing()->getId()), $this->templateVars
         );
 
         return $content;
     }
+
 
     /**
      * @return string
@@ -498,6 +483,21 @@ class EmailService
 
         return $this->mailing;
     }
+
+    /**
+     * Extract the contactService and include the variables in the template array settings
+     */
+    public function updateTemplateVarsWithContactService()
+    {
+        if (!is_null($this->getContactService())) {
+
+            $this->templateVars['attention']    = $this->getContactService()->parseAttention();
+            $this->templateVars['fullname']     = $this->getContactService()->parseFullName();
+            $this->templateVars['country']      = $this->getContactService()->parseCountry();
+            $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
+        }
+    }
+
 
     /**
      * @param \Contact\Service\ContactService $contactService
