@@ -102,9 +102,11 @@ class ChallengeHandler extends AbstractHelper
                 break;
 
             default:
-                return sprintf("No handler available for <code>%s</code> in class <code>%s</code>",
+                return sprintf(
+                    "No handler available for <code>%s</code> in class <code>%s</code>",
                     $this->getHandler()->getHandler(),
-                    __CLASS__);
+                    __CLASS__
+                );
         }
     }
 
@@ -117,7 +119,8 @@ class ChallengeHandler extends AbstractHelper
 
         return $this->zfcTwigRenderer->render(
             'general/partial/list/challenge',
-            array('challenge' => $challenge));
+            array('challenge' => $challenge)
+        );
     }
 
     /**
@@ -127,7 +130,8 @@ class ChallengeHandler extends AbstractHelper
     {
         return $this->zfcTwigRenderer->render(
             'general/partial/entity/challenge',
-            array('challenge' => $this->getChallenge()));
+            array('challenge' => $this->getChallenge())
+        );
     }
 
     /**
@@ -139,7 +143,8 @@ class ChallengeHandler extends AbstractHelper
     {
         $projects = $this->projectService->findProjectByChallenge($challenge);
 
-        return $this->zfcTwigRenderer->render('general/partial/list/project-challenge',
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/project-challenge',
             array(
                 'projects'  => $projects,
                 'challenge' => $challenge

@@ -37,8 +37,7 @@ class ChallengeLink extends AbstractHelper
         Challenge $challenge = null,
         $action = 'view',
         $show = 'name'
-    )
-    {
+    ) {
         $translate = $this->view->plugin('translate');
         $url       = $this->view->plugin('url');
         $serverUrl = $this->view->plugin('serverUrl');

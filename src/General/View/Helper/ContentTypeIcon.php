@@ -52,8 +52,8 @@ class ContentTypeIcon extends AbstractHelper
         } else {
             file_put_contents(
                 $contentType->getCacheFileName(),
-                is_resource($contentType->getImage()) ?
-                    stream_get_contents($contentType->getImage()) : $contentType->getImage()
+                (is_resource($contentType->getImage()) ?
+                    stream_get_contents($contentType->getImage()) : $contentType->getImage())
             );
         }
 

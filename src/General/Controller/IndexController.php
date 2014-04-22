@@ -37,7 +37,8 @@ class IndexController extends AbstractActionController implements ServiceLocator
     {
         $response = $this->getResponse();
 
-        $contentType = $this->getGeneralService()->findEntityById('content-type',
+        $contentType = $this->getGeneralService()->findEntityById(
+            'content-type',
             $this->getEvent()->getRouteMatch()->getParam('id')
         );
 
@@ -54,7 +55,7 @@ class IndexController extends AbstractActionController implements ServiceLocator
 
         $response->getHeaders()
             ->addHeaderLine('Content-Type: image/gif')
-            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
         $response->setContent($file);
 
@@ -94,7 +95,7 @@ class IndexController extends AbstractActionController implements ServiceLocator
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public")
             ->addHeaderLine('Content-Type: image/png')
-            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
         $response->setContent($file);
 

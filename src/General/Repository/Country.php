@@ -205,14 +205,18 @@ class Country extends EntityRepository
         $queryBuilder->select('c country');
         $queryBuilder->from('General\Entity\Country', 'c');
 
-        $queryBuilder->addSelect('(SELECT
-                COUNT(DISTINCT aff.organisation)
-                FROM Affiliation\Entity\Affiliation aff
-                JOIN aff.organisation org WHERE org.country = c AND aff.dateEnd IS NULL) partners');
-        $queryBuilder->addSelect('(SELECT
-                COUNT(DISTINCT aff2.project)
-                FROM Affiliation\Entity\Affiliation aff2
-                JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects');
+        $queryBuilder->addSelect(
+            '(SELECT
+                            COUNT(DISTINCT aff.organisation)
+                            FROM Affiliation\Entity\Affiliation aff
+                            JOIN aff.organisation org WHERE org.country = c AND aff.dateEnd IS NULL) partners'
+        );
+        $queryBuilder->addSelect(
+            '(SELECT
+                            COUNT(DISTINCT aff2.project)
+                            FROM Affiliation\Entity\Affiliation aff2
+                            JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects'
+        );
 
         $queryBuilder->innerJoin('c.itac', 'itac');
 

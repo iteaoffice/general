@@ -128,8 +128,12 @@ class CountryHandler extends AbstractHelper
                 $countryLink = $this->view->plugin('countryLink');
                 $this->getView()->headMeta()->setProperty('og:type', $translate("txt-country"));
                 $this->getView()->headMeta()->setProperty('og:title', $this->getCountry()->getCountry());
-                $this->getView()->headMeta()->setProperty('og:url', $countryLink->__invoke(
-                        $this->getCountry(), 'view', 'social'
+                $this->getView()->headMeta()->setProperty(
+                    'og:url',
+                    $countryLink->__invoke(
+                        $this->getCountry(),
+                        'view',
+                        'social'
                     )
                 );
 
@@ -181,9 +185,11 @@ class CountryHandler extends AbstractHelper
                 break;
 
             default:
-                return sprintf("No handler available for <code>%s</code> in class <code>%s</code>",
+                return sprintf(
+                    "No handler available for <code>%s</code> in class <code>%s</code>",
                     $this->getHandler()->getHandler(),
-                    __CLASS__);
+                    __CLASS__
+                );
         }
     }
 
@@ -196,8 +202,10 @@ class CountryHandler extends AbstractHelper
     {
         $countries = $this->generalService->findActiveCountries();
 
-        return $this->zfcTwigRenderer->render('general/partial/list/country',
-            array('countries' => $countries));
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/country',
+            array('countries' => $countries)
+        );
     }
 
     /**
@@ -209,8 +217,10 @@ class CountryHandler extends AbstractHelper
     {
         $countries = $this->generalService->findItacCountries();
 
-        return $this->zfcTwigRenderer->render('general/partial/list/country-itac',
-            array('countries' => $countries));
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/country-itac',
+            array('countries' => $countries)
+        );
     }
 
     /**
@@ -218,11 +228,13 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountry()
     {
-        return $this->zfcTwigRenderer->render('general/partial/entity/country',
+        return $this->zfcTwigRenderer->render(
+            'general/partial/entity/country',
             array(
                 'country' => $this->getCountry(),
 
-            ));
+            )
+        );
     }
 
     /**
@@ -253,7 +265,8 @@ class CountryHandler extends AbstractHelper
         $projects      = $this->projectService->findProjectByCountry($this->getCountry());
         $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
 
-        return $this->zfcTwigRenderer->render('general/partial/entity/country-metadata',
+        return $this->zfcTwigRenderer->render(
+            'general/partial/entity/country-metadata',
             array(
                 'country'       => $country,
                 'projects'      => $projects,
@@ -275,11 +288,14 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->zfcTwigRenderer->render('general/partial/list/article', array(
-            'country'  => $country,
-            'articles' => $articles,
-            'limit'    => $this->getLimit(),
-        ));
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/article',
+            array(
+                'country'  => $country,
+                'articles' => $articles,
+                'limit'    => $this->getLimit(),
+            )
+        );
     }
 
     /**
@@ -295,9 +311,12 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->zfcTwigRenderer->render('program/partial/list/funder', array(
-            'funder' => $funder,
-        ));
+        return $this->zfcTwigRenderer->render(
+            'program/partial/list/funder',
+            array(
+                'funder' => $funder,
+            )
+        );
     }
 
     /**
@@ -326,10 +345,13 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->zfcTwigRenderer->render('general/partial/list/organisation', array(
-            'country'   => $this->getCountry(),
-            'paginator' => $paginator,
-        ));
+        return $this->zfcTwigRenderer->render(
+            'general/partial/list/organisation',
+            array(
+                'country'   => $this->getCountry(),
+                'paginator' => $paginator,
+            )
+        );
     }
 
     /**

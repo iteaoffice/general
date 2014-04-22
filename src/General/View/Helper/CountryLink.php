@@ -39,8 +39,7 @@ class CountryLink extends AbstractHelper
         $action = 'view',
         $show = 'name',
         $customShow = null
-    )
-    {
+    ) {
         $translate   = $this->view->plugin('translate');
         $url         = $this->view->plugin('url');
         $serverUrl   = $this->view->plugin('serverUrl');

@@ -347,7 +347,10 @@ class EmailService
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
          */
-        $message->getHeaders()->addHeaderLine('X-Mailjet-Campaign', DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId());
+        $message->getHeaders()->addHeaderLine(
+            'X-Mailjet-Campaign',
+            DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId()
+        );
         //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
@@ -371,11 +374,13 @@ class EmailService
          */
         file_put_contents(
             $this->config['template_vars']['cache_location'] . DIRECTORY_SEPARATOR .
-            $this->getTemplateLocation(), preg_replace('~\[(.*?)\]~', "{{ $1|raw }}", nl2br($this->template->getContent()))
+            $this->getTemplateLocation(),
+            preg_replace('~\[(.*?)\]~', "{{ $1|raw }}", nl2br($this->template->getContent()))
         );
 
         $content = $this->renderer->render(
-            $this->getTemplateLocation(), $this->templateVars
+            $this->getTemplateLocation(),
+            $this->templateVars
         );
 
         return $content;
@@ -405,15 +410,20 @@ class EmailService
                 "[fullname]",
                 "[organisation]",
                 "[country]"
-            ), $this->getMailing()->getMailHtml());
+            ),
+            $this->getMailing()->getMailHtml()
+        );
 
         $content = preg_replace(
             array(
                 '~\[(.*?)\]~'
             ),
             array
-            ("{{ $1|raw }}"
-            ), $content);
+            (
+                "{{ $1|raw }}"
+            ),
+            $content
+        );
 
         /**
          * Grab the content from the template and save the .twig format in on the file server
@@ -425,7 +435,8 @@ class EmailService
         );
 
         $content = $this->renderer->render(
-            $this->getMailingTemplateLocation($this->getMailing()->getId()), $this->templateVars
+            $this->getMailingTemplateLocation($this->getMailing()->getId()),
+            $this->templateVars
         );
 
         return $content;
