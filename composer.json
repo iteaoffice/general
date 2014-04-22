@@ -20,10 +20,8 @@
     "require": {
         "php": ">=5.3.23",
         "zendframework/zendframework": "dev-master",
-        "bjyoungblood/bjy-authorize": "dev-master",
         "doctrine/doctrine-orm-module": "dev-master",
-        "gedmo/doctrine-extensions": "dev-master",
-        "zf-commons/zfc-admin": "dev-master"
+        "gedmo/doctrine-extensions": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
