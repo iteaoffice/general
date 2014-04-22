@@ -31,6 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Vat extends EntityAbstract implements ResourceInterface
 {
+    const VAT_VH = 1;
     /**
      * @ORM\Column(name="vat_id",type="integer",nullable=false)
      * @ORM\Id
@@ -157,7 +158,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->percentage . '%';
+        return (string)$this->percentage . '%';
     }
 
     /**

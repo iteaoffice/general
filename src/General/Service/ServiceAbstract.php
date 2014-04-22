@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 
 use General\Entity\EntityAbstract;
 use General\Entity\Country;
+use General\Entity\Vat;
 
 /**
  * ServiceAbstract
@@ -53,7 +54,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      * @param $entity
      * @param $id
      *
-     * @return null|Country|Gender
+     * @return null|Country|Gender|Vat
      */
     public function findEntityById($entity, $id)
     {
