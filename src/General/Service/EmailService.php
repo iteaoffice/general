@@ -286,7 +286,7 @@ class EmailService
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
 
-        $content = $this->renderMailingContent($this->templateVars);
+        $content = $this->renderMailingContent();
 
         $htmlView = $this->renderer->render(
             'email/' . $email->getHtmlLayoutName(),
@@ -363,8 +363,6 @@ class EmailService
     /**
      * Render the content twig-wise
      *
-     * @param $this ->templateVars
-     *
      * @return null|string
      */
     private function renderContent()
@@ -378,12 +376,10 @@ class EmailService
             preg_replace('~\[(.*?)\]~', "{{ $1|raw }}", nl2br($this->template->getContent()))
         );
 
-        $content = $this->renderer->render(
+        return $this->renderer->render(
             $this->getTemplateLocation(),
             $this->templateVars
         );
-
-        return $content;
     }
 
     /**
@@ -434,12 +430,10 @@ class EmailService
             $content
         );
 
-        $content = $this->renderer->render(
+        return $this->renderer->render(
             $this->getMailingTemplateLocation($this->getMailing()->getId()),
             $this->templateVars
         );
-
-        return $content;
     }
 
 
