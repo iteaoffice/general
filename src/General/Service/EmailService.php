@@ -172,7 +172,7 @@ class EmailService
             $email->setFromName($this->config["defaults"]["from_name"]);
         }
 
-        $content = $this->renderContent($this->templateVars);
+        $content = $this->renderContent();
 
         $htmlView = $this->renderer->render(
             'email/' . $email->getHtmlLayoutName(),
