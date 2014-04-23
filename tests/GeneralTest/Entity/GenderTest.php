@@ -7,7 +7,7 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
-namespace GenderalTest\Entity;
+namespace GeneralTest\Entity;
 
 use Zend\InputFilter\InputFilter;
 
@@ -38,11 +38,11 @@ class GenderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
+        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
         $this->genderData = array(
-            'name' => 'This is the name of the gender',
-            'attention' => 'This is the attention',
+            'name'       => 'This is the name of the gender',
+            'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
 
@@ -99,14 +99,25 @@ class GenderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('General\Entity\Gender', $this->gender);
         $this->assertNotNull($this->gender->getId());
-        $this->assertEquals($this->gender->getName(), $this->genderData['name'], 'The name of the saved entity should be the same as the original name');
-        $this->assertEquals($this->gender->getAttention(), $this->genderData['attention'], 'The name of the saved entity should be the same as the original name');
-        $this->assertEquals($this->gender->getSalutation(), $this->genderData['salutation'], 'The name of the saved entity should be the same as the original name');
+        $this->assertEquals(
+            $this->gender->getName(),
+            $this->genderData['name'],
+            'The name of the saved entity should be the same as the original name'
+        );
+        $this->assertEquals(
+            $this->gender->getAttention(),
+            $this->genderData['attention'],
+            'The name of the saved entity should be the same as the original name'
+        );
+        $this->assertEquals(
+            $this->gender->getSalutation(),
+            $this->genderData['salutation'],
+            'The name of the saved entity should be the same as the original name'
+        );
 
         $this->assertNotNull($this->gender->getResourceId());
 
 //        $this->entityManager->remove($this->gender);
 //        $this->entityManager->flush();
     }
-
 }

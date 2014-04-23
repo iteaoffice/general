@@ -38,7 +38,6 @@ use Contact\Service\ContactService;
  */
 class Email
 {
-
     /**
      * __construct
      *
@@ -54,17 +53,14 @@ class Email
      * To recipients
      */
     protected $to = array();
-
     /**
      * Cc recipients
      */
     protected $cc = array();
-
     /**
      * Bcc recipients
      */
     protected $bcc = array();
-
     /**
      * Subject
      */
@@ -146,7 +142,7 @@ class Email
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-            case 'get' :
+            case 'get':
                 $key   = $this->_underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
                 //Try to find a property
@@ -155,7 +151,7 @@ class Email
                 }
 
                 return "";
-            case 'set' :
+            case 'set':
                 $key        = $this->_underscore(substr($method, 3));
                 $result     = isset($args[0]) ? $args[0] : null;
                 $this->$key = $result;

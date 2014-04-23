@@ -436,7 +436,6 @@ class EmailService
         );
     }
 
-
     /**
      * @return string
      */
@@ -502,7 +501,6 @@ class EmailService
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
     }
-
 
     /**
      * @param \Contact\Service\ContactService $contactService

@@ -206,7 +206,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string)$this->contentType;
+        return (string) $this->contentType;
     }
 
     /**

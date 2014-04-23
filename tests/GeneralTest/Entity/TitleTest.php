@@ -7,7 +7,7 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
-namespace TitlealTest\Entity;
+namespace GeneralTest\Entity;
 
 use Zend\InputFilter\InputFilter;
 
@@ -38,11 +38,11 @@ class TitleTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
+        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
         $this->titleData = array(
-            'name' => 'This is the name of the title',
-            'attention' => 'This is the attention',
+            'name'       => 'This is the name of the title',
+            'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
 
@@ -105,5 +105,4 @@ class TitleTest extends \PHPUnit_Framework_TestCase
 
         $this->entityManager->remove($this->title);
     }
-
 }
