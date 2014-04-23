@@ -14,16 +14,15 @@ return array(
     'factories' => array(
 
         'general_module_options' => function ($sm) {
-                $config = $sm->get('Config');
+            $config = $sm->get('Config');
 
-                return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : array());
-            },
-
+            return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : array());
+        },
         'email'                  => function ($sm) {
-                $config = $sm->get('Config');
+            $config = $sm->get('Config');
 
-                return new General\Service\EmailService($config["email"], $sm);
-            }
+            return new General\Service\EmailService($config["email"], $sm);
+        }
 
     ),
 );

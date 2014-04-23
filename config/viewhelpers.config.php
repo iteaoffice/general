@@ -15,14 +15,14 @@ use General\View\Helper;
 return array(
     'factories'  => array(
         'challengeHandler'    => function ($sm) {
-                return new Helper\ChallengeHandler($sm);
-            },
+            return new Helper\ChallengeHandler($sm);
+        },
         'countryHandler'      => function ($sm) {
-                return new Helper\CountryHandler($sm);
-            },
+            return new Helper\CountryHandler($sm);
+        },
         'generalServiceProxy' => function ($sm) {
-                return new Helper\GeneralServiceProxy($sm);
-            },
+            return new Helper\GeneralServiceProxy($sm);
+        },
     ),
     'invokables' => array(
 
