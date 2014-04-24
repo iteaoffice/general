@@ -41,23 +41,6 @@ class Email
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * __construct
      *
