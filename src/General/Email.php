@@ -39,13 +39,11 @@ use Contact\Service\ContactService;
 class Email
 {
 
+ 
 
 
 
-
-
-
-    /**
+ /**
      * __construct
      *
      * Set default options
