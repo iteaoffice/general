@@ -36,7 +36,7 @@ use Contact\Service\ContactService;
  * @method string getReplyToName()
  * @method void setReplyToName($replyToName)
  */
-Test
+Testdd
 class Email
 {
     /**
