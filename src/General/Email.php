@@ -50,8 +50,6 @@ class Email
 
 
 
-
-
     /**
      * __construct
      *
