@@ -114,11 +114,10 @@ class CountryTest extends \PHPUnit_Framework_TestCase
             $this->countryData['numcode'],
             'The numcode of the saved entity should be the same as the original name'
         );
-        $this->assertEquals(
-            $this->country->getVat(),
-            $this->countryData['vat'],
-            'The country_vat of the saved entity should be the same as the original name'
-        );
+//        $this->assertNull(
+//            $this->country->getVat(),
+//            'The country_vat of the saved entity should be the same as the original name'
+//        );
 
         $this->assertNotNull($this->country->getResourceId());
     }
@@ -126,6 +125,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $this->country->country = $this->countryData['country'];
-        $this->assertEquals((string) $this->country, $this->countryData['country']);
+        $this->assertEquals((string)$this->country, $this->countryData['country']);
     }
 }

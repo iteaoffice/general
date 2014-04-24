@@ -90,12 +90,10 @@ class GenderTest extends \PHPUnit_Framework_TestCase
 
         $this->gender = $hydrator->hydrate($this->genderData, new Gender());
 
-        $this->assertEquals((string) $this->gender, $this->genderData['name']);
+        $this->assertEquals((string)$this->gender, $this->genderData['attention']);
 
         $this->entityManager->persist($this->gender);
-        //Since we don't save, we will give the gender a standard id
-        $this->gender->setId(1);
-//        $this->entityManager->flush();
+        $this->entityManager->flush();
 
         $this->assertInstanceOf('General\Entity\Gender', $this->gender);
         $this->assertNotNull($this->gender->getId());

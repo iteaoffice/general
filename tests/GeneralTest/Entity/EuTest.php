@@ -40,13 +40,13 @@ class EuTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
+        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
         $country = $this->entityManager->find("General\Entity\Country", 1);
 
         $this->euData = array(
             'country' => $country,
-            'since' => new \DateTime(),
+            'since'   => new \DateTime(),
         );
 
         $this->eu = new Eu;
@@ -67,7 +67,7 @@ class EuTest extends \PHPUnit_Framework_TestCase
 
     public function testMagicGettersAndSetters()
     {
-        $date = new \DateTime();
+        $date            = new \DateTime();
         $this->eu->since = $date;
         $this->assertEquals($date, $this->eu->since);
     }
@@ -103,7 +103,5 @@ class EuTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->eu->getId());
         $this->assertEquals($this->eu->getSince(), $this->euData['since']);
         $this->assertEquals($this->eu->getCountry()->getCountry(), $this->euData['country']->getCountry());
-
-        $this->assertNotNull($this->eu->getResourceId());
     }
 }

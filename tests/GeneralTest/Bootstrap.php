@@ -16,11 +16,6 @@ use RuntimeException;
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
 
-define('DEBRANOVA_HOST', 'test');
-define('DEBRANOVA_APP', 'test');
-define('DEBRANOVA_APPLICATION', 'test');
-define('DEBRANOVA_ENV', 'development');
-
 /**
  * Test bootstrap, for setting up autoloading
  */
@@ -106,7 +101,9 @@ class Bootstrap
         }
 
         if (!$zf2Path) {
-            throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
+            throw new RuntimeException(
+                'Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.'
+            );
         }
 
         if (file_exists($vendorPath . '/autoload.php')) {
@@ -114,15 +111,17 @@ class Bootstrap
         }
 
         include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
-        AutoloaderFactory::factory(array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'autoregister_zf' => true,
-                'namespaces'      => array(
-                    __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
-                    'Admin'       => __DIR__ . '/../../../../module/Admin'
+        AutoloaderFactory::factory(
+            array(
+                'Zend\Loader\StandardAutoloader' => array(
+                    'autoregister_zf' => true,
+                    'namespaces'      => array(
+                        __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
+                        'Admin'       => __DIR__ . '/../../../../module/Admin'
+                    ),
                 ),
-            ),
-        ));
+            )
+        );
     }
 
     protected static function findParentPath($path)
@@ -131,7 +130,9 @@ class Bootstrap
         $previousDir = '.';
         while (!is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
-            if ($previousDir === $dir) return false;
+            if ($previousDir === $dir) {
+                return false;
+            }
             $previousDir = $dir;
         }
 

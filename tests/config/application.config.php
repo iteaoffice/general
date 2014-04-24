@@ -1,7 +1,22 @@
 <?php
 return array(
     'modules'                 => array(
+        'Admin',
+        'Publication',
+        'Content',
+        'Deeplink',
+        'Calendar',
+        'News',
         'General',
+        'Program',
+        'Organisation',
+        'Affiliation',
+        'Invoice',
+        'Event',
+        'Press',
+        'Mailing',
+        'Project',
+        'Contact',
         'DoctrineModule',
         'DoctrineORMModule',
     ),

@@ -207,32 +207,7 @@ class EmailService
             $message->addReplyTo($email->getReplyTo(), $email->getReplyToName());
         }
 
-        //To recipients
-        foreach ($email->getTo() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addTo($contact->getEmail(), $contact);
-            } else {
-                $message->addTo($emailAddress, $contact);
-            }
-        }
-
-        //Cc recipients
-        foreach ($email->getCc() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addCc($contact->getEmail(), $contact);
-            } else {
-                $message->addCc($emailAddress, $contact);
-            }
-        }
-
-        //Bcc recipients
-        foreach ($email->getBcc() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addBcc($contact->getEmail(), $contact);
-            } else {
-                $message->addBcc($emailAddress, $contact);
-            }
-        }
+        $message = $this->setRecipients($email, $message);
 
         //Subject. Include the CompanyName in the [[site]] tags
         $message->setSubject(
@@ -309,26 +284,11 @@ class EmailService
         //Create Zend Message
         $message = new Message();
 
-        //To recipients
-        foreach ($email->getTo() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addTo($contact->getEmail(), $contact);
-            } else {
-                $message->addTo($emailAddress, $contact);
-            }
-        }
-
         //From
         $message->setFrom($this->getMailing()->getSender()->getEmail(), $this->getMailing()->getSender()->getSender());
 
-        //To recipients
-        foreach ($email->getTo() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addTo($contact->getEmail(), $contact);
-            } else {
-                $message->addTo($emailAddress, $contact);
-            }
-        }
+        //Set the other recipients
+        $message = $this->setRecipients($email, $message);
 
         //Subject. Include the CompanyName in the [[site]] tags
         $message->setSubject($this->getMailing()->getMailSubject());
@@ -500,6 +460,46 @@ class EmailService
             $this->templateVars['country']      = $this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
+    }
+
+    /**
+     * Set the recipients to the email
+     *
+     * @param $email
+     * @param $message
+     *
+     * @return mixed
+     */
+    public function setRecipients(Email $email, Message $message)
+    {
+        //To recipients
+        foreach ($email->getTo() as $emailAddress => $contact) {
+            if ($contact instanceof Contact) {
+                $message->addTo($contact->getEmail(), $contact);
+            } else {
+                $message->addTo($emailAddress, $contact);
+            }
+        }
+
+        //Cc recipients
+        foreach ($email->getCc() as $emailAddress => $contact) {
+            if ($contact instanceof Contact) {
+                $message->addCc($contact->getEmail(), $contact);
+            } else {
+                $message->addCc($emailAddress, $contact);
+            }
+        }
+
+        //Bcc recipients
+        foreach ($email->getBcc() as $emailAddress => $contact) {
+            if ($contact instanceof Contact) {
+                $message->addBcc($contact->getEmail(), $contact);
+            } else {
+                $message->addBcc($emailAddress, $contact);
+            }
+        }
+
+        return $message;
     }
 
     /**
