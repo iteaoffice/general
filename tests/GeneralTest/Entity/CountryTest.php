@@ -125,6 +125,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $this->country->country = $this->countryData['country'];
-        $this->assertEquals((string)$this->country, $this->countryData['country']);
+        $this->assertEquals((string) $this->country, $this->countryData['country']);
     }
 }

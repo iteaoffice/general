@@ -90,7 +90,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
 
         $this->gender = $hydrator->hydrate($this->genderData, new Gender());
 
-        $this->assertEquals((string)$this->gender, $this->genderData['attention']);
+        $this->assertEquals((string) $this->gender, $this->genderData['attention']);
 
         $this->entityManager->persist($this->gender);
         $this->entityManager->flush();
