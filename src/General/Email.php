@@ -47,6 +47,9 @@ class Email
      */
     public function __construct($data = array())
     {
+
+
+
         $this->setProperties($data);
     }
 
