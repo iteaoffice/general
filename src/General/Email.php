@@ -3,7 +3,7 @@
  * Email class
  *
  */
-namespace General;
+namespace Blaat;
 
 use Contact\Entity\Contact;
 use General\Service\GeneralService;
@@ -36,7 +36,6 @@ use Contact\Service\ContactService;
  * @method string getReplyToName()
  * @method void setReplyToName($replyToName)
  */
-
 class Email
 {
     /**
@@ -47,11 +46,6 @@ class Email
      */
     public function __construct($data = array())
     {
-
-        
-
-
-
         $this->setProperties($data);
     }
 
