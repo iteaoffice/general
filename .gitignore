@@ -3,4 +3,4 @@
 /vendor
 /tests/data
 ocular.phar
-clover.clover
+coverage.clover

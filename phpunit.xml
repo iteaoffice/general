@@ -1,5 +1,5 @@
 <phpunit bootstrap="tests/GeneralTest/Bootstrap.php"
-         colors="false"
+         colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -9,7 +9,7 @@
          backupGlobals="false"
          syntaxCheck="true"
         >
-    <testsuite name="ZfcUser Test Suite">
+    <testsuite name="debranova/general Test Suite">
         <directory>./tests/GeneralTest</directory>
     </testsuite>
 
@@ -22,7 +22,7 @@
 
     <filter>
         <whitelist>
-            <directory suffix=".php">../src</directory>
+            <directory suffix=".php">../src/General</directory>
         </whitelist>
     </filter>
 
