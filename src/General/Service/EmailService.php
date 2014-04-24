@@ -8,7 +8,6 @@
 namespace General\Service;
 
 use General\Email as Email;
-
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
@@ -16,7 +15,6 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\Sendmail as SendmailTransport;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
-
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
 use Mailing\Entity\Mailing;
@@ -468,7 +466,7 @@ class EmailService
      * @param $email
      * @param $message
      *
-     * @return mixed
+     * @return Message
      */
     public function setRecipients(Email $email, Message $message)
     {

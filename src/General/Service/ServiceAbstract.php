@@ -12,9 +12,7 @@ namespace General\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Authentication\AuthenticationService;
-
 use Doctrine\ORM\EntityManager;
-
 use General\Entity\EntityAbstract;
 use General\Entity\Country;
 use General\Entity\Vat;
@@ -51,8 +49,8 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     /**
      * Find 1 entity based on the id
      *
-     * @param $entity
-     * @param $id
+     * @param string  $entity
+     * @param integer $id
      *
      * @return null|Country|Gender|Vat
      */

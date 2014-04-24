@@ -12,7 +12,6 @@
 namespace General\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
-
 use General\Entity\ContentType;
 
 /**

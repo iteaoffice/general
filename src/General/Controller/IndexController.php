@@ -12,7 +12,6 @@ namespace General\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\View\Model\ViewModel;
-
 use General\Service\GeneralService;
 
 /**

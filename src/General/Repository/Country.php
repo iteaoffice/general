@@ -10,13 +10,10 @@
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-
 use Program\Entity\Call\Call;
 use Project\Entity\Project;
 use Project\Entity\Evaluation;
 use Affiliation\Service\AffiliationService;
-
 use General\Entity;
 
 /**

@@ -12,7 +12,6 @@ namespace General\Entity;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**

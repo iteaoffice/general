@@ -12,9 +12,7 @@ namespace General\Service;
 use Zend\Http\Client;
 use Zend\Json\Json;
 use Zend\Http\Response;
-
 use Affiliation\Service\AffiliationService;
-
 use General\Entity;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
@@ -34,10 +32,10 @@ class GeneralService extends ServiceAbstract
     protected $options;
 
     /**
-     * @param $entity
+     * @param string $entity
      * @param $docRef
      *
-     * @return null|Entity\Challenge|Entity\Country
+     * @return Entity\Challenge
      * @throws \InvalidArgumentException
      */
     public function findEntityByDocRef($entity, $docRef)
@@ -227,7 +225,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $options
      *
-     * @return ModuleOptions
+     * @return GeneralService
      */
     public function setOptions($options)
     {

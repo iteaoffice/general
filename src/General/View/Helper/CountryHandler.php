@@ -15,12 +15,9 @@ use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
-
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-
 use ZfcTwig\View\TwigRenderer;
-
 use General\Entity\Country;
 use General\Service\GeneralService;
 use Content\Service\ArticleService;
@@ -28,7 +25,6 @@ use Program\Service\ProgramService;
 use Contact\Service\ContactService;
 use Project\Service\ProjectService;
 use Organisation\Service\OrganisationService;
-
 use Content\Entity\Handler;
 
 /**

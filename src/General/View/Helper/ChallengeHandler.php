@@ -14,14 +14,10 @@ namespace General\View\Helper;
 use Zend\View\HelperPluginManager;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Mvc\Router\Http\RouteMatch;
-
 use ZfcTwig\View\TwigRenderer;
-
 use General\Entity\Challenge;
 use General\Service\GeneralService;
-
 use Project\Service\ProjectService;
-
 use Content\Entity\Handler;
 
 /**

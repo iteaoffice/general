@@ -14,10 +14,8 @@ use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\Form\Annotation;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**

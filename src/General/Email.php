@@ -3,7 +3,7 @@
  * Email class
  *
  */
-namespace dd;
+namespace General;
 
 use Contact\Entity\Contact;
 use General\Service\GeneralService;
