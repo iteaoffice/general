@@ -11,118 +11,61 @@
 
 namespace General\View\Helper;
 
-use Zend\View\HelperPluginManager;
-use Zend\View\Helper\AbstractHelper;
-use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\Paginator\Paginator;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use Content\Entity\Content;
+use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use ZfcTwig\View\TwigRenderer;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Country;
 use General\Service\GeneralService;
-use Content\Service\ArticleService;
-use Program\Service\ProgramService;
-use Contact\Service\ContactService;
-use Project\Service\ProjectService;
 use Organisation\Service\OrganisationService;
-use Content\Entity\Handler;
+use Program\Service\ProgramService;
+use Project\Service\ProjectService;
+use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Paginator\Paginator;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
+use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class CountryHandler
  * @package Country\View\Helper
  */
-class CountryHandler extends AbstractHelper
+class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+    /**
+     * @var HelperPluginManager
+     */
+    protected $serviceLocator;
     /**
      * @var Country
      */
     protected $country;
     /**
-     * @var GeneralService
-     */
-    protected $generalService;
-    /**
-     * @var ProjectService
-     */
-    protected $projectService;
-    /**
-     * @var OrganisationService
-     */
-    protected $organisationService;
-    /**
-     * @var ContactService
-     */
-    protected $contactService;
-    /**
-     * @var ArticleService
-     */
-    protected $articleService;
-    /**
-     * @var ProgramService
-     */
-    protected $programService;
-    /**
-     * @var Handler
-     */
-    protected $handler;
-    /**
-     * @var CountryMap
-     */
-    protected $countryMap;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch = null;
-    /**
      * @var int
      */
     protected $limit = 5;
-    /**
-     * @var TwigRenderer;
-     */
-    protected $zfcTwigRenderer;
 
-    /**
-     * @param HelperPluginManager $helperPluginManager
-     */
-    public function __construct(HelperPluginManager $helperPluginManager)
-    {
-        $this->generalService      = $helperPluginManager->getServiceLocator()->get('general_general_service');
-        $this->projectService      = $helperPluginManager->getServiceLocator()->get('project_project_service');
-        $this->articleService      = $helperPluginManager->getServiceLocator()->get('content_article_service');
-        $this->contactService      = $helperPluginManager->getServiceLocator()->get('contact_contact_service');
-        $this->organisationService = $helperPluginManager->getServiceLocator()
-            ->get('organisation_organisation_service');
-        $this->programService      = $helperPluginManager->getServiceLocator()->get('program_program_service');
-        $this->routeMatch          = $helperPluginManager->getServiceLocator()
-            ->get('application')
-            ->getMvcEvent()
-            ->getRouteMatch();
-        $this->countryMap          = $helperPluginManager->get('countryMap');
-        /**
-         * Load the TwigRenderer directly form the plugin manager to avoid a fallback to the standard PhpRenderer
-         */
-        $this->zfcTwigRenderer = $helperPluginManager->getServiceLocator()->get('ZfcTwigRenderer');
-    }
-
-    /**
+    /***
+     * @param Content $content
+     *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    public function render()
+    public function __invoke(Content $content)
     {
 
-        $translate = $this->getView()->plugin('translate');
+        $this->extractContentParam($content);
 
-        switch ($this->getHandler()->getHandler()) {
+        switch ($content->getHandler()->getHandler()) {
 
             case 'country':
 
-                $this->getView()->headTitle()->append($translate("txt-country"));
+                $this->getView()->headTitle()->append($this->translate("txt-country"));
                 $this->getView()->headTitle()->append($this->getCountry()->getCountry());
 
-                $countryLink = $this->view->plugin('countryLink');
-                $this->getView()->headMeta()->setProperty('og:type', $translate("txt-country"));
+                $countryLink = $this->serviceLocator->get('countryLink');
+                $this->getView()->headMeta()->setProperty('og:type', $this->translate("txt-country"));
                 $this->getView()->headMeta()->setProperty('og:title', $this->getCountry()->getCountry());
                 $this->getView()->headMeta()->setProperty(
                     'og:url',
@@ -134,59 +77,242 @@ class CountryHandler extends AbstractHelper
                 );
 
                 return $this->parseCountry();
-                break;
-
             case 'country_map':
-                $countryMap = $this->countryMap;
+                /**
+                 * @var $countryMap CountryMap
+                 */
+                $countryMap = $this->serviceLocator->get('countryMap');
 
-                return $countryMap->__invoke(array($this->getCountry()), $this->getCountry());
-                break;
+                return $countryMap(array($this->getCountry()), $this->getCountry());
 
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
-                break;
-
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
-                break;
-
             case 'country_list':
-                $this->getView()->headTitle()->append($translate("txt-countries-in-itea"));
-                $page = $this->routeMatch->getParam('page');
+                $this->getView()->headTitle()->append($this->translate("txt-countries-in-itea"));
+                $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseCountryList($page);
-                break;
-
             case 'country_list_itac':
-                $this->getView()->headTitle()->append($translate("txt-itac-countries-in-itea"));
-                $page = $this->routeMatch->getParam('page');
+                $this->getView()->headTitle()->append($this->translate("txt-itac-countries-in-itea"));
+                $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseCountryListItac($page);
-                break;
-
             case 'country_organisation':
 
-                $page = $this->routeMatch->getParam('page');
+                $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseOrganisationList($page);
-                break;
-
             case 'country_project':
                 return $this->parseCountryProjectList($this->getCountry());
-                break;
-
             case 'country_article':
                 return $this->parseCountryArticleList($this->getCountry());
-
-                break;
-
             default:
                 return sprintf(
                     "No handler available for <code>%s</code> in class <code>%s</code>",
-                    $this->getHandler()->getHandler(),
+                    $content->getHandler()->getHandler(),
                     __CLASS__
                 );
         }
+    }
+
+    /**
+     * @param Content $content
+     */
+    public function extractContentParam(Content $content)
+    {
+        //Give default the docRef to the handler, this does not harm
+        if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
+            $this->setCountryDocRef($this->getRouteMatch()->getParam('docRef'));
+        }
+        foreach ($content->getContentParam() as $param) {
+            switch ($param->getParameter()->getParam()) {
+                case 'docRef':
+                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                        $this->setCountryDocRef($docRef);
+                    }
+                    break;
+
+                case 'limit':
+                    if ('0' === $param->getParameterId()) {
+                        $limit = null;
+                    } else {
+                        $limit = $param->getParameterId();
+                    }
+                    $this->setLimit($limit);
+                    break;
+
+                default:
+                    $this->setCountryId($param->getParameterId());
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @return RouteMatch
+     */
+    public function getRouteMatch()
+    {
+        return $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
+    }
+
+    /**
+     * Get the service locator.
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator->getServiceLocator();
+    }
+
+    /**
+     * Set the service locator.
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return AbstractHelper
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * @param $docRef
+     *
+     * @return Country
+     */
+    public function setCountryDocRef($docRef)
+    {
+        $this->setCountry($this->getGeneralService()->findEntityByDocRef('country', $docRef));
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService()
+    {
+        return $this->getServiceLocator()->get('general_general_service');
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Country
+     */
+    public function setCountryId($id)
+    {
+        $this->setCountry($this->getGeneralService()->findEntityById('country', $id));
+
+        return $this->getCountry();
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function parseCountry()
+    {
+        return $this->getRenderer()->render(
+            'general/partial/entity/country',
+            array(
+                'country' => $this->getCountry(),
+
+            )
+        );
+    }
+
+    /**
+     * @return TwigRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->getServiceLocator()->get('ZfcTwigRenderer');
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return string
+     */
+    public function parseCountryFunderList(Country $country)
+    {
+        $funder = $this->getProgramService()->findFunderByCountry($country);
+
+        /**
+         * Parse the organisationService in to have the these functions available in the view
+         */
+
+        return $this->getRenderer()->render(
+            'program/partial/list/funder',
+            array(
+                'funder' => $funder,
+            )
+        );
+    }
+
+    /**
+     * @return ProgramService
+     */
+    public function getProgramService()
+    {
+        return $this->getServiceLocator()->get('program_program_service');
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return string
+     */
+    public function parseCountryMetadata(Country $country)
+    {
+        $projects      = $this->getProjectService()->findProjectByCountry($this->getCountry());
+        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
+
+        return $this->getRenderer()->render(
+            'general/partial/entity/country-metadata',
+            array(
+                'country'       => $country,
+                'projects'      => $projects,
+                'organisations' => $organisations->getResult()
+            )
+        );
+    }
+
+    /**
+     * @return ProjectService
+     */
+    public function getProjectService()
+    {
+        return $this->getServiceLocator()->get('project_project_service');
+    }
+
+    /**
+     * @return OrganisationService
+     */
+    public function getOrganisationService()
+    {
+        return $this->getServiceLocator()->get('organisation_organisation_service');
     }
 
     /**
@@ -196,9 +322,9 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountryList()
     {
-        $countries = $this->generalService->findActiveCountries();
+        $countries = $this->getGeneralService()->findActiveCountries();
 
-        return $this->zfcTwigRenderer->render(
+        return $this->getRenderer()->render(
             'general/partial/list/country',
             array('countries' => $countries)
         );
@@ -211,107 +337,11 @@ class CountryHandler extends AbstractHelper
      */
     public function parseCountryListItac()
     {
-        $countries = $this->generalService->findItacCountries();
+        $countries = $this->getGeneralService()->findItacCountries();
 
-        return $this->zfcTwigRenderer->render(
+        return $this->getRenderer()->render(
             'general/partial/list/country-itac',
             array('countries' => $countries)
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function parseCountry()
-    {
-        return $this->zfcTwigRenderer->render(
-            'general/partial/entity/country',
-            array(
-                'country' => $this->getCountry(),
-
-            )
-        );
-    }
-
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
-    public function parseCountryProjectList(Country $country)
-    {
-        $projects = $this->projectService->findProjectByCountry($country);
-
-        return $this->zfcTwigRenderer->render(
-            'general/partial/list/project',
-            array(
-                'country'  => $country,
-                'projects' => $projects
-            )
-        );
-    }
-
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
-    public function parseCountryMetadata(Country $country)
-    {
-        $projects      = $this->projectService->findProjectByCountry($this->getCountry());
-        $organisations = $this->organisationService->findOrganisationByCountry($this->getCountry());
-
-        return $this->zfcTwigRenderer->render(
-            'general/partial/entity/country-metadata',
-            array(
-                'country'       => $country,
-                'projects'      => $projects,
-                'organisations' => $organisations->getResult()
-            )
-        );
-    }
-
-    /**
-     * @param Country $country
-     *
-     * @return \Content\Entity\Article[]
-     */
-    public function parseCountryArticleList(Country $country)
-    {
-        $articles = $this->articleService->findArticlesByCountry($country, $this->getLimit());
-
-        /**
-         * Parse the organisationService in to have the these functions available in the view
-         */
-
-        return $this->zfcTwigRenderer->render(
-            'general/partial/list/article',
-            array(
-                'country'  => $country,
-                'articles' => $articles,
-                'limit'    => $this->getLimit(),
-            )
-        );
-    }
-
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
-    public function parseCountryFunderList(Country $country)
-    {
-        $funder = $this->programService->findFunderByCountry($country);
-
-        /**
-         * Parse the organisationService in to have the these functions available in the view
-         */
-
-        return $this->zfcTwigRenderer->render(
-            'program/partial/list/funder',
-            array(
-                'funder' => $funder,
-            )
         );
     }
 
@@ -330,7 +360,7 @@ class CountryHandler extends AbstractHelper
             throw new \InvalidArgumentException("The country cannot be null");
         }
 
-        $organisationQuery = $this->organisationService->findOrganisationByCountry($this->getCountry());
+        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
@@ -341,7 +371,7 @@ class CountryHandler extends AbstractHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->zfcTwigRenderer->render(
+        return $this->getRenderer()->render(
             'general/partial/list/organisation',
             array(
                 'country'   => $this->getCountry(),
@@ -351,73 +381,52 @@ class CountryHandler extends AbstractHelper
     }
 
     /**
-     * @param \Content\Entity\Handler $handler
+     * @param Country $country
+     *
+     * @return string
      */
-    public function setHandler($handler)
+    public function parseCountryProjectList(Country $country)
     {
-        $this->handler = $handler;
-    }
+        $projects = $this->getProjectService()->findProjectByCountry($country);
 
-    /**
-     * @return \Content\Entity\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
+        return $this->getRenderer()->render(
+            'general/partial/list/project',
+            array(
+                'country'  => $country,
+                'projects' => $projects
+            )
+        );
     }
 
     /**
      * @param Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param $id
      *
-     * @return Country
+     * @return string
      */
-    public function setCountryId($id)
+    public function parseCountryArticleList(Country $country)
     {
-        $this->setCountry($this->generalService->findEntityById('country', $id));
+        $articles = $this->getArticleService()->findArticlesByCountry($country, $this->getLimit());
 
-        return $this->getCountry();
+        /**
+         * Parse the organisationService in to have the these functions available in the view
+         */
+
+        return $this->getRenderer()->render(
+            'general/partial/list/article',
+            array(
+                'country'  => $country,
+                'articles' => $articles,
+                'limit'    => $this->getLimit(),
+            )
+        );
     }
 
     /**
-     * @param $docRef
-     *
-     * @return Country
+     * @return ArticleService
      */
-    public function setCountryDocRef($docRef)
+    public function getArticleService()
     {
-        $country = $this->generalService->findEntityByDocRef('country', $docRef);
-
-        if (is_null($country)) {
-            return null;
-        }
-
-        $this->setCountry($country);
-
-        return $this->getCountry();
-    }
-
-    /**
-     * @param int $limit
-     */
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
+        return $this->getServiceLocator()->get('content_article_service');
     }
 
     /**
@@ -426,5 +435,13 @@ class CountryHandler extends AbstractHelper
     public function getLimit()
     {
         return $this->limit;
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
     }
 }

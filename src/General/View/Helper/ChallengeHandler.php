@@ -11,165 +11,163 @@
 
 namespace General\View\Helper;
 
-use Zend\View\HelperPluginManager;
-use Zend\View\Helper\AbstractHelper;
-use Zend\Mvc\Router\Http\RouteMatch;
-use ZfcTwig\View\TwigRenderer;
+use Content\Entity\Content;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
-use Content\Entity\Handler;
+use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
+use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class ChallengeHandler
  * @package Challenge\View\Helper
  */
-class ChallengeHandler extends AbstractHelper
+class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+    /**
+     * @var HelperPluginManager
+     */
+    protected $serviceLocator;
     /**
      * @var Challenge
      */
     protected $challenge;
-    /**
-     * @var GeneralService
-     */
-    protected $generalService;
-    /**
-     * @var ProjectService
-     */
-    protected $projectService;
-    /**
-     * @var Handler
-     */
-    protected $handler;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch = null;
-    /**
-     * @var TwigRenderer;
-     */
-    protected $zfcTwigRenderer;
 
     /**
-     * @param HelperPluginManager $helperPluginManager
-     */
-    public function __construct(HelperPluginManager $helperPluginManager)
-    {
-        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_general_service');
-        $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
-        $this->projectService = $helperPluginManager->getServiceLocator()->get('project_project_service');
-        $this->routeMatch     = $helperPluginManager->getServiceLocator()
-            ->get('application')
-            ->getMvcEvent()
-            ->getRouteMatch();
-
-        /**
-         * Load the TwigRenderer directly form the plugin manager to avoid a fallback to the standard PhpRenderer
-         */
-        $this->zfcTwigRenderer = $helperPluginManager->getServiceLocator()->get('ZfcTwigRenderer');
-    }
-
-    /**
+     * @param Content $content
+     *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    public function render()
+    public function __invoke(Content $content)
     {
-        $translate = $this->getView()->plugin('translate');
+        $this->extractContentParam($content);
 
-        switch ($this->getHandler()->getHandler()) {
+        switch ($content->getHandler()->getHandler()) {
 
             case 'challenge':
 
-                $this->getView()->headTitle()->append($translate("txt-challenge"));
-                $this->getView()->headTitle()->append($this->getChallenge()->getChallenge());
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-challenge"));
+                $this->serviceLocator->get('headtitle')->append($this->getChallenge()->getChallenge());
 
                 return $this->parseChallenge();
-                break;
             case 'challenge_list':
 
-                $page = $this->routeMatch->getParam('page');
+                $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseChallengeList($page);
-                break;
             case 'challenge_project':
                 return $this->parseChallengeProjectList($this->getChallenge());
-                break;
-
             default:
                 return sprintf(
                     "No handler available for <code>%s</code> in class <code>%s</code>",
-                    $this->getHandler()->getHandler(),
+                    $content->getHandler()->getHandler(),
                     __CLASS__
                 );
         }
     }
 
     /**
-     * @return string
+     * @param Content $content
      */
-    public function parseChallengeList()
+    public function extractContentParam(Content $content)
     {
-        $challenge = $this->generalService->findAll('challenge');
 
-        return $this->zfcTwigRenderer->render(
-            'general/partial/list/challenge',
-            array('challenge' => $challenge)
-        );
+        if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
+            $this->setChallengeDocRef($this->getRouteMatch()->getParam('docRef'));
+        }
+
+        foreach ($content->getContentParam() as $param) {
+            /**
+             * When the parameterId is 0 (so we want to get the article from the URL
+             */
+            switch ($param->getParameter()->getParam()) {
+                case 'docRef':
+                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                        $this->setChallengeDocRef($docRef);
+                    }
+                    break;
+                default:
+                    $this->setChallengeId($param->getParameterId());
+                    break;
+            }
+        }
     }
 
     /**
-     * @return string
+     * @return RouteMatch
      */
-    public function parseChallenge()
+    public function getRouteMatch()
     {
-        return $this->zfcTwigRenderer->render(
-            'general/partial/entity/challenge',
-            array('challenge' => $this->getChallenge())
-        );
+        return $this->getServiceLocator()
+                    ->get('application')
+                    ->getMvcEvent()
+                    ->getRouteMatch();
     }
 
     /**
-     * @param Challenge $challenge
+     * Get the service locator.
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator->getServiceLocator();
+    }
+
+    /**
+     * Set the service locator.
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return AbstractHelper
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * @param $docRef
+     *
+     * @return Challenge
+     */
+    public function setChallengeDocRef($docRef)
+    {
+        $this->setChallenge($this->getGeneralService()->findEntityByDocRef('challenge', $docRef));
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService()
+    {
+        return $this->getServiceLocator()->get('general_general_service');
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Challenge
+     */
+    public function setChallengeId($id)
+    {
+        $this->setChallenge($this->getGeneralService()->findChallengeById($id));
+    }
+
+    /**
+     * @param $string
      *
      * @return string
      */
-    public function parseChallengeProjectList(Challenge $challenge)
+    public function translate($string)
     {
-        $projects = $this->projectService->findProjectByChallenge($challenge);
-
-        return $this->zfcTwigRenderer->render(
-            'general/partial/list/project-challenge',
-            array(
-                'projects'  => $projects,
-                'challenge' => $challenge
-            )
-        );
-    }
-
-    /**
-     * @param \Content\Entity\Handler $handler
-     */
-    public function setHandler($handler)
-    {
-        $this->handler = $handler;
-    }
-
-    /**
-     * @return \Content\Entity\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
-    }
-
-    /**
-     * @param Challenge $challenge
-     */
-    public function setChallenge($challenge)
-    {
-        $this->challenge = $challenge;
+        return $this->serviceLocator->get('translate')->__invoke($string);
     }
 
     /**
@@ -181,26 +179,68 @@ class ChallengeHandler extends AbstractHelper
     }
 
     /**
-     * @param $id
-     *
-     * @return Challenge
+     * @param Challenge $challenge
      */
-    public function setChallengeId($id)
+    public function setChallenge($challenge)
     {
-        $this->setChallenge($this->generalService->findChallengeById($id));
-
-        return $this->getChallenge();
+        $this->challenge = $challenge;
     }
 
     /**
-     * @param $docRef
-     *
-     * @return Challenge
+     * @return string
      */
-    public function setChallengeDocRef($docRef)
+    public function parseChallenge()
     {
-        $this->setChallenge($this->generalService->findEntityByDocRef('challenge', $docRef));
+        return $this->getRenderer()->render(
+            'general/partial/entity/challenge',
+            array('challenge' => $this->getChallenge())
+        );
+    }
 
-        return $this->getChallenge();
+    /**
+     * @return TwigRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->getServiceLocator()->get('ZfcTwigRenderer');
+    }
+
+    /**
+     * @return string
+     */
+    public function parseChallengeList()
+    {
+        $challenge = $this->getGeneralService()->findAll('challenge');
+
+        return $this->getRenderer()->render(
+            'general/partial/list/challenge',
+            array('challenge' => $challenge)
+        );
+    }
+
+    /**
+     * @param Challenge $challenge
+     *
+     * @return string
+     */
+    public function parseChallengeProjectList(Challenge $challenge)
+    {
+        $projects = $this->getProjectService()->findProjectByChallenge($challenge);
+
+        return $this->getRenderer()->render(
+            'general/partial/list/project-challenge',
+            array(
+                'projects'  => $projects,
+                'challenge' => $challenge
+            )
+        );
+    }
+
+    /**
+     * @return ProjectService
+     */
+    public function getProjectService()
+    {
+        return $this->getServiceLocator()->get('project_project_service');
     }
 }

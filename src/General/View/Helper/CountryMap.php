@@ -11,8 +11,12 @@
  */
 namespace General\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use General\Entity\Country;
+use General\Service\GeneralService;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
 
 /**
  * Create a country map based on a list of countries
@@ -21,8 +25,12 @@ use General\Entity\Country;
  * @package     View
  * @subpackage  Helper
  */
-class CountryMap extends AbstractHelper
+class CountryMap extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+    /**
+     * @var HelperPluginManager
+     */
+    protected $serviceLocator;
 
     /**
      * @param Country[] $countries
@@ -33,8 +41,7 @@ class CountryMap extends AbstractHelper
      */
     public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true)
     {
-        $generalService = $this->view->getHelperPluginManager()->getServiceLocator()->get('general_general_service');
-        $allCountries   = $generalService->findAll('country');
+        $allCountries = $this->getGeneralService()->findAll('country');
 
         $color      = '#005C00';
         $colorFaded = '#009900';
@@ -102,5 +109,37 @@ EOT;
         $this->getView()->headScript()->appendScript(implode('', $html));
 
         return '<h3>Map</h3><div id="world-map-gdp" style="height: 340px"></div>';
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService()
+    {
+        return $this->getServiceLocator()->get('general_general_service');
+    }
+
+    /**
+     * Get the service locator.
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator->getServiceLocator();
+    }
+
+    /**
+     * Set the service locator.
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return AbstractHelper
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
     }
 }

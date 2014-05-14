@@ -6,8 +6,9 @@
 namespace General;
 
 use Contact\Entity\Contact;
-use General\Service\GeneralService;
 use Contact\Service\ContactService;
+use General\Entity\WebInfo;
+use General\Service\GeneralService;
 
 /**
  * Class Email
@@ -35,21 +36,19 @@ use Contact\Service\ContactService;
  * @method void setReplyTo($replyTo)
  * @method string getReplyToName()
  * @method void setReplyToName($replyToName)
+ * @method void setCode($code)
+ * @method void setUrl($url)
+ * @method void setProject($project)
+ * @method void setProjectLeader($projectLeader)
+ * @method void setProjectLeaderOrganisation($projectLeaderOrganisation)
+ * @method void setProjectLeaderEmail($projectLeaderEmail)
+ * @method void setProjectLeaderCountry($projectLeaderEmail)
+ * @method void setContact($contact)
+ * @method void setOrganisation($contact)
+ * @method void setCountry($contact)
  */
 class Email
 {
-
-    /**
-     * __construct
-     *
-     * Set default options
-     *
-     */
-    public function __construct($data = array())
-    {
-        $this->setProperties($data);
-    }
-
     /**
      * To recipients
      */
@@ -74,6 +73,33 @@ class Email
      * @var WebInfo
      */
     protected $template;
+
+    /**
+     * __construct
+     *
+     * Set default options
+     *
+     */
+    public function __construct($data = array())
+    {
+        $this->setProperties($data);
+    }
+
+    /**
+     * Set all values from $data to each property.
+     *
+     * @param $data array set
+     *
+     * @return $this
+     */
+    public function setProperties(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
+        }
+
+        return $this;
+    }
 
     /**
      * Add TO recipient
@@ -177,22 +203,6 @@ class Email
         $result = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
 
         return $result;
-    }
-
-    /**
-     * Set all values from $data to each property.
-     *
-     * @param $data array set
-     *
-     * @return $this
-     */
-    public function setProperties(array $data)
-    {
-        foreach ($data as $key => $value) {
-            $this->$key = $value;
-        }
-
-        return $this;
     }
 
     /**

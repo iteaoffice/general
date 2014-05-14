@@ -11,7 +11,10 @@
 use General\Options;
 
 return array(
-    'factories' => array(
+    'initializers' => array(
+        'general_service_initializer' => 'General\Service\ServiceInitializer'
+    ),
+    'factories'    => array(
 
         'general_module_options' => function ($sm) {
             $config = $sm->get('Config');

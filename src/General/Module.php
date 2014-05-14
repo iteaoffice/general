@@ -11,8 +11,8 @@
  */
 namespace General;
 
-use Zend\ModuleManager\Feature; //Makes the module class more strict
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature;
 
 /**
  *
@@ -24,7 +24,9 @@ class Module implements
     Feature\BootstrapListenerInterface,
     Feature\ViewHelperProviderInterface
 {
-
+    /**
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -66,24 +68,6 @@ class Module implements
     public function getViewHelperConfig()
     {
         return include __DIR__ . '/../../config/viewhelpers.config.php';
-    }
-
-    /**
-     * @return array
-     */
-    public function getControllerConfig()
-    {
-        return array(
-            'initializers' => array(
-                function ($instance, $sm) {
-                    if ($instance instanceof FormServiceAwareInterface) {
-                        $sm          = $sm->getServiceLocator();
-                        $formService = $sm->get('general_form_service');
-                        $instance->setFormService($formService);
-                    }
-                },
-            ),
-        );
     }
 
     /**

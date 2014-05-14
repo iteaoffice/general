@@ -11,34 +11,51 @@
 
 namespace General\View\Helper;
 
-use Zend\View\HelperPluginManager;
-use Zend\View\Helper\AbstractHelper;
 use General\Service\GeneralService;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\AbstractHelper;
 
 /**
  * Class VersionServiceProxy
  * @package General\View\Helper
  */
-class GeneralServiceProxy extends AbstractHelper
+class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     /**
-     * @var GeneralService
+     * @var ServiceLocatorInterface
      */
-    protected $generalService;
-
-    /**
-     * @param HelperPluginManager $helperPluginManager
-     */
-    public function __construct(HelperPluginManager $helperPluginManager)
-    {
-        $this->generalService = $helperPluginManager->getServiceLocator()->get('general_general_service');
-    }
+    protected $serviceLocator;
 
     /**
      * @return GeneralService
      */
     public function __invoke()
     {
-        return $this->generalService;
+        return $this->serviceLocator->getServiceLocator()->get('general_general_service');
+    }
+
+    /**
+     * Get the service locator.
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * Set the service locator.
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return AbstractHelper
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
     }
 }

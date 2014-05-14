@@ -9,15 +9,15 @@
  */
 namespace General\Service;
 
-use Zend\Http\Client;
-use Zend\Json\Json;
-use Zend\Http\Response;
 use Affiliation\Service\AffiliationService;
 use General\Entity;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
-use Project\Entity\Project;
 use Project\Entity\Evaluation;
+use Project\Entity\Project;
+use Zend\Http\Client;
+use Zend\Http\Response;
+use Zend\Json\Json;
 
 /**
  * GeneralService
@@ -33,9 +33,9 @@ class GeneralService extends ServiceAbstract
 
     /**
      * @param string $entity
-     * @param $docRef
+     * @param        $docRef
      *
-     * @return Entity\Challenge
+     * @return Entity\Challenge|Entity\Country
      * @throws \InvalidArgumentException
      */
     public function findEntityByDocRef($entity, $docRef)
@@ -213,13 +213,17 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * @param $id
+     * get options
      *
-     * @return \General\Entity\Challenge
+     * @return ModuleOptions
      */
-    public function findChallengeById($id)
+    public function getOptions()
     {
-        return $this->getEntityManager()->getRepository($this->getFullEntityName('challenge'))->find($id);
+        if (!$this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('general_module_options'));
+        }
+
+        return $this->options;
     }
 
     /**
@@ -235,16 +239,12 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * get options
+     * @param $id
      *
-     * @return ModuleOptions
+     * @return \General\Entity\Challenge
      */
-    public function getOptions()
+    public function findChallengeById($id)
     {
-        if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceLocator()->get('general_module_options'));
-        }
-
-        return $this->options;
+        return $this->getEntityManager()->getRepository($this->getFullEntityName('challenge'))->find($id);
     }
 }
