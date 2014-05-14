@@ -50,6 +50,30 @@ use General\Service\GeneralService;
 class Email
 {
     /**
+     * @var string
+     */
+    protected $fullname;
+    /**
+     * @var string
+     */
+    protected $firstname;
+    /**
+     * @var string
+     */
+    protected $lastName;
+    /**
+     * @var string
+     */
+    protected $organisation;
+    /**
+     * @var string
+     */
+    protected $country;
+    /**
+     * @var string
+     */
+    protected $attention;
+    /**
      * To recipients
      */
     protected $to = array();
@@ -124,11 +148,9 @@ class Email
      */
     public function addCc($var, $user = null)
     {
-        if (is_object($var)) {
-            //to[email] = UserObject
-            $this->cc[$var->getEmail()] = $var;
+        if ($var instanceof Contact) {
+            $this->cc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            //to[email] = user_name
             $this->cc[$var] = $user;
         }
     }
@@ -141,11 +163,9 @@ class Email
      */
     public function addBcc($var, $user = null)
     {
-        if (is_object($var)) {
-            //to[email] = UserObject
-            $this->bcc[$var->getEmail()] = $var;
+        if ($var instanceof Contact) {
+            $this->bcc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            //to[email] = user_name
             $this->bcc[$var] = $user;
         }
     }

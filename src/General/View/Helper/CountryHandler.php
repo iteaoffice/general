@@ -61,13 +61,13 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
             case 'country':
 
-                $this->getView()->headTitle()->append($this->translate("txt-country"));
-                $this->getView()->headTitle()->append($this->getCountry()->getCountry());
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
+                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
 
                 $countryLink = $this->serviceLocator->get('countryLink');
-                $this->getView()->headMeta()->setProperty('og:type', $this->translate("txt-country"));
-                $this->getView()->headMeta()->setProperty('og:title', $this->getCountry()->getCountry());
-                $this->getView()->headMeta()->setProperty(
+                $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
+                $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
+                $this->serviceLocator->get('headmeta')->setProperty(
                     'og:url',
                     $countryLink->__invoke(
                         $this->getCountry(),
@@ -90,12 +90,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
             case 'country_list':
-                $this->getView()->headTitle()->append($this->translate("txt-countries-in-itea"));
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseCountryList($page);
             case 'country_list_itac':
-                $this->getView()->headTitle()->append($this->translate("txt-itac-countries-in-itea"));
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseCountryListItac($page);
@@ -226,6 +226,16 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * @param $string
+     *
+     * @return string
+     */
+    public function translate($string)
+    {
+        return $this->serviceLocator->get('translate')->__invoke($string);
     }
 
     /**

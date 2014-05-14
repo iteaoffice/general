@@ -44,7 +44,7 @@ class ServiceInitializer implements InitializerInterface
 
         if ($instance instanceof GeneralServiceAwareInterface) {
             /**
-             * @var generalService GeneralService
+             * @var @generalService GeneralService
              */
             $generalService = $serviceLocator->get('general_general_service');
             $instance->setGeneralService($generalService);

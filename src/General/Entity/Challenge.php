@@ -9,14 +9,14 @@
  */
 namespace General\Entity;
 
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Zend\Form\Annotation;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General
@@ -251,6 +251,11 @@ class Challenge extends EntityAbstract implements ResourceInterface
         return $this->inputFilter;
     }
 
+    public function populate()
+    {
+        return $this->getArrayCopy();
+    }
+
     /**
      * Needed for the hydration of form elements
      *
@@ -259,17 +264,12 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function getArrayCopy()
     {
         return array(
-            'challenge'       => $this->challenge,
-            'description'     => $this->description,
-            'backgroundColor' => $this->backgroundColor,
-            'frontColor'      => $this->frontColor,
-            'project'         => $this->project,
+            'challenge'        => $this->challenge,
+            'description'      => $this->description,
+            'backgroundColor'  => $this->backgroundColor,
+            'frontColor'       => $this->frontColor,
+            'projectChallenge' => $this->projectChallenge,
         );
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
     }
 
     /**
@@ -285,6 +285,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->backgroundColor;
+    }
+
+    /**
      * @param string $backgroundColor
      */
     public function setBackgroundColor($backgroundColor)
@@ -295,9 +303,9 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getBackgroundColor()
+    public function getChallenge()
     {
-        return $this->backgroundColor;
+        return $this->challenge;
     }
 
     /**
@@ -311,17 +319,17 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getChallenge()
+    public function getDocRef()
     {
-        return $this->challenge;
+        return $this->docRef;
     }
 
     /**
      * @return string
      */
-    public function getDocRef()
+    public function getDescription()
     {
-        return $this->docRef;
+        return $this->description;
     }
 
     /**
@@ -335,9 +343,9 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getDescription()
+    public function getFrontColor()
     {
-        return $this->description;
+        return $this->frontColor;
     }
 
     /**
@@ -349,11 +357,11 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getFrontColor()
+    public function getId()
     {
-        return $this->frontColor;
+        return $this->id;
     }
 
     /**
@@ -365,11 +373,11 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return \Project\Entity\Challenge[]
      */
-    public function getId()
+    public function getProjectChallenge()
     {
-        return $this->id;
+        return $this->projectChallenge;
     }
 
     /**
@@ -378,13 +386,5 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function setProjectChallenge($projectChallenge)
     {
         $this->projectChallenge = $projectChallenge;
-    }
-
-    /**
-     * @return \Project\Entity\Challenge[]
-     */
-    public function getProjectChallenge()
-    {
-        return $this->projectChallenge;
     }
 }

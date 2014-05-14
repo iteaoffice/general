@@ -37,7 +37,7 @@ $config = array(
     'asset_manager'   => array(
         'resolver_configs' => array(
             'collections' => array(
-                'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js' => array(
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js' => array(
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-1.1.1.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
@@ -47,7 +47,7 @@ $config = array(
                 __DIR__ . '/../public',
             ),
             'caching'     => array(
-                'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js' => array(
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js' => array(
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => array(
                         'dir' => __DIR__ . '/../../../public',

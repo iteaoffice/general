@@ -8,7 +8,7 @@
 $settings = array(
     'style_locations' => array(
         __DIR__ . '/../../../../styles/common',
-        __DIR__ . '/../../../../styles/' . DEBRANOVA_HOST
+        __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
     ),
     'image_not_found' => 'image_not_found.jpg',
 

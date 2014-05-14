@@ -14,7 +14,7 @@ return array(
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => array(
-                    'route'    => '/assets/' . DEBRANOVA_HOST,
+                    'route'    => '/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test'),
                     'defaults' => array(
                         'controller' => 'general-index',
                     ),

@@ -190,16 +190,6 @@ class ContentType
     }
 
     /**
-     * Although an alternative does not have a clear hash, we can create one based on the id;
-     *
-     * @return string
-     */
-    public function getHash()
-    {
-        return sha1($this->id . $this->contentType . $this->extension);
-    }
-
-    /**
      * Return the name of the content type
      *
      * @return string
@@ -220,10 +210,30 @@ class ContentType
     {
 
         $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR . DEBRANOVA_HOST . DIRECTORY_SEPARATOR . 'content-type-icon';
+            DIRECTORY_SEPARATOR . (defined(
+                "DEBRANOVA_HOST"
+            ) ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR
         . $this->getHash() . '.gif';
+    }
+
+    /**
+     * Although an alternative does not have a clear hash, we can create one based on the id;
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return sha1($this->id . $this->contentType . $this->extension);
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
     }
 
     /**
@@ -237,9 +247,9 @@ class ContentType
     /**
      * @return string
      */
-    public function getContentType()
+    public function getDescription()
     {
-        return $this->contentType;
+        return $this->description;
     }
 
     /**
@@ -253,9 +263,9 @@ class ContentType
     /**
      * @return string
      */
-    public function getDescription()
+    public function getExtension()
     {
-        return $this->description;
+        return $this->extension;
     }
 
     /**
@@ -267,11 +277,11 @@ class ContentType
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getExtension()
+    public function getId()
     {
-        return $this->extension;
+        return $this->id;
     }
 
     /**
@@ -283,11 +293,11 @@ class ContentType
     }
 
     /**
-     * @return int
+     * @return resource
      */
-    public function getId()
+    public function getImage()
     {
-        return $this->id;
+        return $this->image;
     }
 
     /**
@@ -299,11 +309,11 @@ class ContentType
     }
 
     /**
-     * @return resource
+     * @return \Content\Entity\Image[]
      */
-    public function getImage()
+    public function getContentImage()
     {
-        return $this->image;
+        return $this->contentImage;
     }
 
     /**
@@ -317,9 +327,9 @@ class ContentType
     /**
      * @return \Content\Entity\Image[]
      */
-    public function getContentImage()
+    public function getPressArticle()
     {
-        return $this->contentImage;
+        return $this->pressArticle;
     }
 
     /**
@@ -331,11 +341,11 @@ class ContentType
     }
 
     /**
-     * @return \Content\Entity\Image[]
+     * @return \Project\Entity\Logo[]
      */
-    public function getPressArticle()
+    public function getProjectLogo()
     {
-        return $this->pressArticle;
+        return $this->projectLogo;
     }
 
     /**
@@ -347,11 +357,11 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\Logo[]
+     * @return \Program\Entity\Nda[]
      */
-    public function getProjectLogo()
+    public function getProgramNna()
     {
-        return $this->projectLogo;
+        return $this->programNna;
     }
 
     /**
@@ -363,11 +373,11 @@ class ContentType
     }
 
     /**
-     * @return \Program\Entity\Nda[]
+     * @return \Program\Entity\Dnd[]
      */
-    public function getProgramNna()
+    public function getProgramDnd()
     {
-        return $this->programNna;
+        return $this->programDnd;
     }
 
     /**
@@ -379,11 +389,11 @@ class ContentType
     }
 
     /**
-     * @return \Program\Entity\Dnd[]
+     * @return \Program\Entity\Doa[]
      */
-    public function getProgramDnd()
+    public function getProgramDoa()
     {
-        return $this->programDnd;
+        return $this->programDoa;
     }
 
     /**
@@ -392,14 +402,6 @@ class ContentType
     public function setProgramDoa($programDoa)
     {
         $this->programDoa = $programDoa;
-    }
-
-    /**
-     * @return \Program\Entity\Doa[]
-     */
-    public function getProgramDoa()
-    {
-        return $this->programDoa;
     }
 
     /**
@@ -419,14 +421,6 @@ class ContentType
     }
 
     /**
-     * @param \Contact\Entity\Dnd[] $contactDnd
-     */
-    public function setContactDnd($contactDnd)
-    {
-        $this->contactDnd = $contactDnd;
-    }
-
-    /**
      * @return \Contact\Entity\Dnd[]
      */
     public function getContactDnd()
@@ -435,11 +429,11 @@ class ContentType
     }
 
     /**
-     * @param \Organisation\Entity\Logo[] $organisationLogo
+     * @param \Contact\Entity\Dnd[] $contactDnd
      */
-    public function setOrganisationLogo($organisationLogo)
+    public function setContactDnd($contactDnd)
     {
-        $this->organisationLogo = $organisationLogo;
+        $this->contactDnd = $contactDnd;
     }
 
     /**
@@ -451,11 +445,11 @@ class ContentType
     }
 
     /**
-     * @param \Publication\Entity\Publication[] $publication
+     * @param \Organisation\Entity\Logo[] $organisationLogo
      */
-    public function setPublication($publication)
+    public function setOrganisationLogo($organisationLogo)
     {
-        $this->publication = $publication;
+        $this->organisationLogo = $organisationLogo;
     }
 
     /**
@@ -467,11 +461,11 @@ class ContentType
     }
 
     /**
-     * @param \Contact\Entity\Photo[] $contactPhoto
+     * @param \Publication\Entity\Publication[] $publication
      */
-    public function setContactPhoto($contactPhoto)
+    public function setPublication($publication)
     {
-        $this->contactPhoto = $contactPhoto;
+        $this->publication = $publication;
     }
 
     /**
@@ -483,11 +477,11 @@ class ContentType
     }
 
     /**
-     * @param \Publication\Entity\Publication[] $badgeAttachment
+     * @param \Contact\Entity\Photo[] $contactPhoto
      */
-    public function setBadgeAttachment($badgeAttachment)
+    public function setContactPhoto($contactPhoto)
     {
-        $this->badgeAttachment = $badgeAttachment;
+        $this->contactPhoto = $contactPhoto;
     }
 
     /**
@@ -499,11 +493,11 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\Result\Result[] $result
+     * @param \Publication\Entity\Publication[] $badgeAttachment
      */
-    public function setResult($result)
+    public function setBadgeAttachment($badgeAttachment)
     {
-        $this->result = $result;
+        $this->badgeAttachment = $badgeAttachment;
     }
 
     /**
@@ -515,11 +509,11 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\Workpackage\Document[] $workpackageDocument
+     * @param \Project\Entity\Result\Result[] $result
      */
-    public function setWorkpackageDocument($workpackageDocument)
+    public function setResult($result)
     {
-        $this->workpackageDocument = $workpackageDocument;
+        $this->result = $result;
     }
 
     /**
@@ -531,11 +525,11 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\Poster\Poster[] $poster
+     * @param \Project\Entity\Workpackage\Document[] $workpackageDocument
      */
-    public function setPoster($poster)
+    public function setWorkpackageDocument($workpackageDocument)
     {
-        $this->poster = $poster;
+        $this->workpackageDocument = $workpackageDocument;
     }
 
     /**
@@ -547,11 +541,11 @@ class ContentType
     }
 
     /**
-     * @param \Project\Entity\Idea\Document[] $ideaDocument
+     * @param \Project\Entity\Poster\Poster[] $poster
      */
-    public function setIdeaDocument($ideaDocument)
+    public function setPoster($poster)
     {
-        $this->ideaDocument = $ideaDocument;
+        $this->poster = $poster;
     }
 
     /**
@@ -560,6 +554,22 @@ class ContentType
     public function getIdeaDocument()
     {
         return $this->ideaDocument;
+    }
+
+    /**
+     * @param \Project\Entity\Idea\Document[] $ideaDocument
+     */
+    public function setIdeaDocument($ideaDocument)
+    {
+        $this->ideaDocument = $ideaDocument;
+    }
+
+    /**
+     * @return \Project\Entity\Idea\Image[]
+     */
+    public function getIdeaImage()
+    {
+        return $this->ideaImage;
     }
 
     /**
@@ -573,9 +583,9 @@ class ContentType
     /**
      * @return \Project\Entity\Idea\Image[]
      */
-    public function getIdeaImage()
+    public function getProjectDescriptionImage()
     {
-        return $this->ideaImage;
+        return $this->projectDescriptionImage;
     }
 
     /**
@@ -587,11 +597,11 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\Idea\Image[]
+     * @return \Project\Entity\Document\Document[]
      */
-    public function getProjectDescriptionImage()
+    public function getProjectDocument()
     {
-        return $this->projectDescriptionImage;
+        return $this->projectDocument;
     }
 
     /**
@@ -603,11 +613,11 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\Document\Document[]
+     * @return \Project\Entity\Version\Document[]
      */
-    public function getProjectDocument()
+    public function getVersionDocument()
     {
-        return $this->projectDocument;
+        return $this->versionDocument;
     }
 
     /**
@@ -621,9 +631,9 @@ class ContentType
     /**
      * @return \Project\Entity\Version\Document[]
      */
-    public function getVersionDocument()
+    public function getCalendarDocument()
     {
-        return $this->versionDocument;
+        return $this->calendarDocument;
     }
 
     /**
@@ -635,11 +645,11 @@ class ContentType
     }
 
     /**
-     * @return \Project\Entity\Version\Document[]
+     * @return \Affiliation\Entity\Loi[]
      */
-    public function getCalendarDocument()
+    public function getLoi()
     {
-        return $this->calendarDocument;
+        return $this->loi;
     }
 
     /**
@@ -648,13 +658,5 @@ class ContentType
     public function setLoi($loi)
     {
         $this->loi = $loi;
-    }
-
-    /**
-     * @return \Affiliation\Entity\Loi[]
-     */
-    public function getLoi()
-    {
-        return $this->loi;
     }
 }
