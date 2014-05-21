@@ -9,12 +9,14 @@
  */
 namespace General\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Program\Entity\Call\Call;
-use Project\Entity\Project;
-use Project\Entity\Evaluation;
 use Affiliation\Service\AffiliationService;
+use Doctrine\ORM\EntityRepository;
+use Event\Entity\Meeting\Meeting;
+use Event\Entity\Registration;
 use General\Entity;
+use Program\Entity\Call\Call;
+use Project\Entity\Evaluation;
+use Project\Entity\Project;
 
 /**
  * @category    Contact
@@ -224,5 +226,36 @@ class Country extends EntityRepository
         $queryBuilder->where('c.id <> 0');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return array
+     */
+    public function findCountriesByMeeting(Meeting $meeting)
+    {
+
+        $query = $this->_em->createQueryBuilder();
+        $query->distinct('country.id');
+        $query->select('country.id');
+        $query->addSelect('country.country');
+
+        $query->from('Event\Entity\Registration', 'r');
+        $query->where('r.meeting = ?1');
+
+        $query->setParameter(1, $meeting->getId());
+        $query->andWhere($query->expr()->isNull('r.dateEnd'));
+        $query->andWhere('r.hideInList = ?2');
+        $query->andWhere('r.overbooked = ?3');
+        $query->setParameter(2, Registration::NOT_HIDE_IN_LIST);
+        $query->setParameter(3, Registration::NOT_OVERBOOKED);
+
+        $query->join('r.contact', 'c');
+        $query->join('c.contactOrganisation', 'co');
+        $query->join('co.organisation', 'o');
+        $query->join('o.country', 'country');
+
+        return $query->getQuery()->getResult();
     }
 }

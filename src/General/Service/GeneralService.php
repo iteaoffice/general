@@ -10,6 +10,7 @@
 namespace General\Service;
 
 use Affiliation\Service\AffiliationService;
+use Event\Entity\Meeting\Meeting;
 use General\Entity;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
@@ -107,6 +108,17 @@ class GeneralService extends ServiceAbstract
         );
 
         return $entity;
+    }
+
+    /**
+     * @param Meeting $meeting
+     *
+     * @return array
+     */
+    public function findCountriesByMeeting(Meeting $meeting)
+    {
+        return $this->getEntityManager()->getRepository($this->getFullEntityName('country'))
+                    ->findCountriesByMeeting($meeting);
     }
 
     /**

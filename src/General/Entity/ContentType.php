@@ -160,6 +160,11 @@ class ContentType
      * @var \Affiliation\Entity\Loi[]
      */
     private $loi;
+    /**
+     * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
+     * @var \Event\Entity\Meeting\Floorplan[]
+     */
+    private $floorplan;
 
     /**
      * Class constructor
@@ -187,6 +192,7 @@ class ContentType
         $this->versionDocument         = new Collections\ArrayCollection();
         $this->calendarDocument        = new Collections\ArrayCollection();
         $this->loi                     = new Collections\ArrayCollection();
+        $this->floorplan               = new Collections\ArrayCollection();
     }
 
     /**
@@ -658,5 +664,21 @@ class ContentType
     public function setLoi($loi)
     {
         $this->loi = $loi;
+    }
+
+    /**
+     * @return \Event\Entity\Meeting\Floorplan[]
+     */
+    public function getFloorplan()
+    {
+        return $this->floorplan;
+    }
+
+    /**
+     * @param \Event\Entity\Meeting\Floorplan[] $floorplan
+     */
+    public function setFloorplan($floorplan)
+    {
+        $this->floorplan = $floorplan;
     }
 }
