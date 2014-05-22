@@ -164,7 +164,7 @@ class ContentType
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
      * @var \Event\Entity\Meeting\Floorplan[]
      */
-    private $floorplan;
+    private $meetingFloorplan;
 
     /**
      * Class constructor
@@ -192,7 +192,7 @@ class ContentType
         $this->versionDocument         = new Collections\ArrayCollection();
         $this->calendarDocument        = new Collections\ArrayCollection();
         $this->loi                     = new Collections\ArrayCollection();
-        $this->floorplan               = new Collections\ArrayCollection();
+        $this->meetingFloorplan        = new Collections\ArrayCollection();
     }
 
     /**
@@ -669,16 +669,16 @@ class ContentType
     /**
      * @return \Event\Entity\Meeting\Floorplan[]
      */
-    public function getFloorplan()
+    public function getMeetingFloorplan()
     {
-        return $this->floorplan;
+        return $this->meetingFloorplan;
     }
 
     /**
-     * @param \Event\Entity\Meeting\Floorplan[] $floorplan
+     * @param \Event\Entity\Meeting\Floorplan[] $meetingFloorplan
      */
-    public function setFloorplan($floorplan)
+    public function setMeetingFloorplan($meetingFloorplan)
     {
-        $this->floorplan = $floorplan;
+        $this->meetingFloorplan = $meetingFloorplan;
     }
 }
