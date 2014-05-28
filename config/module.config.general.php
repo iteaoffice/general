@@ -21,7 +21,7 @@ return array(
     'email'   => array(
         "active"              => true,
         "defaults"            => array(
-            "html_layout_name" => "template",
+            "html_layout_name" => "signature_twig",
             "text_layout_name" => "template_text",
             "from_email"       => "noreply@itea3.org",
             "from_name"        => "ITEA Office",
@@ -30,13 +30,12 @@ return array(
         ),
         "emails"              => array(
             "support" => "info@itea3.org",
-            "admin"   => "webmaster@itea3.org"
+            "admin"   => "info@japaveh.nl"
         ),
         'template_vars'       => array(
-            "company"        => "ITEA Office",
-            "slogan"         => "",
-            "baseUrl"        => "http://itea3.org",
-            "cache_location" => __DIR__ . '/../../../../data/mail/template',
+            "company" => "ITEA Office",
+            "slogan"  => "",
+            "baseUrl" => "http://itea3.org",
         ),
         'relay'               => array(
             'active'   => true,

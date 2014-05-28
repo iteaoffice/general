@@ -7,18 +7,18 @@
  */
 namespace General\Service;
 
+use Contact\Entity\Contact;
+use Contact\Service\ContactService;
 use General\Email as Email;
-use Zend\ServiceManager\ServiceManager;
+use General\Entity\WebInfo;
+use Mailing\Entity\Mailing;
 use Zend\Mail\Message;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\Sendmail as SendmailTransport;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
-use Contact\Entity\Contact;
-use Contact\Service\ContactService;
-use Mailing\Entity\Mailing;
-use General\Entity\WebInfo;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -134,13 +134,6 @@ class EmailService
     }
 
     /**
-     * Return a preview of the email
-     */
-    public function preview($email)
-    {
-    }
-
-    /**
      * Prepare email to send.
      */
     private function prepare(Email $email)
@@ -164,6 +157,13 @@ class EmailService
             $email->addTo($this->config["emails"]["admin"]);
         }
 
+        /**
+         * Overrule the to when we are in development
+         */
+        if ('development' === DEBRANOVA_ENVIRONMENT) {
+            $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
+        }
+
         //If not sender, use default
         if (!$email->getFrom()) {
             $email->setFrom($this->config["defaults"]["from_email"]);
@@ -172,19 +172,14 @@ class EmailService
 
         $content = $this->renderContent();
 
-        $htmlView = $this->renderer->render(
-            'email/' . $email->getHtmlLayoutName(),
-            array_merge_recursive(array('content' => $content), $this->templateVars)
-        );
-
-        $textView = $this->renderer->render(
-            'email/' . $email->getTextLayoutName(),
-            array_merge_recursive(array('content' => $content), $this->templateVars)
-        );
-
-        if (!is_null($textView)) {
-            $email->setTextContent($textView);
-        };
+        try {
+            $htmlView = $this->renderer->render(
+                $email->getHtmlLayoutName(),
+                array_merge_recursive(array('content' => $content), $this->templateVars)
+            );
+        } catch (\Twig_Error_Syntax $e) {
+            var_dump($e->getMessage());
+        }
 
         if (!is_null($htmlView)) {
             $email->setHtmlContent($htmlView);
@@ -237,216 +232,6 @@ class EmailService
     }
 
     /**
-     * Prepare email to send.
-     */
-    private function prepareMailing(Email $email)
-    {
-        //Template Variables
-        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
-
-        $this->updateTemplateVarsWithContactService();
-
-        //If not layout, use default
-        if (!$email->getHtmlLayoutName()) {
-            $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
-        }
-
-        //If not recipient, send to admin
-        if (count($email->getTo()) === 0) {
-            $email->addTo($this->config["emails"]["admin"]);
-        }
-
-        $email->setFrom($this->getMailing()->getSender()->getSender());
-        $email->setFromName($this->getMailing()->getSender()->getEmail());
-
-        $content = $this->renderMailingContent();
-
-        $htmlView = $this->renderer->render(
-            'email/' . $email->getHtmlLayoutName(),
-            array_merge_recursive(array('content' => $content), $this->templateVars)
-        );
-
-        $textView = $this->renderer->render(
-            'email/' . $email->getTextLayoutName(),
-            array_merge_recursive(array('content' => $content), $this->templateVars)
-        );
-
-        if (!is_null($textView)) {
-            $email->setTextContent($textView);
-        };
-
-        if (!is_null($htmlView)) {
-            $email->setHtmlContent($htmlView);
-        };
-
-        //Create Zend Message
-        $message = new Message();
-
-        //From
-        $message->setFrom($this->getMailing()->getSender()->getEmail(), $this->getMailing()->getSender()->getSender());
-
-        //Set the other recipients
-        $message = $this->setRecipients($email, $message);
-
-        //Subject. Include the CompanyName in the [[site]] tags
-        $message->setSubject($this->getMailing()->getMailSubject());
-
-        $htmlContent       = new MimePart($email->getHtmlContent());
-        $htmlContent->type = "text/html";
-
-        $textContent       = new MimePart($email->getTextContent());
-        $textContent->type = 'text/plain';
-
-        $body = new MimeMessage();
-        //$body->setParts(array($htmlContent, $textContent));
-        $body->setParts(array($htmlContent));
-
-        /**
-         * Set specific headers
-         * https://eu.mailjet.com/docs/emails_headers
-         */
-        $message->getHeaders()->addHeaderLine(
-            'X-Mailjet-Campaign',
-            DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId()
-        );
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
-
-        $message->setBody($body);
-
-        return $message;
-    }
-
-    /**
-     * Render the content twig-wise
-     *
-     * @return null|string
-     */
-    private function renderContent()
-    {
-        /**
-         * Grab the content from the template and save the .twig format in on the file server
-         */
-        file_put_contents(
-            $this->config['template_vars']['cache_location'] . DIRECTORY_SEPARATOR .
-            $this->getTemplateLocation(),
-            preg_replace('~\[(.*?)\]~', "{{ $1|raw }}", nl2br($this->template->getContent()))
-        );
-
-        return $this->renderer->render(
-            $this->getTemplateLocation(),
-            $this->templateVars
-        );
-    }
-
-    /**
-     * Render the content twig-wise
-     *
-     * @return null|string
-     */
-    private function renderMailingContent()
-    {
-        /**
-         * Replace first the content of the mailing with the required (new) shorttags
-         */
-        $content = preg_replace(
-            array(
-                '~\[parent::getContact\(\)::firstname\]~',
-                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~'
-            ),
-            array(
-                "[firstname]",
-                "[lastname]",
-                "[fullname]",
-                "[organisation]",
-                "[country]"
-            ),
-            $this->getMailing()->getMailHtml()
-        );
-
-        $content = preg_replace(
-            array(
-                '~\[(.*?)\]~'
-            ),
-            array
-            (
-                "{{ $1|raw }}"
-            ),
-            $content
-        );
-
-        /**
-         * Grab the content from the template and save the .twig format in on the file server
-         */
-        file_put_contents(
-            $this->config['template_vars']['cache_location'] . DIRECTORY_SEPARATOR .
-            $this->getMailingTemplateLocation($this->getMailing()->getId()),
-            $content
-        );
-
-        return $this->renderer->render(
-            $this->getMailingTemplateLocation($this->getMailing()->getId()),
-            $this->templateVars
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplateLocation()
-    {
-        return 'template-' . $this->template->getId() . '.twig';
-    }
-
-    /**
-     * @param $id
-     *
-     * @return string
-     */
-    public function getMailingTemplateLocation($id)
-    {
-        return 'template-mailing-content-' . $id . '.twig';
-    }
-
-    /**
-     * @param $templateName
-     *
-     * @throws \Exception
-     */
-    public function setTemplate($templateName)
-    {
-        $this->template = $this->generalService->findWebInfoByInfo($templateName);
-
-        if (is_null($this->template)) {
-            throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
-        }
-    }
-
-    /**
-     * @param \Mailing\Entity\Mailing $mailing
-     */
-    public function setMailing($mailing)
-    {
-        $this->mailing = $mailing;
-    }
-
-    /**
-     * @return \Mailing\Entity\Mailing
-     */
-    public function getMailing()
-    {
-        if (is_null($this->mailing)) {
-            $this->setMailing($this->mailing);
-        }
-
-        return $this->mailing;
-    }
-
-    /**
      * Extract the contactService and include the variables in the template array settings
      */
     public function updateTemplateVarsWithContactService()
@@ -458,6 +243,60 @@ class EmailService
             $this->templateVars['country']      = $this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
+    }
+
+    /**
+     * @return \Contact\Service\ContactService
+     */
+    public function getContactService()
+    {
+        return $this->contactService;
+    }
+
+    /**
+     * @param \Contact\Service\ContactService $contactService
+     */
+    public function setContactService($contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
+    /**
+     * Render the content twig-wise
+     *
+     * @return null|string
+     */
+    private function renderContent()
+    {
+        /**
+         * Clone the twigRenderer and overrule to loader to be a string
+         */
+        $twigRenderer = clone $this->renderer->getEngine();
+        $twigRenderer->setLoader(new \Twig_Loader_String());
+
+        return $twigRenderer->render(
+            $this->createTwigTemplate($this->template->getContent()),
+            $this->templateVars
+        );
+    }
+
+    /**
+     * @param $content
+     *
+     * @return string
+     */
+    protected function createTwigTemplate($content)
+    {
+        return preg_replace(
+            array(
+                '~\[(.*?)\]~'
+            ),
+            array
+            (
+                "{{ $1|raw }}"
+            ),
+            $content
+        );
     }
 
     /**
@@ -501,18 +340,165 @@ class EmailService
     }
 
     /**
-     * @param \Contact\Service\ContactService $contactService
+     * Prepare email to send.
      */
-    public function setContactService($contactService)
+    private function prepareMailing(Email $email)
     {
-        $this->contactService = $contactService;
+        //Template Variables
+        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
+
+        $this->updateTemplateVarsWithContactService();
+
+        //If not layout, use default
+        if (!$email->getHtmlLayoutName()) {
+            $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
+        }
+
+        //If not recipient, send to admin
+        if (count($email->getTo()) === 0) {
+            $email->addTo($this->config["emails"]["admin"]);
+        }
+
+        /**
+         * Overrule the to when we are in development
+         */
+        if ('development' === DEBRANOVA_ENVIRONMENT) {
+            $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
+        }
+
+        $email->setFrom($this->getMailing()->getSender()->getSender());
+        $email->setFromName($this->getMailing()->getSender()->getEmail());
+
+        $content = $this->renderMailingContent();
+
+        $htmlView = $this->renderer->render(
+            $this->getMailing()->getTemplate()->getTemplate(),
+            array_merge_recursive(array('content' => $content), $this->templateVars)
+        );
+
+        $textView = $this->renderer->render(
+            'plain',
+            array_merge_recursive(array('content' => $content), $this->templateVars)
+        );
+
+        if (!is_null($textView)) {
+            $email->setTextContent(strip_tags($textView));
+        };
+
+        if (!is_null($htmlView)) {
+            $email->setHtmlContent($htmlView);
+        };
+
+        //Create Zend Message
+        $message = new Message();
+
+        //From
+        $message->setFrom($this->getMailing()->getSender()->getEmail(), $this->getMailing()->getSender()->getSender());
+
+        //Set the other recipients
+        $message = $this->setRecipients($email, $message);
+
+        //Subject. Include the CompanyName in the [[site]] tags
+        $message->setSubject($this->getMailing()->getMailSubject());
+
+        $htmlContent       = new MimePart($email->getHtmlContent());
+        $htmlContent->type = "text/html";
+
+        //        $textContent       = new MimePart($email->getTextContent());
+        //        $textContent->type = 'text/plain';
+
+        $body = new MimeMessage();
+        //$body->setParts(array($htmlContent, $textContent));
+        $body->setParts(array($htmlContent));
+
+        /**
+         * Set specific headers
+         * https://eu.mailjet.com/docs/emails_headers
+         */
+        $message->getHeaders()->addHeaderLine(
+            'X-Mailjet-Campaign',
+            DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId()
+        );
+        //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
+        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
+        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
+
+        $message->setBody($body);
+
+        return $message;
     }
 
     /**
-     * @return \Contact\Service\ContactService
+     * @return \Mailing\Entity\Mailing
      */
-    public function getContactService()
+    public function getMailing()
     {
-        return $this->contactService;
+        if (is_null($this->mailing)) {
+            $this->setMailing($this->mailing);
+        }
+
+        return $this->mailing;
+    }
+
+    /**
+     * @param \Mailing\Entity\Mailing $mailing
+     */
+    public function setMailing($mailing)
+    {
+        $this->mailing = $mailing;
+    }
+
+    /**
+     * Render the content twig-wise
+     *
+     * @return null|string
+     */
+    private function renderMailingContent()
+    {
+        /**
+         * Replace first the content of the mailing with the required (new) shorttags
+         */
+        $content = preg_replace(
+            array(
+                '~\[parent::getContact\(\)::firstname\]~',
+                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
+                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
+                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
+                '~\[parent::getContact\(\)::country\]~'
+            ),
+            array(
+                "[firstname]",
+                "[lastname]",
+                "[fullname]",
+                "[organisation]",
+                "[country]"
+            ),
+            $this->getMailing()->getMailHtml()
+        );
+
+        /**
+         * Clone the twigRenderer and overrule to loader to be a string
+         */
+        $twigRenderer = clone $this->renderer->getEngine();
+        $twigRenderer->setLoader(new \Twig_Loader_String());
+
+        return $twigRenderer->render(
+            $this->createTwigTemplate($content),
+            $this->templateVars
+        );
+    }
+
+    /**
+     * @param $templateName
+     *
+     * @throws \Exception
+     */
+    public function setTemplate($templateName)
+    {
+        $this->template = $this->generalService->findWebInfoByInfo($templateName);
+
+        if (is_null($this->template)) {
+            throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
+        }
     }
 }

@@ -7,7 +7,6 @@ namespace General;
 
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
-use General\Entity\WebInfo;
 use General\Service\GeneralService;
 
 /**
@@ -23,11 +22,11 @@ use General\Service\GeneralService;
  * @method string getTextContent()
  * @method void setTextContent($textContent)
  * @method array getTo()
- * @method void setTo($to)
+ * @method array setTo($to)
  * @method array getCc()
- * @method void setCc($cc)
+ * @method array setCc($cc)
  * @method array getBcc()
- * @method void setBcc($bcc)
+ * @method array setBcc($bcc)
  * @method string getFrom()
  * @method void setFrom($from)
  * @method string getFromName()
@@ -35,6 +34,8 @@ use General\Service\GeneralService;
  * @method string getReplyTo()
  * @method void setReplyTo($replyTo)
  * @method string getReplyToName()
+ * @method void setDeeplink($deeplink)
+ * @method void setSubject($subject)
  * @method void setReplyToName($replyToName)
  * @method void setCode($code)
  * @method void setUrl($url)
@@ -93,10 +94,6 @@ class Email
      * @var GeneralService
      */
     protected $generalService;
-    /**
-     * @var WebInfo
-     */
-    protected $template;
 
     /**
      * __construct

@@ -11,7 +11,5 @@ return array(
     'general/partial/entity/country'          => __DIR__ . '//view/general/partial/entity/country.twig',
     'general/partial/entity/country-metadata' => __DIR__ . '//view/general/partial/entity/country-metadata.twig',
     'general/partial/entity/challenge'        => __DIR__ . '//view/general/partial/entity/challenge.twig',
-    'email/template_text'                     => __DIR__ . '//view/email/template_text.twig',
     'email/newsletter'                        => __DIR__ . '//view/email/newsletter.twig',
-    'email/template'                          => __DIR__ . '//view/email/template.twig',
 );
