@@ -271,8 +271,7 @@ class EmailService
         /**
          * Clone the twigRenderer and overrule to loader to be a string
          */
-        $twigRenderer = clone $this->renderer->getEngine();
-        $twigRenderer->setLoader(new \Twig_Loader_String());
+        $twigRenderer = new \Twig_Environment(new \Twig_Loader_String());
 
         return $twigRenderer->render(
             $this->createTwigTemplate($this->template->getContent()),

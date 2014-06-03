@@ -21,7 +21,7 @@ return array(
 
             return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : array());
         },
-        'email'                  => function ($sm) {
+        'general_email_service'  => function ($sm) {
             $config = $sm->get('Config');
 
             return new General\Service\EmailService($config["email"], $sm);
