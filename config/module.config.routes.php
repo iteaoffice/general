@@ -5,171 +5,171 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
-return array(
-    'router' => array(
-        'routes' => array(
-            'assets'       => array(
+return [
+    'router' => [
+        'routes' => [
+            'assets'       => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
-                'options'       => array(
+                'options'       => [
                     'route'    => '/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test'),
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'general-index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => false,
-                'child_routes'  => array(
-                    'country-flag'      => array(
+                'child_routes'  => [
+                    'country-flag'      => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => "/country-flag/[:iso3].[:ext]",
-                            'defaults' => array(
+                            'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => 'general-index',
                                 'action'     => 'country-flag',
-                            ),
-                        ),
-                    ),
-                    'content-type-icon' => array(
+                            ],
+                        ],
+                    ],
+                    'content-type-icon' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => "/content-type-icon/[:hash].gif",
-                            'defaults' => array(
+                            'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => 'general-index',
                                 'action'     => 'content-type-icon',
-                            ),
-                        ),
-                    ),
-                    'style-image'       => array(
+                            ],
+                        ],
+                    ],
+                    'style-image'       => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => "/style/image/[:source]",
-                            'defaults' => array(
+                            'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => 'general-style',
                                 'action'     => 'display',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'country'      => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'country'      => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
-                'options'       => array(
+                'options'       => [
                     'route'    => '/country',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'general-index',
                         'action'     => 'country',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes'  => array(
-                    'code' => array(
+                'child_routes'  => [
+                    'code' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/code/[:cd]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'code',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            'content-type' => array(
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            'content-type' => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
-                'options'       => array(
+                'options'       => [
                     'route'    => '/content-type',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'general-index',
                         'action'     => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes'  => array(
-                    'icon' => array(
+                'child_routes'  => [
+                    'icon' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/icon/[:id].gif',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'content-type-icon',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            'zfcadmin'     => array(
-                'child_routes' => array(
-                    'general-manager' => array(
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            'zfcadmin'     => [
+                'child_routes' => [
+                    'general-manager' => [
                         'type'          => 'Zend\Mvc\Router\Http\Segment',
                         'priority'      => 1000,
-                        'options'       => array(
+                        'options'       => [
                             'route'    => '/general-manager',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'general-manager',
                                 'action'     => 'index',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'messages' => array(
+                        'child_routes'  => [
+                            'messages' => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/messages.html',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'messages',
-                                    ),
-                                ),
-                            ),
-                            'message'  => array(
+                                    ],
+                                ],
+                            ],
+                            'message'  => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'       => '/message/[:id].html',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'id' => '\d+',
-                                    ),
-                                    'defaults'    => array(
+                                    ],
+                                    'defaults'    => [
                                         'action' => 'message',
-                                    ),
-                                ),
-                            ),
-                            'new'      => array(
+                                    ],
+                                ],
+                            ],
+                            'new'      => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/new/:entity',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'new',
-                                    ),
-                                ),
-                            ),
-                            'edit'     => array(
+                                    ],
+                                ],
+                            ],
+                            'edit'     => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/edit/:entity/:id',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'edit',
-                                    ),
-                                ),
-                            ),
-                            'delete'   => array(
+                                    ],
+                                ],
+                            ],
+                            'delete'   => [
                                 'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/delete/:entity/:id',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'delete',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
 
-        ),
-    ),
+        ],
+    ],
 
-);
+];

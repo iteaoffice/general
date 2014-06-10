@@ -9,13 +9,13 @@
  */
 namespace General\Entity;
 
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Form\Annotation;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General
@@ -30,6 +30,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Title extends EntityAbstract implements ResourceInterface
 {
+    /**
+     * Constant for the default title
+     */
+    const TITLE_UNKNOWN = 0;
     /**
      * @ORM\Column(name="title_id",type="integer",nullable=false)
      * @ORM\Id

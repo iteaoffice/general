@@ -11,8 +11,9 @@
  */
 namespace General\Controller;
 
-use General\Service\FormService;
+use General\Service\EmailServiceAwareInterface;
 use General\Service\FormServiceAwareInterface;
+use General\Service\GeneralServiceAwareInterface;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -37,17 +38,41 @@ class ControllerInitializer implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
+        if (!is_object($instance)) {
+            return;
+        }
+
+        $arrayCheck = [
+            FormServiceAwareInterface::class    => 'general_form_service',
+            EmailServiceAwareInterface::class   => 'general_email_service',
+            GeneralServiceAwareInterface::class => 'general_general_service',
+        ];
+
         /**
          * @var $sm ServiceLocatorInterface
          */
         $sm = $serviceLocator->getServiceLocator();
 
-        if ($instance instanceof FormServiceAwareInterface) {
-            /**
-             * @var $formService FormService
-             */
-            $formService = $sm->get('general_form_service');
-            $instance->setFormService($formService);
+        foreach ($arrayCheck as $interface => $serviceName) {
+            if (isset(class_implements($instance)[$interface])) {
+                $this->setInterface($instance, $interface, $sm->get($serviceName));
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * @param $interface
+     * @param $instance
+     * @param $service
+     */
+    protected function setInterface($instance, $interface, $service)
+    {
+        foreach (get_class_methods($interface) as $setter) {
+            if (strpos($setter, 'set') !== false) {
+                $instance->$setter($service);
+            }
         }
     }
 }

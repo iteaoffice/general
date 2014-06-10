@@ -34,20 +34,35 @@ class ServiceInitializer implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
-        if ($instance instanceof EmailServiceAwareInterface) {
-            /**
-             * @var $emailService EmailService
-             */
-            $emailService = $serviceLocator->get('general_email_service');
-            $instance->setEmailService($emailService);
+        if (!is_object($instance)) {
+            return;
         }
 
-        if ($instance instanceof GeneralServiceAwareInterface) {
-            /**
-             * @var @generalService GeneralService
-             */
-            $generalService = $serviceLocator->get('general_general_service');
-            $instance->setGeneralService($generalService);
+        $arrayCheck = [
+            EmailServiceAwareInterface::class   => 'general_email_service',
+            GeneralServiceAwareInterface::class => 'general_general_service',
+        ];
+
+        foreach ($arrayCheck as $interface => $serviceName) {
+            if (isset(class_implements($instance)[$interface])) {
+                $this->setInterface($instance, $interface, $serviceLocator->get($serviceName));
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * @param $interface
+     * @param $instance
+     * @param $service
+     */
+    protected function setInterface($instance, $interface, $service)
+    {
+        foreach (get_class_methods($interface) as $setter) {
+            if (strpos($setter, 'set') !== false) {
+                $instance->$setter($service);
+            }
         }
     }
 }

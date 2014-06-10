@@ -10,16 +10,12 @@
 
 use General\Options;
 
-return array(
-    'initializers' => array(
-        'general_service_initializer' => 'General\Service\ServiceInitializer'
-    ),
-    'factories'    => array(
-
+return [
+    'factories' => [
         'general_module_options' => function ($sm) {
             $config = $sm->get('Config');
 
-            return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : array());
+            return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : []);
         },
         'general_email_service'  => function ($sm) {
             $config = $sm->get('Config');
@@ -27,5 +23,5 @@ return array(
             return new General\Service\EmailService($config["email"], $sm);
         }
 
-    ),
-);
+    ],
+];

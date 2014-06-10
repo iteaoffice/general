@@ -137,7 +137,7 @@ class Flag extends EntityAbstract
      */
     public function getArrayCopy()
     {
-        return array();
+        return [];
     }
 
     public function populate()

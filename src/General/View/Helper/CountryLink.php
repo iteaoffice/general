@@ -89,8 +89,8 @@ class CountryLink extends AbstractHelper
             'entity' => 'country'
         );
 
-        $classes     = array();
-        $linkContent = array();
+        $classes     = [];
+        $linkContent = [];
 
         switch ($show) {
             case 'icon':

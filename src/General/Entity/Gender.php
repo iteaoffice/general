@@ -31,6 +31,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Gender extends EntityAbstract implements ResourceInterface
 {
     /**
+     * Constant for the default gender
+     */
+    const GENDER_UNKNOWN = 0;
+    /**
      * @ORM\Column(name="gender_id",type="integer",length=10,nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

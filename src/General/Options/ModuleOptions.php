@@ -10,7 +10,7 @@ class ModuleOptions extends AbstractOptions
     /**
      * @var string
      */
-    protected $styleLocations = array();
+    protected $styleLocations = [];
     /**
      * @var string
      */

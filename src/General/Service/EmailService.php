@@ -58,7 +58,7 @@ class EmailService
     /**
      * @var array
      */
-    protected $templateVars = array();
+    protected $templateVars = [];
 
     /**
      * __construct
@@ -82,7 +82,7 @@ class EmailService
      *
      * @return Email
      */
-    public function create($data = array())
+    public function create($data = [])
     {
         return new Email($data);
     }
@@ -489,6 +489,7 @@ class EmailService
 
     /**
      * @param $templateName
+     * @return EmailService
      *
      * @throws \Exception
      */
@@ -499,5 +500,7 @@ class EmailService
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
+
+        return $this;
     }
 }

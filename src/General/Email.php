@@ -44,9 +44,13 @@ use General\Service\GeneralService;
  * @method void setProjectLeaderOrganisation($projectLeaderOrganisation)
  * @method void setProjectLeaderEmail($projectLeaderEmail)
  * @method void setProjectLeaderCountry($projectLeaderEmail)
+ * @method void setFullname($fullname)
  * @method void setContact($contact)
  * @method void setOrganisation($contact)
  * @method void setCountry($contact)
+ * @method void setIdea($idea)
+ * @method void setComment($comment)
+ * @method void setCommenter($commenter)
  */
 class Email
 {
@@ -77,15 +81,15 @@ class Email
     /**
      * To recipients
      */
-    protected $to = array();
+    protected $to = [];
     /**
      * Cc recipients
      */
-    protected $cc = array();
+    protected $cc = [];
     /**
      * Bcc recipients
      */
-    protected $bcc = array();
+    protected $bcc = [];
     /**
      * Subject
      */
@@ -101,7 +105,7 @@ class Email
      * Set default options
      *
      */
-    public function __construct($data = array())
+    public function __construct($data = [])
     {
         $this->setProperties($data);
     }
@@ -231,7 +235,7 @@ class Email
      */
     public function toArray()
     {
-        $values = array();
+        $values = [];
         foreach (get_object_vars($this) as $key => $val) {
             $values[$key] = $val;
         }

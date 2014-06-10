@@ -45,7 +45,7 @@ class CountryMap extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $color      = '#005C00';
         $colorFaded = '#009900';
-        $html       = array();
+        $html       = [];
         $html[]     = " var gdpData = {\n";
 
         foreach ($countries as $country) {

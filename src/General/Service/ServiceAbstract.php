@@ -113,7 +113,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      * @param string  $entity
      * @param integer $id
      *
-     * @return null|Country|Gender|Vat
+     * @return null|\General\Entity\Country|\General\Entity\Gender|Vat|\General\Entity\Title
      */
     public function findEntityById($entity, $id)
     {
