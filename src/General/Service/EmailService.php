@@ -264,6 +264,14 @@ class EmailService
     }
 
     /**
+     * @param \Contact\Service\ContactService $contactService
+     */
+    public function setContactService($contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
+    /**
      * Render the content twig-wise
      *
      * @return null|string
