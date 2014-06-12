@@ -6,7 +6,6 @@
 namespace General;
 
 use Contact\Entity\Contact;
-use Contact\Service\ContactService;
 use General\Service\GeneralService;
 
 /**
@@ -65,7 +64,7 @@ class Email
     /**
      * @var string
      */
-    protected $lastName;
+    protected $lastname;
     /**
      * @var string
      */
@@ -241,18 +240,5 @@ class Email
         }
 
         return $values;
-    }
-
-    /**
-     * @param ContactService $contactService
-     */
-    public function setContactService(ContactService $contactService)
-    {
-        $this->fullname     = $contactService->parseFullName();
-        $this->firstname    = $contactService->getContact()->getFirstName();
-        $this->lastName     = $contactService->parseLastName();
-        $this->organisation = $contactService->parseOrganisation();
-        $this->country      = $contactService->parseCountry();
-        $this->attention    = $contactService->parseAttention();
     }
 }

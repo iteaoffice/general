@@ -145,8 +145,6 @@ class EmailService
         //Template Variables
         $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
 
-        $this->updateTemplateVarsWithContactService();
-
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
             $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
@@ -156,6 +154,13 @@ class EmailService
         if (count($email->getTo()) === 0) {
             $email->addTo($this->config["emails"]["admin"]);
         }
+
+        $contactService = clone $this->sm->get('contact_contact_service');
+        foreach ($email->getTo() as $emailAddress => $name) {
+            $this->contactService = $contactService->setContact($contactService->findContactByEmail($emailAddress));
+        }
+
+        $this->updateTemplateVarsWithContactService();
 
         /**
          * Overrule the to when we are in development
@@ -236,11 +241,16 @@ class EmailService
      */
     public function updateTemplateVarsWithContactService()
     {
-        if (!is_null($this->getContactService())) {
-
+        if (!$this->getContactService()->isEmpty()) {
             $this->templateVars['attention']    = $this->getContactService()->parseAttention();
+            $this->templateVars['firstname']    = $this->getContactService()->getContact()->getFirstName();
+            $this->templateVars['lastname']     = trim(
+                $this->getContactService()->getContact()->getMiddleName() .
+                ' ' .
+                $this->getContactService()->getContact()->getLastName()
+            );
             $this->templateVars['fullname']     = $this->getContactService()->parseFullName();
-            $this->templateVars['country']      = $this->getContactService()->parseCountry();
+            $this->templateVars['country']      = $this->getContactService()->parseCountry()->getCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
     }
@@ -251,14 +261,6 @@ class EmailService
     public function getContactService()
     {
         return $this->contactService;
-    }
-
-    /**
-     * @param \Contact\Service\ContactService $contactService
-     */
-    public function setContactService($contactService)
-    {
-        $this->contactService = $contactService;
     }
 
     /**
@@ -346,8 +348,6 @@ class EmailService
         //Template Variables
         $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
 
-        $this->updateTemplateVarsWithContactService();
-
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
             $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
@@ -357,6 +357,12 @@ class EmailService
         if (count($email->getTo()) === 0) {
             $email->addTo($this->config["emails"]["admin"]);
         }
+
+        foreach ($email->getTo() as $email => $recipient) {
+            $this->getContactService()->findContactByEmail($email);
+        }
+
+        $this->updateTemplateVarsWithContactService();
 
         /**
          * Overrule the to when we are in development
@@ -489,6 +495,7 @@ class EmailService
 
     /**
      * @param $templateName
+     *
      * @return EmailService
      *
      * @throws \Exception
