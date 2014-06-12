@@ -366,8 +366,8 @@ class EmailService
             $email->addTo($this->config["emails"]["admin"]);
         }
 
-        foreach ($email->getTo() as $email => $recipient) {
-            $this->getContactService()->findContactByEmail($email);
+        foreach ($email->getTo() as $emailAddress => $recipient) {
+            $this->getContactService()->findContactByEmail($emailAddress);
         }
 
         $this->updateTemplateVarsWithContactService();
