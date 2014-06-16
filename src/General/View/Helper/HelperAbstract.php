@@ -11,7 +11,6 @@
  */
 namespace General\View\Helper;
 
-use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
@@ -28,10 +27,6 @@ abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAw
      * @var HelperPluginManager
      */
     protected $serviceLocator;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch = null;
 
     /**
      * Get the service locator.

@@ -13,8 +13,8 @@ namespace General\View\Helper;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
-use Event\Acl\Assertion\AssertionAbstract;
-use Event\Entity\EntityAbstract;
+use General\Acl\Assertion\AssertionAbstract;
+use General\Entity\EntityAbstract;
 use General\Entity\Country;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;

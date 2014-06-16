@@ -157,7 +157,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->percentage . '%';
+        return (string) $this->percentage . '%';
     }
 
     /**

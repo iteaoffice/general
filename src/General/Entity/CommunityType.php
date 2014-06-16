@@ -97,7 +97,7 @@ class CommunityType extends EntityAbstract
      */
     public function __toString()
     {
-        return (string)$this->type;
+        return (string) $this->type;
     }
 
     /**
