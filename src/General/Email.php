@@ -190,7 +190,7 @@ class Email
     {
         switch (substr($method, 0, 3)) {
             case 'get':
-                $key   = $this->_underscore(substr($method, 3));
+                $key   = $this->underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
                 //Try to find a property
                 if (!$index && isset($this->$key)) {
@@ -199,7 +199,7 @@ class Email
 
                 return "";
             case 'set':
-                $key        = $this->_underscore(substr($method, 3));
+                $key        = $this->underscore(substr($method, 3));
                 $result     = isset($args[0]) ? $args[0] : null;
                 $this->$key = $result;
 
@@ -218,7 +218,7 @@ class Email
      *
      * @return string
      */
-    protected function _underscore($name)
+    protected function underscore($name)
     {
         $result = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
 

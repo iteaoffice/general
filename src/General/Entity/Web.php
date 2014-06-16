@@ -9,11 +9,11 @@
  */
 namespace General\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Web

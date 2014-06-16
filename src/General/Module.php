@@ -79,6 +79,5 @@ class Module implements
      */
     public function onBootstrap(EventInterface $e)
     {
-
     }
 }

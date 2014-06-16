@@ -9,10 +9,9 @@
  */
 namespace General\Controller;
 
+use General\Service\GeneralService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\View\Model\ViewModel;
-use General\Service\GeneralService;
 
 /**
  * The index of the system
@@ -46,15 +45,15 @@ class IndexController extends AbstractActionController implements ServiceLocator
         }
 
         $response->getHeaders()
-            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public");
+                 ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
+                 ->addHeaderLine("Pragma: public");
 
         $file = stream_get_contents($contentType->getImage());
 
         $response->getHeaders()
-            ->addHeaderLine('Content-Type: image/gif')
-            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+                 ->addHeaderLine('Content-Type: image/gif')
+                 ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
         $response->setContent($file);
 
@@ -90,11 +89,11 @@ class IndexController extends AbstractActionController implements ServiceLocator
         }
 
         $response->getHeaders()
-            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public")
-            ->addHeaderLine('Content-Type: image/png')
-            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
+                 ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
+                 ->addHeaderLine("Pragma: public")
+                 ->addHeaderLine('Content-Type: image/png')
+                 ->addHeaderLine('Content-Length: ' . (string)strlen($file));
 
         $response->setContent($file);
 

@@ -74,7 +74,7 @@ class StyleController extends AbstractActionController implements ServiceLocator
 
         $response->getHeaders()
                  ->addHeaderLine('Content-Type: image/jpg')
-                 ->addHeaderLine('Content-Length: ' . (string) filesize($requestedFile));
+                 ->addHeaderLine('Content-Length: ' . (string)filesize($requestedFile));
 
         $response->setContent(file_get_contents($requestedFile));
 

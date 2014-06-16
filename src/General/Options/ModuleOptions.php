@@ -6,7 +6,6 @@ use Zend\Stdlib\AbstractOptions;
 
 class ModuleOptions extends AbstractOptions
 {
-
     /**
      * @var string
      */
@@ -15,12 +14,10 @@ class ModuleOptions extends AbstractOptions
      * @var string
      */
     protected $imageLocation = 'img';
-
     /**
      * @var string
      */
     protected $imageNotFound = 'image_not_found.jpg';
-
     /**
      * String of the GeoIP service
      *

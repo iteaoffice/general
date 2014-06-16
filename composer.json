@@ -1,7 +1,7 @@
 {
     "name": "debranova/general",
     "type": "library",
-    "description": "General code for Debranova",
+    "description": "General shared code for Debranova",
     "keywords": ["general"],
     "license": "proprietary",
     "homepage": "http://debranova.org",
