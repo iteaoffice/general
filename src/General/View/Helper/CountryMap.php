@@ -13,10 +13,8 @@ namespace General\View\Helper;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use General\Service\GeneralServiceAwareInterface;
 use Zend\View\Helper\AbstractHelper;
-use Zend\View\HelperPluginManager;
 
 /**
  * Create a country map based on a list of countries
@@ -25,12 +23,12 @@ use Zend\View\HelperPluginManager;
  * @package     View
  * @subpackage  Helper
  */
-class CountryMap extends AbstractHelper implements ServiceLocatorAwareInterface
+class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 {
     /**
-     * @var HelperPluginManager
+     * @var GeneralService
      */
-    protected $serviceLocator;
+    protected $generalService;
 
     /**
      * @param Country[] $countries
@@ -102,11 +100,11 @@ class CountryMap extends AbstractHelper implements ServiceLocatorAwareInterface
                  });
 
 EOT;
-        $this->getView()->headScript()->appendFile(
+        $this->serviceLocator->get('headscript')->appendFile(
             'assets/itea/js/jvectormap.js',
             'text/javascript'
         );
-        $this->getView()->headScript()->appendScript(implode('', $html));
+        $this->serviceLocator->get('headscript')->appendScript(implode('', $html));
 
         return '<h3>Map</h3><div id="world-map-gdp" style="height: 340px"></div>';
     }
@@ -116,29 +114,19 @@ EOT;
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get('general_general_service');
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator->getServiceLocator();
+        return $this->generalService;
     }
 
     /**
      * Set the service locator.
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param GeneralService $generalService
      *
      * @return AbstractHelper
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function setGeneralService(GeneralService $generalService)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->generalService = $generalService;
 
         return $this;
     }

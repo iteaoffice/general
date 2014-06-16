@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office copyright message placeholder
  *
@@ -8,32 +9,29 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
-
 namespace General\View\Helper;
 
-use General\Service\GeneralService;
+use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
+use Zend\View\Helper\Url;
+use Zend\View\HelperPluginManager;
 
 /**
- * Class VersionServiceProxy
- * @package General\View\Helper
+ * Class LinkAbstract
+ * @package Project\View\Helper
  */
-class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareInterface
+abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var HelperPluginManager
      */
     protected $serviceLocator;
-
     /**
-     * @return GeneralService
+     * @var RouteMatch
      */
-    public function __invoke()
-    {
-        return clone $this->serviceLocator->getServiceLocator()->get('general_general_service');
-    }
+    protected $routeMatch = null;
 
     /**
      * Get the service locator.
@@ -42,7 +40,7 @@ class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareI
      */
     public function getServiceLocator()
     {
-        return $this->serviceLocator;
+        return $this->serviceLocator->getServiceLocator();
     }
 
     /**
@@ -57,5 +55,26 @@ class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareI
         $this->serviceLocator = $serviceLocator;
 
         return $this;
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    public function translate($string)
+    {
+        return $this->serviceLocator->get('translate')->__invoke($string);
+    }
+
+    /**
+     * @param string $router
+     * @param array  $params
+     *
+     * @return Url
+     */
+    public function getUrl($router, array $params)
+    {
+        return $this->serviceLocator->get('url')->__invoke($router, $params);
     }
 }

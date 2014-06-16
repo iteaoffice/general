@@ -11,7 +11,6 @@
  */
 namespace General\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use General\Entity\Country;
 
 /**
@@ -21,9 +20,8 @@ use General\Entity\Country;
  * @package     View
  * @subpackage  Helper
  */
-class CountryFlag extends AbstractHelper
+class CountryFlag extends HelperAbstract
 {
-
     /**
      * @param Country $country
      * @param int     $width
@@ -32,7 +30,7 @@ class CountryFlag extends AbstractHelper
      */
     public function __invoke(Country $country, $width = 20)
     {
-        $url  = $this->getView()->plugin('url');
+
         $flag = $country->getFlag();
 
         if (is_null($flag)) {
@@ -52,14 +50,14 @@ class CountryFlag extends AbstractHelper
 
         $imageUrl = '<img src="%s" id="%s" width="%s">';
 
-        $params = array(
+        $params = [
             'ext'  => 'png',
             'iso3' => strtolower($country->getIso3()),
-        );
+        ];
 
         $image = sprintf(
             $imageUrl,
-            $url($router, $params),
+            $this->getUrl($router, $params),
             'country_flag_' . $country->getIso3(),
             $width
         );

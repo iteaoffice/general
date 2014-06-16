@@ -9,6 +9,8 @@
  */
 namespace General\Version;
 
+use Zend\Json\Json;
+
 /**
  * @category    General
  * @package     Version
@@ -19,7 +21,6 @@ class Version
      * DebraNova-Website version identification - see compareVersion()
      */
     const VERSION = '1.0.1-dev';
-
     /**
      * The latest stable version Zend Framework available
      *

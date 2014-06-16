@@ -11,7 +11,6 @@
  */
 namespace General\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use General\Entity\Country;
 
 /**
@@ -21,122 +20,91 @@ use General\Entity\Country;
  * @package     View
  * @subpackage  Helper
  */
-class CountryLink extends AbstractHelper
+class CountryLink extends LinkAbstract
 {
+    /**
+     * @var Country
+     */
+    protected $country;
 
     /**
      * @param Country $country
      * @param string  $action
      * @param string  $show
-     * @param string  $customShow
+     * @param string  $alternativeShow
      *
      * @return string
      * @throws \Exception
      */
     public function __invoke(
-        Country $country = null,
+        Country $country,
         $action = 'view',
         $show = 'name',
-        $customShow = null
+        $alternativeShow = null
     ) {
-        $translate   = $this->view->plugin('translate');
-        $url         = $this->view->plugin('url');
-        $serverUrl   = $this->view->plugin('serverUrl');
-        $isAllowed   = $this->view->plugin('isAllowed');
-        $countryFlag = $this->view->plugin('countryFlag');
 
-//        if (!$isAllowed('country', $action)) {
-//            if ($action === 'view' && $show === 'name') {
-//                return $countryService;
-//            }
-//
-//            return '';
-//        }
+        $this->setCountry($country);
+        $this->setAction($action);
+        $this->setShow($show);
+        $this->setAlternativeShow($alternativeShow);
 
-        switch ($action) {
-            case 'new':
-                $router  = 'zfcadmin/country-manager/new';
-                $text    = sprintf($translate("txt-new-country"));
-                $country = new Country();
-                break;
-            case 'edit':
-                $router = 'zfcadmin/country-manager/edit';
-                $text   = sprintf($translate("txt-edit-country-%s"), $country);
-                break;
+        $this->addRouterParam('id', $country->getId());
+        $this->addRouterParam('docRef', $country->getDocRef());
+        $this->setShowOptions(
+            [
+                'name'   => $country,
+                'more'   => $this->translate("txt-read-more"),
+                'custom' => $this->getAlternativeShow(),
+                'flag'   => $this->getCountryFlag($country, 40)
+            ]
+        );
+
+        return $this->createLink();
+    }
+
+    /**
+     * @return string|void
+     */
+    public function parseAction()
+    {
+        switch ($this->getAction()) {
+
             case 'view':
-                $router = 'route-' . $country->get('underscore_full_entity_name');
-                $text   = sprintf($translate("txt-view-country-%s"), $country);
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name'));
+                $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
                 break;
             case 'view-project':
-                $router = 'route-' . $country->get('underscore_full_entity_name') . '-project';
-                $text   = sprintf($translate("txt-view-project-for-country-%s"), $country);
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-project');
+                $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-organisation':
-                $router = 'route-' . $country->get('underscore_full_entity_name') . '-organisation';
-                $text   = sprintf($translate("txt-view-organisation-for-country-%s"), $country);
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-organisation');
+                $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-article':
-                $router = 'route-' . $country->get('underscore_full_entity_name') . '-article';
-                $text   = sprintf($translate("txt-view-article-for-country-%s"), $country);
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-article');
+                $this->setText(sprintf($this->translate("txt-view-article-for-country-%s"), $this->getCountry()));
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf("%s is an incorrect action for %s", $action, __CLASS__));
+                throw new \InvalidArgumentException(
+                    sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__)
+                );
         }
+    }
 
-        $params = array(
-            'id'     => $country->getId(),
-            'docRef' => strtolower($country->getDocRef()),
-            'entity' => 'country'
-        );
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
 
-        $classes     = [];
-        $linkContent = [];
-
-        switch ($show) {
-            case 'icon':
-                if ($action === 'edit') {
-                    $linkContent[] = '<i class="icon-pencil"></i>';
-                } elseif ($action === 'delete') {
-                    $linkContent[] = '<i class="icon-remove"></i>';
-                } else {
-                    $linkContent[] = '<i class="icon-info-sign"></i>';
-                }
-                break;
-            case 'button':
-                $linkContent[] = '<i class="icon-pencil icon-white"></i> ' . $text;
-                $classes[]     = "btn btn-primary";
-                break;
-            case 'name':
-                $linkContent[] = $country;
-                break;
-            case 'more':
-                $linkContent[] = $translate("txt-read-more");
-                break;
-            case 'custom':
-                if (is_null($customShow)) {
-                    throw new \InvalidArgumentException(sprintf("CustomShow cannot be empty"));
-                }
-                $linkContent[] = $customShow;
-                break;
-            case 'flag':
-                $linkContent[] = $countryFlag($country, 40);
-                break;
-            case 'social':
-                return $serverUrl() . $url($router, $params);
-                break;
-            default:
-                $linkContent[] = $country;
-                break;
-        }
-
-        $uri = '<a href="%s" title="%s" class="%s">%s</a>';
-
-        return sprintf(
-            $uri,
-            $serverUrl->__invoke() . $url($router, $params),
-            $text,
-            implode($classes),
-            implode($linkContent)
-        );
+    /**
+     * @param Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
     }
 }

@@ -11,7 +11,6 @@
  */
 namespace General\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use General\Entity\ContentType;
 
 /**
@@ -21,9 +20,8 @@ use General\Entity\ContentType;
  * @package     View
  * @subpackage  Helper
  */
-class ContentTypeIcon extends AbstractHelper
+class ContentTypeIcon extends HelperAbstract
 {
-
     /**
      * @param ContentType $contentType
      * @param int         $width
@@ -32,7 +30,7 @@ class ContentTypeIcon extends AbstractHelper
      */
     public function __invoke(ContentType $contentType, $width = 20)
     {
-        $url   = $this->getView()->plugin('url');
+
         $image = $contentType->getImage();
 
         if (is_null($image)) {
@@ -58,14 +56,14 @@ class ContentTypeIcon extends AbstractHelper
 
         $imageUrl = '<img src="%s" id="%s" width="%s">';
 
-        $params = array(
+        $params = [
             'hash' => $contentType->getHash(),
             'id'   => $contentType->getId()
-        );
+        ];
 
         $image = sprintf(
             $imageUrl,
-            $url($router, $params),
+            $this->getUrl($router, $params),
             'content_type_icon_' . $contentType->getExtension(),
             $width
         );

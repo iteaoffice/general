@@ -183,7 +183,7 @@ class EmailService
                 array_merge_recursive(array('content' => $content), $this->templateVars)
             );
         } catch (\Twig_Error_Syntax $e) {
-            var_dump($e->getMessage());
+            return sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
 
         if (!is_null($htmlView)) {
@@ -250,7 +250,7 @@ class EmailService
                 $this->getContactService()->getContact()->getLastName()
             );
             $this->templateVars['fullname']     = $this->getContactService()->parseFullName();
-            $this->templateVars['country']      = $this->getContactService()->parseCountry()->getCountry();
+            $this->templateVars['country']      = $this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
     }

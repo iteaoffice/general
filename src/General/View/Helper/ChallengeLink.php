@@ -11,7 +11,6 @@
  */
 namespace General\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use General\Entity\Challenge;
 
 /**
@@ -21,8 +20,12 @@ use General\Entity\Challenge;
  * @package     View
  * @subpackage  Helper
  */
-class ChallengeLink extends AbstractHelper
+class ChallengeLink extends LinkAbstract
 {
+    /**
+     * @var Challenge
+     */
+    protected $challenge;
 
     /**
      * @param Challenge $challenge
@@ -37,68 +40,63 @@ class ChallengeLink extends AbstractHelper
         $action = 'view',
         $show = 'name'
     ) {
-        $translate = $this->view->plugin('translate');
-        $url       = $this->view->plugin('url');
-        $serverUrl = $this->view->plugin('serverUrl');
-        $isAllowed = $this->view->plugin('isAllowed');
+        $this->setChallenge($challenge);
+        $this->setAction($action);
+        $this->setShow($show);
 
-        switch ($action) {
+        $this->addRouterParam('entity', 'Challenge');
+
+        if (!is_null($challenge)) {
+            $this->addRouterParam('id', $challenge->getId());
+            $this->addRouterParam('docRef', $challenge->getDocRef());
+            $this->setShowOptions(
+                [
+                    'name' => $challenge,
+                ]
+            );
+        }
+
+        return $this->createLink();
+    }
+
+    /**
+     * Parse the action
+     *
+     * @throws \Exception
+     */
+    public function parseAction()
+    {
+        switch ($this->getAction()) {
             case 'new':
-                $router    = 'zfcadmin/challenge-manager/new';
-                $text      = sprintf($translate("txt-new-challenge"));
-                $challenge = new General();
+                $this->setRouter('zfcadmin/challenge-manager/new');
+                $this->setText($this->translate("txt-new-challenge"));
                 break;
             case 'edit':
-                $router = 'zfcadmin/challenge-manager/edit';
-                $text   = sprintf($translate("txt-edit-challenge-%s"), $challenge);
+                $this->setRouter('zfcadmin/challenge-manager/edit');
+                $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
                 break;
             case 'view':
-                $router = 'route-' . $challenge->get("underscore_full_entity_name");
-                $text   = sprintf($translate("txt-view-challenge-%s"), $challenge);
+                $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
+                $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $action, __CLASS__));
+                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
+    }
 
-        $params = array(
-            'id'     => $challenge->getId(),
-            'docRef' => $challenge->getDocRef(),
-            'entity' => 'country'
-        );
+    /**
+     * @return Challenge
+     */
+    public function getChallenge()
+    {
+        return $this->challenge;
+    }
 
-        $classes     = [];
-        $linkContent = [];
-
-        switch ($show) {
-            case 'icon':
-                if ($action === 'edit') {
-                    $linkContent[] = '<i class="icon-pencil"></i>';
-                } elseif ($action === 'delete') {
-                    $linkContent[] = '<i class="icon-remove"></i>';
-                } else {
-                    $linkContent[] = '<i class="icon-info-sign"></i>';
-                }
-                break;
-            case 'button':
-                $linkContent[] = '<i class="icon-pencil icon-white"></i> ' . $text;
-                $classes[]     = "btn btn-primary";
-                break;
-            case 'name':
-                $linkContent[] = $challenge;
-                break;
-            default:
-                $linkContent[] = $challenge;
-                break;
-        }
-
-        $uri = '<a href="%s" title="%s" class="%s">%s</a>';
-
-        return sprintf(
-            $uri,
-            $serverUrl->__invoke() . $url($router, $params),
-            $text,
-            implode($classes),
-            implode($linkContent)
-        );
+    /**
+     * @param Challenge $challenge
+     */
+    public function setChallenge($challenge)
+    {
+        $this->challenge = $challenge;
     }
 }

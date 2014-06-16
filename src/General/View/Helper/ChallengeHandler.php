@@ -102,10 +102,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
      */
     public function getRouteMatch()
     {
-        return $this->getServiceLocator()
-                    ->get('application')
-                    ->getMvcEvent()
-                    ->getRouteMatch();
+        return $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
     }
 
     /**

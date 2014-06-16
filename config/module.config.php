@@ -1,9 +1,6 @@
 <?php
 namespace General;
 
-use Zend\Stdlib\ArrayUtils;
-use General\Controller\ControllerInitializer;
-use General\Service\ServiceInitializer;
 /**
  * ITEA Office copyright message placeholder
  *
@@ -12,18 +9,39 @@ use General\Service\ServiceInitializer;
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
+
+use General\Controller\ControllerInitializer;
+use General\Service\ServiceInitializer;
+use General\View\Helper\ViewHelperInitializer;
+use Zend\Stdlib\ArrayUtils;
+
 $config = [
     'controllers'     => [
         'initializers' => [
             ControllerInitializer::class
         ],
-        'invokables' => [
+        'invokables'   => [
             'general-index' => 'General\Controller\IndexController',
             'general-style' => 'General\Controller\StyleController',
         ],
     ],
     'view_manager'    => [
         'template_map' => include __DIR__ . '/../template_map.php',
+    ],
+    'view_helpers'    => [
+        'initializers' => [
+            ViewHelperInitializer::class
+        ],
+        'invokables'   => [
+            'generalServiceProxy' => 'General\View\Helper\GeneralServiceProxy',
+            'countryHandler'      => 'General\View\Helper\CountryHandler',
+            'challengeHandler'    => 'General\View\Helper\ChallengeHandler',
+            'countryMap'          => 'General\View\Helper\CountryMap',
+            'countryFlag'         => 'General\View\Helper\CountryFlag',
+            'countryLink'         => 'General\View\Helper\CountryLink',
+            'challengeLink'       => 'General\View\Helper\ChallengeLink',
+            'contentTypeIcon'     => 'General\View\Helper\ContentTypeIcon',
+        ]
     ],
     'service_manager' => [
         'initializers' => [
