@@ -47,7 +47,9 @@ class Country extends EntityRepository
         $queryBuilder->where('c.id <> 0');
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-        //Limit to only the active projects
+        /**
+         * @var $projectRepository \Project\Repository\Project
+         */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
 
@@ -64,31 +66,7 @@ class Country extends EntityRepository
      */
     public function findCountryByCall(Call $call, $which)
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('c');
-        $queryBuilder->from('General\Entity\Country', 'c');
-        $queryBuilder->join('c.organisation', 'o');
-        $queryBuilder->join('o.affiliation', 'a');
-        $queryBuilder->join('a.project', 'p');
-        //Remove the 0 country (unknown)
-        $queryBuilder->where('c.id <> 0');
-        $queryBuilder->addGroupBy('c.id');
-        switch ($which) {
-            case AffiliationService::WHICH_ALL:
-                break;
-            case AffiliationService::WHICH_ONLY_ACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
-                break;
-            case AffiliationService::WHICH_ONLY_INACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('a.dateEnd'));
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
-        }
-
-        //        //Limit to only the active projects
-        //        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
-        //        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
@@ -106,6 +84,22 @@ class Country extends EntityRepository
      */
     public function findCountryByProject(Project $project, $which)
     {
+        $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
+        $queryBuilder->andWhere('a.project = ?1');
+        $queryBuilder->setParameter(1, $project);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Produces a default query to get a country and the required joins
+     *
+     * @param $which
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilderForCountryByWhich($which)
+    {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
         $queryBuilder->from('General\Entity\Country', 'c');
@@ -127,10 +121,8 @@ class Country extends EntityRepository
             default:
                 throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
         }
-        $queryBuilder->andWhere('a.project = ?1');
-        $queryBuilder->setParameter(1, $project);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder;
     }
 
     /**
@@ -141,18 +133,12 @@ class Country extends EntityRepository
      */
     public function findCountryByEvaluationTypeAndCall(Evaluation\Type $type, Call $call = null)
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('c');
-        $queryBuilder->from('General\Entity\Country', 'c');
-        $queryBuilder->join('c.organisation', 'o');
-        $queryBuilder->join('o.affiliation', 'a');
-        $queryBuilder->join('a.project', 'p');
+        $queryBuilder = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
-        //Remove the 0 country (unknown)
-        $queryBuilder->where('c.id <> 0');
-        $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-        //Limit to only the active projects
+        /**
+         * @var $projectRepository \Project\Repository\Project
+         */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');

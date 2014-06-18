@@ -110,7 +110,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->name;
+        return (string)$this->name;
     }
 
     /**
@@ -120,7 +120,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
+        return sprintf("%s:%s", Title::class, $this->id);
     }
 
     /**

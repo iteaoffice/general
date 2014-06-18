@@ -58,7 +58,6 @@ class Flag extends EntityAbstract
      * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
      *
      * @return string
-     * @todo: make the location variable (via the serviceManager?)
      */
     public function getCacheFileName()
     {

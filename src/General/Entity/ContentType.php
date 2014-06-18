@@ -202,7 +202,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string) $this->contentType;
+        return (string)$this->contentType;
     }
 
     /**
@@ -210,14 +210,13 @@ class ContentType
      * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
      *
      * @return string
-     * @todo: make the location variable (via the serviceManager?)
      */
     public function getCacheFileName()
     {
         $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR . (defined(
-                "DEBRANOVA_HOST"
-            ) ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
+            DIRECTORY_SEPARATOR .
+            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') .
+            DIRECTORY_SEPARATOR . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR
         . $this->getHash() . '.gif';

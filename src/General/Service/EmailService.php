@@ -197,17 +197,16 @@ class EmailService
         $htmlContent->type = "text/html";
         $textContent       = new MimePart($email->getTextContent());
         $textContent->type = 'text/plain';
-        $body = new MimeMessage();
-        //        $body->setParts(array($htmlContent, $textContent));
-        $body->setParts(array($htmlContent));
+        $body              = new MimeMessage();
+        $body->setParts([$htmlContent]);
         /**
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
          */
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-Campaign', $campaign);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-Campaign', $campaign);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
         $message->setBody($body);
 
         return $message;
@@ -350,7 +349,7 @@ class EmailService
         }
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
-        $content = $this->renderMailingContent();
+        $content  = $this->renderMailingContent();
         $htmlView = $this->renderer->render(
             $this->getMailing()->getTemplate()->getTemplate(),
             array_merge_recursive(array('content' => $content), $this->templateVars)
@@ -375,10 +374,7 @@ class EmailService
         $message->setSubject($this->getMailing()->getMailSubject());
         $htmlContent       = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
-        //        $textContent       = new MimePart($email->getTextContent());
-        //        $textContent->type = 'text/plain';
-        $body = new MimeMessage();
-        //$body->setParts(array($htmlContent, $textContent));
+        $body              = new MimeMessage();
         $body->setParts(array($htmlContent));
         /**
          * Set specific headers
@@ -388,9 +384,9 @@ class EmailService
             'X-Mailjet-Campaign',
             DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId()
         );
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
+        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
         $message->setBody($body);
 
         return $message;

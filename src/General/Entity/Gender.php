@@ -120,7 +120,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
+        return sprintf("%s:%s", Gender::class, $this->id);
     }
 
     /**
@@ -146,68 +146,68 @@ class Gender extends EntityAbstract implements ResourceInterface
             $factory     = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'name',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'attention',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'salutation',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $this->inputFilter = $inputFilter;
