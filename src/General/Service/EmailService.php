@@ -100,7 +100,6 @@ class EmailService
         } else {
             $message = $this->prepareMailing($email);
         }
-
         //Send email
         if ($message && $this->config["active"]) {
             // Server SMTP config
@@ -128,7 +127,6 @@ class EmailService
                 $options = new SmtpOptions($transportConfig);
                 $transport->setOptions($options);
             }
-
             $transport->send($message);
         }
     }
@@ -141,42 +139,33 @@ class EmailService
         if (is_null($this->template)) {
             return new \InvalidArgumentException("There is no template set");
         }
-
         //Template Variables
         $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
-
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
             $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
         }
-
         //If not recipient, send to admin
         if (count($email->getTo()) === 0) {
             $email->addTo($this->config["emails"]["admin"]);
         }
-
         $contactService = clone $this->sm->get('contact_contact_service');
         foreach ($email->getTo() as $emailAddress => $name) {
             $this->contactService = $contactService->setContact($contactService->findContactByEmail($emailAddress));
         }
-
         $this->updateTemplateVarsWithContactService();
-
         /**
          * Overrule the to when we are in development
          */
         if ('development' === DEBRANOVA_ENVIRONMENT) {
             $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
         }
-
         //If not sender, use default
         if (!$email->getFrom()) {
             $email->setFrom($this->config["defaults"]["from_email"]);
             $email->setFromName($this->config["defaults"]["from_name"]);
         }
-
         $content = $this->renderContent();
-
         try {
             $htmlView = $this->renderer->render(
                 $email->getHtmlLayoutName(),
@@ -185,43 +174,32 @@ class EmailService
         } catch (\Twig_Error_Syntax $e) {
             return sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
-
         if (!is_null($htmlView)) {
             $email->setHtmlContent($htmlView);
         };
-
         //Create Zend Message
         $message = new Message();
-
         //From
         $message->setFrom($email->getFrom(), $email->getFromName());
-
         //Reply to
         if ($this->config["defaults"]["reply_to"]) {
             $message->addReplyTo($this->config["defaults"]["reply_to"], $this->config["defaults"]["reply_to_name"]);
         }
-
         if ($email->getReplyTo()) {
             $message->addReplyTo($email->getReplyTo(), $email->getReplyToName());
         }
-
         $message = $this->setRecipients($email, $message);
-
         //Subject. Include the CompanyName in the [[site]] tags
         $message->setSubject(
             str_replace('[site]', $this->config["template_vars"]["company"], $this->template->getSubject())
         );
-
         $htmlContent       = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
-
         $textContent       = new MimePart($email->getTextContent());
         $textContent->type = 'text/plain';
-
         $body = new MimeMessage();
         //        $body->setParts(array($htmlContent, $textContent));
         $body->setParts(array($htmlContent));
-
         /**
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -230,7 +208,6 @@ class EmailService
         //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
-
         $message->setBody($body);
 
         return $message;
@@ -326,7 +303,6 @@ class EmailService
                 $message->addTo($emailAddress, $contact);
             }
         }
-
         //Cc recipients
         foreach ($email->getCc() as $emailAddress => $contact) {
             if ($contact instanceof Contact) {
@@ -335,7 +311,6 @@ class EmailService
                 $message->addCc($emailAddress, $contact);
             }
         }
-
         //Bcc recipients
         foreach ($email->getBcc() as $emailAddress => $contact) {
             if ($contact instanceof Contact) {
@@ -355,75 +330,56 @@ class EmailService
     {
         //Template Variables
         $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
-
         //If not layout, use default
         if (!$email->getHtmlLayoutName()) {
             $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
         }
-
         //If not recipient, send to admin
         if (count($email->getTo()) === 0) {
             $email->addTo($this->config["emails"]["admin"]);
         }
-
         foreach ($email->getTo() as $emailAddress => $recipient) {
             $this->getContactService()->findContactByEmail($emailAddress);
         }
-
         $this->updateTemplateVarsWithContactService();
-
         /**
          * Overrule the to when we are in development
          */
         if ('development' === DEBRANOVA_ENVIRONMENT) {
             $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
         }
-
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
-
         $content = $this->renderMailingContent();
-
         $htmlView = $this->renderer->render(
             $this->getMailing()->getTemplate()->getTemplate(),
             array_merge_recursive(array('content' => $content), $this->templateVars)
         );
-
         $textView = $this->renderer->render(
             'plain',
             array_merge_recursive(array('content' => $content), $this->templateVars)
         );
-
         if (!is_null($textView)) {
             $email->setTextContent(strip_tags($textView));
         };
-
         if (!is_null($htmlView)) {
             $email->setHtmlContent($htmlView);
         };
-
         //Create Zend Message
         $message = new Message();
-
         //From
         $message->setFrom($this->getMailing()->getSender()->getEmail(), $this->getMailing()->getSender()->getSender());
-
         //Set the other recipients
         $message = $this->setRecipients($email, $message);
-
         //Subject. Include the CompanyName in the [[site]] tags
         $message->setSubject($this->getMailing()->getMailSubject());
-
         $htmlContent       = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
-
         //        $textContent       = new MimePart($email->getTextContent());
         //        $textContent->type = 'text/plain';
-
         $body = new MimeMessage();
         //$body->setParts(array($htmlContent, $textContent));
         $body->setParts(array($htmlContent));
-
         /**
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -435,7 +391,6 @@ class EmailService
         //$message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
         //$message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
-
         $message->setBody($body);
 
         return $message;
@@ -488,7 +443,6 @@ class EmailService
             ),
             $this->getMailing()->getMailHtml()
         );
-
         /**
          * Clone the twigRenderer and overrule to loader to be a string
          */
@@ -511,7 +465,6 @@ class EmailService
     public function setTemplate($templateName)
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
-
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }

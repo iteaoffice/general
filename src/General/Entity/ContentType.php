@@ -214,7 +214,6 @@ class ContentType
      */
     public function getCacheFileName()
     {
-
         $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
             DIRECTORY_SEPARATOR . (defined(
                 "DEBRANOVA_HOST"

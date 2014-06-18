@@ -37,22 +37,16 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('a affiliation');
-
         $queryBuilder->addSelect('COUNT(DISTINCT a.organisation) partners');
         $queryBuilder->addSelect('COUNT(DISTINCT a.project) projects');
-
         $queryBuilder->from('Affiliation\Entity\Affiliation', 'a');
-
         $queryBuilder->join('a.organisation', 'o');
         $queryBuilder->join('a.project', 'p');
         $queryBuilder->join('o.country', 'c');
-
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
-
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-
         //Limit to only the active projects
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
@@ -72,18 +66,13 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
-
         $queryBuilder->from('General\Entity\Country', 'c');
-
         $queryBuilder->join('c.organisation', 'o');
         $queryBuilder->join('o.affiliation', 'a');
         $queryBuilder->join('a.project', 'p');
-
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
-
         $queryBuilder->addGroupBy('c.id');
-
         switch ($which) {
             case AffiliationService::WHICH_ALL:
                 break;
@@ -100,10 +89,8 @@ class Country extends EntityRepository
         //        //Limit to only the active projects
         //        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         //        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
-
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
-
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
 
         return $queryBuilder->getQuery()->getResult();
@@ -121,18 +108,13 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
-
         $queryBuilder->from('General\Entity\Country', 'c');
-
         $queryBuilder->join('c.organisation', 'o');
         $queryBuilder->join('o.affiliation', 'a');
         $queryBuilder->join('a.project', 'p');
-
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
-
         $queryBuilder->addGroupBy('c.id');
-
         switch ($which) {
             case AffiliationService::WHICH_ALL:
                 break;
@@ -145,7 +127,6 @@ class Country extends EntityRepository
             default:
                 throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
         }
-
         $queryBuilder->andWhere('a.project = ?1');
         $queryBuilder->setParameter(1, $project);
 
@@ -163,25 +144,19 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c');
         $queryBuilder->from('General\Entity\Country', 'c');
-
         $queryBuilder->join('c.organisation', 'o');
         $queryBuilder->join('o.affiliation', 'a');
         $queryBuilder->join('a.project', 'p');
         $queryBuilder->join('p.evaluation', 'e');
-
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
-
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-
         //Limit to only the active projects
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
-
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
-
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
 
@@ -203,7 +178,6 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c country');
         $queryBuilder->from('General\Entity\Country', 'c');
-
         $queryBuilder->addSelect(
             '(SELECT
                             COUNT(DISTINCT aff.organisation)
@@ -216,12 +190,9 @@ class Country extends EntityRepository
                             FROM Affiliation\Entity\Affiliation aff2
                             JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects'
         );
-
         $queryBuilder->innerJoin('c.itac', 'itac');
-
         $queryBuilder->join('c.organisation', 'o');
         $queryBuilder->join('o.affiliation', 'a');
-
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
 
@@ -235,22 +206,18 @@ class Country extends EntityRepository
      */
     public function findCountriesByMeeting(Meeting $meeting)
     {
-
         $query = $this->_em->createQueryBuilder();
         $query->distinct('country.id');
         $query->select('country.id');
         $query->addSelect('country.country');
-
         $query->from('Event\Entity\Registration', 'r');
         $query->where('r.meeting = ?1');
-
         $query->setParameter(1, $meeting->getId());
         $query->andWhere($query->expr()->isNull('r.dateEnd'));
         $query->andWhere('r.hideInList = ?2');
         $query->andWhere('r.overbooked = ?3');
         $query->setParameter(2, Registration::NOT_HIDE_IN_LIST);
         $query->setParameter(3, Registration::NOT_OVERBOOKED);
-
         $query->join('r.contact', 'c');
         $query->join('c.contactOrganisation', 'co');
         $query->join('co.organisation', 'o');

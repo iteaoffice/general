@@ -1,8 +1,8 @@
 <?php
 namespace GeneralTest\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadContentTypeData implements FixtureInterface
 {
@@ -18,7 +18,6 @@ class LoadContentTypeData implements FixtureInterface
         $contentType->setContentType('application/pdf');
         $contentType->setExtension('pdf');
         $contentType->setImage(file_get_contents(__DIR__ . '/../../assets/img/image_not_found.jpg'));
-
         $manager->persist($contentType);
         $manager->flush();
     }

@@ -9,7 +9,6 @@ namespace General;
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
-
 use General\Controller\ControllerInitializer;
 use General\Service\ServiceInitializer;
 use General\View\Helper\ViewHelperInitializer;
@@ -53,7 +52,6 @@ $config = [
         'invokables'   => [
             'general_general_service' => 'General\Service\GeneralService',
             'general_form_service'    => 'General\Service\FormService',
-
         ]
     ],
     'asset_manager'   => [
@@ -103,14 +101,12 @@ $config = [
         ],
     ]
 ];
-
 $configFiles = [
     __DIR__ . '/module.config.routes.php',
     __DIR__ . '/module.config.general.php',
     __DIR__ . '/module.config.navigation.php',
     __DIR__ . '/module.config.authorize.php',
 ];
-
 foreach ($configFiles as $configFile) {
     $config = ArrayUtils::merge($config, include $configFile);
 }

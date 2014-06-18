@@ -44,11 +44,9 @@ class GeneralService extends ServiceAbstract
         if (is_null($entity)) {
             throw new \InvalidArgumentException("An entity is required to find an entity");
         }
-
         if (is_null($docRef)) {
             throw new \InvalidArgumentException("A docRef is required to find an entity");
         }
-
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findOneBy(
             array('docRef' => $docRef)
         );
@@ -83,7 +81,6 @@ class GeneralService extends ServiceAbstract
         if (is_null($iso3)) {
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
-
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
             array('iso3' => strtoupper($iso3))
         );
@@ -102,7 +99,6 @@ class GeneralService extends ServiceAbstract
         if (is_null($cd)) {
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
-
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
             array('cd' => strtoupper($cd))
         );
@@ -192,7 +188,6 @@ class GeneralService extends ServiceAbstract
         if (is_null($contentTypeName)) {
             throw new \InvalidArgumentException("A content type name is required to find an entity");
         }
-
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->findOneBy(
             array('contentType' => $contentTypeName)
         );
@@ -209,7 +204,6 @@ class GeneralService extends ServiceAbstract
     {
         $client = new Client();
         $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
-
         if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
             /**
              * We have the country, try to find the country in our database

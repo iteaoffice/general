@@ -40,37 +40,31 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
     public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true)
     {
         $allCountries = $this->getGeneralService()->findAll('country');
-
         $color      = '#005C00';
         $colorFaded = '#009900';
         $html       = [];
         $html[]     = " var gdpData = {\n";
-
         foreach ($countries as $country) {
             $html[] = '"' . $country->getCd() . '": ';
             $html[] = (!is_null($selectedCountry) && $country->getId() == $selectedCountry->getId()) ? 2 : 1;
             $html[] = ",\n";
         }
         $html[] = "};\n";
-
         if ($clickable) {
             $html[] = "var clickable = 1;";
         } else {
             $html[] = "var clickable = 0;";
         }
-
         $html[] = " var countries = [\n";
         foreach ($allCountries as $country) {
             $html[] = '"' . $country->getCd() . '", ';
         }
         $html[] = "];\n";
-
         if ($clickable) {
             $html[] = "var clickable = 1;";
         } else {
             $html[] = "var clickable = 0;";
         }
-
         $html[] = <<< EOT
 
                 $(function () {

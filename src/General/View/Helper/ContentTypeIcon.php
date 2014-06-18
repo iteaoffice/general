@@ -30,13 +30,10 @@ class ContentTypeIcon extends HelperAbstract
      */
     public function __invoke(ContentType $contentType, $width = 20)
     {
-
         $image = $contentType->getImage();
-
         if (is_null($image)) {
             return '';
         }
-
         /**
          * Check if the file is cached and if so, pull it from the assets-folder
          */
@@ -53,14 +50,11 @@ class ContentTypeIcon extends HelperAbstract
                     stream_get_contents($contentType->getImage()) : $contentType->getImage())
             );
         }
-
         $imageUrl = '<img src="%s" id="%s" width="%s">';
-
         $params = [
             'hash' => $contentType->getHash(),
             'id'   => $contentType->getId()
         ];
-
         $image = sprintf(
             $imageUrl,
             $this->getUrl($router, $params),

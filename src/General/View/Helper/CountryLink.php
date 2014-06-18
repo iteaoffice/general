@@ -42,12 +42,10 @@ class CountryLink extends LinkAbstract
         $show = 'name',
         $alternativeShow = null
     ) {
-
         $this->setCountry($country);
         $this->setAction($action);
         $this->setShow($show);
         $this->setAlternativeShow($alternativeShow);
-
         $this->addRouterParam('id', $country->getId());
         $this->addRouterParam('docRef', $country->getDocRef());
         $this->setShowOptions(
@@ -68,7 +66,6 @@ class CountryLink extends LinkAbstract
     public function parseAction()
     {
         switch ($this->getAction()) {
-
             case 'view':
                 $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name'));
                 $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));

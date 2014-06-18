@@ -114,7 +114,6 @@ class Flag extends EntityAbstract
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -123,7 +122,6 @@ class Flag extends EntityAbstract
                     )
                 )
             );
-
             $this->inputFilter = $inputFilter;
         }
 

@@ -1,8 +1,8 @@
 <?php
 namespace GeneralTest\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadGenderData implements FixtureInterface
 {
@@ -17,7 +17,6 @@ class LoadGenderData implements FixtureInterface
         $gender->setName("This is the gender");
         $gender->setAttention("attention for gender");
         $gender->setSalutation("Salutation for gender");
-
         $manager->persist($gender);
         $manager->flush();
     }

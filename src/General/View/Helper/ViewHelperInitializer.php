@@ -37,20 +37,16 @@ class ViewHelperInitializer implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
-
         if (!is_object($instance)) {
             return;
         }
-
         $arrayCheck = [
             GeneralServiceAwareInterface::class => 'general_general_service',
         ];
-
         /**
          * @var $sm ServiceLocatorInterface
          */
         $sm = $serviceLocator->getServiceLocator();
-
         /**
          * Go over each interface to see if we should add an interface
          */

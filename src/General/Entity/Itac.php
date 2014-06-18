@@ -109,7 +109,6 @@ class Itac extends EntityAbstract
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -118,7 +117,6 @@ class Itac extends EntityAbstract
                     )
                 )
             );
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -127,7 +125,6 @@ class Itac extends EntityAbstract
                     )
                 )
             );
-
             $this->inputFilter = $inputFilter;
         }
 

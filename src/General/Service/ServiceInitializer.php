@@ -37,12 +37,10 @@ class ServiceInitializer implements InitializerInterface
         if (!is_object($instance)) {
             return;
         }
-
         $arrayCheck = [
             EmailServiceAwareInterface::class   => 'general_email_service',
             GeneralServiceAwareInterface::class => 'general_general_service',
         ];
-
         /**
          * Go over each interface to see if we should add an interface
          */

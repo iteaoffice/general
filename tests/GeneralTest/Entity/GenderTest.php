@@ -9,12 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use Zend\InputFilter\InputFilter;
-
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use General\Entity\Gender;
 use GeneralTest\Bootstrap;
+use Zend\InputFilter\InputFilter;
 
 class GenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,25 +37,20 @@ class GenderTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
         $this->genderData = array(
             'name'       => 'This is the name of the gender',
             'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
-
         $this->gender = new Gender;
     }
 
     public function testCanCreateEntity()
     {
         $this->assertInstanceOf("General\Entity\Gender", $this->gender);
-
         $this->assertNull($this->gender->getId(), 'The "Id" should be null');
-
         $id = 1;
         $this->gender->setId($id);
-
         $this->assertTrue(is_array($this->gender->getArrayCopy()));
         $this->assertTrue(is_array($this->gender->populate()));
     }
@@ -87,14 +80,10 @@ class GenderTest extends \PHPUnit_Framework_TestCase
             $this->entityManager,
             'General\Entity\Gender'
         );
-
         $this->gender = $hydrator->hydrate($this->genderData, new Gender());
-
         $this->assertEquals((string) $this->gender, $this->genderData['attention']);
-
         $this->entityManager->persist($this->gender);
         $this->entityManager->flush();
-
         $this->assertInstanceOf('General\Entity\Gender', $this->gender);
         $this->assertNotNull($this->gender->getId());
         $this->assertEquals(
@@ -112,9 +101,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
             $this->genderData['salutation'],
             'The name of the saved entity should be the same as the original name'
         );
-
         $this->assertNotNull($this->gender->getResourceId());
-
 //        $this->entityManager->remove($this->gender);
 //        $this->entityManager->flush();
     }

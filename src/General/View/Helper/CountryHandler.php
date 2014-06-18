@@ -8,7 +8,6 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
-
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -54,16 +53,11 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function __invoke(Content $content)
     {
-
         $this->extractContentParam($content);
-
         switch ($content->getHandler()->getHandler()) {
-
             case 'country':
-
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
                 $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
-
                 $countryLink = $this->serviceLocator->get('countryLink');
                 $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
                 $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
@@ -84,7 +78,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 $countryMap = $this->serviceLocator->get('countryMap');
 
                 return $countryMap(array($this->getCountry()), $this->getCountry());
-
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
             case 'country_metadata':
@@ -100,7 +93,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
                 return $this->parseCountryListItac($page);
             case 'country_organisation':
-
                 $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseOrganisationList($page);
@@ -133,7 +125,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                         $this->setCountryDocRef($docRef);
                     }
                     break;
-
                 case 'limit':
                     if ('0' === $param->getParameterId()) {
                         $limit = null;
@@ -142,7 +133,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                     }
                     $this->setLimit($limit);
                     break;
-
                 default:
                     $this->setCountryId($param->getParameterId());
                     break;
@@ -247,7 +237,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             'general/partial/entity/country',
             array(
                 'country' => $this->getCountry(),
-
             )
         );
     }
@@ -369,9 +358,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-
         $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
-
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);

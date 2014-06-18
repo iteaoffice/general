@@ -51,7 +51,6 @@ return [
                 ['route' => 'assets/country-flag', 'roles' => []],
                 ['route' => 'assets/content-type-icon', 'roles' => []],
                 ['route' => 'home', 'roles' => []]
-
             ],
         ],
     ],

@@ -9,12 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use Zend\InputFilter\InputFilter;
-
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use General\Entity\Country;
 use GeneralTest\Bootstrap;
+use Zend\InputFilter\InputFilter;
 
 class CountryTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,19 +43,15 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
         $this->country = new Country;
     }
 
     public function testCanCreateEntity()
     {
         $this->assertInstanceOf("General\Entity\Country", $this->country);
-
         $this->assertNull($this->country->getId(), 'The "Id" should be null');
-
         $id = 1;
         $this->country->setId($id);
-
         $this->assertTrue(is_array($this->country->getArrayCopy()));
         $this->assertTrue(is_array($this->country->populate()));
     }
@@ -87,11 +81,9 @@ class CountryTest extends \PHPUnit_Framework_TestCase
             $this->entityManager,
             'General\Entity\Country'
         );
-
         $this->country = $hydrator->hydrate($this->countryData, new Country());
         $this->entityManager->persist($this->country);
         $this->entityManager->flush();
-
         $this->assertInstanceOf('General\Entity\Country', $this->country);
         $this->assertNotNull($this->country->getId());
         $this->assertEquals(
@@ -118,7 +110,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
 //            $this->country->getVat(),
 //            'The country_vat of the saved entity should be the same as the original name'
 //        );
-
         $this->assertNotNull($this->country->getResourceId());
     }
 

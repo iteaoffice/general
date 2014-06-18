@@ -10,9 +10,7 @@
 namespace GeneralTest\Entity;
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use General\Entity\ContentType;
-
 use GeneralTest\Bootstrap;
 
 class ContentTypeTest extends \PHPUnit_Framework_TestCase
@@ -38,23 +36,19 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
         $this->contentTypeData = array(
             'description' => 'description',
             'contentType' => 'This is a content type',
             'extension'   => 'abc',
             'image'       => 'blob',
         );
-
         $this->contentType = new ContentType;
     }
 
     public function testCanCreateEntity()
     {
         $this->assertInstanceOf("General\Entity\ContentType", $this->contentType);
-
         $this->assertNull($this->contentType->getId(), 'The "Id" should be null');
-
         $id = 1;
         $this->contentType->setId($id);
     }
@@ -65,14 +59,11 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
             $this->entityManager,
             'General\Entity\ContentType'
         );
-
         $this->contentType = $hydrator->hydrate($this->contentTypeData, new ContentType());
         $this->entityManager->persist($this->contentType);
         $this->entityManager->flush();
-
         //Since we don't save, we give the $contentType a virtual id
         $this->contentType->setId(1);
-
         $this->assertInstanceOf('General\Entity\ContentType', $this->contentType);
         $this->assertNotNull($this->contentType->getId());
         $this->assertEquals($this->contentType->getDescription(), $this->contentTypeData['description']);

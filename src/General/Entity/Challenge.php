@@ -86,7 +86,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @var \Contact\Entity\Contact[]
      * private $contact;
      */
-
     /**
      * Class constructor
      */
@@ -161,7 +160,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -184,7 +182,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
                     )
                 )
             );
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -193,11 +190,9 @@ class Challenge extends EntityAbstract implements ResourceInterface
                         'filters'  => array(
                             array('name' => 'StringTrim'),
                         ),
-
                     )
                 )
             );
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -220,7 +215,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
                     )
                 )
             );
-
             $inputFilter->add(
                 $factory->createInput(
                     array(
@@ -243,7 +237,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
                     )
                 )
             );
-
             $this->inputFilter = $inputFilter;
         }
 

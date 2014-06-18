@@ -31,32 +31,27 @@ class StyleController extends AbstractActionController implements ServiceLocator
                  ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
                  ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
                  ->addHeaderLine("Pragma: public");
-
         $options            = $this->getServiceLocator()->get('general_module_options');
         $requestedFileFound = false;
         foreach ($options->getStyleLocations() as $location) {
             $requestedFile = $location . DIRECTORY_SEPARATOR
                 . $options->getImageLocation() . DIRECTORY_SEPARATOR
                 . $this->getEvent()->getRouteMatch()->getParam('source');
-
             if (!$requestedFileFound && file_exists($requestedFile)) {
                 $requestedFileFound = true;
                 break;
             }
         }
-
         if (!$requestedFileFound || is_null($this->getEvent()->getRouteMatch()->getParam('source'))) {
             foreach ($options->getStyleLocations() as $location) {
                 $requestedFile = $location . DIRECTORY_SEPARATOR
                     . $options->getImageLocation() . DIRECTORY_SEPARATOR
                     . $options->getImageNotFound();
-
                 if (file_exists($requestedFile)) {
                     break;
                 }
             }
         }
-
         /**
          * Create a cache-version of the file
          */
@@ -71,11 +66,9 @@ class StyleController extends AbstractActionController implements ServiceLocator
                 file_get_contents($requestedFile)
             );
         }
-
         $response->getHeaders()
                  ->addHeaderLine('Content-Type: image/jpg')
                  ->addHeaderLine('Content-Length: ' . (string) filesize($requestedFile));
-
         $response->setContent(file_get_contents($requestedFile));
 
         return $response;

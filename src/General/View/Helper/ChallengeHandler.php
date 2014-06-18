@@ -8,7 +8,6 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
-
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -45,17 +44,13 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
     public function __invoke(Content $content)
     {
         $this->extractContentParam($content);
-
         switch ($content->getHandler()->getHandler()) {
-
             case 'challenge':
-
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-challenge"));
                 $this->serviceLocator->get('headtitle')->append($this->getChallenge()->getChallenge());
 
                 return $this->parseChallenge();
             case 'challenge_list':
-
                 $page = $this->getRouteMatch()->getParam('page');
 
                 return $this->parseChallengeList($page);
@@ -75,11 +70,9 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
      */
     public function extractContentParam(Content $content)
     {
-
         if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
             $this->setChallengeDocRef($this->getRouteMatch()->getParam('docRef'));
         }
-
         foreach ($content->getContentParam() as $param) {
             /**
              * When the parameterId is 0 (so we want to get the article from the URL

@@ -22,7 +22,6 @@ abstract class EntityAbstract implements EntityInterface, InputFilterAwareInterf
      */
     public function has($prop)
     {
-
         $getter = 'get' . ucfirst($prop);
         if (method_exists($this, $getter)) {
             if ('s' === substr($prop, 0, -1) && is_array($this->$getter())) {

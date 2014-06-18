@@ -11,9 +11,7 @@ $settings = [
         __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
     ],
     'image_not_found' => 'image_not_found.jpg',
-
 ];
-
 /**
  * You do not need to edit below this line
  */

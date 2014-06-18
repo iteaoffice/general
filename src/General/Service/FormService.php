@@ -41,15 +41,11 @@ class FormService implements ServiceLocatorAwareInterface
         if (!$entity) {
             $entity = $this->getGeneralService()->getEntity($className);
         }
-
         $formName = 'general_' . $entity->get('underscore_entity_name') . '_form';
         $form     = $this->getServiceLocator()->get($formName);
-
         $filterName = 'general_' . $entity->get('underscore_entity_name') . '_form_filter';
         $filter     = $this->getServiceLocator()->get($filterName);
-
         $form->setInputFilter($filter);
-
         if ($bind) {
             $form->bind($entity);
         }

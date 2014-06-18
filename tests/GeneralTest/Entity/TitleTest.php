@@ -9,12 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use Zend\InputFilter\InputFilter;
-
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use General\Entity\Title;
 use GeneralTest\Bootstrap;
+use Zend\InputFilter\InputFilter;
 
 class TitleTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,25 +37,20 @@ class TitleTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
         $this->titleData = array(
             'name'       => 'This is the name of the title',
             'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
-
         $this->title = new Title;
     }
 
     public function testCanCreateEntity()
     {
         $this->assertInstanceOf("General\Entity\Title", $this->title);
-
         $this->assertNull($this->title->getId(), 'The "Id" should be null');
-
         $id = 1;
         $this->title->setId($id);
-
         $this->assertTrue(is_array($this->title->getArrayCopy()));
         $this->assertTrue(is_array($this->title->populate()));
     }
@@ -87,22 +80,17 @@ class TitleTest extends \PHPUnit_Framework_TestCase
             $this->entityManager,
             'General\Entity\Title'
         );
-
         $this->title = $hydrator->hydrate($this->titleData, new Title());
         $this->entityManager->persist($this->title);
         $this->entityManager->flush();
-
         //Since we don't save, we give the $title a virtual id
         $this->title->setId(1);
-
         $this->assertInstanceOf('General\Entity\Title', $this->title);
         $this->assertNotNull($this->title->getId());
         $this->assertEquals($this->title->getName(), $this->titleData['name']);
         $this->assertEquals($this->title->getAttention(), $this->titleData['attention']);
         $this->assertEquals($this->title->getSalutation(), $this->titleData['salutation']);
-
         $this->assertNotNull($this->title->getResourceId());
-
         $this->entityManager->remove($this->title);
     }
 }

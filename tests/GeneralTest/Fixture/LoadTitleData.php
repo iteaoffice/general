@@ -1,8 +1,8 @@
 <?php
 namespace GeneralTest\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadTitleData implements FixtureInterface
 {
@@ -17,7 +17,6 @@ class LoadTitleData implements FixtureInterface
         $title->setName("This is the title");
         $title->setAttention("attention for title");
         $title->setSalutation("Salutation for title");
-
         $manager->persist($title);
         $manager->flush();
     }

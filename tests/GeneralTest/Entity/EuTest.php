@@ -9,14 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use Zend\InputFilter\InputFilter;
-
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-
 use General\Entity\Eu;
-use General\Entity\Country;
-
 use GeneralTest\Bootstrap;
+use Zend\InputFilter\InputFilter;
 
 class EuTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,26 +37,20 @@ class EuTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-
         $country = $this->entityManager->find("General\Entity\Country", 1);
-
         $this->euData = array(
             'country' => $country,
             'since'   => new \DateTime(),
         );
-
         $this->eu = new Eu;
     }
 
     public function testCanCreateEntity()
     {
         $this->assertInstanceOf("General\Entity\Eu", $this->eu);
-
         $this->assertNull($this->eu->getId(), 'The "Id" should be null');
-
         $id = 1;
         $this->eu->setId($id);
-
         $this->assertTrue(is_array($this->eu->getArrayCopy()));
         $this->assertTrue(is_array($this->eu->populate()));
     }
@@ -91,14 +81,11 @@ class EuTest extends \PHPUnit_Framework_TestCase
             $this->entityManager,
             'General\Entity\Eu'
         );
-
         $this->eu = $hydrator->hydrate($this->euData, new Eu());
         $this->entityManager->persist($this->eu);
         $this->entityManager->flush();
-
         //Since we don't save, we give the $eu a virtual id
         $this->eu->setId(1);
-
         $this->assertInstanceOf('General\Entity\Eu', $this->eu);
         $this->assertNotNull($this->eu->getId());
         $this->assertEquals($this->eu->getSince(), $this->euData['since']);

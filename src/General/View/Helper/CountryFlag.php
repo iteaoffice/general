@@ -30,13 +30,10 @@ class CountryFlag extends HelperAbstract
      */
     public function __invoke(Country $country, $width = 20)
     {
-
         $flag = $country->getFlag();
-
         if (is_null($flag)) {
             return '';
         }
-
         /**
          * Check if the file is cached and if so, pull it from the assets-folder
          */
@@ -47,14 +44,11 @@ class CountryFlag extends HelperAbstract
                 is_resource($flag->getObject()) ? stream_get_contents($flag->getObject()) : $flag->getObject()
             );
         }
-
         $imageUrl = '<img src="%s" id="%s" width="%s">';
-
         $params = [
             'ext'  => 'png',
             'iso3' => strtolower($country->getIso3()),
         ];
-
         $image = sprintf(
             $imageUrl,
             $this->getUrl($router, $params),

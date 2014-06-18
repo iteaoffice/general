@@ -1,8 +1,8 @@
 <?php
 namespace GeneralTest\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class LoadCountryData implements FixtureInterface
 {
@@ -18,7 +18,6 @@ class LoadCountryData implements FixtureInterface
         $country->setCd('cd');
         $country->setNumcode(100);
         $country->setIso3('CCD');
-
         $manager->persist($country);
         $manager->flush();
     }
