@@ -38,8 +38,8 @@ class ServiceInitializer implements InitializerInterface
             return;
         }
         $arrayCheck = [
-            EmailServiceAwareInterface::class   => 'general_email_service',
-            GeneralServiceAwareInterface::class => 'general_general_service',
+            EmailServiceAwareInterface::class   => EmailService::class,
+            GeneralServiceAwareInterface::class => GeneralService::class,
         ];
         /**
          * Go over each interface to see if we should add an interface

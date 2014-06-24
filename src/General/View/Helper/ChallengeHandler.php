@@ -137,7 +137,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get('general_general_service');
+        return $this->getServiceLocator()->get(GeneralService::class);
     }
 
     /**

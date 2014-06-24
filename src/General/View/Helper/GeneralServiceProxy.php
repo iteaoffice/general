@@ -31,7 +31,7 @@ class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareI
      */
     public function __invoke()
     {
-        return clone $this->serviceLocator->getServiceLocator()->get('general_general_service');
+        return clone $this->serviceLocator->getServiceLocator()->get(GeneralService::class);
     }
 
     /**

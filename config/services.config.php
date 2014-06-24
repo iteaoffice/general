@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 use General\Options;
+use General\Service\EmailService;
 
 return [
     'factories' => [
@@ -16,10 +17,10 @@ return [
 
             return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : []);
         },
-        'general_email_service'  => function ($sm) {
+        EmailService::class      => function ($sm) {
             $config = $sm->get('Config');
 
-            return new General\Service\EmailService($config["email"], $sm);
+            return new EmailService($config["email"], $sm);
         }
     ],
 ];

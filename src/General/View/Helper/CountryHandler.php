@@ -187,7 +187,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get('general_general_service');
+        return $this->getServiceLocator()->get(GeneralService::class);
     }
 
     /**

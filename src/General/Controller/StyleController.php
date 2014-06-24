@@ -10,7 +10,6 @@
 namespace General\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * The index of the system
@@ -18,7 +17,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  * @category    Application
  * @package     Controller
  */
-class StyleController extends AbstractActionController implements ServiceLocatorAwareInterface
+class StyleController extends AbstractActionController
 {
     /**
      * Index of the Index

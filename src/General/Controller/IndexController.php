@@ -11,7 +11,6 @@ namespace General\Controller;
 
 use General\Service\GeneralService;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * The index of the system
@@ -19,7 +18,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  * @category    General
  * @package     Controller
  */
-class IndexController extends AbstractActionController implements ServiceLocatorAwareInterface
+class IndexController extends AbstractActionController
 {
     /**
      * @var GeneralService
@@ -109,6 +108,6 @@ class IndexController extends AbstractActionController implements ServiceLocator
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get('general_general_service');
+        return $this->getServiceLocator()->get(GeneralService::class);
     }
 }

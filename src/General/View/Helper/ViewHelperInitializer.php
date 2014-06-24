@@ -11,6 +11,7 @@
  */
 namespace General\View\Helper;
 
+use General\Service\GeneralService;
 use General\Service\GeneralServiceAwareInterface;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -41,7 +42,7 @@ class ViewHelperInitializer implements InitializerInterface
             return;
         }
         $arrayCheck = [
-            GeneralServiceAwareInterface::class => 'general_general_service',
+            GeneralServiceAwareInterface::class => GeneralService::class,
         ];
         /**
          * @var $sm ServiceLocatorInterface

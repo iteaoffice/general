@@ -12,8 +12,11 @@
 namespace General\Controller;
 
 use General\Service\EmailServiceAwareInterface;
+use General\Service\EmailService;
 use General\Service\FormServiceAwareInterface;
+use General\Service\FormService;
 use General\Service\GeneralServiceAwareInterface;
+use General\Service\GeneralService;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -42,9 +45,9 @@ class ControllerInitializer implements InitializerInterface
             return;
         }
         $arrayCheck = [
-            FormServiceAwareInterface::class    => 'general_form_service',
-            EmailServiceAwareInterface::class   => 'general_email_service',
-            GeneralServiceAwareInterface::class => 'general_general_service',
+            FormServiceAwareInterface::class    => FormService::class,
+            EmailServiceAwareInterface::class   => EmailService::class,
+            GeneralServiceAwareInterface::class => GeneralService::class,
         ];
         /**
          * @var $sm ServiceLocatorInterface

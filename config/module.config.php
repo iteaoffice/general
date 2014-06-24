@@ -10,11 +10,13 @@ namespace General;
  * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
 use General\Controller\ControllerInitializer;
+use General\Service\FormService;
+use General\Service\GeneralService;
 use General\Service\ServiceInitializer;
 use General\View\Helper\ViewHelperInitializer;
 use Zend\Stdlib\ArrayUtils;
 
-$config = [
+$config      = [
     'controllers'     => [
         'initializers' => [
             ControllerInitializer::class
@@ -46,12 +48,9 @@ $config = [
         'initializers' => [
             ServiceInitializer::class
         ],
-        'factories'    => [
-            'general-assertion' => 'General\Acl\Assertion\General',
-        ],
         'invokables'   => [
-            'general_general_service' => 'General\Service\GeneralService',
-            'general_form_service'    => 'General\Service\FormService',
+            GeneralService::class => GeneralService::class,
+            FormService::class    => FormService::class,
         ]
     ],
     'asset_manager'   => [

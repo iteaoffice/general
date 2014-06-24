@@ -71,7 +71,7 @@ class EmailService
         $this->config         = $config;
         $this->sm             = $sm;
         $this->renderer       = $this->sm->get('ZfcTwigRenderer');
-        $this->generalService = $this->sm->get('general_general_service');
+        $this->generalService = $this->sm->get(GeneralService::class);
     }
 
     /**
