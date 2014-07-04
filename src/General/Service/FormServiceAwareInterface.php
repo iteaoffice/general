@@ -23,7 +23,7 @@ interface FormServiceAwareInterface
     /**
      * Set formService.
      *
-     * @param FormService the value to set.
+     * @param FormService $formService
      */
     public function setFormService($formService);
 }

@@ -102,31 +102,31 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
-     * @var \Contact\Entity\Address[]
+     * @var \Contact\Entity\Address[]|Collections\ArrayCollection
      */
     private $address;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Organisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \Organisation\Entity\Organisation[]
+     * @var \Organisation\Entity\Organisation[]|Collections\ArrayCollection
      */
     private $organisation;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\IctOrganisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \Organisation\Entity\IctOrganisation[]
+     * @var \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
      */
     private $ictOrganisation;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Vat", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \General\Entity\Vat[]
+     * @var \General\Entity\Vat[]|Collections\ArrayCollection
      */
     private $vat;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Funder", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \Program\Entity\Funder[]
+     * @var \Program\Entity\Funder[]|Collections\ArrayCollection
      */
     private $funder;
     /**
@@ -138,9 +138,15 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Evaluation\Evaluation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Evaluation\Evaluation[]
+     * @var \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
      */
     private $evaluation;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Rationale", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Rationale[]|Collections\ArrayCollection
+     */
+    private $rationale;
 
     /**
      * Class constructor
@@ -150,6 +156,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->address         = new Collections\ArrayCollection();
         $this->organisation    = new Collections\ArrayCollection();
         $this->ictOrganisation = new Collections\ArrayCollection();
+        $this->rationale       = new Collections\ArrayCollection();
         $this->vat             = new Collections\ArrayCollection();
         $this->funder          = new Collections\ArrayCollection();
         $this->evaluation      = new Collections\ArrayCollection();
@@ -187,7 +194,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->country;
+        return (string)$this->country;
     }
 
     /**
@@ -413,7 +420,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \General\Entity\Eu[] $eu
+     * @param \General\Entity\Eu[]|Collections\ArrayCollection $eu
      */
     public function setEu($eu)
     {
@@ -421,7 +428,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Eu[]
+     * @return \General\Entity\Eu[]|Collections\ArrayCollection
      */
     public function getEu()
     {
@@ -493,7 +500,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Contact\Entity\Address[] $address
+     * @param \Contact\Entity\Address[]|Collections\ArrayCollection $address
      */
     public function setAddress($address)
     {
@@ -501,7 +508,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Contact\Entity\Address[]
+     * @return \Contact\Entity\Address[]|Collections\ArrayCollection
      */
     public function getAddress()
     {
@@ -509,7 +516,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Organisation\Entity\IctOrganisation[] $ictOrganisation
+     * @param \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection $ictOrganisation
      */
     public function setIctOrganisation($ictOrganisation)
     {
@@ -517,7 +524,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Organisation\Entity\IctOrganisation[]
+     * @return \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
      */
     public function getIctOrganisation()
     {
@@ -525,7 +532,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Organisation\Entity\Organisation[] $organisation
+     * @param \Organisation\Entity\Organisation[]|Collections\ArrayCollection $organisation
      */
     public function setOrganisation($organisation)
     {
@@ -533,7 +540,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Organisation\Entity\Organisation[]
+     * @return \Organisation\Entity\Organisation[]|Collections\ArrayCollection
      */
     public function getOrganisation()
     {
@@ -557,7 +564,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Program\Entity\Funder[] $funder
+     * @param \Program\Entity\Funder[]|Collections\ArrayCollection $funder
      */
     public function setFunder($funder)
     {
@@ -565,7 +572,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Program\Entity\Funder[]
+     * @return \Program\Entity\Funder[]|Collections\ArrayCollection
      */
     public function getFunder()
     {
@@ -637,7 +644,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Evaluation\Evaluation[] $evaluation
+     * @param \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection $evaluation
      */
     public function setEvaluation($evaluation)
     {
@@ -645,10 +652,26 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Project\Entity\Evaluation\Evaluation[]
+     * @return \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
      */
     public function getEvaluation()
     {
         return $this->evaluation;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Rationale[]
+     */
+    public function getRationale()
+    {
+        return $this->rationale;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Rationale[] $rationale
+     */
+    public function setRationale($rationale)
+    {
+        $this->rationale = $rationale;
     }
 }

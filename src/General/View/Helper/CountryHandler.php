@@ -303,7 +303,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function getProjectService()
     {
-        return $this->getServiceLocator()->get('project_project_service');
+        return $this->getServiceLocator()->get(ProjectService::class);
     }
 
     /**

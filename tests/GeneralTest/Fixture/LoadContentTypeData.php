@@ -20,5 +20,13 @@ class LoadContentTypeData implements FixtureInterface
         $contentType->setImage(file_get_contents(__DIR__ . '/../../assets/img/image_not_found.jpg'));
         $manager->persist($contentType);
         $manager->flush();
+
+        $contentType = new \General\Entity\ContentType();
+        $contentType->setDescription('Word 2007');
+        $contentType->setContentType('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        $contentType->setExtension('docx');
+        $contentType->setImage(file_get_contents(__DIR__ . '/../../assets/img/image_not_found.jpg'));
+        $manager->persist($contentType);
+        $manager->flush();
     }
 }

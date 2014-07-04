@@ -35,8 +35,8 @@ class WebInfo extends EntityAbstract
      */
     private $info;
     /**
-     * @ORM\Column(name="plain", type="boolean", nullable=false)
-     * @var boolean
+     * @ORM\Column(name="plain", type="smallint", nullable=false)
+     * @var int
      */
     private $plain;
     /**
@@ -57,11 +57,20 @@ class WebInfo extends EntityAbstract
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Web", cascade={"persist"}, inversedBy="webInfo")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="web_id", referencedColumnName="web_id", nullable=false)
+     *   @ORM\JoinColumn(name="web_id", referencedColumnName="web_id", nullable=true)
      * })
      * @var \General\Entity\Web
      */
     private $web;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->sync = 1;
+        $this->plain = 1;
+    }
 
     /**
      * Magic Getter
@@ -158,7 +167,7 @@ class WebInfo extends EntityAbstract
     }
 
     /**
-     * @param boolean $plain
+     * @param int $plain
      */
     public function setPlain($plain)
     {

@@ -157,7 +157,7 @@ class EmailService
         /**
          * Overrule the to when we are in development
          */
-        if ('development' === DEBRANOVA_ENVIRONMENT) {
+        if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
             $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
         }
         //If not sender, use default
