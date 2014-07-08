@@ -1,7 +1,8 @@
 debranova\general
 =================
 
-Version: 1.0.1-dev
+master branch: 1.1-dev
+develop branch: 1.2-dev
 
 [![Build Status](https://travis-ci.org/debranova/general.svg?branch=develop)](https://travis-ci.org/debranova/general)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/debranova/general/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/debranova/general/?branch=develop)

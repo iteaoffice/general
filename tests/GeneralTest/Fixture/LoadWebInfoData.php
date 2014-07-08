@@ -26,5 +26,17 @@ class LoadWebInfoData implements FixtureInterface
         $webInfo->setContent('[deeplink]');
         $manager->persist($webInfo);
         $manager->flush();
+        $webInfo = new WebInfo();
+        $webInfo->setInfo("/project/invite/accepted");
+        $webInfo->setSubject('Accepted project invite');
+        $webInfo->setContent('[deeplink]');
+        $manager->persist($webInfo);
+        $manager->flush();
+        $webInfo = new WebInfo();
+        $webInfo->setInfo("/project/invite/confirmed");
+        $webInfo->setSubject('confirmed project invite');
+        $webInfo->setContent('[deeplink]');
+        $manager->persist($webInfo);
+        $manager->flush();
     }
 }
