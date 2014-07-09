@@ -20,7 +20,7 @@ final class Version
     /**
      * Zend Framework version identification - see compareVersion()
      */
-    const VERSION = '1.1.2';
+    const VERSION = '1.1.3';
     /**
      * Github Service Identifier for version information is retrieved from
      */
@@ -79,7 +79,7 @@ final class Version
      * @link   https://api.github.com/repos/zendframework/zf2/git/refs/tags/release-
      * @link   http://framework.zend.com/api/zf-version?v=2
      *
-     * @param string $service Version service with which to retrieve the version
+     * @param string      $service    Version service with which to retrieve the version
      * @param Http\Client $httpClient HTTP client with which to retrieve the version
      *
      * @return string
