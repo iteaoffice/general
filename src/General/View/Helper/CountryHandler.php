@@ -423,7 +423,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function getArticleService()
     {
-        return $this->getServiceLocator()->get('content_article_service');
+        return $this->getServiceLocator()->get(ArticleService::class);
     }
 
     /**
