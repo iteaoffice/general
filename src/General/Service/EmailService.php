@@ -68,9 +68,9 @@ class EmailService
      */
     public function __construct($config, $sm)
     {
-        $this->config         = $config;
-        $this->sm             = $sm;
-        $this->renderer       = $this->sm->get('ZfcTwigRenderer');
+        $this->config = $config;
+        $this->sm = $sm;
+        $this->renderer = $this->sm->get('ZfcTwigRenderer');
         $this->generalService = $this->sm->get(GeneralService::class);
     }
 
@@ -106,16 +106,16 @@ class EmailService
             $transport = new SendmailTransport();
             // Relay SMTP
             if ($this->config["relay"]["active"]) {
-                $transport       = new SmtpTransport();
-                $transportConfig = array(
+                $transport = new SmtpTransport();
+                $transportConfig = [
                     'name'              => "DebraNova_General_Email",
                     'host'              => $this->config["relay"]["host"],
                     'connection_class'  => 'login',
-                    'connection_config' => array(
+                    'connection_config' => [
                         'username' => $this->config["relay"]["username"],
                         'password' => $this->config["relay"]["password"]
-                    )
-                );
+                    ]
+                ];
                 // Add port
                 if ($this->config["relay"]["port"]) {
                     $transportConfig["port"] = $this->config["relay"]["port"];
@@ -158,7 +158,7 @@ class EmailService
          * Overrule the to when we are in development
          */
         if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-            $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
+            $email->setTo([$this->config["emails"]["admin"] => $this->config["emails"]["admin"]]);
         }
         //If not sender, use default
         if (!$email->getFrom()) {
@@ -169,11 +169,12 @@ class EmailService
         try {
             $htmlView = $this->renderer->render(
                 $email->getHtmlLayoutName(),
-                array_merge_recursive(array('content' => $content), $this->templateVars)
+                array_merge_recursive(['content' => $content], $this->templateVars)
             );
         } catch (\Twig_Error_Syntax $e) {
             return sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
+
         if (!is_null($htmlView)) {
             $email->setHtmlContent($htmlView);
         };
@@ -193,11 +194,12 @@ class EmailService
         $message->setSubject(
             str_replace('[site]', $this->config["template_vars"]["company"], $this->template->getSubject())
         );
-        $htmlContent       = new MimePart($email->getHtmlContent());
+
+        $htmlContent = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
-        $textContent       = new MimePart($email->getTextContent());
+        $textContent = new MimePart($email->getTextContent());
         $textContent->type = 'text/plain';
-        $body              = new MimeMessage();
+        $body = new MimeMessage();
         $body->setParts([$htmlContent]);
         /**
          * Set specific headers
@@ -218,15 +220,15 @@ class EmailService
     public function updateTemplateVarsWithContactService()
     {
         if (!$this->getContactService()->isEmpty()) {
-            $this->templateVars['attention']    = $this->getContactService()->parseAttention();
-            $this->templateVars['firstname']    = $this->getContactService()->getContact()->getFirstName();
-            $this->templateVars['lastname']     = trim(
+            $this->templateVars['attention'] = $this->getContactService()->parseAttention();
+            $this->templateVars['firstname'] = $this->getContactService()->getContact()->getFirstName();
+            $this->templateVars['lastname'] = trim(
                 $this->getContactService()->getContact()->getMiddleName() .
                 ' ' .
                 $this->getContactService()->getContact()->getLastName()
             );
-            $this->templateVars['fullname']     = $this->getContactService()->parseFullName();
-            $this->templateVars['country']      = $this->getContactService()->parseCountry();
+            $this->templateVars['fullname'] = $this->getContactService()->parseFullName();
+            $this->templateVars['country'] = $this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
     }
@@ -273,13 +275,12 @@ class EmailService
     protected function createTwigTemplate($content)
     {
         return preg_replace(
-            array(
+            [
                 '~\[(.*?)\]~'
-            ),
-            array
-            (
+            ],
+            [
                 "{{ $1|raw }}"
-            ),
+            ],
             $content
         );
     }
@@ -345,18 +346,18 @@ class EmailService
          * Overrule the to when we are in development
          */
         if ('development' === DEBRANOVA_ENVIRONMENT) {
-            $email->setTo(array($this->config["emails"]["admin"] => $this->config["emails"]["admin"]));
+            $email->setTo([$this->config["emails"]["admin"] => $this->config["emails"]["admin"]]);
         }
         $email->setFrom($this->getMailing()->getSender()->getSender());
         $email->setFromName($this->getMailing()->getSender()->getEmail());
-        $content  = $this->renderMailingContent();
+        $content = $this->renderMailingContent();
         $htmlView = $this->renderer->render(
             $this->getMailing()->getTemplate()->getTemplate(),
-            array_merge_recursive(array('content' => $content), $this->templateVars)
+            array_merge_recursive(['content' => $content], $this->templateVars)
         );
         $textView = $this->renderer->render(
             'plain',
-            array_merge_recursive(array('content' => $content), $this->templateVars)
+            array_merge_recursive(['content' => $content], $this->templateVars)
         );
         if (!is_null($textView)) {
             $email->setTextContent(strip_tags($textView));
@@ -372,10 +373,10 @@ class EmailService
         $message = $this->setRecipients($email, $message);
         //Subject. Include the CompanyName in the [[site]] tags
         $message->setSubject($this->getMailing()->getMailSubject());
-        $htmlContent       = new MimePart($email->getHtmlContent());
+        $htmlContent = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
-        $body              = new MimeMessage();
-        $body->setParts(array($htmlContent));
+        $body = new MimeMessage();
+        $body->setParts([$htmlContent]);
         /**
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -423,20 +424,20 @@ class EmailService
          * Replace first the content of the mailing with the required (new) shorttags
          */
         $content = preg_replace(
-            array(
+            [
                 '~\[parent::getContact\(\)::firstname\]~',
                 '~\[parent::getContact\(\)::parseLastname\(\)\]~',
                 '~\[parent::getContact\(\)::parseFullname\(\)\]~',
                 '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
                 '~\[parent::getContact\(\)::country\]~'
-            ),
-            array(
+            ],
+            [
                 "[firstname]",
                 "[lastname]",
                 "[fullname]",
                 "[organisation]",
                 "[country]"
-            ),
+            ],
             $this->getMailing()->getMailHtml()
         );
         /**

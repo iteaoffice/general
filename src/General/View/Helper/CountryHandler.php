@@ -54,8 +54,29 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function __invoke(Content $content)
     {
         $this->extractContentParam($content);
+
+        if (in_array(
+            $content->getHandler()->getHandler(),
+            [
+                'country',
+                'country_map',
+                'country_funder',
+                'country_project',
+                'country_metadata',
+                'country_article'
+            ]
+        )
+        ) {
+            if (is_null($this->getCountry())) {
+                $this->getServiceLocator()->get("response")->setStatusCode(404);
+
+                return sprintf("The selected country cannot be found");
+            }
+        }
+
         switch ($content->getHandler()->getHandler()) {
             case 'country':
+
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
                 $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
                 $countryLink = $this->serviceLocator->get('countryLink');
@@ -77,7 +98,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                  */
                 $countryMap = $this->serviceLocator->get('countryMap');
 
-                return $countryMap(array($this->getCountry()), $this->getCountry());
+                return $countryMap([$this->getCountry()], $this->getCountry());
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
             case 'country_metadata':
@@ -235,9 +256,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         return $this->getRenderer()->render(
             'general/partial/entity/country',
-            array(
+            [
                 'country' => $this->getCountry(),
-            )
+            ]
         );
     }
 
@@ -264,9 +285,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'program/partial/list/funder',
-            array(
+            [
                 'funder' => $funder,
-            )
+            ]
         );
     }
 
@@ -285,16 +306,16 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMetadata(Country $country)
     {
-        $projects      = $this->getProjectService()->findProjectByCountry($this->getCountry());
+        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
         $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
 
         return $this->getRenderer()->render(
             'general/partial/entity/country-metadata',
-            array(
+            [
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult()
-            )
+            ]
         );
     }
 
@@ -325,7 +346,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'general/partial/list/country',
-            array('countries' => $countries)
+            ['countries' => $countries]
         );
     }
 
@@ -340,7 +361,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'general/partial/list/country-itac',
-            array('countries' => $countries)
+            ['countries' => $countries]
         );
     }
 
@@ -370,10 +391,10 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'general/partial/list/organisation',
-            array(
+            [
                 'country'   => $this->getCountry(),
                 'paginator' => $paginator,
-            )
+            ]
         );
     }
 
@@ -388,10 +409,10 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'general/partial/list/project',
-            array(
+            [
                 'country'  => $country,
                 'projects' => $projects
-            )
+            ]
         );
     }
 
@@ -410,11 +431,11 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
         return $this->getRenderer()->render(
             'general/partial/list/article',
-            array(
+            [
                 'country'  => $country,
                 'articles' => $articles,
                 'limit'    => $this->getLimit(),
-            )
+            ]
         );
     }
 

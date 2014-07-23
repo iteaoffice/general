@@ -23,45 +23,40 @@ use General\Entity\ContentType;
 class ContentTypeIcon extends HelperAbstract
 {
     /**
-     * @param ContentType $contentType
-     * @param int         $width
-     *
+     * @param  ContentType $contentType
      * @return string
      */
-    public function __invoke(ContentType $contentType, $width = 20)
+    public function __invoke(ContentType $contentType)
     {
-        $image = $contentType->getImage();
-        if (is_null($image)) {
-            return '';
+        switch (trim($contentType->getContentType())) {
+            case 'application/pdf':
+                $class = "fa-file-pdf-o";
+                break;
+            case 'application/zip':
+                $class = "fa-file-archive-o";
+                break;
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                $class = "fa-file-excel-o";
+                break;
+            case 'application/mspowerpoint':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                $class = 'fa-file-powerpoint-o';
+                break;
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                $class = "fa-file-word-o";
+                break;
+            case 'application/octet-stream':
+            case 'text/xml':
+                $class = "fa-file-o";
+                break;
+            case 'video/mp4':
+                $class = "fa-file-video-o";
+                break;
+            default:
+                return sprintf('%s not found', $contentType->getContentType());
         }
-        /**
-         * Check if the file is cached and if so, pull it from the assets-folder
-         */
-        $router = 'content-type/icon';
-        if (file_exists($contentType->getCacheFileName())) {
-            /**
-             * The file exists, but is it not updated?
-             */
-            $router = 'assets/content-type-icon';
-        } else {
-            file_put_contents(
-                $contentType->getCacheFileName(),
-                (is_resource($contentType->getImage()) ?
-                    stream_get_contents($contentType->getImage()) : $contentType->getImage())
-            );
-        }
-        $imageUrl = '<img src="%s" id="%s" width="%s">';
-        $params = [
-            'hash' => $contentType->getHash(),
-            'id'   => $contentType->getId()
-        ];
-        $image = sprintf(
-            $imageUrl,
-            $this->getUrl($router, $params),
-            'content_type_icon_' . $contentType->getExtension(),
-            $width
-        );
 
-        return $image;
+        return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
     }
 }

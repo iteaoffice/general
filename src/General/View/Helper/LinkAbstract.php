@@ -125,10 +125,10 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
             case 'icon':
                 switch ($this->getAction()) {
                     case 'edit':
-                        $this->addLinkContent('<span class="glyphicon glyphicon-edit"></span>');
+                        $this->addLinkContent('<i class="fa fa-pencil-square-o"></i>');
                         break;
                     default:
-                        $this->addLinkContent('<span class="glyphicon glyphicon-info-sign"></span>');
+                        $this->addLinkContent('<i class="fa fa-link"></i>');
                         break;
                 }
                 break;

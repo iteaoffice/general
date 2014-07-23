@@ -95,7 +95,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 
 EOT;
         $this->serviceLocator->get('headscript')->appendFile(
-            'assets/itea/js/jvectormap.js',
+            'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js',
             'text/javascript'
         );
         $this->serviceLocator->get('headscript')->appendScript(implode('', $html));
