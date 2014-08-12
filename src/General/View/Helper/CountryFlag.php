@@ -20,7 +20,7 @@ use General\Entity\Country;
  * @package     View
  * @subpackage  Helper
  */
-class CountryFlag extends HelperAbstract
+class CountryFlag extends ImageAbstract
 {
     /**
      * @param Country $country
@@ -34,28 +34,18 @@ class CountryFlag extends HelperAbstract
         if (is_null($flag)) {
             return '';
         }
-        /**
-         * Check if the file is cached and if so, pull it from the assets-folder
-         */
-        $router = 'assets/country-flag';
-        if (!file_exists($flag->getCacheFileName())) {
-            file_put_contents(
-                $flag->getCacheFileName(),
-                is_resource($flag->getObject()) ? stream_get_contents($flag->getObject()) : $flag->getObject()
-            );
-        }
-        $imageUrl = '<img src="%s" id="%s" width="%s">';
-        $params = [
-            'ext'  => 'png',
-            'iso3' => strtolower($country->getIso3()),
-        ];
-        $image = sprintf(
-            $imageUrl,
-            $this->getUrl($router, $params),
-            'country_flag_' . $country->getIso3(),
-            $width
-        );
 
-        return $image;
+        /**
+         * Reset the classes
+         */
+        $this->setClasses([]);
+
+        $this->setRouter('assets/country-flag');
+        $this->addRouterParam('iso3', strtolower($country->getIso3()));
+        $this->addRouterParam('ext', 'png');
+        $this->setImageId('country_flag_' . $country->getIso3());
+        $this->setWidth($width);
+
+        return $this->createImageUrl();
     }
 }

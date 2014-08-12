@@ -21,17 +21,17 @@ return [
         "defaults"            => [
             "html_layout_name" => "signature_twig",
             "text_layout_name" => "template_text",
-            "from_email"       => "noreply@itea3.org",
-            "from_name"        => "ITEA Office",
+            "from_email"       => "noreply@debranova.org",
+            "from_name"        => "DebraNova",
             "reply_to"         => "info@debranova.org",
             "reply_to_name"    => "Reply to"
         ],
         "emails"              => [
-            "support" => "info@itea3.org",
+            "support" => "info@debranova.org",
             "admin"   => "info@japaveh.nl"
         ],
         'template_vars'       => [
-            "company" => "ITEA Office",
+            "company" => "Development ITEA office",
             "slogan"  => "",
             "baseUrl" => "http://itea3.org",
         ],
@@ -39,8 +39,8 @@ return [
             'active'   => true,
             'host'     => 'in.mailjet.com',
             'port'     => '', // it could be empty
-            'username' => '8fcfdb11aaeebed89828fdee92ca4d3d',
-            'password' => '85938a789be340706a1198ec06c296a2',
+            'username' => '0e4802a784bac88d526911483ad2a635', //development
+            'password' => '9dd66f1d58917f98fdec75b9d69acce8',
             'ssl'      => '' // it could be empty
         ],
         "template_path_stack" => [

@@ -76,6 +76,7 @@ class IndexController extends AbstractActionController
             //Save a copy of the file in the caching-folder
             file_put_contents($country->getFlag()->getCacheFileName(), $file);
         }
+
         $response->getHeaders()
                  ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
                  ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")

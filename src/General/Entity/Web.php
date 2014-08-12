@@ -9,6 +9,7 @@
  */
 namespace General\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 use Zend\InputFilter\InputFilter;
@@ -57,6 +58,22 @@ class Web extends EntityAbstract
      * @var \General\Entity\WebInfo[]
      */
     private $webInfo;
+    /**
+     * @ORM\OneToMany(targetEntity="Admin\Entity\Session", cascade={"persist"}, mappedBy="web")
+     * @Annotation\Exclude()
+     * @var \General\Entity\WebInfo[]
+     */
+    private $session;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->webInfo = new ArrayCollection();
+        $this->session = new ArrayCollection();
+    }
+
 
     /**
      * Magic Getter
@@ -199,4 +216,22 @@ class Web extends EntityAbstract
     {
         return $this->webInfo;
     }
+
+    /**
+     * @return \Admin\Entity\Session[]
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param \Admin\Entity\Session[] $session
+     */
+    public function setSession($session)
+    {
+        $this->session = $session;
+    }
+
+
 }
