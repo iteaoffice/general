@@ -6,6 +6,7 @@ return array(
   'General\View\Helper\ChallengeLink'            => __DIR__ . '/src/General/View/Helper/ChallengeLink.php',
   'General\View\Helper\GeneralServiceProxy'      => __DIR__ . '/src/General/View/Helper/GeneralServiceProxy.php',
   'getServiceLocator'                            => __DIR__ . '/src/General/Controller/ControllerInitializer.php',
+  'General\View\Helper\ImageAbstract'            => __DIR__ . '/src/General/View/Helper/ImageAbstract.php',
   'General\View\Helper\ViewHelperInitializer'    => __DIR__ . '/src/General/View/Helper/ViewHelperInitializer.php',
   'GeneralService'                               => __DIR__ . '/src/General/Controller/ControllerInitializer.php',
   'General\View\Helper\CountryFlag'              => __DIR__ . '/src/General/View/Helper/CountryFlag.php',

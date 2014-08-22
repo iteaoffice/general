@@ -35,7 +35,7 @@ class ContentTypeIcon extends HelperAbstract
             case 'application/zip':
                 $class = "fa-file-archive-o";
                 break;
-            case 'application/msword':
+            case 'application/vnd.ms-excel':
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                 $class = "fa-file-excel-o";
                 break;
@@ -44,6 +44,7 @@ class ContentTypeIcon extends HelperAbstract
                 $class = 'fa-file-powerpoint-o';
                 break;
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            case 'application/msword':
                 $class = "fa-file-word-o";
                 break;
             case 'application/octet-stream':

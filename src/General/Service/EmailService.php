@@ -88,10 +88,8 @@ class EmailService
     }
 
     /**
-     * Send the email
-     *
-     * @param $email
-     *
+     * @param      $email
+     * @param bool $overrideDefaults Boolean value on include always the
      */
     public function send($email)
     {
@@ -132,7 +130,8 @@ class EmailService
     }
 
     /**
-     * Prepare email to send.
+     * @param Email $email
+     * @return Message
      */
     private function prepare(Email $email)
     {
@@ -149,9 +148,15 @@ class EmailService
         if (count($email->getTo()) === 0) {
             $email->addTo($this->config["emails"]["admin"]);
         }
-        $contactService = clone $this->sm->get('contact_contact_service');
-        foreach ($email->getTo() as $emailAddress => $name) {
-            $this->contactService = $contactService->setContact($contactService->findContactByEmail($emailAddress));
+
+        /**
+         * When the contactService is still empty, we will fill it with the TO to have the receiver filled in as person
+         */
+        if (is_null($this->getContactService()) || $this->getContactService()->isEmpty()) {
+            $contactService = clone $this->sm->get('contact_contact_service');
+            foreach ($email->getTo() as $emailAddress => $name) {
+                $this->contactService = $contactService->setContact($contactService->findContactByEmail($emailAddress));
+            }
         }
         $this->updateTemplateVarsWithContactService();
         /**
@@ -228,6 +233,7 @@ class EmailService
                 $this->getContactService()->getContact()->getLastName()
             );
             $this->templateVars['fullname'] = $this->getContactService()->parseFullName();
+            $this->templateVars['contact'] = $this->getContactService()->parseFullName();
             $this->templateVars['country'] = $this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
@@ -246,6 +252,7 @@ class EmailService
      */
     public function setContactService($contactService)
     {
+        var_dump($contactService->parseFullName());
         $this->contactService = $contactService;
     }
 
@@ -324,7 +331,8 @@ class EmailService
     }
 
     /**
-     * Prepare email to send.
+     * @param Email $email
+     * @return Message
      */
     private function prepareMailing(Email $email)
     {
