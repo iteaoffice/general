@@ -47,7 +47,7 @@ class IndexController extends AbstractActionController
         $file = stream_get_contents($contentType->getImage());
         $response->getHeaders()
             ->addHeaderLine('Content-Type: image/gif')
-            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
         $response->setContent($file);
 
         return $response;
@@ -82,7 +82,7 @@ class IndexController extends AbstractActionController
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public")
             ->addHeaderLine('Content-Type: image/png')
-            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string) strlen($file));
         $response->setContent($file);
 
         return $response;

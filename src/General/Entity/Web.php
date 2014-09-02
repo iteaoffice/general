@@ -74,7 +74,6 @@ class Web extends EntityAbstract
         $this->session = new ArrayCollection();
     }
 
-
     /**
      * Magic Getter
      *
@@ -232,6 +231,4 @@ class Web extends EntityAbstract
     {
         $this->session = $session;
     }
-
-
 }

@@ -130,7 +130,7 @@ class EmailService
     }
 
     /**
-     * @param Email $email
+     * @param  Email   $email
      * @return Message
      */
     private function prepare(Email $email)
@@ -331,7 +331,7 @@ class EmailService
     }
 
     /**
-     * @param Email $email
+     * @param  Email   $email
      * @return Message
      */
     private function prepareMailing(Email $email)
