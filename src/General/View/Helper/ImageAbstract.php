@@ -99,9 +99,7 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
             return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
         }
 
-
     }
-
 
     /**
      * Get the service locator.
@@ -240,6 +238,5 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
     {
         $this->classes = $classes;
     }
-
 
 }

@@ -37,11 +37,9 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
      *
      * @return string
      */
-    public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true)
+    public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true, $color='#005C00', $colorFaded='#009900', $showTitle = false)
     {
         $allCountries = $this->getGeneralService()->findAll('country');
-        $color      = '#005C00';
-        $colorFaded = '#009900';
         $html       = [];
         $html[]     = " var gdpData = {\n";
         foreach ($countries as $country) {
@@ -100,7 +98,13 @@ EOT;
         );
         $this->serviceLocator->get('headscript')->appendScript(implode('', $html));
 
-        return '<h3>Map</h3><div id="world-map-gdp" style="height: 340px"></div>';
+        $map = '';
+        if ($showTitle) {
+            $map .= '<h3>Map</h3>';
+        }
+        $map .=  '<div id="world-map-gdp" style="height: 340px"></div>';
+
+        return $map;
     }
 
     /**

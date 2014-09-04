@@ -103,6 +103,8 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 return $this->parseCountryFunderList($this->getCountry());
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
+            case 'country_info':
+                return $this->parseCountryInfo($this->getCountry());
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
@@ -304,10 +306,42 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      *
      * @return string
      */
+    public function parseCountryInfo(Country $country)
+    {
+        $whichProjects =  $this->getProjectService()->getOptions()->getProjectHasVersions(
+        ) ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+
+        $onlyActivePartners =  $this->getProjectService()->getOptions()->getProjectHasVersions(
+        ) ? true : false;
+
+        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
+        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
+
+        return $this->getRenderer()->render(
+            'general/partial/entity/country-info',
+            [
+                'country'       => $country,
+                'projects'      => $projects,
+                'organisations' => $organisations->getResult()
+            ]
+        );
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return string
+     */
     public function parseCountryMetadata(Country $country)
     {
-        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
-        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
+        $whichProjects =  $this->getProjectService()->getOptions()->getProjectHasVersions(
+            ) ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+
+        $onlyActivePartners =  $this->getProjectService()->getOptions()->getProjectHasVersions(
+        ) ? true : false;
+
+        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
+        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
         return $this->getRenderer()->render(
             'general/partial/entity/country-metadata',
@@ -384,7 +418,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
-
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
@@ -405,10 +438,17 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryProjectList(Country $country)
     {
-        $projects = $this->getProjectService()->findProjectByCountry($country);
+        $whichProjects =
+            $this->getProjectService()->getOptions()->getProjectHasVersions(
+            ) ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+
+        $projects = $this->getProjectService()->findProjectByCountry($country, $whichProjects);
+
+        $twig = $this->getProjectService()->getOptions()->getProjectHasVersions(
+        ) ? 'general/partial/list/project' : 'general/partial/list/project_eu' ;
 
         return $this->getRenderer()->render(
-            'general/partial/list/project',
+            $twig,
             [
                 'country'  => $country,
                 'projects' => $projects
@@ -424,7 +464,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryArticleList(Country $country)
     {
         $articles = $this->getArticleService()->findArticlesByCountry($country, $this->getLimit());
-
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
