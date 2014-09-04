@@ -12,4 +12,3 @@
  * Config setting for the country map, to allow for a variable color scheme
  */
 return [];
-
