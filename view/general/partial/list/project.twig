@@ -1,11 +1,9 @@
 <h3>{{ translate("txt-country-%s-project-list")|format(country) }}</h3>
-
 <div class="row">
     {% for projectService in projects %}
     <div class="col-md-3">
 
         <div class="thumbnail information-box">
-
             <div class="information-box-header clearfix">
                 {{ projectService.project.number }}
                 <h3 class="information-box-title">
@@ -18,7 +16,6 @@
                     {{ projectLogo(projectService, 'img-responsive') }}
                 </div>
             </div>
-
 
             <dl>
                 <dt>{{ translate("txt-program-call") }}</dt>
