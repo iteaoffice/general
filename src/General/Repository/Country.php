@@ -88,6 +88,8 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('a.project = ?1');
         $queryBuilder->setParameter(1, $project);
 
+        $queryBuilder->addOrderBy('c.country', 'ASC');
+
         return $queryBuilder->getQuery()->getResult();
     }
 
