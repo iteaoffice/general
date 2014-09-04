@@ -2,10 +2,10 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Application
- * @package     Controller
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category  Application
+ * @package   Controller
+ * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Controller;
 
@@ -15,8 +15,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 /**
  * The index of the system
  *
- * @category    General
- * @package     Controller
+ * @category General
+ * @package  Controller
  */
 class IndexController extends AbstractActionController
 {

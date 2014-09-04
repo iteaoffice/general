@@ -3,11 +3,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    General
- * @package     View
- * @subpackage  Helper
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category   General
+ * @package    View
+ * @subpackage Helper
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -16,9 +16,9 @@ use General\Entity\Country;
 /**
  * Create a link to an country
  *
- * @category    General
- * @package     View
- * @subpackage  Helper
+ * @category   General
+ * @package    View
+ * @subpackage Helper
  */
 class CountryLink extends LinkAbstract
 {
@@ -66,26 +66,26 @@ class CountryLink extends LinkAbstract
     public function parseAction()
     {
         switch ($this->getAction()) {
-            case 'view':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name'));
-                $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
-                break;
-            case 'view-project':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-project');
-                $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
-                break;
-            case 'view-organisation':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-organisation');
-                $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
-                break;
-            case 'view-article':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-article');
-                $this->setText(sprintf($this->translate("txt-view-article-for-country-%s"), $this->getCountry()));
-                break;
-            default:
-                throw new \InvalidArgumentException(
-                    sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__)
-                );
+        case 'view':
+            $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name'));
+            $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
+            break;
+        case 'view-project':
+            $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-project');
+            $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
+            break;
+        case 'view-organisation':
+            $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-organisation');
+            $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
+            break;
+        case 'view-article':
+            $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-article');
+            $this->setText(sprintf($this->translate("txt-view-article-for-country-%s"), $this->getCountry()));
+            break;
+        default:
+            throw new \InvalidArgumentException(
+                sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__)
+            );
         }
     }
 

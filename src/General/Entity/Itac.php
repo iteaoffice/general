@@ -2,10 +2,10 @@
 /**
  * Debranova copyright message placeholder
  *
- * @category    General
- * @package     Entity
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category  General
+ * @package   Entity
+ * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Entity;
 
@@ -23,8 +23,8 @@ use Zend\InputFilter\InputFilterInterface;
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("country_itac")
  *
- * @category    General
- * @package     Entity
+ * @category General
+ * @package  Entity
  */
 class Itac extends EntityAbstract
 {

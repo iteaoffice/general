@@ -2,12 +2,12 @@
 /**
  * Japaveh Webdesign copyright message placeholder
  *
- * @category    General
- * @package     Controller
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   2004-2014 Japaveh Webdesign
- * @license     http://solodb.net/license.txt proprietary
- * @link        http://solodb.net
+ * @category  General
+ * @package   Controller
+ * @author    Johan van der Heide <info@japaveh.nl>
+ * @copyright 2004-2014 Japaveh Webdesign
+ * @license   http://solodb.net/license.txt proprietary
+ * @link      http://solodb.net
  */
 namespace General\View\Helper;
 
@@ -21,12 +21,12 @@ use Zend\View\HelperPluginManager;
 /**
  * Japaveh Webdesign copyright message placeholder
  *
- * @category    General
- * @package     Controller
- * @author      Johan van der Heide <info@japaveh.nl>
- * @copyright   2004-2014 Japaveh Webdesign
- * @license     http://solodb.net/license.txt proprietary
- * @link        http://solodb.net
+ * @category  General
+ * @package   Controller
+ * @author    Johan van der Heide <info@japaveh.nl>
+ * @copyright 2004-2014 Japaveh Webdesign
+ * @license   http://solodb.net/license.txt proprietary
+ * @link      http://solodb.net
  */
 class ViewHelperInitializer implements InitializerInterface
 {

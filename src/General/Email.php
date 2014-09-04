@@ -1,6 +1,5 @@
 <?php
 /**
- * Email class
  *
  */
 namespace General;
@@ -10,6 +9,7 @@ use General\Service\GeneralService;
 
 /**
  * Class Email
+ *
  * @package General
  *
  * @method string getHtmlLayoutName()
@@ -99,9 +99,6 @@ class Email
     protected $generalService;
 
     /**
-     * __construct
-     *
-     * Set default options
      *
      */
     public function __construct($data = [])
@@ -128,7 +125,7 @@ class Email
     /**
      * Add TO recipient
      *
-     * @param      $var
+     * @param $var
      * @param null $user
      */
     public function addTo($var, $user = null)
@@ -143,7 +140,7 @@ class Email
     /**
      * Add CC recipient
      *
-     * @param      $var
+     * @param $var
      * @param null $user
      */
     public function addCc($var, $user = null)
@@ -158,7 +155,7 @@ class Email
     /**
      * Add BCC recipient
      *
-     * @param      $var
+     * @param $var
      * @param null $user
      */
     public function addBcc($var, $user = null)
@@ -189,21 +186,21 @@ class Email
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-            case 'get':
-                $key   = $this->underscore(substr($method, 3));
-                $index = isset($args[0]) ? $args[0] : null;
-                //Try to find a property
-                if (!$index && isset($this->$key)) {
-                    return $this->$key;
-                }
+        case 'get':
+            $key   = $this->underscore(substr($method, 3));
+            $index = isset($args[0]) ? $args[0] : null;
+            //Try to find a property
+            if (!$index && isset($this->$key)) {
+                return $this->$key;
+            }
 
-                return "";
-            case 'set':
-                $key        = $this->underscore(substr($method, 3));
-                $result     = isset($args[0]) ? $args[0] : null;
-                $this->$key = $result;
+            return "";
+        case 'set':
+            $key        = $this->underscore(substr($method, 3));
+            $result     = isset($args[0]) ? $args[0] : null;
+            $this->$key = $result;
 
-                return $result;
+            return $result;
         }
         throw new \Exception("Invalid method " . $method);
     }
@@ -226,10 +223,6 @@ class Email
     }
 
     /**
-     * Export all class properties to array
-     * E.g.: ["full_name"] => "Ignacio Pascual"
-     *
-     * Check all variables if exists the method getVariable() then is added to the Array.
      *
      */
     public function toArray()

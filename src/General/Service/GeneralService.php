@@ -2,10 +2,10 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Content
- * @package     Service
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category  Content
+ * @package   Service
+ * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\Service;
 
@@ -114,7 +114,7 @@ class GeneralService extends ServiceAbstract
     public function findCountriesByMeeting(Meeting $meeting)
     {
         return $this->getEntityManager()->getRepository($this->getFullEntityName('country'))
-                    ->findCountriesByMeeting($meeting);
+            ->findCountriesByMeeting($meeting);
     }
 
     /**

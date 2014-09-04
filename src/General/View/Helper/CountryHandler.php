@@ -2,11 +2,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Country
- * @package     View
- * @subpackage  Helper
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category   Country
+ * @package    View
+ * @subpackage Helper
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -75,60 +75,59 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         }
 
         switch ($content->getHandler()->getHandler()) {
-            case 'country':
+        case 'country':
+            $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
+            $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
+            $countryLink = $this->serviceLocator->get('countryLink');
+            $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
+            $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
+            $this->serviceLocator->get('headmeta')->setProperty(
+                'og:url',
+                $countryLink->__invoke(
+                    $this->getCountry(),
+                    'view',
+                    'social'
+                )
+            );
 
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
-                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
-                $countryLink = $this->serviceLocator->get('countryLink');
-                $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
-                $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
-                $this->serviceLocator->get('headmeta')->setProperty(
-                    'og:url',
-                    $countryLink->__invoke(
-                        $this->getCountry(),
-                        'view',
-                        'social'
-                    )
-                );
-
-                return $this->parseCountry();
-            case 'country_map':
-                /**
+            return $this->parseCountry();
+        case 'country_map':
+            /**
                  * @var $countryMap CountryMap
                  */
-                $countryMap = $this->serviceLocator->get('countryMap');
+            $countryMap = $this->serviceLocator->get('countryMap');
 
-                return $countryMap([$this->getCountry()], $this->getCountry());
-            case 'country_funder':
-                return $this->parseCountryFunderList($this->getCountry());
-            case 'country_metadata':
-                return $this->parseCountryMetadata($this->getCountry());
-            case 'country_info':
-                return $this->parseCountryInfo($this->getCountry());
-            case 'country_list':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
+            return $countryMap([$this->getCountry()], $this->getCountry());
+        case 'country_funder':
+            return $this->parseCountryFunderList($this->getCountry());
+        case 'country_metadata':
+            return $this->parseCountryMetadata($this->getCountry());
+        case 'country_info':
+            return $this->parseCountryInfo($this->getCountry());
+        case 'country_list':
+            $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
+            $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryList($page);
-            case 'country_list_itac':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
+            return $this->parseCountryList($page);
+        case 'country_list_itac':
+            $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
+            $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryListItac($page);
-            case 'country_organisation':
-                $page = $this->getRouteMatch()->getParam('page');
+            return $this->parseCountryListItac($page);
+        case 'country_organisation':
+            $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseOrganisationList($page);
-            case 'country_project':
-                return $this->parseCountryProjectList($this->getCountry());
-            case 'country_article':
-                return $this->parseCountryArticleList($this->getCountry());
-            default:
-                return sprintf(
-                    "No handler available for <code>%s</code> in class <code>%s</code>",
-                    $content->getHandler()->getHandler(),
-                    __CLASS__
-                );
+            return $this->parseOrganisationList($page);
+        case 'country_project':
+            return $this->parseCountryProjectList($this->getCountry());
+        case 'country_article':
+            return $this->parseCountryArticleList($this->getCountry());
+        default:
+            return sprintf(
+                "No handler available for <code>%s</code> in class <code>%s</code>",
+                $content->getHandler()->getHandler(),
+                __CLASS__
+            );
         }
     }
 
@@ -143,22 +142,22 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         }
         foreach ($content->getContentParam() as $param) {
             switch ($param->getParameter()->getParam()) {
-                case 'docRef':
-                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
-                        $this->setCountryDocRef($docRef);
-                    }
-                    break;
-                case 'limit':
-                    if ('0' === $param->getParameterId()) {
-                        $limit = null;
-                    } else {
-                        $limit = $param->getParameterId();
-                    }
-                    $this->setLimit($limit);
-                    break;
-                default:
-                    $this->setCountryId($param->getParameterId());
-                    break;
+            case 'docRef':
+                if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    $this->setCountryDocRef($docRef);
+                }
+                break;
+            case 'limit':
+                if ('0' === $param->getParameterId()) {
+                    $limit = null;
+                } else {
+                    $limit = $param->getParameterId();
+                }
+                $this->setLimit($limit);
+                break;
+            default:
+                $this->setCountryId($param->getParameterId());
+                break;
             }
         }
     }

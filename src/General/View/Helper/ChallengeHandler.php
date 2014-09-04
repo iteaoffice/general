@@ -2,11 +2,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Challenge
- * @package     View
- * @subpackage  Helper
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category   Challenge
+ * @package    View
+ * @subpackage Helper
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -45,23 +45,23 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
     {
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
-            case 'challenge':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-challenge"));
-                $this->serviceLocator->get('headtitle')->append($this->getChallenge()->getChallenge());
+        case 'challenge':
+            $this->serviceLocator->get('headtitle')->append($this->translate("txt-challenge"));
+            $this->serviceLocator->get('headtitle')->append($this->getChallenge()->getChallenge());
 
-                return $this->parseChallenge();
-            case 'challenge_list':
-                $page = $this->getRouteMatch()->getParam('page');
+            return $this->parseChallenge();
+        case 'challenge_list':
+            $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseChallengeList($page);
-            case 'challenge_project':
-                return $this->parseChallengeProjectList($this->getChallenge());
-            default:
-                return sprintf(
-                    "No handler available for <code>%s</code> in class <code>%s</code>",
-                    $content->getHandler()->getHandler(),
-                    __CLASS__
-                );
+            return $this->parseChallengeList($page);
+        case 'challenge_project':
+            return $this->parseChallengeProjectList($this->getChallenge());
+        default:
+            return sprintf(
+                "No handler available for <code>%s</code> in class <code>%s</code>",
+                $content->getHandler()->getHandler(),
+                __CLASS__
+            );
         }
     }
 
@@ -78,14 +78,14 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
              * When the parameterId is 0 (so we want to get the article from the URL
              */
             switch ($param->getParameter()->getParam()) {
-                case 'docRef':
-                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
-                        $this->setChallengeDocRef($docRef);
-                    }
-                    break;
-                default:
-                    $this->setChallengeId($param->getParameterId());
-                    break;
+            case 'docRef':
+                if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    $this->setChallengeDocRef($docRef);
+                }
+                break;
+            default:
+                $this->setChallengeId($param->getParameterId());
+                break;
             }
         }
     }

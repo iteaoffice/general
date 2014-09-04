@@ -3,11 +3,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Organisation
- * @package     View
- * @subpackage  Helper
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category   Organisation
+ * @package    View
+ * @subpackage Helper
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -129,7 +129,7 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
      * Add a parameter to the list of parameters for the router
      *
      * @param string $key
-     * @param        $value
+     * @param $value
      * @param bool   $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)

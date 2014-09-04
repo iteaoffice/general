@@ -2,11 +2,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    Twitter
- * @package     View
- * @subpackage  Helper
- * @author      Andre Hebben <andre.hebben@artemis-ia.eu>
- * @copyright   Copyright (c) 2007-2014 ARTEMIS-IA (http://artemis-ia.eu)
+ * @category   Twitter
+ * @package    View
+ * @subpackage Helper
+ * @author     Andre Hebben <andre.hebben@artemis-ia.eu>
+ * @copyright  Copyright (c) 2007-2014 ARTEMIS-IA (http://artemis-ia.eu)
  */
 namespace General\View\Helper;
 
@@ -48,11 +48,11 @@ class TwitterHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
-            case 'twitter':
-                //generate handler through this
-                //append the java script
-                //generate through partial
-                break;
+        case 'twitter':
+            //generate handler through this
+            //append the java script
+            //generate through partial
+            break;
         }
     }
 

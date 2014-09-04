@@ -1,8 +1,5 @@
 <?php
 /**
- * A template based email system
- *
- * Supports the sending of multipart txt/html emails based on templates
  *
  */
 namespace General\Service;
@@ -61,9 +58,6 @@ class EmailService
     protected $templateVars = [];
 
     /**
-     * __construct
-     *
-     * Set default options
      *
      */
     public function __construct($config, $sm)
@@ -75,7 +69,6 @@ class EmailService
     }
 
     /**
-     *
      * Create a new email
      *
      * @param array $data

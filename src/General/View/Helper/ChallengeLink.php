@@ -3,11 +3,11 @@
 /**
  * ITEA Office copyright message placeholder
  *
- * @category    General
- * @package     View
- * @subpackage  Helper
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @category   General
+ * @package    View
+ * @subpackage Helper
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
 namespace General\View\Helper;
 
@@ -16,9 +16,9 @@ use General\Entity\Challenge;
 /**
  * Create a link to an challenge
  *
- * @category    General
- * @package     View
- * @subpackage  Helper
+ * @category   General
+ * @package    View
+ * @subpackage Helper
  */
 class ChallengeLink extends LinkAbstract
 {
@@ -65,20 +65,20 @@ class ChallengeLink extends LinkAbstract
     public function parseAction()
     {
         switch ($this->getAction()) {
-            case 'new':
-                $this->setRouter('zfcadmin/challenge-manager/new');
-                $this->setText($this->translate("txt-new-challenge"));
-                break;
-            case 'edit':
-                $this->setRouter('zfcadmin/challenge-manager/edit');
-                $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
-                break;
-            case 'view':
-                $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
-                $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
-                break;
-            default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+        case 'new':
+            $this->setRouter('zfcadmin/challenge-manager/new');
+            $this->setText($this->translate("txt-new-challenge"));
+            break;
+        case 'edit':
+            $this->setRouter('zfcadmin/challenge-manager/edit');
+            $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
+            break;
+        case 'view':
+            $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
+            $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
+            break;
+        default:
+            throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 
