@@ -39,8 +39,8 @@ return [
             'active'   => true,
             'host'     => 'in.mailjet.com',
             'port'     => '', // it could be empty
-            'username' => '0e4802a784bac88d526911483ad2a635', //development
-            'password' => '9dd66f1d58917f98fdec75b9d69acce8',
+            'username' => '8fcfdb11aaeebed89828fdee92ca4d3d', //development
+            'password' => '20221049ffd9ca689f592281b75bb24b',
             'ssl'      => '' // it could be empty
         ],
         "template_path_stack" => [
