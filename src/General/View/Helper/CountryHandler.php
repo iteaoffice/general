@@ -335,7 +335,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryMetadata(Country $country)
     {
         $whichProjects =  $this->getProjectService()->getOptions()->getProjectHasVersions(
-            ) ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+        ) ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
 
         $onlyActivePartners =  $this->getProjectService()->getOptions()->getProjectHasVersions(
         ) ? true : false;

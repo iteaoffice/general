@@ -37,7 +37,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
      *
      * @return string
      */
-    public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true, $color='#005C00', $colorFaded='#009900', $showTitle = false)
+    public function __invoke(array $countries, Country $selectedCountry = null, $clickable = true, $color = '#005C00', $colorFaded = '#009900', $showTitle = false)
     {
         $allCountries = $this->getGeneralService()->findAll('country');
         $html       = [];
