@@ -186,21 +186,21 @@ class Email
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-        case 'get':
-            $key   = $this->underscore(substr($method, 3));
-            $index = isset($args[0]) ? $args[0] : null;
+            case 'get':
+                $key   = $this->underscore(substr($method, 3));
+                $index = isset($args[0]) ? $args[0] : null;
             //Try to find a property
-            if (!$index && isset($this->$key)) {
-                return $this->$key;
-            }
+                if (!$index && isset($this->$key)) {
+                    return $this->$key;
+                }
 
-            return "";
-        case 'set':
-            $key        = $this->underscore(substr($method, 3));
-            $result     = isset($args[0]) ? $args[0] : null;
-            $this->$key = $result;
+                return "";
+            case 'set':
+                $key        = $this->underscore(substr($method, 3));
+                $result     = isset($args[0]) ? $args[0] : null;
+                $this->$key = $result;
 
-            return $result;
+                return $result;
         }
         throw new \Exception("Invalid method " . $method);
     }

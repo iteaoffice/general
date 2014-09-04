@@ -48,12 +48,11 @@ class TwitterHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
-        case 'twitter':
+            case 'twitter':
             //generate handler through this
             //append the java script
             //generate through partial
-            break;
+                break;
         }
     }
-
 }

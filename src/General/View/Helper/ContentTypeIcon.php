@@ -29,33 +29,33 @@ class ContentTypeIcon extends HelperAbstract
     public function __invoke(ContentType $contentType)
     {
         switch (trim($contentType->getContentType())) {
-        case 'application/pdf':
-            $class = "fa-file-pdf-o";
-            break;
-        case 'application/zip':
-            $class = "fa-file-archive-o";
-            break;
-        case 'application/vnd.ms-excel':
-        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-            $class = "fa-file-excel-o";
-            break;
-        case 'application/mspowerpoint':
-        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-            $class = 'fa-file-powerpoint-o';
-            break;
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-        case 'application/msword':
-            $class = "fa-file-word-o";
-            break;
-        case 'application/octet-stream':
-        case 'text/xml':
-            $class = "fa-file-o";
-            break;
-        case 'video/mp4':
-            $class = "fa-file-video-o";
-            break;
-        default:
-            return sprintf('%s not found', $contentType->getContentType());
+            case 'application/pdf':
+                $class = "fa-file-pdf-o";
+                break;
+            case 'application/zip':
+                $class = "fa-file-archive-o";
+                break;
+            case 'application/vnd.ms-excel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                $class = "fa-file-excel-o";
+                break;
+            case 'application/mspowerpoint':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                $class = 'fa-file-powerpoint-o';
+                break;
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            case 'application/msword':
+                $class = "fa-file-word-o";
+                break;
+            case 'application/octet-stream':
+            case 'text/xml':
+                $class = "fa-file-o";
+                break;
+            case 'video/mp4':
+                $class = "fa-file-video-o";
+                break;
+            default:
+                return sprintf('%s not found', $contentType->getContentType());
         }
 
         return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());

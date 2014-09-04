@@ -122,49 +122,49 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function parseShow()
     {
         switch ($this->getShow()) {
-        case 'icon':
-            switch ($this->getAction()) {
-            case 'edit':
-                $this->addLinkContent('<i class="fa fa-pencil-square-o"></i>');
+            case 'icon':
+                switch ($this->getAction()) {
+                    case 'edit':
+                        $this->addLinkContent('<i class="fa fa-pencil-square-o"></i>');
+                        break;
+                    default:
+                        $this->addLinkContent('<i class="fa fa-link"></i>');
+                        break;
+                }
                 break;
-            default:
-                $this->addLinkContent('<i class="fa fa-link"></i>');
+            case 'button':
+                $this->addClasses("btn btn-primary");
+                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
                 break;
-            }
-            break;
-        case 'button':
-            $this->addClasses("btn btn-primary");
-            $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
-            break;
-        case 'text':
-            $this->addLinkContent($this->getText());
-            break;
-        case 'paginator':
-            if (is_null($this->getAlternativeShow())) {
-                throw new \InvalidArgumentException(
-                    sprintf("this->alternativeShow cannot be null for a paginator link")
-                );
-            }
-            $this->addLinkContent($this->getAlternativeShow());
-            break;
-        case 'social':
-            /**
+            case 'text':
+                $this->addLinkContent($this->getText());
+                break;
+            case 'paginator':
+                if (is_null($this->getAlternativeShow())) {
+                    throw new \InvalidArgumentException(
+                        sprintf("this->alternativeShow cannot be null for a paginator link")
+                    );
+                }
+                $this->addLinkContent($this->getAlternativeShow());
+                break;
+            case 'social':
+                /**
                  * Social is treated in the createLink function, no content needs to be created
                  */
 
-            return null;
-        default:
-            if (!array_key_exists($this->getShow(), $this->showOptions)) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
-                        $this->getShow(),
-                        implode(', ', array_keys($this->showOptions))
-                    )
-                );
-            }
-            $this->addLinkContent($this->showOptions[$this->getShow()]);
-            break;
+                return null;
+            default:
+                if (!array_key_exists($this->getShow(), $this->showOptions)) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
+                            $this->getShow(),
+                            implode(', ', array_keys($this->showOptions))
+                        )
+                    );
+                }
+                $this->addLinkContent($this->showOptions[$this->getShow()]);
+                break;
         }
     }
 

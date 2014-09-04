@@ -112,16 +112,16 @@ class Country extends EntityRepository
         $queryBuilder->where('c.id <> 0');
         $queryBuilder->addGroupBy('c.id');
         switch ($which) {
-        case AffiliationService::WHICH_ALL:
-            break;
-        case AffiliationService::WHICH_ONLY_ACTIVE:
-            $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
-            break;
-        case AffiliationService::WHICH_ONLY_INACTIVE:
-            $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('a.dateEnd'));
-            break;
-        default:
-            throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
+            case AffiliationService::WHICH_ALL:
+                break;
+            case AffiliationService::WHICH_ONLY_ACTIVE:
+                $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
+                break;
+            case AffiliationService::WHICH_ONLY_INACTIVE:
+                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('a.dateEnd'));
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
         }
 
         return $queryBuilder;

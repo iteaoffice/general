@@ -65,20 +65,20 @@ class ChallengeLink extends LinkAbstract
     public function parseAction()
     {
         switch ($this->getAction()) {
-        case 'new':
-            $this->setRouter('zfcadmin/challenge-manager/new');
-            $this->setText($this->translate("txt-new-challenge"));
-            break;
-        case 'edit':
-            $this->setRouter('zfcadmin/challenge-manager/edit');
-            $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
-            break;
-        case 'view':
-            $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
-            $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
-            break;
-        default:
-            throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+            case 'new':
+                $this->setRouter('zfcadmin/challenge-manager/new');
+                $this->setText($this->translate("txt-new-challenge"));
+                break;
+            case 'edit':
+                $this->setRouter('zfcadmin/challenge-manager/edit');
+                $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
+                break;
+            case 'view':
+                $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
+                $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
+                break;
+            default:
+                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 

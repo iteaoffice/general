@@ -231,5 +231,4 @@ class Web extends EntityAbstract
     {
         $this->session = $session;
     }
-
 }

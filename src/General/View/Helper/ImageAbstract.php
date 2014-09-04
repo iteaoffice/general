@@ -238,5 +238,4 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
     {
         $this->classes = $classes;
     }
-
 }
