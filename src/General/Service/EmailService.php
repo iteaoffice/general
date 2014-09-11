@@ -58,7 +58,8 @@ class EmailService
     protected $templateVars = [];
 
     /**
-     *
+     * @param $config
+     * @param $sm
      */
     public function __construct($config, $sm)
     {
@@ -245,7 +246,6 @@ class EmailService
      */
     public function setContactService($contactService)
     {
-        var_dump($contactService->parseFullName());
         $this->contactService = $contactService;
     }
 
