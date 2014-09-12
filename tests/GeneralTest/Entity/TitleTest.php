@@ -42,7 +42,7 @@ class TitleTest extends \PHPUnit_Framework_TestCase
             'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
-        $this->title = new Title;
+        $this->title = new Title();
     }
 
     public function testCanCreateEntity()

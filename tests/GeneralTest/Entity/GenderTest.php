@@ -42,7 +42,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
             'attention'  => 'This is the attention',
             'salutation' => 'This is the salutation'
         );
-        $this->gender = new Gender;
+        $this->gender = new Gender();
     }
 
     public function testCanCreateEntity()

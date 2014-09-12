@@ -43,7 +43,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager = Bootstrap::getServiceManager();
         $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-        $this->country = new Country;
+        $this->country = new Country();
     }
 
     public function testCanCreateEntity()

@@ -42,7 +42,7 @@ class EuTest extends \PHPUnit_Framework_TestCase
             'country' => $country,
             'since'   => new \DateTime(),
         );
-        $this->eu = new Eu;
+        $this->eu = new Eu();
     }
 
     public function testCanCreateEntity()

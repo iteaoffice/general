@@ -42,7 +42,7 @@ class ContentTypeTest extends \PHPUnit_Framework_TestCase
             'extension'   => 'abc',
             'image'       => 'blob',
         );
-        $this->contentType = new ContentType;
+        $this->contentType = new ContentType();
     }
 
     public function testCanCreateEntity()
