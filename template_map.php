@@ -13,5 +13,6 @@ return array(
     'general/partial/entity/country'          => __DIR__ . '//view/general/partial/entity/country.twig',
     'general/partial/entity/country-info'     => __DIR__ . '//view/general/partial/entity/country-info.twig',
     'general/partial/entity/country-metadata' => __DIR__ . '//view/general/partial/entity/country-metadata.twig',
+    'general/partial/entity/country-map'      => __DIR__ . '//view/general/partial/entity/country-map.twig',
     'general/partial/entity/challenge'        => __DIR__ . '//view/general/partial/entity/challenge.twig',
 );
