@@ -14,7 +14,6 @@ return [
     'factories' => [
         'general_module_options' => function ($sm) {
             $config = $sm->get('Config');
-
             return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : []);
         },
         EmailService::class      => function ($sm) {
