@@ -1,0 +1,25 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+    google.load('visualization', '1.1', {'packages': ['geomap']});
+
+    google.setOnLoadCallback(drawRegionsMap);
+    function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+            ['Country', 'Data'],
+            ['{{ country.country }}', 1],
+        ]);
+        var options = {
+            region: '150',
+            displayMode: 'auto',
+            enableRegionInteractivity: 'false',
+            legend: 'none',
+            colorAxis: {colors: ['#009ac9', '#009ac9', '#009ac9', '#009ac9', '#009ac9']}
+        };
+        var chart = new google.visualization.GeoChart(document.getElementById('country_map'));
+        chart.draw(data, options);
+    }
+</script>
+<div class="col-md-12" >
+    <div id="country_map" style=""></div>
+</div>
