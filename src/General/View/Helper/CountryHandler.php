@@ -69,6 +69,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         ) {
             if (is_null($this->getCountry())) {
                 $this->getServiceLocator()->get("response")->setStatusCode(404);
+
                 return sprintf("The selected country cannot be found");
             }
         }
@@ -88,12 +89,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                         'social'
                     )
                 );
+
                 return $this->parseCountry();
 
             case 'country_map':
                 /**
                  * @var $countryMap CountryMap
                  */
+
                 return $this->parseCountryMap();
 
             case 'country_funder':
@@ -110,10 +113,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
+
                 return $this->parseCountryListItac($page);
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
+
                 return $this->parseOrganisationList($page);
 
             case 'country_project':
@@ -274,9 +279,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     /**
      * @return null|string
      */
-    public function parseCountryMap(){
-
-        switch($this->getGeneralService()->getOptions()->getUseDatamap()){
+    public function parseCountryMap()
+    {
+        switch ($this->getGeneralService()->getOptions()->getUseDatamap()) {
             case true:
                 return $this->getRenderer()->render(
                     'general/partial/entity/country-map',
@@ -286,6 +291,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 );
             case false:
                 $countryMap = $this->serviceLocator->get('countryMap');
+
                 return $countryMap([$this->getCountry()], $this->getCountry());
         }
     }
@@ -301,6 +307,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
+
         return $this->getRenderer()->render(
             'program/partial/list/funder',
             [
@@ -344,7 +351,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
-     * @param Country $country
+     * @param  Country $country
      * @return string
      */
     public function parseCountryMetadata(Country $country)
@@ -436,6 +443,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
+
         return $this->getRenderer()->render(
             'general/partial/list/organisation',
             [
@@ -481,6 +489,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
+
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [

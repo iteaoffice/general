@@ -94,7 +94,8 @@ class ModuleOptions extends AbstractOptions
     /**
      * @return bool
      */
-    public function getUseDatamap(){
+    public function getUseDatamap()
+    {
         return $this->useDataMap;
     }
 
@@ -102,8 +103,10 @@ class ModuleOptions extends AbstractOptions
      *
      * @return bool
      */
-    public function setUseDatamap($bool){
+    public function setUseDatamap($bool)
+    {
         $this->useDataMap = $bool;
+
         return $this;
     }
 
