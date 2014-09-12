@@ -5,7 +5,8 @@
 namespace General;
 
 use Contact\Entity\Contact;
-use General\Service\GeneralService;
+use Contact\Entity\Selection;
+use Contact\Service\ContactService;
 
 /**
  * Class Email
@@ -93,13 +94,9 @@ class Email
      * Subject
      */
     protected $subject = "";
-    /**
-     * @var GeneralService
-     */
-    protected $generalService;
 
     /**
-     *
+     * @param array $data
      */
     public function __construct($data = [])
     {
@@ -125,7 +122,7 @@ class Email
     /**
      * Add TO recipient
      *
-     * @param $var
+     * @param      $var
      * @param null $user
      */
     public function addTo($var, $user = null)
@@ -138,9 +135,21 @@ class Email
     }
 
     /**
+     * We can also add users via a selection
+     *
+     * @param Selection $selection
+     */
+    public function addSelection(Selection $selection, ContactService $contactService)
+    {
+        foreach ($contactService->findContactsInSelection($selection) as $contact) {
+            $this->addTo($contact);
+        }
+    }
+
+    /**
      * Add CC recipient
      *
-     * @param $var
+     * @param      $var
      * @param null $user
      */
     public function addCc($var, $user = null)
@@ -155,7 +164,7 @@ class Email
     /**
      * Add BCC recipient
      *
-     * @param $var
+     * @param      $var
      * @param null $user
      */
     public function addBcc($var, $user = null)
@@ -187,17 +196,17 @@ class Email
     {
         switch (substr($method, 0, 3)) {
             case 'get':
-                $key   = $this->underscore(substr($method, 3));
+                $key = $this->underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
-            //Try to find a property
+
                 if (!$index && isset($this->$key)) {
                     return $this->$key;
                 }
 
                 return "";
             case 'set':
-                $key        = $this->underscore(substr($method, 3));
-                $result     = isset($args[0]) ? $args[0] : null;
+                $key = $this->underscore(substr($method, 3));
+                $result = isset($args[0]) ? $args[0] : null;
                 $this->$key = $result;
 
                 return $result;
