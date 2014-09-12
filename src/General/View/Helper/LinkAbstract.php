@@ -110,10 +110,11 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      *
+     * @return null
      */
     public function parseAction()
     {
-        $this->action = null;
+       return  $this->action = null;
     }
 
     /**
@@ -210,6 +211,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
         if (!is_array($linkContent)) {
             $linkContent = array($linkContent);
         }
+
         foreach ($linkContent as $content) {
             $this->linkContent[] = $content;
         }

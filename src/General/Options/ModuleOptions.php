@@ -26,6 +26,13 @@ class ModuleOptions extends AbstractOptions
     protected $geoIpServiceURL = 'http://freegeoip.net/json/%s';
 
     /**
+     * Wether or not to use the data map
+     *
+     * @var bool
+     */
+    protected $useDataMap = false;
+
+    /**
      * @param array $styleLocations
      *
      * @return ModuleOptions
@@ -82,6 +89,22 @@ class ModuleOptions extends AbstractOptions
     public function getImageNotFound()
     {
         return $this->imageNotFound;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseDatamap(){
+        return $this->useDataMap;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function setUseDatamap($bool){
+        $this->useDataMap = $bool;
+        return $this;
     }
 
     /**

@@ -69,7 +69,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         ) {
             if (is_null($this->getCountry())) {
                 $this->getServiceLocator()->get("response")->setStatusCode(404);
-
                 return sprintf("The selected country cannot be found");
             }
         }
@@ -89,15 +88,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                         'social'
                     )
                 );
-
                 return $this->parseCountry();
+
             case 'country_map':
                 /**
                  * @var $countryMap CountryMap
                  */
-                $countryMap = $this->serviceLocator->get('countryMap');
+                return $this->parseCountryMap();
 
-                return $countryMap([$this->getCountry()], $this->getCountry());
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
             case 'country_metadata':
@@ -112,16 +110,18 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseCountryListItac($page);
+
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseOrganisationList($page);
+
             case 'country_project':
                 return $this->parseCountryProjectList($this->getCountry());
+
             case 'country_article':
                 return $this->parseCountryArticleList($this->getCountry());
+
             default:
                 return sprintf(
                     "No handler available for <code>%s</code> in class <code>%s</code>",
@@ -272,6 +272,25 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
+     * @return null|string
+     */
+    public function parseCountryMap(){
+
+        switch($this->getGeneralService()->getOptions()->getUseDatamap()){
+            case true:
+                return $this->getRenderer()->render(
+                    'general/partial/entity/country-map',
+                    [
+                       'country'=>$this->getCountry()
+                    ]
+                );
+            case false:
+                $countryMap = $this->serviceLocator->get('countryMap');
+                return $countryMap([$this->getCountry()], $this->getCountry());
+        }
+    }
+
+    /**
      * @param Country $country
      *
      * @return string
@@ -279,11 +298,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryFunderList(Country $country)
     {
         $funder = $this->getProgramService()->findFunderByCountry($country);
-
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'program/partial/list/funder',
             [
@@ -328,7 +345,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
     /**
      * @param Country $country
-     *
      * @return string
      */
     public function parseCountryMetadata(Country $country)
@@ -420,7 +436,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/organisation',
             [
@@ -466,7 +481,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
