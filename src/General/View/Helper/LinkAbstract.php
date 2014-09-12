@@ -114,7 +114,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     public function parseAction()
     {
-       return  $this->action = null;
+        return  $this->action = null;
     }
 
     /**
