@@ -29,7 +29,13 @@ class ContentTypeIcon extends HelperAbstract
     public function __invoke(ContentType $contentType)
     {
         switch (trim($contentType->getContentType())) {
+            case 'image/jpeg':
+            case 'image/tiff':
+            case 'image/png':
+                $class = " fa-file-image-o";
+                break;
             case 'application/pdf':
+            case 'application/postscript':
                 $class = "fa-file-pdf-o";
                 break;
             case 'application/zip':
@@ -40,6 +46,7 @@ class ContentTypeIcon extends HelperAbstract
                 $class = "fa-file-excel-o";
                 break;
             case 'application/mspowerpoint':
+            case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
                 $class = 'fa-file-powerpoint-o';
                 break;
@@ -48,6 +55,7 @@ class ContentTypeIcon extends HelperAbstract
                 $class = "fa-file-word-o";
                 break;
             case 'application/octet-stream':
+
             case 'text/xml':
                 $class = "fa-file-o";
                 break;
