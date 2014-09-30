@@ -67,6 +67,7 @@ class Country extends EntityRepository
     public function findCountryByCall(Call $call, $which)
     {
         $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
+
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
@@ -186,6 +187,8 @@ class Country extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+
 
     /**
      * @param Meeting $meeting
