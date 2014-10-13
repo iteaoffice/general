@@ -43,6 +43,7 @@ class ContentTypeIcon extends HelperAbstract
                 break;
             case 'application/vnd.ms-excel':
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            case 'application/vnd.ms-excel.sheet.macroEnabled.12':
                 $class = "fa-file-excel-o";
                 break;
             case 'application/mspowerpoint':

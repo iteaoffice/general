@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ContentType
 {
+    const TYPE_UNKNOWN = 0;
     const TYPE_OFFICE_2007 = 16;
     /**
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)

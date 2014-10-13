@@ -12,6 +12,7 @@ namespace General\Service;
 use Affiliation\Service\AffiliationService;
 use Event\Entity\Meeting\Meeting;
 use General\Entity;
+use General\Entity\ContentType;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
 use Project\Entity\Evaluation;
@@ -48,7 +49,7 @@ class GeneralService extends ServiceAbstract
             throw new \InvalidArgumentException("A docRef is required to find an entity");
         }
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findOneBy(
-            array('docRef' => $docRef)
+            ['docRef' => $docRef]
         );
 
         return $entity;
@@ -82,7 +83,7 @@ class GeneralService extends ServiceAbstract
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
-            array('iso3' => strtoupper($iso3))
+            ['iso3' => strtoupper($iso3)]
         );
 
         return $entity;
@@ -100,7 +101,7 @@ class GeneralService extends ServiceAbstract
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
-            array('cd' => strtoupper($cd))
+            ['cd' => strtoupper($cd)]
         );
 
         return $entity;
@@ -173,7 +174,7 @@ class GeneralService extends ServiceAbstract
         }
 
         return $this->getEntityManager()->getRepository($this->getFullEntityName('webInfo'))->findOneBy(
-            array('info' => $info)
+            ['info' => $info]
         );
     }
 
@@ -189,8 +190,15 @@ class GeneralService extends ServiceAbstract
             throw new \InvalidArgumentException("A content type name is required to find an entity");
         }
         $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->findOneBy(
-            array('contentType' => $contentTypeName)
+            ['contentType' => $contentTypeName]
         );
+
+        //Create a fallback to the unknown type when the requested type cannot be found.
+        if (is_null($entity)) {
+            $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->find(
+                ContentType::TYPE_UNKNOWN
+            );
+        }
 
         return $entity;
     }
@@ -211,7 +219,7 @@ class GeneralService extends ServiceAbstract
             $countryResult = Json::decode($client->send()->getContent());
 
             return $this->getEntityManager()->getRepository($this->getFullEntityName('country'))->findOneBy(
-                array('cd' => $countryResult->country_code)
+                ['cd' => $countryResult->country_code]
             );
         }
 
