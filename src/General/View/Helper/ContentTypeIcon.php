@@ -39,6 +39,7 @@ class ContentTypeIcon extends HelperAbstract
                 $class = "fa-file-pdf-o";
                 break;
             case 'application/zip':
+            case 'application/x-zip-compressed':
                 $class = "fa-file-archive-o";
                 break;
             case 'application/vnd.ms-excel':
