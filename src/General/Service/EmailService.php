@@ -87,7 +87,9 @@ class EmailService
      */
     public function send($email)
     {
+
         if (is_null($this->mailing)) {
+
             $message = $this->prepare($email);
         } else {
             $message = $this->prepareMailing($email);
@@ -463,6 +465,7 @@ class EmailService
     public function setTemplate($templateName)
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
+
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
