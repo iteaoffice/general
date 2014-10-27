@@ -50,9 +50,11 @@ class ContentTypeIcon extends HelperAbstract
             case 'application/mspowerpoint':
             case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.template':
                 $class = 'fa-file-powerpoint-o';
                 break;
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
             case 'application/msword':
                 $class = "fa-file-word-o";
                 break;

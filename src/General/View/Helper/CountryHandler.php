@@ -118,7 +118,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseOrganisationList($page);
 
             case 'country_project':

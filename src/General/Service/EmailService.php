@@ -87,9 +87,7 @@ class EmailService
      */
     public function send($email)
     {
-
         if (is_null($this->mailing)) {
-
             $message = $this->prepare($email);
         } else {
             $message = $this->prepareMailing($email);
@@ -126,7 +124,7 @@ class EmailService
     }
 
     /**
-     * @param  Email   $email
+     * @param  Email $email
      * @return Message
      */
     private function prepare(Email $email)
@@ -326,7 +324,7 @@ class EmailService
     }
 
     /**
-     * @param  Email   $email
+     * @param  Email $email
      * @return Message
      */
     private function prepareMailing(Email $email)
@@ -443,6 +441,9 @@ class EmailService
             ],
             $this->getMailing()->getMailHtml()
         );
+
+
+
         /**
          * Clone the twigRenderer and overrule to loader to be a string
          */
@@ -456,6 +457,21 @@ class EmailService
     }
 
     /**
+     * Produce a preview of the mailing content
+     *
+     * @return null|string
+     */
+    public function generatePreview()
+    {
+        $this->updateTemplateVarsWithContactService();
+
+        return $this->renderer->render(
+            $this->getMailing()->getTemplate()->getTemplate(),
+            array_merge_recursive(['content' => $this->renderMailingContent()], $this->templateVars)
+        );
+    }
+
+    /**
      * @param $templateName
      *
      * @return EmailService
@@ -465,7 +481,6 @@ class EmailService
     public function setTemplate($templateName)
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
-
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
