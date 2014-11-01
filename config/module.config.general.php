@@ -32,6 +32,7 @@ return [
         ],
         'template_vars'       => [
             "company" => "Development ITEA office",
+            "site"    => "Development ITEA office",
             "slogan"  => "",
             "baseUrl" => "http://itea3.org",
         ],

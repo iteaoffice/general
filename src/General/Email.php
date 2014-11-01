@@ -21,12 +21,6 @@ use Contact\Service\ContactService;
  * @method void setHtmlContent($htmlContent)
  * @method string getTextContent()
  * @method void setTextContent($textContent)
- * @method array getTo()
- * @method array setTo($to)
- * @method array getCc()
- * @method array setCc($cc)
- * @method array getBcc()
- * @method array setBcc($bcc)
  * @method string getFrom()
  * @method void setFrom($from)
  * @method string getFromName()
@@ -135,6 +129,54 @@ class Email
     }
 
     /**
+     * @param $to
+     */
+    public function setTo($to)
+    {
+        $this->to = $to;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param mixed $cc
+     */
+    public function setCc($cc)
+    {
+        $this->cc = $cc;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param mixed $bcc
+     */
+    public function setBcc($bcc)
+    {
+        $this->bcc = $bcc;
+    }
+
+    /**
      * We can also add users via a selection
      *
      * @param Selection $selection
@@ -176,6 +218,7 @@ class Email
         }
     }
 
+
     /**
      * Set/Get Magic function
      *
@@ -207,9 +250,19 @@ class Email
             case 'set':
                 $key = $this->underscore(substr($method, 3));
                 $result = isset($args[0]) ? $args[0] : null;
-                $this->$key = $result;
 
-                return $result;
+                //Only keep the item when it can be set to a toString
+                if (
+                    (!is_array($result)) &&
+                    ((!is_object($result) && settype($result, 'string') !== false) ||
+                        (is_object($result) && method_exists($result, '__toString')))
+                ) {
+                    $this->$key = (string) $result;
+                    return (string)$result;
+
+                }
+
+
         }
         throw new \Exception("Invalid method " . $method);
     }

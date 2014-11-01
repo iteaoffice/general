@@ -189,10 +189,19 @@ class EmailService
             $message->addReplyTo($email->getReplyTo(), $email->getReplyToName());
         }
         $message = $this->setRecipients($email, $message);
+
         //Subject. Include the CompanyName in the [[site]] tags
-        $message->setSubject(
-            str_replace('[site]', $this->config["template_vars"]["company"], $this->template->getSubject())
-        );
+        $subject = $this->template->getSubject();
+        foreach ($this->templateVars as $key => $replace) {
+            /**
+             * replace the content of the title with the available keys in the template vars
+             */
+            if (!is_array($replace)) {
+                $subject = str_replace(sprintf("[%s]", $key), $replace, $subject);
+            }
+        }
+
+        $message->setSubject($subject);
 
         $htmlContent = new MimePart($email->getHtmlContent());
         $htmlContent->type = "text/html";
@@ -227,8 +236,7 @@ class EmailService
                 $this->getContactService()->getContact()->getLastName()
             );
             $this->templateVars['fullname'] = $this->getContactService()->parseFullName();
-            $this->templateVars['contact'] = $this->getContactService()->parseFullName();
-            $this->templateVars['country'] = $this->getContactService()->parseCountry();
+            $this->templateVars['country'] = (string)$this->getContactService()->parseCountry();
             $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
         }
     }
@@ -441,7 +449,6 @@ class EmailService
             ],
             $this->getMailing()->getMailHtml()
         );
-
 
 
         /**
