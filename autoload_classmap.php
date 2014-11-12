@@ -23,7 +23,6 @@ return array(
   'setChallengeId'                               => __DIR__ . '/src/General/View/Helper/ChallengeHandler.php',
   'General\Version\Version'                      => __DIR__ . '/src/General/Version/Version.php',
   'General\Service\EmailService'                 => __DIR__ . '/src/General/Service/EmailService.php',
-  'create'                                       => __DIR__ . '/src/General/Service/EmailService.php',
   'General\Service\GeneralService'               => __DIR__ . '/src/General/Service/GeneralService.php',
   'General\Service\ServiceAbstract'              => __DIR__ . '/src/General/Service/ServiceAbstract.php',
   'General\Service\GeneralServiceAwareInterface' => __DIR__ . '/src/General/Service/GeneralServiceAwareInterface.php',

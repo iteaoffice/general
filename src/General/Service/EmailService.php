@@ -5,7 +5,6 @@
 namespace General\Service;
 
 use Contact\Entity\Contact;
-use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -15,6 +14,7 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
@@ -22,24 +22,30 @@ use ZfcTwig\View\TwigRenderer;
  * Class EmailService
  * @package General\Service
  */
-class EmailService
+class EmailService extends ServiceAbstract implements
+    ServiceLocatorAwareInterface,
+    GeneralServiceAwareInterface
 {
+    /**
+     * @var Email
+     */
+    protected $email;
+    /**
+     * @var Message
+     */
+    protected $message;
+    /**
+     * @var SendmailTransport|SmtpTransport
+     */
+    protected $transport;
     /**
      * @var array
      */
     protected $config;
     /**
-     * @var ServiceManager;
-     */
-    protected $sm;
-    /**
      * @var TwigRenderer
      */
     protected $renderer;
-    /**
-     * @var GeneralService
-     */
-    protected $generalService;
     /**
      * @var WebInfo
      */
@@ -49,51 +55,20 @@ class EmailService
      */
     protected $mailing;
     /**
-     * @var ContactService
-     */
-    protected $contactService;
-    /**
      * @var array
      */
     protected $templateVars = [];
 
     /**
-     * @param $config
-     * @param $sm
+     * @param                $config
+     * @param ServiceManager $serviceManager
      */
-    public function __construct($config, $sm)
+    public function __construct($config, ServiceManager $serviceManager)
     {
         $this->config = $config;
-        $this->sm = $sm;
-        $this->renderer = $this->sm->get('ZfcTwigRenderer');
-        $this->generalService = $this->sm->get(GeneralService::class);
-    }
+        $this->renderer = $serviceManager->get('ZfcTwigRenderer');
 
-    /**
-     * Create a new email
-     *
-     * @param array $data
-     *
-     * @return Email
-     */
-    public function create($data = [])
-    {
-        return new Email($data);
-    }
-
-    /**
-     * @param      $email
-     * @param bool $overrideDefaults Boolean value on include always the
-     */
-    public function send($email)
-    {
-        if (is_null($this->mailing)) {
-            $message = $this->prepare($email);
-        } else {
-            $message = $this->prepareMailing($email);
-        }
-        //Send email
-        if ($message && $this->config["active"]) {
+        if ($this->config["active"]) {
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
@@ -119,93 +94,130 @@ class EmailService
                 $options = new SmtpOptions($transportConfig);
                 $transport->setOptions($options);
             }
-            $transport->send($message);
+            //$transport->send($message);
+            $this->transport = $transport;
         }
     }
 
     /**
-     * @param  Email $email
-     * @return Message
+     * Create a new email
+     *
+     * @param array $data
+     *
+     * @return Email
      */
-    private function prepare(Email $email)
+    public function create($data = [])
     {
-        if (is_null($this->template)) {
-            return new \InvalidArgumentException("There is no template set");
-        }
-        //Template Variables
-        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
-        //If not layout, use default
-        if (!$email->getHtmlLayoutName()) {
-            $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
-        }
-        //If not recipient, send to admin
-        if (count($email->getTo()) === 0) {
-            $email->addTo($this->config["emails"]["admin"]);
-        }
+        $this->email = new Email($data);
+        $this->message = new Message();
 
-        /**
-         * When the contactService is still empty, we will fill it with the TO to have the receiver filled in as person
-         */
-        if (is_null($this->getContactService()) || $this->getContactService()->isEmpty()) {
-            $contactService = clone $this->sm->get('contact_contact_service');
-            foreach ($email->getTo() as $emailAddress => $name) {
-                $this->contactService = $contactService->setContact($contactService->findContactByEmail($emailAddress));
+        return $this->email;
+    }
+
+    public function send()
+    {
+        //Send email
+        foreach ($this->email->getTo() as $recipient => $contact) {
+
+            $this->generateMessage();
+
+            //add the CC and BCC to the email
+            $this->setShadowRecipients();
+
+            /**
+             * We have a recipient which can be an instance of the contact. Produce a contactService object
+             * and fill the templateVars with extra options
+             */
+            if ($contact instanceof Contact) {
+                $this->updateTemplateVarsWithContact($contact);
+            } else {
+                $contactName = $contact;
+                $contact = new Contact();
+                $contact->setEmail($recipient);
+                $contact->setFirstName($contactName);
             }
+
+            /**
+             * Overrule the to when we are in development
+             */
+            if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+            } else {
+                $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+            }
+
+            /**
+             * We have the contact and can now produce the content of the message
+             */
+            $this->parseSubject();
+
+            /**
+             * We have the contact and can now produce the content of the message
+             */
+            $this->parseBody();
+
+            /**
+             * Send the email
+             */
+            $this->transport->send($this->message);
         }
-        $this->updateTemplateVarsWithContactService();
+    }
+
+    /**
+     * Parse the subject of the email
+     */
+    public function parseSubject()
+    {
+        //Transfer first the subject form the email (if any)
+        $this->message->setSubject($this->email->getSubject());
+
         /**
-         * Overrule the to when we are in development
+         * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-            $email->setTo([$this->config["emails"]["admin"] => $this->config["emails"]["admin"]]);
-        }
-        //If not sender, use default
-        if (!$email->getFrom()) {
-            $email->setFrom($this->config["defaults"]["from_email"]);
-            $email->setFromName($this->config["defaults"]["from_name"]);
-        }
-        $content = $this->renderContent();
-        try {
-            $htmlView = $this->renderer->render(
-                $email->getHtmlLayoutName(),
-                array_merge_recursive(['content' => $content], $this->templateVars)
-            );
-        } catch (\Twig_Error_Syntax $e) {
-            return sprintf("Something went wrong. Error message: %s", $e->getMessage());
+        if (!empty($this->message->getSubject()) && !is_null($this->template)) {
+            $this->message->setSubject($this->template->getSubject());
         }
 
-        if (!is_null($htmlView)) {
-            $email->setHtmlContent($htmlView);
-        };
-        //Create Zend Message
-        $message = new Message();
-        //From
-        $message->setFrom($email->getFrom(), $email->getFromName());
-        //Reply to
-        if ($this->config["defaults"]["reply_to"]) {
-            $message->addReplyTo($this->config["defaults"]["reply_to"], $this->config["defaults"]["reply_to_name"]);
-        }
-        if ($email->getReplyTo()) {
-            $message->addReplyTo($email->getReplyTo(), $email->getReplyToName());
-        }
-        $message = $this->setRecipients($email, $message);
-
-        //Subject. Include the CompanyName in the [[site]] tags
-        $subject = $this->template->getSubject();
+        /**
+         * Go over the templateVars to replace content in the subject
+         */
         foreach ($this->templateVars as $key => $replace) {
             /**
              * replace the content of the title with the available keys in the template vars
              */
             if (!is_array($replace)) {
-                $subject = str_replace(sprintf("[%s]", $key), $replace, $subject);
+                $this->message->setSubject(str_replace(sprintf("[%s]", $key), $replace, $this->message->getSubject()));
             }
         }
+    }
 
-        $message->setSubject($subject);
+    /**
+     * @return void|string
+     */
+    public function parseBody()
+    {
+        try {
+            $htmlView = $this->renderer->render(
+                $this->email->getHtmlLayoutName(),
+                array_merge_recursive(
+                    ['content' => $this->personaliseMessage($this->email->getMessage())],
+                    $this->templateVars
+                )
+            );
+            $textView = $this->renderer->render(
+                'plain',
+                array_merge_recursive(
+                    ['content' => $this->personaliseMessage($this->email->getMessage())],
+                    $this->templateVars
+                )
+            );
+        } catch (\Twig_Error_Syntax $e) {
+            return sprintf("Something went wrong. Error message: %s", $e->getMessage());
+        }
 
-        $htmlContent = new MimePart($email->getHtmlContent());
+        $htmlContent = new MimePart($htmlView);
         $htmlContent->type = "text/html";
-        $textContent = new MimePart($email->getTextContent());
+        $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
         $body->setParts([$htmlContent]);
@@ -217,63 +229,73 @@ class EmailService
         //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
         //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
         //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
-        $message->setBody($body);
 
-        return $message;
+        $this->message->setBody($body);
+
+        return;
     }
 
     /**
-     * Extract the contactService and include the variables in the template array settings
+     *
      */
-    public function updateTemplateVarsWithContactService()
+    private function generateMessage()
     {
-        if (!$this->getContactService()->isEmpty()) {
-            $this->templateVars['attention'] = $this->getContactService()->parseAttention();
-            $this->templateVars['firstname'] = $this->getContactService()->getContact()->getFirstName();
-            $this->templateVars['lastname'] = trim(
-                $this->getContactService()->getContact()->getMiddleName() .
-                ' ' .
-                $this->getContactService()->getContact()->getLastName()
+
+
+        //Reply to
+        if ($this->config["defaults"]["reply_to"]) {
+            $this->message->addReplyTo(
+                $this->config["defaults"]["reply_to"],
+                $this->config["defaults"]["reply_to_name"]
             );
-            $this->templateVars['fullname'] = $this->getContactService()->parseFullName();
-            $this->templateVars['country'] = (string)$this->getContactService()->parseCountry();
-            $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation();
+        }
+
+        /**
+         * Produce a list of template vars
+         */
+        $this->templateVars = array_merge($this->config["template_vars"], $this->email->toArray());
+
+        //If not layout, use default
+        if (!$this->email->getHtmlLayoutName()) {
+            $this->email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
+        }
+
+        /**
+         * If not sender, use default
+         */
+        if (!is_null($this->email->getFrom())) {
+            $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
+        } else {
+            $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
         }
     }
 
-    /**
-     * @return \Contact\Service\ContactService
-     */
-    public function getContactService()
-    {
-        return $this->contactService;
-    }
 
     /**
-     * @param \Contact\Service\ContactService $contactService
-     */
-    public function setContactService($contactService)
-    {
-        $this->contactService = $contactService;
-    }
-
-    /**
-     * Render the content twig-wise
+     * Extract the contactService and include the variables in the template array settings
      *
-     * @return null|string
+     * @var Contact $contact
      */
-    private function renderContent()
+    public function updateTemplateVarsWithContact(Contact $contact)
     {
-        /**
-         * Clone the twigRenderer and overrule to loader to be a string
-         */
-        $twigRenderer = new \Twig_Environment(new \Twig_Loader_String());
+        $contactService = clone $this->getServiceLocator()->get('contact_contact_service');
+        $contactService->setContact($contact);
 
-        return $twigRenderer->render(
-            $this->createTwigTemplate($this->template->getContent()),
-            $this->templateVars
+        $this->templateVars['attention'] = $contactService->parseAttention();
+        $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
+        $this->templateVars['lastname'] = trim(
+            sprintf(
+                "%s %s",
+                $contactService->getContact()->getMiddleName(),
+                $contactService->getContact()->getLastName()
+            )
         );
+        $this->templateVars['fullname'] = $contactService->parseFullName();
+        $this->templateVars['country'] = (string)$contactService->parseCountry();
+        $this->templateVars['organisation'] = $contactService->parseOrganisation();
+
     }
+
 
     /**
      * @param $content
@@ -294,143 +316,60 @@ class EmailService
     }
 
     /**
-     * Set the recipients to the email
-     *
-     * @param $email
-     * @param $message
+     * Set the BCC and CC recipients to the email (they are the same for every email)
      *
      * @return Message
      */
-    public function setRecipients(Email $email, Message $message)
+    public function setShadowRecipients()
     {
-        //To recipients
-        foreach ($email->getTo() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $message->addTo($contact->getEmail(), $contact);
-            } else {
-                $message->addTo($emailAddress, $contact);
-            }
-        }
         //Cc recipients
-        foreach ($email->getCc() as $emailAddress => $contact) {
+        foreach ($this->email->getCc() as $emailAddress => $contact) {
             if ($contact instanceof Contact) {
-                $message->addCc($contact->getEmail(), $contact);
+                $this->message->addCc($contact->getEmail(), $contact);
             } else {
-                $message->addCc($emailAddress, $contact);
+                $this->message->addCc($emailAddress, $contact);
             }
         }
         //Bcc recipients
-        foreach ($email->getBcc() as $emailAddress => $contact) {
+        foreach ($this->email->getBcc() as $emailAddress => $contact) {
             if ($contact instanceof Contact) {
-                $message->addBcc($contact->getEmail(), $contact);
+                $this->message->addBcc($contact->getEmail(), $contact);
             } else {
-                $message->addBcc($emailAddress, $contact);
+                $this->message->addBcc($emailAddress, $contact);
             }
         }
-
-        return $message;
     }
 
-    /**
-     * @param  Email $email
-     * @return Message
-     */
-    private function prepareMailing(Email $email)
-    {
-        //Template Variables
-        $this->templateVars = array_merge($this->config["template_vars"], $email->toArray());
-        //If not layout, use default
-        if (!$email->getHtmlLayoutName()) {
-            $email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
-        }
-        //If not recipient, send to admin
-        if (count($email->getTo()) === 0) {
-            $email->addTo($this->config["emails"]["admin"]);
-        }
-        foreach ($email->getTo() as $emailAddress => $recipient) {
-            $this->getContactService()->findContactByEmail($emailAddress);
-        }
-        $this->updateTemplateVarsWithContactService();
-        /**
-         * Overrule the to when we are in development
-         */
-        if ('development' === DEBRANOVA_ENVIRONMENT) {
-            $email->setTo([$this->config["emails"]["admin"] => $this->config["emails"]["admin"]]);
-        }
-        $email->setFrom($this->getMailing()->getSender()->getSender());
-        $email->setFromName($this->getMailing()->getSender()->getEmail());
-        $content = $this->renderMailingContent();
-        $htmlView = $this->renderer->render(
-            $this->getMailing()->getTemplate()->getTemplate(),
-            array_merge_recursive(['content' => $content], $this->templateVars)
-        );
-        $textView = $this->renderer->render(
-            'plain',
-            array_merge_recursive(['content' => $content], $this->templateVars)
-        );
-        if (!is_null($textView)) {
-            $email->setTextContent(strip_tags($textView));
-        };
-        if (!is_null($htmlView)) {
-            $email->setHtmlContent($htmlView);
-        };
-        //Create Zend Message
-        $message = new Message();
-        //From
-        $message->setFrom($this->getMailing()->getSender()->getEmail(), $this->getMailing()->getSender()->getSender());
-        //Set the other recipients
-        $message = $this->setRecipients($email, $message);
-        //Subject. Include the CompanyName in the [[site]] tags
-        $message->setSubject($this->getMailing()->getMailSubject());
-        $htmlContent = new MimePart($email->getHtmlContent());
-        $htmlContent->type = "text/html";
-        $body = new MimeMessage();
-        $body->setParts([$htmlContent]);
-        /**
-         * Set specific headers
-         * https://eu.mailjet.com/docs/emails_headers
-         */
-        $message->getHeaders()->addHeaderLine(
-            'X-Mailjet-Campaign',
-            DEBRANOVA_HOST . '-mailing-' . $this->getMailing()->getId()
-        );
-        //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
-        $message->setBody($body);
-
-        return $message;
-    }
 
     /**
-     * @return \Mailing\Entity\Mailing
-     */
-    public function getMailing()
-    {
-        if (is_null($this->mailing)) {
-            $this->setMailing($this->mailing);
-        }
-
-        return $this->mailing;
-    }
-
-    /**
+     * When the mailing is set, we need to take some features over from the mailing to the email.
+     *
      * @param \Mailing\Entity\Mailing $mailing
      */
     public function setMailing($mailing)
     {
         $this->mailing = $mailing;
+
+        $this->email->setFrom($this->mailing->getSender()->getSender());
+        $this->email->setFromName($this->mailing->getSender()->getEmail());
+        $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
+        $this->email->setMessage($this->mailing->getMailHtml());
+
+        $this->message->getHeaders()->addHeaderLine(
+            'X-Mailjet-Campaign',
+            DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId()
+        );
     }
 
     /**
      * Render the content twig-wise
-     *
+     * @param $message
      * @return null|string
      */
-    private function renderMailingContent()
+    private function personaliseMessage($message)
     {
         /**
-         * Replace first the content of the mailing with the required (new) shorttags
+         * Replace first the content of the mailing with the required (new) short tags
          */
         $content = preg_replace(
             [
@@ -447,14 +386,14 @@ class EmailService
                 "[organisation]",
                 "[country]"
             ],
-            $this->getMailing()->getMailHtml()
+            $message
         );
 
 
         /**
          * Clone the twigRenderer and overrule to loader to be a string
          */
-        $twigRenderer = clone $this->renderer->getEngine();
+        $twigRenderer = new \Twig_Environment();
         $twigRenderer->setLoader(new \Twig_Loader_String());
 
         return $twigRenderer->render(
@@ -470,11 +409,14 @@ class EmailService
      */
     public function generatePreview()
     {
-        $this->updateTemplateVarsWithContactService();
+        $this->updateTemplateVarsWithContact($this->getContactService()->getContact());
 
         return $this->renderer->render(
             $this->getMailing()->getTemplate()->getTemplate(),
-            array_merge_recursive(['content' => $this->renderMailingContent()], $this->templateVars)
+            array_merge_recursive(
+                ['content' => $this->personaliseMessage($this->email->getMessage())],
+                $this->templateVars
+            )
         );
     }
 
@@ -488,10 +430,22 @@ class EmailService
     public function setTemplate($templateName)
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
+
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
 
+        $this->email->setMessage($this->createTwigTemplate($this->template->getContent()));
+        $this->email->setSubject($this->template->getSubject());
+
         return $this;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

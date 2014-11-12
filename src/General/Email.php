@@ -21,15 +21,10 @@ use Contact\Service\ContactService;
  * @method void setHtmlContent($htmlContent)
  * @method string getTextContent()
  * @method void setTextContent($textContent)
- * @method string getFrom()
- * @method void setFrom($from)
- * @method string getFromName()
- * @method void setFromName($fromName)
  * @method string getReplyTo()
  * @method void setReplyTo($replyTo)
  * @method string getReplyToName()
  * @method void setDeeplink($deeplink)
- * @method void setSubject($subject)
  * @method void setReplyToName($replyToName)
  * @method void setCode($code)
  * @method void setUrl($url)
@@ -73,6 +68,14 @@ class Email
      */
     protected $attention;
     /**
+     * @var string
+     */
+    protected $from;
+    /**
+     * @var string
+     */
+    protected $fromName;
+    /**
      * To recipients
      */
     protected $to = [];
@@ -88,6 +91,10 @@ class Email
      * Subject
      */
     protected $subject = "";
+    /**
+     * Message
+     */
+    protected $message = "";
 
     /**
      * @param array $data
@@ -122,10 +129,51 @@ class Email
     public function addTo($var, $user = null)
     {
         if ($var instanceof Contact) {
-            $this->to[$var->getEmail()] = $var->getDisplayName();
+            $this->to[$var->getEmail()] = $var;
         } else {
             $this->to[$var] = $user;
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * @param mixed $from
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFromName()
+    {
+        return $this->fromName;
+    }
+
+    /**
+     * @param mixed $fromName
+     */
+    public function setFromName($fromName)
+    {
+        $this->fromName = $fromName;
+    }
+
+    /**
+     * @param Contact $contact
+     */
+    public function setFromContact(Contact $contact)
+    {
+        $this->from = $contact->getEmail();
+        $this->fromName = $contact->getDisplayName();
     }
 
     /**
@@ -143,6 +191,7 @@ class Email
     {
         return $this->to;
     }
+
 
     /**
      * @return mixed
@@ -177,9 +226,24 @@ class Email
     }
 
     /**
-     * We can also add users via a selection
-     *
-     * @param Selection $selection
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
+
+    /**
+     * @param Selection      $selection
+     * @param ContactService $contactService
      */
     public function addSelection(Selection $selection, ContactService $contactService)
     {
@@ -257,7 +321,7 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string) $result;
+                    $this->$key = (string)$result;
                     return (string)$result;
 
                 }
@@ -266,6 +330,23 @@ class Email
         }
         throw new \Exception("Invalid method " . $method);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param mixed $subject
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+    }
+
 
     /**
      * Converts field names for setters and getters

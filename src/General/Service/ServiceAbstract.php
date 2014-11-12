@@ -9,6 +9,7 @@
  */
 namespace General\Service;
 
+use Contact\Service\ContactService;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\Vat;
@@ -33,6 +34,14 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var ContactService
+     */
+    protected $contactService;
 
     /**
      * @param      $entity
@@ -183,5 +192,45 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
         }
 
         return $this->authenticationService;
+    }
+
+    /**
+     * @return ContactService
+     */
+    public function getContactService()
+    {
+        return $this->contactService;
+    }
+
+    /**
+     * @param ContactService $contactService
+     *
+     * @return ServiceAbstract
+     */
+    public function setContactService(ContactService $contactService)
+    {
+        $this->contactService = $contactService;
+
+        return $this;
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService()
+    {
+        return $this->generalService;
+    }
+
+    /**
+     * @param GeneralService $generalService
+     *
+     * @return ServiceAbstract
+     */
+    public function setGeneralService(GeneralService $generalService)
+    {
+        $this->generalService = $generalService;
+
+        return $this;
     }
 }

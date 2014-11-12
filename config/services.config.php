@@ -9,15 +9,16 @@
  */
 use General\Options;
 use General\Service\EmailService;
+use Zend\ServiceManager\ServiceManager;
 
 return [
     'factories' => [
-        'general_module_options' => function ($sm) {
+        'general_module_options' => function (ServiceManager $sm) {
             $config = $sm->get('Config');
 
             return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : []);
         },
-        EmailService::class      => function ($sm) {
+        EmailService::class      => function (ServiceManager $sm) {
             $config = $sm->get('Config');
 
             return new EmailService($config["email"], $sm);
