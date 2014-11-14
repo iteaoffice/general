@@ -110,6 +110,7 @@ class EmailService extends ServiceAbstract implements
     {
         $this->email = new Email($data);
         $this->message = new Message();
+        $this->message->setEncoding('UTF-8');
 
         return $this->email;
     }
