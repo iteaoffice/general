@@ -352,6 +352,7 @@ class EmailService extends ServiceAbstract implements
 
         $this->email->setFrom($this->mailing->getSender()->getSender());
         $this->email->setFromName($this->mailing->getSender()->getEmail());
+        $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
         $this->email->setMessage($this->mailing->getMailHtml());
 
