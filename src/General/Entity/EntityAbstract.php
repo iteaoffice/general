@@ -9,10 +9,14 @@
  */
 namespace General\Entity;
 
+use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 
 abstract class EntityAbstract implements EntityInterface, InputFilterAwareInterface
 {
+    /**
+     * @var InputFilter
+     */
     protected $inputFilter;
 
     /**
@@ -43,21 +47,21 @@ abstract class EntityAbstract implements EntityInterface, InputFilterAwareInterf
             case 'entity_name':
                 return join('', array_slice(explode('\\', get_class($this)), -1));
             case 'dashed_entity_name':
-                    $dash = function ($m) {
+                $dash = function ($m) {
                     return '-' . strtolower($m[1]);
-                    };
+                };
 
                 return preg_replace_callback('/([A-Z])/', $dash, lcfirst($this->get('entity_name')));
             case 'underscore_entity_name':
-                    $underscore = function ($m) {
+                $underscore = function ($m) {
                     return '_' . strtolower($m[1]);
-                    };
+                };
 
                 return preg_replace_callback('/([A-Z])/', $underscore, lcfirst($this->get('entity_name')));
             case 'underscore_full_entity_name':
-                    $underscore = function ($m) {
+                $underscore = function ($m) {
                     return '_' . strtolower($m[1]);
-                    };
+                };
 
                 return preg_replace_callback(
                     '/([A-Z])/',

@@ -188,8 +188,6 @@ class Country extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-
     /**
      * @param Meeting $meeting
      *

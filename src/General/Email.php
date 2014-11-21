@@ -192,7 +192,6 @@ class Email
         return $this->to;
     }
 
-
     /**
      * @return mixed
      */
@@ -282,7 +281,6 @@ class Email
         }
     }
 
-
     /**
      * Set/Get Magic function
      *
@@ -321,11 +319,11 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string)$result;
-                    return (string)$result;
+                    $this->$key = (string) $result;
+
+                    return (string) $result;
 
                 }
-
 
         }
         throw new \Exception("Invalid method " . $method);
@@ -346,7 +344,6 @@ class Email
     {
         $this->subject = $subject;
     }
-
 
     /**
      * Converts field names for setters and getters

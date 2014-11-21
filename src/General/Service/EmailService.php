@@ -5,6 +5,7 @@
 namespace General\Service;
 
 use Contact\Entity\Contact;
+use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -115,11 +116,12 @@ class EmailService extends ServiceAbstract implements
         return $this->email;
     }
 
+    /**
+     * Send the email
+     */
     public function send()
     {
-        //Send email
         foreach ($this->email->getTo() as $recipient => $contact) {
-
             $this->generateMessage();
 
             //add the CC and BCC to the email
@@ -193,7 +195,7 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * @return void|string
+     * @return string|null
      */
     public function parseBody()
     {
@@ -233,7 +235,7 @@ class EmailService extends ServiceAbstract implements
 
         $this->message->setBody($body);
 
-        return;
+        return null;
     }
 
     /**
@@ -241,7 +243,6 @@ class EmailService extends ServiceAbstract implements
      */
     private function generateMessage()
     {
-
 
         //Reply to
         if ($this->config["defaults"]["reply_to"]) {
@@ -271,7 +272,6 @@ class EmailService extends ServiceAbstract implements
         }
     }
 
-
     /**
      * Extract the contactService and include the variables in the template array settings
      *
@@ -279,6 +279,9 @@ class EmailService extends ServiceAbstract implements
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
+        /**
+         * @var $contactService ContactService
+         */
         $contactService = clone $this->getServiceLocator()->get('contact_contact_service');
         $contactService->setContact($contact);
 
@@ -292,11 +295,12 @@ class EmailService extends ServiceAbstract implements
             )
         );
         $this->templateVars['fullname'] = $contactService->parseFullName();
-        $this->templateVars['country'] = (string)$contactService->parseCountry();
+        $this->templateVars['country'] = (string) $contactService->parseCountry();
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
+        $this->templateVars['email'] = $contactService->getContact()->getEmail();
+        $this->templateVars['signature'] = $contactService->parseSignature();
 
     }
-
 
     /**
      * @param $content
@@ -341,7 +345,6 @@ class EmailService extends ServiceAbstract implements
         }
     }
 
-
     /**
      * When the mailing is set, we need to take some features over from the mailing to the email.
      *
@@ -351,8 +354,13 @@ class EmailService extends ServiceAbstract implements
     {
         $this->mailing = $mailing;
 
-        $this->email->setFrom($this->mailing->getSender()->getSender());
-        $this->email->setFromName($this->mailing->getSender()->getEmail());
+        if (is_null($this->email)) {
+            throw new \RuntimeException("The email object is empty. Did you call create() first?");
+        }
+
+        $this->email->setFrom($this->mailing->getSender()->getEmail());
+        $this->email->setFromName($this->mailing->getSender()->getSender());
+
         $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
         $this->email->setMessage($this->mailing->getMailHtml());
@@ -391,7 +399,6 @@ class EmailService extends ServiceAbstract implements
             $message
         );
 
-
         /**
          * Clone the twigRenderer and overrule to loader to be a string
          */
@@ -413,13 +420,23 @@ class EmailService extends ServiceAbstract implements
     {
         $this->updateTemplateVarsWithContact($this->getContactService()->getContact());
 
-        return $this->renderer->render(
-            $this->getMailing()->getTemplate()->getTemplate(),
-            array_merge_recursive(
-                ['content' => $this->personaliseMessage($this->email->getMessage())],
-                $this->templateVars
-            )
-        );
+        if (is_null($this->mailing)) {
+            throw new \RuntimeException("The mailing object is empty. Did set the template");
+        }
+
+        try {
+            return $this->renderer->render(
+                $this->mailing->getTemplate()->getTemplate(),
+                array_merge_recursive(
+                    ['content' => $this->personaliseMessage($this->email->getMessage())],
+                    $this->templateVars
+                )
+            );
+        } catch (\Twig_Error_Syntax $e) {
+            print sprintf("Something went wrong. Error message: %s", $e->getMessage());
+        }
+
+        return null;
     }
 
     /**
