@@ -131,7 +131,7 @@ class Email
         if ($var instanceof Contact) {
             $this->to[$var->getEmail()] = $var;
         } else {
-            $this->to[$var] = $user;
+            $this->to[$var] = is_null($user) ? $var : $user;
         }
     }
 
@@ -177,9 +177,9 @@ class Email
     }
 
     /**
-     * @param $to
+     * @param array $to
      */
-    public function setTo($to)
+    public function setTo(array $to)
     {
         $this->to = $to;
     }
@@ -319,9 +319,9 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string) $result;
+                    $this->$key = (string)$result;
 
-                    return (string) $result;
+                    return (string)$result;
 
                 }
 
