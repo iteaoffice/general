@@ -96,6 +96,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 /**
                  * @var $countryMap CountryMap
                  */
+
                 return $this->parseCountryMap();
 
             case 'country_funder':

@@ -319,9 +319,9 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string)$result;
+                    $this->$key = (string) $result;
 
-                    return (string)$result;
+                    return (string) $result;
 
                 }
 

@@ -17,7 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SendEmailJobFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $sl
+     * @param  ServiceLocatorInterface $sl
      * @return SendEmailJob
      */
     public function createService(ServiceLocatorInterface $sl)
