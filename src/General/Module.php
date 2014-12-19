@@ -11,6 +11,7 @@
  */
 namespace General;
 
+use General\Listener\SendEmailListener;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature;
 
@@ -29,16 +30,16 @@ class Module implements
      */
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
+        return [
+            'Zend\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/../../autoload_classmap.php',
-            ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+            ],
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/../../src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -79,5 +80,9 @@ class Module implements
      */
     public function onBootstrap(EventInterface $e)
     {
+        $app = $e->getParam('application');
+
+        $em = $app->getEventManager();
+        $em->trigger(SendEmailListener::class, $this, ['id' => 1]);
     }
 }

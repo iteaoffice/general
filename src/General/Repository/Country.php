@@ -51,7 +51,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
-        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -143,7 +143,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
-        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->andWhere('e.type = ?11');
@@ -180,8 +180,6 @@ class Country extends EntityRepository
                             JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects'
         );
         $queryBuilder->innerJoin('c.itac', 'itac');
-        $queryBuilder->join('c.organisation', 'o');
-        $queryBuilder->join('o.affiliation', 'a');
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
 
