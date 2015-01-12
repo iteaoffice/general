@@ -7,6 +7,7 @@ namespace General;
 use Contact\Entity\Contact;
 use Contact\Entity\Selection;
 use Contact\Service\ContactService;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class Email
@@ -21,11 +22,7 @@ use Contact\Service\ContactService;
  * @method void setHtmlContent($htmlContent)
  * @method string getTextContent()
  * @method void setTextContent($textContent)
- * @method string getReplyTo()
- * @method void setReplyTo($replyTo)
- * @method string getReplyToName()
  * @method void setDeeplink($deeplink)
- * @method void setReplyToName($replyToName)
  * @method void setCode($code)
  * @method void setUrl($url)
  * @method void setProject($project)
@@ -74,6 +71,14 @@ class Email
     /**
      * @var string
      */
+    protected $replyTo = null;
+    /**
+     * @var string
+     */
+    protected $replyToName = null;
+    /**
+     * @var string
+     */
     protected $fromName;
     /**
      * To recipients
@@ -95,13 +100,19 @@ class Email
      * Message
      */
     protected $message = "";
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
 
     /**
-     * @param array $data
+     * @param array          $data
+     * @param ServiceManager $serviceManager
      */
-    public function __construct($data = [])
+    public function __construct($data = [], ServiceManager $serviceManager)
     {
         $this->setProperties($data);
+        $this->setServiceManager($serviceManager);
     }
 
     /**
@@ -172,8 +183,15 @@ class Email
      */
     public function setFromContact(Contact $contact)
     {
-        $this->from = $contact->getEmail();
-        $this->fromName = $contact->getDisplayName();
+        /**
+         * The From contact cannot have the FROM email since we don't want to sent emails directly from other users
+         */
+        $config = $this->getServiceManager()->get('config');
+
+        $this->from = $config['email']['defaults']['from_email'];
+        $this->replyTo = $contact->getEmail();
+        $this->replyToName = $contact->getDisplayName();
+        $this->fromName = sprintf("%s (via %s)", $contact->getDisplayName(), $config['email']['defaults']['from_name']);
     }
 
     /**
@@ -319,9 +337,9 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string)$result;
+                    $this->$key = (string) $result;
 
-                    return (string)$result;
+                    return (string) $result;
 
                 }
 
@@ -344,6 +362,7 @@ class Email
     {
         $this->subject = $subject;
     }
+
 
     /**
      * Converts field names for setters and getters
@@ -373,5 +392,53 @@ class Email
         }
 
         return $values;
+    }
+
+    /**
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
+    /**
+     * @param ServiceManager $serviceManager
+     */
+    public function setServiceManager($serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyTo()
+    {
+        return $this->replyTo;
+    }
+
+    /**
+     * @param string $replyTo
+     */
+    public function setReplyTo($replyTo)
+    {
+        $this->replyTo = $replyTo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToName()
+    {
+        return $this->replyToName;
+    }
+
+    /**
+     * @param string $replyToName
+     */
+    public function setReplyToName($replyToName)
+    {
+        $this->replyToName = $replyToName;
     }
 }

@@ -74,7 +74,6 @@ class SendEmailListener implements ListenerAggregateInterface
             $this->state = sprintf('%s jobs processed', $this->runCount);
         }
 
-
     }
 
     /**

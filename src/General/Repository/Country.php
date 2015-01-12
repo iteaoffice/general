@@ -95,6 +95,39 @@ class Country extends EntityRepository
     }
 
     /**
+     * This function returns the country based on an IN query to avoid the unwanted hydration of the result
+     *
+     * @param Project $project
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return null|Entity\Country[]
+     */
+    public function findCountryOfProjectContact(Project $project)
+    {
+
+        $findQueryBuilder = $this->_em->createQueryBuilder();
+        $findQueryBuilder->select('c');
+        $findQueryBuilder->from('Project\Entity\Project', 'p');
+        $findQueryBuilder->join('p.contact', 'contact');
+        $findQueryBuilder->join('contact.contactOrganisation', 'co');
+        $findQueryBuilder->join('co.organisation', 'o');
+        $findQueryBuilder->join('o.country', 'c');
+        $findQueryBuilder->andWhere('p = ?1');
+
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('country');
+        $queryBuilder->from('General\Entity\Country', 'country');
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in('country', $findQueryBuilder->getDQL())
+        );
+
+        $queryBuilder->setParameter(1, $project);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * Produces a default query to get a country and the required joins
      *
      * @param $which

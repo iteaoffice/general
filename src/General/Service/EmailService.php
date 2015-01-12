@@ -114,7 +114,7 @@ class EmailService extends ServiceAbstract implements
      */
     public function create($data = [])
     {
-        $this->email = new Email($data);
+        $this->email = new Email($data, $this->getServiceLocator());
         $this->message = new Message();
         $this->message->setEncoding('UTF-8');
 
@@ -190,6 +190,14 @@ class EmailService extends ServiceAbstract implements
          * Go over the templateVars to replace content in the subject
          */
         foreach ($this->templateVars as $key => $replace) {
+
+            /**
+             * Skip the service manager
+             */
+            if ($replace instanceof ServiceManager) {
+                continue;
+            }
+
             /**
              * replace the content of the title with the available keys in the template vars
              */
@@ -250,7 +258,7 @@ class EmailService extends ServiceAbstract implements
     {
 
         //Reply to
-        if ($this->config["defaults"]["reply_to"]) {
+        if ($this->config["defaults"]["reply_to"] && is_null($this->email->getReplyTo())) {
             $this->message->addReplyTo(
                 $this->config["defaults"]["reply_to"],
                 $this->config["defaults"]["reply_to_name"]
@@ -347,6 +355,9 @@ class EmailService extends ServiceAbstract implements
             } else {
                 $this->message->addBcc($emailAddress, $contact);
             }
+        }
+        if (!is_null($this->email->getReplyTo())) {
+            $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
         }
     }
 

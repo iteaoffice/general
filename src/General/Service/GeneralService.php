@@ -147,6 +147,20 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * Returns the country of the project leader (project.contact)
+     *
+     * @param Project $project
+     *
+     * @return null|Entity\Country[]
+     */
+    public function findCountryOfProjectContact(Project $project)
+    {
+        return $this->getEntityManager()->getRepository(
+            $this->getFullEntityName('country')
+        )->findCountryOfProjectContact($project);
+    }
+
+    /**
      * Produce a list of countries active in a call and evaluation type
      *
      * @param Evaluation\Type $type
