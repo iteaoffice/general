@@ -19,7 +19,7 @@ class Bootstrap
 
     public static function init()
     {
-        $zf2ModulePaths = array(dirname(dirname(__DIR__)));
+        $zf2ModulePaths = [dirname(dirname(__DIR__))];
         if (($path = static::findParentPath('vendor'))) {
             $zf2ModulePaths[] = $path;
         }
@@ -29,6 +29,7 @@ class Bootstrap
         if (($path = static::findParentPath('src')) !== $zf2ModulePaths[0]) {
             $zf2ModulePaths[] = $path;
         }
+
         static::initAutoloader();
         $config = include __DIR__ . '/../config/application.config.php';
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
@@ -49,7 +50,7 @@ class Bootstrap
 //            die();
 //        }
         //Create the schema
-        $tool      = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
         $mdFactory = $entityManager->getMetadataFactory();
         $mdFactory->getAllMetadata();
         $tool->dropDatabase();
@@ -94,21 +95,21 @@ class Bootstrap
         }
         include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
         AutoloaderFactory::factory(
-            array(
-                'Zend\Loader\StandardAutoloader' => array(
+            [
+                'Zend\Loader\StandardAutoloader' => [
                     'autoregister_zf' => true,
-                    'namespaces'      => array(
+                    'namespaces'      => [
                         __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
                         'Admin'       => __DIR__ . '/../../../../module/Admin'
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
     protected static function findParentPath($path)
     {
-        $dir         = __DIR__;
+        $dir = __DIR__;
         $previousDir = '.';
         while (!is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
