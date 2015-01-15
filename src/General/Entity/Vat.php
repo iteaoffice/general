@@ -157,7 +157,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->percentage . '%';
+        return (string) $this->percentage.'%';
     }
 
     /**
@@ -167,7 +167,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
+        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
     }
 
     /**
@@ -249,7 +249,7 @@ class Vat extends EntityAbstract implements ResourceInterface
             'percentage' => $this->percentage,
             'dateStart'  => $this->dateStart,
             'type'       => $this->type,
-            'country'    => $this->country
+            'country'    => $this->country,
         );
     }
 

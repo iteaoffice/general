@@ -61,10 +61,10 @@ class Flag extends EntityAbstract
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR . DEBRANOVA_HOST . DIRECTORY_SEPARATOR . 'country-flag';
+        $cacheDir = __DIR__.'/../../../../../../public'.DIRECTORY_SEPARATOR.'assets'.
+            DIRECTORY_SEPARATOR.DEBRANOVA_HOST.DIRECTORY_SEPARATOR.'country-flag';
 
-        return $cacheDir . DIRECTORY_SEPARATOR . strtolower($this->getCountry()->getIso3()) . '.png';
+        return $cacheDir.DIRECTORY_SEPARATOR.strtolower($this->getCountry()->getIso3()).'.png';
     }
 
     /**

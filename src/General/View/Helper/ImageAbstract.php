@@ -90,15 +90,14 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
             $url($this->router, $this->routerParams),
             $this->imageId,
             implode(' ', $this->classes),
-            is_null($this->width) ? null : ' width="' . $this->width . '"'
+            is_null($this->width) ? null : ' width="'.$this->width.'"'
         );
 
         if (!$this->lightBox) {
             return $image;
         } else {
-            return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
+            return '<a href="'.$url($this->router, $this->routerParams).'" data-lightbox="itea">'.$image.'</a>';
         }
-
     }
 
     /**

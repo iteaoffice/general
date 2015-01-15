@@ -74,7 +74,7 @@ class ChallengeLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
                 break;
             case 'view':
-                $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
+                $this->setRouter('route-'.$this->getChallenge()->get("underscore_full_entity_name"));
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             default:

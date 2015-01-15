@@ -86,8 +86,8 @@ class EmailService extends ServiceAbstract implements
                     'connection_class'  => 'login',
                     'connection_config' => [
                         'username' => $this->config["relay"]["username"],
-                        'password' => $this->config["relay"]["password"]
-                    ]
+                        'password' => $this->config["relay"]["password"],
+                    ],
                 ];
                 // Add port
                 if ($this->config["relay"]["port"]) {
@@ -190,7 +190,6 @@ class EmailService extends ServiceAbstract implements
          * Go over the templateVars to replace content in the subject
          */
         foreach ($this->templateVars as $key => $replace) {
-
             /**
              * Skip the service manager
              */
@@ -248,7 +247,7 @@ class EmailService extends ServiceAbstract implements
 
         $this->message->setBody($body);
 
-        return null;
+        return;
     }
 
     /**
@@ -256,7 +255,6 @@ class EmailService extends ServiceAbstract implements
      */
     private function generateMessage()
     {
-
         //Reply to
         if ($this->config["defaults"]["reply_to"] && is_null($this->email->getReplyTo())) {
             $this->message->addReplyTo(
@@ -312,7 +310,6 @@ class EmailService extends ServiceAbstract implements
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
         $this->templateVars['email'] = $contactService->getContact()->getEmail();
         $this->templateVars['signature'] = $contactService->parseSignature();
-
     }
 
     /**
@@ -324,7 +321,7 @@ class EmailService extends ServiceAbstract implements
     {
         return preg_replace(
             [
-                '~\[(.*?)\]~'
+                '~\[(.*?)\]~',
             ],
             [
                 "{{ $1|raw }}"
@@ -383,7 +380,7 @@ class EmailService extends ServiceAbstract implements
 
         $this->message->getHeaders()->addHeaderLine(
             'X-Mailjet-Campaign',
-            DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId()
+            DEBRANOVA_HOST.'-mailing-'.$this->mailing->getId()
         );
     }
 
@@ -403,7 +400,7 @@ class EmailService extends ServiceAbstract implements
                 '~\[parent::getContact\(\)::parseLastname\(\)\]~',
                 '~\[parent::getContact\(\)::parseFullname\(\)\]~',
                 '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~'
+                '~\[parent::getContact\(\)::country\]~',
             ],
             [
                 "[firstname]",
@@ -452,7 +449,7 @@ class EmailService extends ServiceAbstract implements
             print sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
 
-        return null;
+        return;
     }
 
     /**

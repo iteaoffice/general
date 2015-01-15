@@ -105,7 +105,6 @@ class Country extends EntityRepository
      */
     public function findCountryOfProjectContact(Project $project)
     {
-
         $findQueryBuilder = $this->_em->createQueryBuilder();
         $findQueryBuilder->select('c');
         $findQueryBuilder->from('Project\Entity\Project', 'p');

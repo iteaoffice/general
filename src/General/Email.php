@@ -109,7 +109,7 @@ class Email
      * @param array          $data
      * @param ServiceManager $serviceManager
      */
-    public function __construct($data = [], ServiceManager $serviceManager)
+    public function __construct(array $data, ServiceManager $serviceManager)
     {
         $this->setProperties($data);
         $this->setServiceManager($serviceManager);
@@ -340,11 +340,10 @@ class Email
                     $this->$key = (string) $result;
 
                     return (string) $result;
-
                 }
 
         }
-        throw new \Exception("Invalid method " . $method);
+        throw new \Exception("Invalid method ".$method);
     }
 
     /**
@@ -362,7 +361,6 @@ class Email
     {
         $this->subject = $subject;
     }
-
 
     /**
      * Converts field names for setters and getters

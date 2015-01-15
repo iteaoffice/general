@@ -45,7 +45,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $html       = [];
         $html[]     = " var gdpData = {\n";
         foreach ($countries as $country) {
-            $html[] = '"' . $country->getCd() . '": ';
+            $html[] = '"'.$country->getCd().'": ';
             $html[] = (!is_null($selectedCountry) && $country->getId() == $selectedCountry->getId()) ? 2 : 1;
             $html[] = ",\n";
         }
@@ -57,7 +57,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         }
         $html[] = " var countries = [\n";
         foreach ($allCountries as $country) {
-            $html[] = '"' . $country->getCd() . '", ';
+            $html[] = '"'.$country->getCd().'", ';
         }
         $html[] = "];\n";
         if ($clickable) {
@@ -95,7 +95,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 
 EOT;
         $this->serviceLocator->get('headscript')->appendFile(
-            'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js',
+            'assets/'.DEBRANOVA_HOST.'/js/jvectormap.js',
             'text/javascript'
         );
         $this->serviceLocator->get('headscript')->appendScript(implode('', $html));

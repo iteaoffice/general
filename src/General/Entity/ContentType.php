@@ -204,7 +204,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string)$this->contentType;
+        return (string) $this->contentType;
     }
 
     /**
@@ -215,13 +215,13 @@ class ContentType
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR .
-            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') .
-            DIRECTORY_SEPARATOR . 'content-type-icon';
+        $cacheDir = __DIR__.'/../../../../../../public'.DIRECTORY_SEPARATOR.'assets'.
+            DIRECTORY_SEPARATOR.
+            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test').
+            DIRECTORY_SEPARATOR.'content-type-icon';
 
-        return $cacheDir . DIRECTORY_SEPARATOR
-        . $this->getHash() . '.gif';
+        return $cacheDir.DIRECTORY_SEPARATOR
+        .$this->getHash().'.gif';
     }
 
     /**
@@ -231,7 +231,7 @@ class ContentType
      */
     public function getHash()
     {
-        return sha1($this->id . $this->contentType . $this->extension);
+        return sha1($this->id.$this->contentType.$this->extension);
     }
 
     /**

@@ -221,7 +221,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
             'general/partial/list/project-challenge',
             array(
                 'projects'  => $projects,
-                'challenge' => $challenge
+                'challenge' => $challenge,
             )
         );
     }

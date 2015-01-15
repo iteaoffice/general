@@ -136,7 +136,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
+        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
     }
 
     /**
@@ -273,7 +273,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     {
         $arrWords = explode(' ', strip_tags($this->description));
 
-        return implode(' ', array_slice($arrWords, 0, 40)) . '...';
+        return implode(' ', array_slice($arrWords, 0, 40)).'...';
     }
 
     /**

@@ -202,7 +202,7 @@ class Title extends EntityAbstract implements ResourceInterface
     public function getArrayCopy()
     {
         return array(
-            'contacts' => $this->contacts
+            'contacts' => $this->contacts,
         );
     }
 

@@ -44,7 +44,6 @@ class SendEmailListener implements ListenerAggregateInterface
             WorkerEvent::EVENT_FINISH,
             [$this, 'onFinish']
         );
-
     }
 
     /**
@@ -73,7 +72,6 @@ class SendEmailListener implements ListenerAggregateInterface
         } else {
             $this->state = sprintf('%s jobs processed', $this->runCount);
         }
-
     }
 
     /**

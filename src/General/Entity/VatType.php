@@ -131,7 +131,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
+        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
     }
 
     /**
@@ -223,7 +223,7 @@ class VatType extends EntityAbstract implements ResourceInterface
         return array(
             'type'        => $this->type,
             'description' => $this->description,
-            'vat'         => $this->vat
+            'vat'         => $this->vat,
         );
     }
 

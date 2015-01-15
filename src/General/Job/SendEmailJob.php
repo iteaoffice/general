@@ -39,6 +39,5 @@ class SendEmailJob extends AbstractJob
         $this->emailService->send();
 
         print 'test';
-
     }
 }

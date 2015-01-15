@@ -94,13 +94,13 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
-            return $serverUrl->__invoke() . $url($this->router, $this->routerParams);
+            return $serverUrl->__invoke().$url($this->router, $this->routerParams);
         }
         $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
         return sprintf(
             $uri,
-            $serverUrl() . $url($this->router, $this->routerParams),
+            $serverUrl().$url($this->router, $this->routerParams),
             $this->text,
             implode(' ', $this->classes),
             implode('', $this->linkContent)
@@ -134,7 +134,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                 break;
             case 'button':
                 $this->addClasses("btn btn-primary");
-                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
+                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> '.$this->getText());
                 break;
             case 'text':
                 $this->addLinkContent($this->getText());
@@ -152,7 +152,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                  * Social is treated in the createLink function, no content needs to be created
                  */
 
-                return null;
+                return;
             default:
                 if (!array_key_exists($this->getShow(), $this->showOptions)) {
                     throw new \InvalidArgumentException(
