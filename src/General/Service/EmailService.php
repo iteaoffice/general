@@ -37,10 +37,6 @@ class EmailService extends ServiceAbstract implements
      */
     protected $email;
     /**
-     * @var Message
-     */
-    protected $message;
-    /**
      * @var SendmailTransport|SmtpTransport
      */
     protected $transport;
@@ -61,6 +57,10 @@ class EmailService extends ServiceAbstract implements
      */
     protected $mailing;
     /**
+     * @var Message
+     */
+    protected $message;
+    /**
      * @var array
      */
     protected $templateVars = [];
@@ -72,9 +72,9 @@ class EmailService extends ServiceAbstract implements
     public function __construct($config, ServiceManager $serviceManager)
     {
         $this->config = $config;
-        $this->renderer = $serviceManager->get('ZfcTwigRenderer');
 
         if ($this->config["active"]) {
+            $this->renderer = $serviceManager->get('ZfcTwigRenderer');
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
@@ -115,8 +115,6 @@ class EmailService extends ServiceAbstract implements
     public function create($data = [])
     {
         $this->email = new Email($data, $this->getServiceLocator());
-        $this->message = new Message();
-        $this->message->setEncoding('UTF-8');
 
         return $this->email;
     }
@@ -126,48 +124,109 @@ class EmailService extends ServiceAbstract implements
      */
     public function send()
     {
-        foreach ($this->email->getTo() as $recipient => $contact) {
-            $this->generateMessage();
+        switch ($this->email->isPersonal()) {
+            case true:
+                foreach ($this->email->getTo() as $recipient => $contact) {
+                    /**
+                     * Create a new message for everyone
+                     */
+                    $this->message = new Message();
+                    $this->message->setEncoding('UTF-8');
 
-            //add the CC and BCC to the email
-            $this->setShadowRecipients();
+                    $this->generateMessage();
 
-            /**
-             * We have a recipient which can be an instance of the contact. Produce a contactService object
-             * and fill the templateVars with extra options
-             */
-            if ($contact instanceof Contact) {
-                $this->updateTemplateVarsWithContact($contact);
-            } else {
-                $contactName = $contact;
-                $contact = new Contact();
-                $contact->setEmail($recipient);
-                $contact->setFirstName($contactName);
-            }
+                    //add the CC and BCC to the email
+                    $this->setShadowRecipients();
 
-            /**
-             * Overrule the to when we are in development
-             */
-            if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
-            } else {
-                $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
-            }
+                    /**
+                     * We have a recipient which can be an instance of the contact. Produce a contactService object
+                     * and fill the templateVars with extra options
+                     */
+                    if ($contact instanceof Contact) {
+                        $this->updateTemplateVarsWithContact($contact);
+                    } else {
+                        $contactName = $contact;
+                        $contact = new Contact();
+                        $contact->setEmail($recipient);
+                        $contact->setFirstName($contactName);
+                    }
 
-            /**
-             * We have the contact and can now produce the content of the message
-             */
-            $this->parseSubject();
+                    /**
+                     * Overrule the to when we are in development
+                     */
+                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                    } else {
+                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                    }
 
-            /**
-             * We have the contact and can now produce the content of the message
-             */
-            $this->parseBody();
+                    /**
+                     * We have the contact and can now produce the content of the message
+                     */
+                    $this->parseSubject();
 
-            /**
-             * Send the email
-             */
-            $this->transport->send($this->message);
+                    /**
+                     * We have the contact and can now produce the content of the message
+                     */
+                    $this->parseBody();
+
+                    /**
+                     * Send the email
+                     */
+                    $this->transport->send($this->message);
+                }
+                break;
+            case false:
+
+                /**
+                 * Create a new message for everyone
+                 */
+                $this->message = new Message();
+                $this->message->setEncoding('UTF-8');
+
+                $this->generateMessage();
+
+                //add the CC and BCC to the email
+                $this->setShadowRecipients();
+
+                foreach ($this->email->getTo() as $recipient => $contact) {
+                    /**
+                     * We have a recipient which can be an instance of the contact. Produce a contactService object
+                     * and fill the templateVars with extra options
+                     */
+                    if (!$contact instanceof Contact) {
+                        $contactName = $contact;
+                        $contact = new Contact();
+                        $contact->setEmail($recipient);
+                        $contact->setFirstName($contactName);
+                    }
+
+                    /**
+                     * Overrule the to when we are in development
+                     */
+                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                    } else {
+                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                    }
+                }
+
+                /**
+                 * We have the contact and can now produce the content of the message
+                 */
+                $this->parseSubject();
+
+                /**
+                 * We have the contact and can now produce the content of the message
+                 */
+                $this->parseBody();
+
+                /**
+                 * Send the email
+                 */
+                $this->transport->send($this->message);
+
+                break;
         }
     }
 
@@ -247,7 +306,7 @@ class EmailService extends ServiceAbstract implements
 
         $this->message->setBody($body);
 
-        return;
+        return true;
     }
 
     /**
@@ -280,6 +339,16 @@ class EmailService extends ServiceAbstract implements
             $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
+        }
+
+        /**
+         * Force the mailing as header if we have a mailing
+         */
+        if (!is_null($this->mailing)) {
+            $this->message->getHeaders()->addHeaderLine(
+                'X-Mailjet-Campaign',
+                DEBRANOVA_HOST.'-mailing-'.$this->mailing->getId()
+            );
         }
     }
 
@@ -377,11 +446,6 @@ class EmailService extends ServiceAbstract implements
         $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
         $this->email->setMessage($this->mailing->getMailHtml());
-
-        $this->message->getHeaders()->addHeaderLine(
-            'X-Mailjet-Campaign',
-            DEBRANOVA_HOST.'-mailing-'.$this->mailing->getId()
-        );
     }
 
     /**
@@ -449,7 +513,7 @@ class EmailService extends ServiceAbstract implements
             print sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
 
-        return;
+        return true;
     }
 
     /**

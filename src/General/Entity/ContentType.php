@@ -53,7 +53,7 @@ class ContentType
      */
     private $projectLogo;
     /**
-     * @ORM\Column(name="gifimage",  type="blob")
+     * @ORM\Column(name="gifimage",  type="blob", nullable=true)
      * @var resource
      */
     private $image;

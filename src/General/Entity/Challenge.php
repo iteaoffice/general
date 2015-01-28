@@ -84,7 +84,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="challenge")
      * @Annotation\Exclude()
      * @var \Contact\Entity\Contact[]
-     * private $contact;
+     *                                private $contact;
      */
     /**
      * Class constructor

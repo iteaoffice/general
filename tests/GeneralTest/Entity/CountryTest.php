@@ -9,7 +9,6 @@
  */
 namespace GeneralTest\Entity;
 
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Country;
 use GeneralTest\Bootstrap;
 use Zend\InputFilter\InputFilter;
@@ -24,42 +23,46 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      * @var \Doctrine\ORM\EntityManager;
      */
     protected $entityManager;
+
+
     /**
-     * @var array
+     * @return array
      */
-    protected $countryData = array(
-        'country' => 'This is a name of the country',
-        'cd'      => 'XX',
-        'iso3'    => 'BEL',
-        'numcode' => '123',
-        'vat'     => null
-    );
-    /**
-     * @var Country
-     */
-    protected $country;
+    public function provider()
+    {
+        $country = new Country();
+        $country->setCountry('Testonia');
+        $country->setCd('TS');
+        $country->setIso3('TST');
+        $country->setNumcode('1234');
+
+        return [
+            [$country]
+        ];
+    }
 
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-        $this->country = new Country();
+        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
     }
 
     public function testCanCreateEntity()
     {
-        $this->assertInstanceOf("General\Entity\Country", $this->country);
-        $this->assertNull($this->country->getId(), 'The "Id" should be null');
+        $country = new Country();
+        $this->assertInstanceOf("General\Entity\Country", $country);
+        $this->assertNull($country->getId(), 'The "Id" should be null');
         $id = 1;
-        $this->country->setId($id);
-        $this->assertTrue(is_array($this->country->getArrayCopy()));
-        $this->assertTrue(is_array($this->country->populate()));
+        $country->setId($id);
+        $this->assertTrue(is_array($country->getArrayCopy()));
+        $this->assertTrue(is_array($country->populate()));
     }
 
     public function testMagicGettersAndSetters()
     {
-        $this->country->country = 'test';
-        $this->assertEquals('test', $this->country->country);
+        $country = new Country();
+        $country->country('test');
+        $this->assertEquals('test', $country->country);
     }
 
     /**
@@ -67,55 +70,35 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotSetInputFilter()
     {
-        $this->country->setInputFilter(new InputFilter());
+        $country = new Country();
+        $country->setInputFilter(new InputFilter());
     }
 
     public function testHasFilter()
     {
-        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->country->getInputFilter());
+        $country = new Country();
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $country->getInputFilter());
     }
 
-    public function testCanSaveEntityInDatabase()
+    /**
+     * @param Country $country
+     *
+     * @dataProvider provider
+     */
+    public function testCanSaveEntityInDatabase(Country $country)
     {
-        $hydrator = new DoctrineObject(
-            $this->entityManager,
-            'General\Entity\Country'
-        );
-        $this->country = $hydrator->hydrate($this->countryData, new Country());
-        $this->entityManager->persist($this->country);
+        $this->entityManager->persist($country);
         $this->entityManager->flush();
-        $this->assertInstanceOf('General\Entity\Country', $this->country);
-        $this->assertNotNull($this->country->getId());
-        $this->assertEquals(
-            $this->country->getCountry(),
-            $this->countryData['country'],
-            'The country name of the saved entity should be the same as the original name'
-        );
-        $this->assertEquals(
-            $this->country->getCd(),
-            $this->countryData['cd'],
-            'The cd of the saved entity should be the same as the original name'
-        );
-        $this->assertEquals(
-            $this->country->getIso3(),
-            $this->countryData['iso3'],
-            'The iso3 of the saved entity should be the same as the original name'
-        );
-        $this->assertEquals(
-            $this->country->getNumcode(),
-            $this->countryData['numcode'],
-            'The numcode of the saved entity should be the same as the original name'
-        );
-//        $this->assertNull(
-//            $this->country->getVat(),
-//            'The country_vat of the saved entity should be the same as the original name'
-//        );
-        $this->assertNotNull($this->country->getResourceId());
+        $this->assertInstanceOf('General\Entity\Country', $country);
+        $this->assertNotNull($country->getId());
+
+        $this->assertNotNull($country->getResourceId());
     }
 
     public function testToString()
     {
-        $this->country->country = $this->countryData['country'];
-        $this->assertEquals((string) $this->country, $this->countryData['country']);
+        $country = new Country();
+        $country->setCountry('test');
+        $this->assertEquals((string)$country, 'test');
     }
 }

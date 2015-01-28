@@ -101,6 +101,12 @@ class Email
      */
     protected $message = "";
     /**
+     * Value to check if a mail is sent personal or send to everyone in the to if set to false
+     *
+     * @var bool
+     */
+    protected $personal = true;
+    /**
      * @var ServiceManager
      */
     protected $serviceManager;
@@ -203,7 +209,7 @@ class Email
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getTo()
     {
@@ -438,5 +444,25 @@ class Email
     public function setReplyToName($replyToName)
     {
         $this->replyToName = $replyToName;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPersonal()
+    {
+        return $this->personal;
+    }
+
+    /**
+     * @param boolean $personal
+     *
+     * @return Email
+     */
+    public function setPersonal($personal)
+    {
+        $this->personal = $personal;
+
+        return $this;
     }
 }

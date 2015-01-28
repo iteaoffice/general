@@ -9,10 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Gender;
 use GeneralTest\Bootstrap;
 use Zend\InputFilter\InputFilter;
+use Zend\Math\Rand;
 
 class GenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,41 +24,44 @@ class GenderTest extends \PHPUnit_Framework_TestCase
      * @var \Doctrine\ORM\EntityManager;
      */
     protected $entityManager;
+
     /**
-     * @var array
+     * @return array
      */
-    protected $genderData;
-    /**
-     * @var Gender
-     */
-    protected $gender;
+    public function provider()
+    {
+        $gender = new Gender();
+        $gender->setName(Rand::getString(4));
+        $gender->setAttention('attention:' . Rand::getString(4));
+        $gender->setSalutation('This is the salutation');
+
+        return [
+            [$gender]
+        ];
+    }
 
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-        $this->genderData = array(
-            'name'       => 'This is the name of the gender',
-            'attention'  => 'This is the attention',
-            'salutation' => 'This is the salutation'
-        );
-        $this->gender = new Gender();
+        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
     }
 
     public function testCanCreateEntity()
     {
-        $this->assertInstanceOf("General\Entity\Gender", $this->gender);
-        $this->assertNull($this->gender->getId(), 'The "Id" should be null');
+        $gender = new Gender();
+        $this->assertInstanceOf("General\Entity\Gender", $gender);
+        $this->assertNull($gender->getId(), 'The "Id" should be null');
         $id = 1;
-        $this->gender->setId($id);
-        $this->assertTrue(is_array($this->gender->getArrayCopy()));
-        $this->assertTrue(is_array($this->gender->populate()));
+        $gender->setId($id);
+        $this->assertTrue(is_array($gender->getArrayCopy()));
+        $this->assertTrue(is_array($gender->populate()));
     }
 
     public function testMagicGettersAndSetters()
     {
-        $this->gender->name = 'test';
-        $this->assertEquals('test', $this->gender->name);
+        $gender = new Gender();
+        $gender->name = 'test';
+        $this->assertEquals('test', $gender->name);
     }
 
     /**
@@ -66,43 +69,27 @@ class GenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotSetInputFilter()
     {
-        $this->gender->setInputFilter(new InputFilter());
+        $gender = new Gender();
+        $gender->setInputFilter(new InputFilter());
     }
 
     public function testHasFilter()
     {
-        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->gender->getInputFilter());
+        $gender = new Gender();
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $gender->getInputFilter());
     }
 
-    public function testCanSaveEntityInDatabase()
+    /**
+     * @param Gender $gender
+     *
+     * @dataProvider provider
+     */
+    public function testCanSaveEntityInDatabase(Gender $gender)
     {
-        $hydrator = new DoctrineObject(
-            $this->entityManager,
-            'General\Entity\Gender'
-        );
-        $this->gender = $hydrator->hydrate($this->genderData, new Gender());
-        $this->assertEquals((string) $this->gender, $this->genderData['attention']);
-        $this->entityManager->persist($this->gender);
+        $this->entityManager->persist($gender);
         $this->entityManager->flush();
-        $this->assertInstanceOf('General\Entity\Gender', $this->gender);
-        $this->assertNotNull($this->gender->getId());
-        $this->assertEquals(
-            $this->gender->getName(),
-            $this->genderData['name'],
-            'The name of the saved entity should be the same as the original name'
-        );
-        $this->assertEquals(
-            $this->gender->getAttention(),
-            $this->genderData['attention'],
-            'The name of the saved entity should be the same as the original name'
-        );
-        $this->assertEquals(
-            $this->gender->getSalutation(),
-            $this->genderData['salutation'],
-            'The name of the saved entity should be the same as the original name'
-        );
-        $this->assertNotNull($this->gender->getResourceId());
-//        $this->entityManager->remove($this->gender);
-//        $this->entityManager->flush();
+        $this->assertInstanceOf('General\Entity\Gender', $gender);
+        $this->assertNotNull($gender->getId());
+
     }
 }

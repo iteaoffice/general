@@ -9,10 +9,10 @@
  */
 namespace GeneralTest\Entity;
 
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use General\Entity\Title;
 use GeneralTest\Bootstrap;
 use Zend\InputFilter\InputFilter;
+use Zend\Math\Rand;
 
 class TitleTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,41 +24,46 @@ class TitleTest extends \PHPUnit_Framework_TestCase
      * @var \Doctrine\ORM\EntityManager;
      */
     protected $entityManager;
-    /**
-     * @var array
-     */
-    protected $titleData;
-    /**
-     * @var Title
-     */
-    protected $title;
+
 
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
-        $this->entityManager  = $this->serviceManager->get('doctrine.entitymanager.orm_default');
-        $this->titleData = array(
-            'name'       => 'This is the name of the title',
-            'attention'  => 'This is the attention',
-            'salutation' => 'This is the salutation'
-        );
-        $this->title = new Title();
+        $this->entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
     }
+
+    /**
+     * @return array
+     */
+    public function provider()
+    {
+        $title = new Title();
+        $title->setName(Rand::getString(4));
+        $title->setAttention('attention:' . Rand::getString(4));
+        $title->setSalutation('This is the salutation');
+
+        return [
+            [$title]
+        ];
+    }
+
 
     public function testCanCreateEntity()
     {
-        $this->assertInstanceOf("General\Entity\Title", $this->title);
-        $this->assertNull($this->title->getId(), 'The "Id" should be null');
+        $title = new Title();
+        $this->assertInstanceOf("General\Entity\Title", $title);
+        $this->assertNull($title->getId(), 'The "Id" should be null');
         $id = 1;
-        $this->title->setId($id);
-        $this->assertTrue(is_array($this->title->getArrayCopy()));
-        $this->assertTrue(is_array($this->title->populate()));
+        $title->setId($id);
+        $this->assertTrue(is_array($title->getArrayCopy()));
+        $this->assertTrue(is_array($title->populate()));
     }
 
     public function testMagicGettersAndSetters()
     {
-        $this->title->name = 'test';
-        $this->assertEquals('test', $this->title->name);
+        $title = new Title();
+        $title->name = 'test';
+        $this->assertEquals('test', $title->name);
     }
 
     /**
@@ -66,31 +71,27 @@ class TitleTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotSetInputFilter()
     {
-        $this->title->setInputFilter(new InputFilter());
+        $title = new Title();
+        $title->setInputFilter(new InputFilter());
     }
 
     public function testHasFilter()
     {
-        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $this->title->getInputFilter());
+        $title = new Title();
+        $this->assertInstanceOf('Zend\InputFilter\InputFilter', $title->getInputFilter());
     }
 
-    public function testCanSaveEntityInDatabase()
+    /**
+     * @param Title $title
+     *
+     * @dataProvider provider
+     */
+    public function testCanSaveEntityInDatabase(Title $title)
     {
-        $hydrator = new DoctrineObject(
-            $this->entityManager,
-            'General\Entity\Title'
-        );
-        $this->title = $hydrator->hydrate($this->titleData, new Title());
-        $this->entityManager->persist($this->title);
+        $this->entityManager->persist($title);
         $this->entityManager->flush();
-        //Since we don't save, we give the $title a virtual id
-        $this->title->setId(1);
-        $this->assertInstanceOf('General\Entity\Title', $this->title);
-        $this->assertNotNull($this->title->getId());
-        $this->assertEquals($this->title->getName(), $this->titleData['name']);
-        $this->assertEquals($this->title->getAttention(), $this->titleData['attention']);
-        $this->assertEquals($this->title->getSalutation(), $this->titleData['salutation']);
-        $this->assertNotNull($this->title->getResourceId());
-        $this->entityManager->remove($this->title);
+        $this->assertInstanceOf('General\Entity\Title', $title);
+        $this->assertNotNull($title->getId());
+        $this->assertNotNull($title->getResourceId());
     }
 }

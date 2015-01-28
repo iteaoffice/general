@@ -96,7 +96,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 /**
                  * @var $countryMap CountryMap
                  */
-
                 return $this->parseCountryMap();
 
             case 'country_funder':
@@ -310,7 +309,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'program/partial/list/funder',
             [
@@ -450,7 +448,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/organisation',
             [
@@ -496,7 +493,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /**
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
