@@ -354,7 +354,7 @@ class Country extends EntityAbstract implements ResourceInterface
         return [
             'address'      => $this->address,
             'organisation' => $this->organisation,
-            'vat'          => $this->vat
+            'vat'          => $this->vat,
         ];
     }
 
