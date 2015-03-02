@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * ITEA copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -22,7 +23,6 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity
  *
  * @category General
- * @package  Entity
  */
 class CommunityType extends EntityAbstract
 {
@@ -30,37 +30,43 @@ class CommunityType extends EntityAbstract
      * @ORM\Column(name="type_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="type", type="string", unique=true)
+     *
      * @var string
      */
     private $type;
     /**
      * @ORM\Column(name="regularexpression", type="string", unique=true)
+     *
      * @var string
      */
     private $regularExpression;
     /**
      * @ORM\Column(name="link", type="string", unique=true)
+     *
      * @var string
      */
     private $link;
     /**
      * @ORM\Column(name="image", type="string", unique=true)
+     *
      * @var string
      */
     private $image;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Community", cascade={"persist"}, mappedBy="type")
+     *
      * @var \Contact\Entity\Community[]
      */
     private $community;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -68,7 +74,7 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -80,12 +86,10 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -101,11 +105,10 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -160,7 +163,7 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */
@@ -176,7 +179,7 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * Function needed for the population of forms
+     * Function needed for the population of forms.
      *
      * @return array
      */

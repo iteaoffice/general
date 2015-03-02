@@ -1,22 +1,22 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  Application
- * @package   Controller
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Controller;
 
 use General\Service\GeneralService;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * The index of the system
+ * The index of the system.
  *
  * @category General
- * @package  Controller
  */
 class IndexController extends AbstractActionController
 {
@@ -26,7 +26,7 @@ class IndexController extends AbstractActionController
     protected $generalService;
 
     /**
-     * Show icon of the content type
+     * Show icon of the content type.
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -54,7 +54,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * Display an icon of a country
+     * Display an icon of a country.
      */
     public function countryFlagAction()
     {
@@ -62,14 +62,14 @@ class IndexController extends AbstractActionController
             strtolower($this->getEvent()->getRouteMatch()->getParam('iso3'))
         );
         $response = $this->getResponse();
-        /**
+        /*
          * Return the response when no iso3 can be found
          */
         if (is_null($country)) {
             return $response;
         }
         $file = stream_get_contents($country->getFlag()->getObject());
-        /**
+        /*
          * Create a cache-version of the file
          */
         if (!file_exists($country->getFlag()->getCacheFileName())) {
@@ -89,7 +89,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * Redirect an old project to a new project
+     * Redirect an old project to a new project.
      */
     public function codeAction()
     {
@@ -104,7 +104,7 @@ class IndexController extends AbstractActionController
     }
 
     /**
-     * Gateway to the General Service
+     * Gateway to the General Service.
      *
      * @return GeneralService
      */

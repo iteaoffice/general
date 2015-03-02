@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -19,7 +20,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="challenge")
  * @ORM\Entity
@@ -27,7 +28,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Name("general_challenge")
  *
  * @category General
- * @package  Entity
  */
 class Challenge extends EntityAbstract implements ResourceInterface
 {
@@ -36,6 +36,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -43,6 +44,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="challenge",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge"})
+     *
      * @var string
      */
     private $challenge;
@@ -50,6 +52,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="docref", type="string", length=255, nullable=false, unique=true)
      * @Gedmo\Slug(fields={"challenge"})
      * @Annotation\Exclude()
+     *
      * @var string
      */
     private $docRef;
@@ -57,6 +60,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="description",type="string")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-description"})
+     *
      * @var string
      */
     private $description;
@@ -64,6 +68,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="backcolor",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-background-color"})
+     *
      * @var string
      */
     private $backgroundColor;
@@ -71,23 +76,26 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="frontcolor",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-front-color"})
+     *
      * @var string
      */
     private $frontColor;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Challenge[]
      */
     private $projectChallenge;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="challenge")
      * @Annotation\Exclude()
+     *
      * @var \Contact\Entity\Contact[]
      *                                private $contact;
      */
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -95,7 +103,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -107,12 +115,10 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -120,7 +126,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -130,7 +136,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource
+     * Returns the string identifier of the Resource.
      *
      * @return string
      */
@@ -140,11 +146,10 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -249,7 +254,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */
@@ -265,7 +270,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Auto-generate an abstract of a article-item
+     * Auto-generate an abstract of a article-item.
      *
      * @return string
      */

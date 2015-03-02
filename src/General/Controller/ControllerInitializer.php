@@ -1,14 +1,16 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * Japaveh Webdesign copyright message placeholder.
  *
  * @category  Controller
- * @package   Service
+ *
  * @author    Johan van der Heide <info@japaveh.nl>
  * @copyright 2004-2014 Japaveh Webdesign
  * @license   http://solodb.net/license.txt proprietary
+ *
  * @link      http://solodb.net
  */
+
 namespace General\Controller;
 
 use General\Service\EmailServiceAwareInterface;
@@ -22,13 +24,14 @@ use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Japaveh Webdesign copyright message placeholder
+ * Japaveh Webdesign copyright message placeholder.
  *
  * @category  Controller
- * @package   Service
+ *
  * @author    Johan van der Heide <info@japaveh.nl>
  * @copyright 2004-2014 Japaveh Webdesign
  * @license   http://solodb.net/license.txt proprietary
+ *
  * @link      http://solodb.net
  */
 class ControllerInitializer implements InitializerInterface
@@ -49,11 +52,11 @@ class ControllerInitializer implements InitializerInterface
             EmailServiceAwareInterface::class   => EmailService::class,
             GeneralServiceAwareInterface::class => GeneralService::class,
         ];
-        /**
-         * @var $sm ServiceLocatorInterface
+        /*
+         * @var ServiceLocatorInterface
          */
         $sm = $serviceLocator->getServiceLocator();
-        /**
+        /*
          * Go over each interface to see if we should add an interface
          */
         foreach (class_implements($instance) as $interface) {

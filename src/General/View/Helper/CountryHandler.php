@@ -1,13 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   Country
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -28,8 +28,7 @@ use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class CountryHandler
- * @package Country\View\Helper
+ * Class CountryHandler.
  */
 class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterface
 {
@@ -63,7 +62,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 'country_funder',
                 'country_project',
                 'country_metadata',
-                'country_article'
+                'country_article',
             ]
         )
         ) {
@@ -93,7 +92,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 return $this->parseCountry();
 
             case 'country_map':
-                /**
+                /*
                  * @var $countryMap CountryMap
                  */
                 return $this->parseCountryMap();
@@ -285,12 +284,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 return $this->getRenderer()->render(
                     'general/partial/entity/country-map',
                     [
-                        'country' => $this->getCountry()
+                        'country' => $this->getCountry(),
                     ]
                 );
             case false:
-                /**
-                 * @var $countryMap CountryMap
+                /*
+                 * @var CountryMap
                  */
                 $countryMap = $this->serviceLocator->get('countryMap');
 
@@ -306,7 +305,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryFunderList(Country $country)
     {
         $funder = $this->getProgramService()->findFunderByCountry($country);
-        /**
+        /*
          * Parse the organisationService in to have the these functions available in the view
          */
         return $this->getRenderer()->render(
@@ -348,13 +347,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             [
                 'country'       => $country,
                 'projects'      => $projects,
-                'organisations' => $organisations->getResult()
+                'organisations' => $organisations->getResult(),
             ]
         );
     }
 
     /**
-     * @param  Country $country
+     * @param Country $country
+     *
      * @return string
      */
     public function parseCountryMetadata(Country $country)
@@ -375,7 +375,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             [
                 'country'       => $country,
                 'projects'      => $projects,
-                'organisations' => $organisations->getResult()
+                'organisations' => $organisations->getResult(),
             ]
         );
     }
@@ -397,7 +397,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
-     * Create a list of all countries which are active (have projects)
+     * Create a list of all countries which are active (have projects).
      *
      * @return string
      */
@@ -412,7 +412,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
-     * Create a list of countries which are member of the itac
+     * Create a list of countries which are member of the itac.
      *
      * @return string
      */
@@ -427,7 +427,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
-     * Create a list of organisations
+     * Create a list of organisations.
      *
      * @param int $page
      *
@@ -445,7 +445,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
-        /**
+        /*
          * Parse the organisationService in to have the these functions available in the view
          */
         return $this->getRenderer()->render(
@@ -477,7 +477,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             $twig,
             [
                 'country'  => $country,
-                'projects' => $projects
+                'projects' => $projects,
             ]
         );
     }
@@ -490,7 +490,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryArticleList(Country $country)
     {
         $articles = $this->getArticleService()->findArticlesByCountry($country, $this->getLimit());
-        /**
+        /*
          * Parse the organisationService in to have the these functions available in the view
          */
         return $this->getRenderer()->render(

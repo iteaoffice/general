@@ -1,26 +1,26 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  Application
- * @package   Controller
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * The index of the system
+ * The index of the system.
  *
  * @category Application
- * @package  Controller
  */
 class StyleController extends AbstractActionController
 {
     /**
-     * Index of the Index
+     * Index of the Index.
      */
     public function displayAction()
     {
@@ -51,7 +51,7 @@ class StyleController extends AbstractActionController
                 }
             }
         }
-        /**
+        /*
          * Create a cache-version of the file
          */
         $cacheDir = __DIR__.'/../../../../../../public/assets/'.

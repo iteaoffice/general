@@ -2,6 +2,7 @@
 /**
  *
  */
+
 namespace General;
 
 use Contact\Entity\Contact;
@@ -10,9 +11,8 @@ use Contact\Service\ContactService;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class Email
+ * Class Email.
  *
- * @package General
  *
  * @method string getHtmlLayoutName()
  * @method void setHtmlLayoutName($name)
@@ -81,27 +81,27 @@ class Email
      */
     protected $fromName;
     /**
-     * To recipients
+     * To recipients.
      */
     protected $to = [];
     /**
-     * Cc recipients
+     * Cc recipients.
      */
     protected $cc = [];
     /**
-     * Bcc recipients
+     * Bcc recipients.
      */
     protected $bcc = [];
     /**
-     * Subject
+     * Subject.
      */
     protected $subject = "";
     /**
-     * Message
+     * Message.
      */
     protected $message = "";
     /**
-     * Value to check if a mail is sent personal or send to everyone in the to if set to false
+     * Value to check if a mail is sent personal or send to everyone in the to if set to false.
      *
      * @var bool
      */
@@ -138,7 +138,7 @@ class Email
     }
 
     /**
-     * Add TO recipient
+     * Add TO recipient.
      *
      * @param      $var
      * @param null $user
@@ -189,7 +189,7 @@ class Email
      */
     public function setFromContact(Contact $contact)
     {
-        /**
+        /*
          * The From contact cannot have the FROM email since we don't want to sent emails directly from other users
          */
         $config = $this->getServiceManager()->get('config');
@@ -276,7 +276,7 @@ class Email
     }
 
     /**
-     * Add CC recipient
+     * Add CC recipient.
      *
      * @param      $var
      * @param null $user
@@ -291,7 +291,7 @@ class Email
     }
 
     /**
-     * Add BCC recipient
+     * Add BCC recipient.
      *
      * @param      $var
      * @param null $user
@@ -306,7 +306,7 @@ class Email
     }
 
     /**
-     * Set/Get Magic function
+     * Set/Get Magic function.
      *
      * Set
      * $user->setSubject("This is a test")
@@ -319,6 +319,7 @@ class Email
      * @param $args
      *
      * @return null|string
+     *
      * @throws \Exception
      */
     public function __call($method, $args)
@@ -369,7 +370,7 @@ class Email
     }
 
     /**
-     * Converts field names for setters and getters
+     * Converts field names for setters and getters.
      *
      * $this->setMyField($value) === $this->setData('my_field', $value)
      * Uses cache to eliminate unnecessary preg_replace

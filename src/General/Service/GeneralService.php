@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  Content
- * @package   Service
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Service;
 
 use Affiliation\Service\AffiliationService;
@@ -22,7 +23,7 @@ use Zend\Http\Response;
 use Zend\Json\Json;
 
 /**
- * GeneralService
+ * GeneralService.
  *
  * This is a general service which contains methods which are generally available in this module
  */
@@ -38,6 +39,7 @@ class GeneralService extends ServiceAbstract
      * @param        $docRef
      *
      * @return Entity\Challenge|Entity\Country
+     *
      * @throws \InvalidArgumentException
      */
     public function findEntityByDocRef($entity, $docRef)
@@ -75,6 +77,7 @@ class GeneralService extends ServiceAbstract
      * @param $iso3
      *
      * @return null|Entity\Country
+     *
      * @throws \InvalidArgumentException
      */
     public function findCountryByIso3($iso3)
@@ -93,6 +96,7 @@ class GeneralService extends ServiceAbstract
      * @param $cd
      *
      * @return null|Entity\Country
+     *
      * @throws \InvalidArgumentException
      */
     public function findCountryByCD($cd)
@@ -119,7 +123,7 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Produce a list of countries active in a program call
+     * Produce a list of countries active in a program call.
      *
      * @param Call $call
      * @param int  $which
@@ -147,7 +151,7 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Returns the country of the project leader (project.contact)
+     * Returns the country of the project leader (project.contact).
      *
      * @param Project $project
      *
@@ -161,7 +165,7 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Produce a list of countries active in a call and evaluation type
+     * Produce a list of countries active in a call and evaluation type.
      *
      * @param Evaluation\Type $type
      * @param Call|null       $call
@@ -179,6 +183,7 @@ class GeneralService extends ServiceAbstract
      * @param $info
      *
      * @return Entity\WebInfo
+     *
      * @throws \InvalidArgumentException
      */
     public function findWebInfoByInfo($info)
@@ -196,6 +201,7 @@ class GeneralService extends ServiceAbstract
      * @param $contentTypeName
      *
      * @return null|\General\Entity\ContentType
+     *
      * @throws \InvalidArgumentException
      */
     public function findContentTypeByContentTypeName($contentTypeName)
@@ -218,7 +224,7 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Give the location of a user based on an IP address IPAddress of a person by checking an online service
+     * Give the location of a user based on an IP address IPAddress of a person by checking an online service.
      *
      * @return null|Entity\Country
      */
@@ -227,7 +233,7 @@ class GeneralService extends ServiceAbstract
         $client = new Client();
         $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
         if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
-            /**
+            /*
              * We have the country, try to find the country in our database
              */
             $countryResult = Json::decode($client->send()->getContent());
@@ -241,7 +247,7 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * get options
+     * get options.
      *
      * @return ModuleOptions
      */

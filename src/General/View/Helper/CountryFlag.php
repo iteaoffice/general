@@ -1,24 +1,22 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use General\Entity\Country;
 
 /**
- * Create a link to an project
+ * Create a link to an project.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
  */
 class CountryFlag extends ImageAbstract
 {
@@ -35,7 +33,7 @@ class CountryFlag extends ImageAbstract
             return '';
         }
 
-        /**
+        /*
          * Reset the classes
          */
         $this->setClasses([]);

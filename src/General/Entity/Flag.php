@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="country_flag")
  * @ORM\Entity
@@ -24,7 +25,6 @@ use Zend\InputFilter\InputFilterInterface;
  * @Annotation\Name("country_flag")
  *
  * @category General
- * @package  Entity
  */
 class Flag extends EntityAbstract
 {
@@ -33,6 +33,7 @@ class Flag extends EntityAbstract
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -42,6 +43,7 @@ class Flag extends EntityAbstract
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({"target_class":"General\Entity\Flag"})
      * @Annotation\Attributes({"label":"txt-country", "required":"true","class":"span3"})
+     *
      * @var \General\Entity\Country
      */
     private $country;
@@ -49,13 +51,14 @@ class Flag extends EntityAbstract
      * @ORM\Column(name="object",type="blob",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\File")
      * @Annotation\Options({"label":"txt-object"})
+     *
      * @var resource
      */
     private $object;
 
     /**
      * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
+     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
      *
      * @return string
      */
@@ -68,7 +71,7 @@ class Flag extends EntityAbstract
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -80,12 +83,10 @@ class Flag extends EntityAbstract
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -93,11 +94,10 @@ class Flag extends EntityAbstract
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -128,7 +128,7 @@ class Flag extends EntityAbstract
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */

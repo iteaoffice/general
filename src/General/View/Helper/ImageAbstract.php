@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   Organisation
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use Zend\Mvc\Router\RouteMatch;
@@ -19,8 +19,7 @@ use Zend\View\Helper\Url;
 use Zend\View\HelperPluginManager;
 
 /**
- * Class LinkAbstract
- * @package Project\View\Helper
+ * Class LinkAbstract.
  */
 abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwareInterface
 {
@@ -62,18 +61,18 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
     protected $lightBox = false;
 
     /**
-     * This function produces the link in the end
+     * This function produces the link in the end.
      *
      * @return string
      */
     public function createImageUrl()
     {
-        /**
-         * @var $url Url
+        /*
+         * @var Url
          */
         $url = $this->serviceLocator->get('url');
-        /**
-         * @var $config array
+        /*
+         * @var array
          */
         $config = $this->serviceLocator->getServiceLocator()->get('config');
 
@@ -125,7 +124,7 @@ abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwa
     }
 
     /**
-     * Add a parameter to the list of parameters for the router
+     * Add a parameter to the list of parameters for the router.
      *
      * @param string $key
      * @param $value

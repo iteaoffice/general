@@ -1,24 +1,22 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use General\Entity\Challenge;
 
 /**
- * Create a link to an challenge
+ * Create a link to an challenge.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
  */
 class ChallengeLink extends LinkAbstract
 {
@@ -33,6 +31,7 @@ class ChallengeLink extends LinkAbstract
      * @param string    $show
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function __invoke(
@@ -58,7 +57,7 @@ class ChallengeLink extends LinkAbstract
     }
 
     /**
-     * Parse the action
+     * Parse the action.
      *
      * @throws \Exception
      */

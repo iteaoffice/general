@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -18,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="gender")
  * @ORM\Entity
@@ -26,12 +27,11 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Name("general_gender")
  *
  * @category General
- * @package  Entity
  */
 class Gender extends EntityAbstract implements ResourceInterface
 {
     /**
-     * Constant for the default gender
+     * Constant for the default gender.
      */
     const GENDER_UNKNOWN = 0;
     /**
@@ -39,6 +39,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -46,6 +47,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="gender",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-gender"})
+     *
      * @var string
      */
     private $name;
@@ -53,6 +55,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="attention",type="string",length=20)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
+     *
      * @var string
      */
     private $attention;
@@ -60,18 +63,20 @@ class Gender extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="salutation",type="string",length=20)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-salutation"})
+     *
      * @var string
      */
     private $salutation;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="gender")
      * @Annotation\Exclude()
+     *
      * @var \Contact\Entity\Contact[]
      */
     private $contacts;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -79,7 +84,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -91,12 +96,10 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -104,7 +107,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -114,7 +117,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource
+     * Returns the string identifier of the Resource.
      *
      * @return string
      */
@@ -124,11 +127,10 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -217,7 +219,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */

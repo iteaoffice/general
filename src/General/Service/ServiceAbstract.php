@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  General
- * @package   Service
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Service;
 
 use Contact\Service\ContactService;
@@ -18,7 +19,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * ServiceAbstract
+ * ServiceAbstract.
  */
 abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceInterface
 {
@@ -95,7 +96,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     }
 
     /**
-     * Create a full path to the entity for Doctrine
+     * Create a full path to the entity for Doctrine.
      *
      * @param $entity
      *
@@ -103,7 +104,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      */
     public function getFullEntityName($entity)
     {
-        /**
+        /*
          * Convert a - to a camelCased situation
          */
         if (strpos($entity, '-') !== false) {
@@ -117,7 +118,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     }
 
     /**
-     * Find 1 entity based on the id
+     * Find 1 entity based on the id.
      *
      * @param string  $entity
      * @param integer $id
@@ -169,7 +170,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     }
 
     /**
-     * Build dynamically a entity based on the full entity name
+     * Build dynamically a entity based on the full entity name.
      *
      * @param $entity
      *

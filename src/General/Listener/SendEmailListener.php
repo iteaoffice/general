@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  General
- * @package   Factory
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Listener;
 
 use SlmQueue\Worker\WorkerEvent;
@@ -14,8 +15,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 
 /**
- * Class SendEmailListener
- * @package General\Listener
+ * Class SendEmailListener.
  */
 class SendEmailListener implements ListenerAggregateInterface
 {

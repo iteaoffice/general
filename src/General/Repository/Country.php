@@ -1,12 +1,13 @@
 <?php
 /**
- * DebraNova copyright message placeholder
+ * DebraNova copyright message placeholder.
  *
  * @category  Contact
- * @package   Repository
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Repository;
 
 use Affiliation\Service\AffiliationService;
@@ -20,12 +21,11 @@ use Project\Entity\Project;
 
 /**
  * @category    Contact
- * @package     Repository
  */
 class Country extends EntityRepository
 {
     /**
-     * This function returns an array with three elements
+     * This function returns an array with three elements.
      *
      * 'country' which contains the country object
      * 'partners' which contains the amount of partners
@@ -47,8 +47,8 @@ class Country extends EntityRepository
         $queryBuilder->where('c.id <> 0');
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-        /**
-         * @var $projectRepository \Project\Repository\Project
+        /*
+         * @var \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
@@ -95,7 +95,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * This function returns the country based on an IN query to avoid the unwanted hydration of the result
+     * This function returns the country based on an IN query to avoid the unwanted hydration of the result.
      *
      * @param Project $project
      *
@@ -127,7 +127,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * Produces a default query to get a country and the required joins
+     * Produces a default query to get a country and the required joins.
      *
      * @param $which
      *
@@ -171,8 +171,8 @@ class Country extends EntityRepository
         $queryBuilder = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
         $queryBuilder->addOrderBy('c.country');
-        /**
-         * @var $projectRepository \Project\Repository\Project
+        /*
+         * @var \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
@@ -186,7 +186,7 @@ class Country extends EntityRepository
 
     /**
      * Find all countries active in the ITAC
-     * This function returns an array with three elements
+     * This function returns an array with three elements.
      *
      * 'country' which contains the country object
      * 'partners' which contains the amount of partners

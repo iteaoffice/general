@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  General
- * @package   Service
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Service;
 
 use Contact\Entity\Contact;
@@ -25,8 +26,7 @@ use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class EmailService
- * @package General\Service
+ * Class EmailService.
  */
 class EmailService extends ServiceAbstract implements
     ServiceLocatorAwareInterface,
@@ -106,7 +106,7 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Create a new email
+     * Create a new email.
      *
      * @param array $data
      *
@@ -120,14 +120,14 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Send the email
+     * Send the email.
      */
     public function send()
     {
         switch ($this->email->isPersonal()) {
             case true:
                 foreach ($this->email->getTo() as $recipient => $contact) {
-                    /**
+                    /*
                      * Create a new message for everyone
                      */
                     $this->message = new Message();
@@ -138,7 +138,7 @@ class EmailService extends ServiceAbstract implements
                     //add the CC and BCC to the email
                     $this->setShadowRecipients();
 
-                    /**
+                    /*
                      * We have a recipient which can be an instance of the contact. Produce a contactService object
                      * and fill the templateVars with extra options
                      */
@@ -151,7 +151,7 @@ class EmailService extends ServiceAbstract implements
                         $contact->setFirstName($contactName);
                     }
 
-                    /**
+                    /*
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
@@ -160,17 +160,17 @@ class EmailService extends ServiceAbstract implements
                         $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
                     }
 
-                    /**
+                    /*
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseSubject();
 
-                    /**
+                    /*
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseBody();
 
-                    /**
+                    /*
                      * Send the email
                      */
                     $this->transport->send($this->message);
@@ -178,7 +178,7 @@ class EmailService extends ServiceAbstract implements
                 break;
             case false:
 
-                /**
+                /*
                  * Create a new message for everyone
                  */
                 $this->message = new Message();
@@ -190,7 +190,7 @@ class EmailService extends ServiceAbstract implements
                 $this->setShadowRecipients();
 
                 foreach ($this->email->getTo() as $recipient => $contact) {
-                    /**
+                    /*
                      * We have a recipient which can be an instance of the contact. Produce a contactService object
                      * and fill the templateVars with extra options
                      */
@@ -201,7 +201,7 @@ class EmailService extends ServiceAbstract implements
                         $contact->setFirstName($contactName);
                     }
 
-                    /**
+                    /*
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
@@ -211,17 +211,17 @@ class EmailService extends ServiceAbstract implements
                     }
                 }
 
-                /**
+                /*
                  * We have the contact and can now produce the content of the message
                  */
                 $this->parseSubject();
 
-                /**
+                /*
                  * We have the contact and can now produce the content of the message
                  */
                 $this->parseBody();
 
-                /**
+                /*
                  * Send the email
                  */
                 $this->transport->send($this->message);
@@ -231,32 +231,32 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Parse the subject of the email
+     * Parse the subject of the email.
      */
     public function parseSubject()
     {
         //Transfer first the subject form the email (if any)
         $this->message->setSubject($this->email->getSubject());
 
-        /**
+        /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
         if (!empty($this->message->getSubject()) && !is_null($this->template)) {
             $this->message->setSubject($this->template->getSubject());
         }
 
-        /**
+        /*
          * Go over the templateVars to replace content in the subject
          */
         foreach ($this->templateVars as $key => $replace) {
-            /**
+            /*
              * Skip the service manager
              */
             if ($replace instanceof ServiceManager) {
                 continue;
             }
 
-            /**
+            /*
              * replace the content of the title with the available keys in the template vars
              */
             if (!is_array($replace)) {
@@ -295,7 +295,7 @@ class EmailService extends ServiceAbstract implements
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
         $body->setParts([$htmlContent]);
-        /**
+        /*
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
          */
@@ -322,7 +322,7 @@ class EmailService extends ServiceAbstract implements
             );
         }
 
-        /**
+        /*
          * Produce a list of template vars
          */
         $this->templateVars = array_merge($this->config["template_vars"], $this->email->toArray());
@@ -332,7 +332,7 @@ class EmailService extends ServiceAbstract implements
             $this->email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
         }
 
-        /**
+        /*
          * If not sender, use default
          */
         if (!is_null($this->email->getFrom())) {
@@ -341,7 +341,7 @@ class EmailService extends ServiceAbstract implements
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
         }
 
-        /**
+        /*
          * Force the mailing as header if we have a mailing
          */
         if (!is_null($this->mailing)) {
@@ -353,14 +353,14 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Extract the contactService and include the variables in the template array settings
+     * Extract the contactService and include the variables in the template array settings.
      *
-     * @var Contact $contact
+     * @var Contact
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
-        /**
-         * @var $contactService ContactService
+        /*
+         * @var ContactService
          */
         $contactService = clone $this->getServiceLocator()->get('contact_contact_service');
         $contactService->setContact($contact);
@@ -393,14 +393,14 @@ class EmailService extends ServiceAbstract implements
                 '~\[(.*?)\]~',
             ],
             [
-                "{{ $1|raw }}"
+                "{{ $1|raw }}",
             ],
             $content
         );
     }
 
     /**
-     * Set the BCC and CC recipients to the email (they are the same for every email)
+     * Set the BCC and CC recipients to the email (they are the same for every email).
      *
      * @return Message
      */
@@ -449,13 +449,15 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Render the content twig-wise
+     * Render the content twig-wise.
+     *
      * @param $message
+     *
      * @return null|string
      */
     private function personaliseMessage($message)
     {
-        /**
+        /*
          * Replace first the content of the mailing with the required (new) short tags
          */
         $content = preg_replace(
@@ -471,12 +473,12 @@ class EmailService extends ServiceAbstract implements
                 "[lastname]",
                 "[fullname]",
                 "[organisation]",
-                "[country]"
+                "[country]",
             ],
             $message
         );
 
-        /**
+        /*
          * Clone the twigRenderer and overrule to loader to be a string
          */
         $twigRenderer = new \Twig_Environment();
@@ -489,7 +491,7 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
-     * Produce a preview of the mailing content
+     * Produce a preview of the mailing content.
      *
      * @return null|string
      */

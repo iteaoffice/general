@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * ITEA copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -18,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="vat_type")
  * @ORM\Entity
@@ -26,7 +27,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Name("vat_type")
  *
  * @category General
- * @package  Entity
  */
 class VatType extends EntityAbstract implements ResourceInterface
 {
@@ -35,6 +35,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -42,6 +43,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="type",type="string",length=30, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-type"})
+     *
      * @var string
      */
     private $type;
@@ -49,6 +51,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="description",type="string",length=64)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-description"})
+     *
      * @var string
      */
     private $description;
@@ -71,18 +74,20 @@ class VatType extends EntityAbstract implements ResourceInterface
      *      }
      * )
      * @Annotation\Attributes({"label":"txt-vat"})
+     *
      * @var \General\Entity\Vat
      */
     private $vat;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Invoice", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
+     *
      * @var \Invoice\Entity\Invoice[]
      */
     private $invoice;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -90,7 +95,7 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -102,12 +107,10 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -115,7 +118,7 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -125,7 +128,7 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource
+     * Returns the string identifier of the Resource.
      *
      * @return string
      */
@@ -135,11 +138,10 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -214,7 +216,7 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */

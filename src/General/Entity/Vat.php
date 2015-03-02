@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * ITEA copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -18,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="vat")
  * @ORM\Entity
@@ -26,7 +27,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Name("vat")
  *
  * @category General
- * @package  Entity
  */
 class Vat extends EntityAbstract implements ResourceInterface
 {
@@ -36,6 +36,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -43,6 +44,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="vat_code",type="string",length=45,nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-code"})
+     *
      * @var string
      */
     private $code;
@@ -50,6 +52,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="vat_percentage",type="decimal",nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-percentage"})
+     *
      * @var float
      */
     private $percentage;
@@ -57,12 +60,14 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="vat_date_start",type="datetime",nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-date-start"})
+     *
      * @var \DateTime
      */
     private $dateStart;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\VatType", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\VatType[]
      */
     private $type;
@@ -85,36 +90,41 @@ class Vat extends EntityAbstract implements ResourceInterface
      *      }
      * )
      * @Annotation\Attributes({"label":"txt-country"})
+     *
      * @var \General\Entity\Country
      */
     private $country;
     /**
      * @ORM\OneToMany(targetEntity="\Invoice\Entity\Row", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
+     *
      * @var \Invoice\Entity\Row[]
      */
     private $invoiceRow;
     /**
      * @ORM\OneToMany(targetEntity="\Invoice\Entity\FinancialRow", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
+     *
      * @var \Invoice\Entity\FinancialRow[]
      */
     private $financialRow;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
+     *
      * @var \Event\Entity\DeskCosts[]
      */
     private $deskCosts;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\OptionCosts", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
+     *
      * @var \Event\Entity\Meeting\OptionCosts[]
      */
     private $optionCosts;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -126,7 +136,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -138,12 +148,10 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -151,7 +159,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -161,7 +169,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource
+     * Returns the string identifier of the Resource.
      *
      * @return string
      */
@@ -171,11 +179,10 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -238,7 +245,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */

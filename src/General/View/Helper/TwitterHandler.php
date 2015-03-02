@@ -1,13 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   Twitter
- * @package    View
- * @subpackage Helper
+ *
  * @author     Andre Hebben <andre.hebben@artemis-ia.eu>
  * @copyright  Copyright (c) 2007-2014 ARTEMIS-IA (http://artemis-ia.eu)
  */
+
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -17,8 +17,7 @@ use Zend\View\Helper\AbstractHelper;
 use Zend\View\HelperPluginManager;
 
 /**
- * Class TwitterHandler
- * @package Twitter\View\Helper
+ * Class TwitterHandler.
  */
 class TwitterHandler extends AbstractHelper implements ServiceLocatorAwareInterface
 {

@@ -1,29 +1,28 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use General\Entity\ContentType;
 
 /**
- * Create a link to an project
+ * Create a link to an project.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
  */
 class ContentTypeIcon extends HelperAbstract
 {
     /**
-     * @param  ContentType $contentType
+     * @param ContentType $contentType
+     *
      * @return string
      */
     public function __invoke(ContentType $contentType)

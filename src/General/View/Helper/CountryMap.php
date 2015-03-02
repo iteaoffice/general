@@ -1,14 +1,14 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use General\Entity\Country;
@@ -17,11 +17,9 @@ use General\Service\GeneralServiceAwareInterface;
 use Zend\View\Helper\AbstractHelper;
 
 /**
- * Create a country map based on a list of countries
+ * Create a country map based on a list of countries.
  *
  * @category   General
- * @package    View
- * @subpackage Helper
  */
 class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 {

@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * ITEA copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -27,7 +28,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Name("general_gender")
  *
  * @category General
- * @package  Entity
  */
 class Country extends EntityAbstract implements ResourceInterface
 {
@@ -36,6 +36,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -43,6 +44,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="country_cd",type="string",length=2, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-cd"})
+     *
      * @var string
      */
     private $cd;
@@ -50,6 +52,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="country",type="string",length=80, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country"})
+     *
      * @var string
      */
     private $country;
@@ -57,6 +60,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="docRef",type="string",length=80, unique=true)
      * @Gedmo\Slug(fields={"country"})
      * @Annotation\Exclude()
+     *
      * @var string
      */
     private $docRef;
@@ -64,6 +68,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="iso3",type="string",length=20)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-iso3"})
+     *
      * @var string
      */
     private $iso3;
@@ -71,6 +76,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="numcode",type="integer",length=6)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-numcode"})
+     *
      * @var int
      */
     private $numcode;
@@ -78,78 +84,90 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="country_vat",type="string",length=2,nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat"})
+     *
      * @var int
      */
     private $countryVat;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\Eu
      */
     private $eu;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Eureka", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\Eureka
      */
     private $eureka;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\Eureka
      */
     private $itac;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
+     *
      * @var \Contact\Entity\Address[]|Collections\ArrayCollection
      */
     private $address;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Organisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \Organisation\Entity\Organisation[]|Collections\ArrayCollection
      */
     private $organisation;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\IctOrganisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
      */
     private $ictOrganisation;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Vat", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\Vat[]|Collections\ArrayCollection
      */
     private $vat;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Funder", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \Program\Entity\Funder[]|Collections\ArrayCollection
      */
     private $funder;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Flag", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\Flag
      */
     private $flag;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Evaluation\Evaluation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
      */
     private $evaluation;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Rationale", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Rationale[]|Collections\ArrayCollection
      */
     private $rationale;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -163,7 +181,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -175,12 +193,10 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -188,7 +204,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -198,7 +214,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource
+     * Returns the string identifier of the Resource.
      *
      * @return string
      */
@@ -208,11 +224,10 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -345,7 +360,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */
@@ -364,7 +379,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * New function needed to make the hydrator happy
+     * New function needed to make the hydrator happy.
      *
      * @param Collections\Collection $vatCollection
      */
@@ -376,7 +391,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * New function needed to make the hydrator happy
+     * New function needed to make the hydrator happy.
      *
      * @param Collections\Collection $vatCollection
      */

@@ -1,12 +1,13 @@
 <?php
 /**
- * ITEA copyright message placeholder
+ * ITEA copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -19,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  *
  * @category General
- * @package  Entity
  */
 class ContentType
 {
@@ -29,147 +29,175 @@ class ContentType
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="description", type="string", unique=true)
+     *
      * @var string
      */
     private $description;
     /**
      * @ORM\Column(name="contenttype", type="string", unique=true)
+     *
      * @var string
      */
     private $contentType;
     /**
      * @ORM\Column(name="extension", type="string", unique=true)
+     *
      * @var string
      */
     private $extension;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Logo[]
      */
     private $projectLogo;
     /**
      * @ORM\Column(name="gifimage",  type="blob", nullable=true)
+     *
      * @var resource
      */
     private $image;
     /**
      * @ORM\OneToMany(targetEntity="Content\Entity\Image", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Content\Entity\Image[]
      */
     private $contentImage;
     /**
      * @ORM\OneToMany(targetEntity="Press\Entity\Article", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Content\Entity\Image[]
      */
     private $pressArticle;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Nda", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Program\Entity\Nda[]
      */
     private $programNna;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Program\Entity\Doa[]
      */
     private $programDoa;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Affiliation\Entity\Doa[]
      */
     private $affiliationDoa;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Contact\Entity\Dnd[]
      */
     private $contactDnd;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
+     *
      * @var \Contact\Entity\Photo[]
      */
     private $contactPhoto;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Organisation\Entity\Logo[]
      */
     private $organisationLogo;
     /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Publication\Entity\Publication[]
      */
     private $publication;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Publication\Entity\Publication[]
      */
     private $badgeAttachment;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Result\Result[]
      */
     private $result;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Workpackage\Document", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Workpackage\Document[]
      */
     private $workpackageDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Poster\Poster[]
      */
     private $poster;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Document", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Idea\Document[]
      */
     private $ideaDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Idea\Image[]
      */
     private $ideaImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Idea\Image[]
      */
     private $projectDescriptionImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Document\Document[]
      */
     private $projectDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Version\Document", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Project\Entity\Version\Document[]
      */
     private $versionDocument;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Calendar\Entity\Document[]
      */
     private $calendarDocument;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Affiliation\Entity\Loi[]
      */
     private $loi;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Event\Entity\Meeting\Floorplan[]
      */
     private $meetingFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Exhibition\Floorplan", cascade={"persist"}, mappedBy="contentType")
+     *
      * @var \Event\Entity\Exhibition\Floorplan[]
      */
     private $exhibitionFloorplan;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -198,7 +226,7 @@ class ContentType
     }
 
     /**
-     * Return the name of the content type
+     * Return the name of the content type.
      *
      * @return string
      */
@@ -209,7 +237,7 @@ class ContentType
 
     /**
      * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder
+     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
      *
      * @return string
      */
@@ -225,7 +253,7 @@ class ContentType
     }
 
     /**
-     * Although an alternative does not have a clear hash, we can create one based on the id;
+     * Although an alternative does not have a clear hash, we can create one based on the id;.
      *
      * @return string
      */

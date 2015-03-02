@@ -1,13 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category   Challenge
- * @package    View
- * @subpackage Helper
+ *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -22,8 +22,7 @@ use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class ChallengeHandler
- * @package Challenge\View\Helper
+ * Class ChallengeHandler.
  */
 class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInterface
 {
@@ -74,7 +73,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
             $this->setChallengeDocRef($this->getRouteMatch()->getParam('docRef'));
         }
         foreach ($content->getContentParam() as $param) {
-            /**
+            /*
              * When the parameterId is 0 (so we want to get the article from the URL
              */
             switch ($param->getParameter()->getParam()) {

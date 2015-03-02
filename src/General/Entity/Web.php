@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  Application
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 Debranova
  */
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,7 +18,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
- * Web
+ * Web.
  *
  * @ORM\Table(name="web")
  * @ORM\Entity
@@ -28,45 +29,52 @@ class Web extends EntityAbstract
      * @ORM\Column(name="web_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      * @var integer
      */
     private $id;
     /**
      * @ORM\Column(name="web", type="string", length=30, nullable=false)
+     *
      * @var string
      */
     private $web;
     /**
      * @ORM\Column(name="url", type="string", length=60, nullable=false)
+     *
      * @var string
      */
     private $url;
     /**
      * @ORM\Column(name="mount", type="string", length=40, nullable=true)
+     *
      * @var string
      */
     private $mount;
     /**
      * @ORM\OneToMany(targetEntity="Deeplink\Entity\Target", cascade={"persist"}, mappedBy="web")
      * @Annotation\Exclude()
+     *
      * @var \Deeplink\Entity\Target[]
      */
     private $target;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\WebInfo", cascade={"persist"}, mappedBy="web")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\WebInfo[]
      */
     private $webInfo;
     /**
      * @ORM\OneToMany(targetEntity="Admin\Entity\Session", cascade={"persist"}, mappedBy="web")
      * @Annotation\Exclude()
+     *
      * @var \General\Entity\WebInfo[]
      */
     private $session;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -75,7 +83,7 @@ class Web extends EntityAbstract
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -87,12 +95,10 @@ class Web extends EntityAbstract
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -103,6 +109,7 @@ class Web extends EntityAbstract
      * @param InputFilterInterface $inputFilter
      *
      * @return void|InputFilterAwareInterface
+     *
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -111,7 +118,7 @@ class Web extends EntityAbstract
     }
 
     /**
-     * Retrieve input filter
+     * Retrieve input filter.
      *
      * @return InputFilterInterface
      */

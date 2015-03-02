@@ -1,14 +1,16 @@
 <?php
 /**
- * Japaveh Webdesign copyright message placeholder
+ * Japaveh Webdesign copyright message placeholder.
  *
  * @category  General
- * @package   Controller
+ *
  * @author    Johan van der Heide <info@japaveh.nl>
  * @copyright 2004-2014 Japaveh Webdesign
  * @license   http://solodb.net/license.txt proprietary
+ *
  * @link      http://solodb.net
  */
+
 namespace General\View\Helper;
 
 use General\Service\GeneralService;
@@ -19,13 +21,14 @@ use Zend\View\Helper\AbstractHelper;
 use Zend\View\HelperPluginManager;
 
 /**
- * Japaveh Webdesign copyright message placeholder
+ * Japaveh Webdesign copyright message placeholder.
  *
  * @category  General
- * @package   Controller
+ *
  * @author    Johan van der Heide <info@japaveh.nl>
  * @copyright 2004-2014 Japaveh Webdesign
  * @license   http://solodb.net/license.txt proprietary
+ *
  * @link      http://solodb.net
  */
 class ViewHelperInitializer implements InitializerInterface
@@ -44,11 +47,11 @@ class ViewHelperInitializer implements InitializerInterface
         $arrayCheck = [
             GeneralServiceAwareInterface::class => GeneralService::class,
         ];
-        /**
-         * @var $sm ServiceLocatorInterface
+        /*
+         * @var ServiceLocatorInterface
          */
         $sm = $serviceLocator->getServiceLocator();
-        /**
+        /*
          * Go over each interface to see if we should add an interface
          */
         foreach (class_implements($instance) as $interface) {

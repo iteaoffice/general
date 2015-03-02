@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  Application
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 Debranova
  */
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
- * WebInfo
+ * WebInfo.
  *
  * @ORM\Table(name="web_info")
  * @ORM\Entity
@@ -26,31 +27,37 @@ class WebInfo extends EntityAbstract
      * @ORM\Column(name="info_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      * @var integer
      */
     private $id;
     /**
      * @ORM\Column(name="info", type="string", length=64, nullable=false)
+     *
      * @var string
      */
     private $info;
     /**
      * @ORM\Column(name="plain", type="smallint", nullable=false)
+     *
      * @var int
      */
     private $plain;
     /**
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     *
      * @var string
      */
     private $subject;
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
+     *
      * @var string
      */
     private $content;
     /**
      * @ORM\Column(name="sync", type="smallint", nullable=false)
+     *
      * @var integer
      */
     private $sync;
@@ -59,12 +66,13 @@ class WebInfo extends EntityAbstract
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="web_id", referencedColumnName="web_id", nullable=true)
      * })
+     *
      * @var \General\Entity\Web
      */
     private $web;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -73,7 +81,7 @@ class WebInfo extends EntityAbstract
     }
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -85,12 +93,10 @@ class WebInfo extends EntityAbstract
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -101,6 +107,7 @@ class WebInfo extends EntityAbstract
      * @param InputFilterInterface $inputFilter
      *
      * @return void|InputFilterAwareInterface
+     *
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -109,7 +116,7 @@ class WebInfo extends EntityAbstract
     }
 
     /**
-     * Retrieve input filter
+     * Retrieve input filter.
      *
      * @return InputFilterInterface
      */

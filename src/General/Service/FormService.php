@@ -1,13 +1,14 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder
+ * ITEA Office copyright message placeholder.
  *
  * @category  General
- * @package   Service
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Service;
 
 use Zend\Form\Form;
@@ -91,7 +92,7 @@ class FormService implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Set the service locator
+     * Set the service locator.
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
@@ -101,7 +102,7 @@ class FormService implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the service locator
+     * Get the service locator.
      *
      * @return ServiceLocatorInterface
      */

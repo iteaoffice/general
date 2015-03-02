@@ -19,14 +19,14 @@ class ModuleOptions extends AbstractOptions
      */
     protected $imageNotFound = 'image_not_found.jpg';
     /**
-     * String of the GeoIP service
+     * String of the GeoIP service.
      *
      * @var string
      */
     protected $geoIpServiceURL = 'http://freegeoip.net/json/%s';
 
     /**
-     * Wether or not to use the data map
+     * Wether or not to use the data map.
      *
      * @var bool
      */
@@ -100,7 +100,6 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
-     *
      * @return bool
      */
     public function setUseDatamap($bool)

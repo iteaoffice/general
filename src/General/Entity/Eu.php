@@ -1,12 +1,13 @@
 <?php
 /**
- * Debranova copyright message placeholder
+ * Debranova copyright message placeholder.
  *
  * @category  General
- * @package   Entity
+ *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
- * Entity for the General
+ * Entity for the General.
  *
  * @ORM\Table(name="country_eu")
  * @ORM\Entity
@@ -24,7 +25,6 @@ use Zend\InputFilter\InputFilterInterface;
  * @Annotation\Name("country_eu")
  *
  * @category General
- * @package  Entity
  */
 class Eu extends EntityAbstract
 {
@@ -33,6 +33,7 @@ class Eu extends EntityAbstract
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -42,6 +43,7 @@ class Eu extends EntityAbstract
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({"target_class":"General\Entity\Country"})
      * @Annotation\Attributes({"label":"txt-country", "required":"true","class":"span3"})
+     *
      * @var \General\Entity\Country
      */
     private $country;
@@ -49,12 +51,13 @@ class Eu extends EntityAbstract
      * @ORM\Column(name="date_since",type="date",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-since"})
+     *
      * @var string
      */
     private $since;
 
     /**
-     * Magic Getter
+     * Magic Getter.
      *
      * @param $property
      *
@@ -66,12 +69,10 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * Magic Setter
+     * Magic Setter.
      *
      * @param $property
      * @param $value
-     *
-     * @return void
      */
     public function __set($property, $value)
     {
@@ -79,7 +80,7 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * toString returns the name
+     * toString returns the name.
      *
      * @return string
      */
@@ -89,11 +90,10 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * Set input filter
+     * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
      *
-     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -132,7 +132,7 @@ class Eu extends EntityAbstract
     }
 
     /**
-     * Needed for the hydration of form elements
+     * Needed for the hydration of form elements.
      *
      * @return array
      */
