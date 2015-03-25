@@ -11,7 +11,6 @@
 namespace General\Service;
 
 use Contact\Entity\Contact;
-use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -286,7 +285,7 @@ class EmailService extends ServiceAbstract implements
                 )
             );
         } catch (\Twig_Error_Syntax $e) {
-            return sprintf("Something went wrong. Error message: %s", $e->getMessage());
+            $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
 
         $htmlContent = new MimePart($htmlView);
