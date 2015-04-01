@@ -136,6 +136,12 @@ class ContentType
      */
     private $workpackageDocument;
     /**
+     * @ORM\OneToMany(targetEntity="Ambassador\Entity\Document", cascade={"persist"}, mappedBy="contentType")
+     *
+     * @var \Ambassador\Entity\Document[]
+     */
+    private $ambassadorDocument;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
      *
      * @var \Project\Entity\Poster\Poster[]
@@ -223,6 +229,7 @@ class ContentType
         $this->loi = new Collections\ArrayCollection();
         $this->meetingFloorplan = new Collections\ArrayCollection();
         $this->exhibitionFloorplan = new Collections\ArrayCollection();
+        $this->ambassadorDocument =  new Collections\ArrayCollection();
     }
 
     /**
@@ -623,12 +630,33 @@ class ContentType
     }
 
     /**
+     * @param \Ambassador\Entity\Document[] $ambassadorDocument
+     *
+     */
+    public function setAmbassadorDocument($ambassadorDocument)
+    {
+        $this->ambassadorDocument = $ambassadorDocument;
+        return $this;
+    }
+
+    /**
+     * @return \Ambassador\Entity\Document[]
+     */
+    public function getAmbassadorDocument()
+    {
+        return $this->ambassadorDocument;
+    }
+
+    /**
      * @param \Project\Entity\Document\Document[] $projectDocument
      */
     public function setProjectDocument($projectDocument)
     {
         $this->projectDocument = $projectDocument;
+        return $this;
     }
+
+
 
     /**
      * @return \Project\Entity\Version\Document[]
