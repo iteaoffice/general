@@ -195,6 +195,12 @@ class ContentType
      * @var \Event\Entity\Exhibition\Floorplan[]
      */
     private $exhibitionFloorplan;
+    /**
+     * @ORM\OneToMany(targetEntity="Invoice\Entity\Reminder", cascade={"persist"}, mappedBy="contentType")
+     *
+     * @var \Invoice\Entity\Reminder[]|Collections\ArrayCollection()
+     */
+    private $reminder;
 
     /**
      * Class constructor.
@@ -223,6 +229,7 @@ class ContentType
         $this->loi = new Collections\ArrayCollection();
         $this->meetingFloorplan = new Collections\ArrayCollection();
         $this->exhibitionFloorplan = new Collections\ArrayCollection();
+        $this->reminder = new Collections\ArrayCollection();
     }
 
     /**
@@ -232,7 +239,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string) $this->contentType;
+        return (string)$this->contentType;
     }
 
     /**
@@ -243,13 +250,13 @@ class ContentType
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__.'/../../../../../../public'.DIRECTORY_SEPARATOR.'assets'.
-            DIRECTORY_SEPARATOR.
-            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test').
-            DIRECTORY_SEPARATOR.'content-type-icon';
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
+            DIRECTORY_SEPARATOR .
+            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') .
+            DIRECTORY_SEPARATOR . 'content-type-icon';
 
-        return $cacheDir.DIRECTORY_SEPARATOR
-        .$this->getHash().'.gif';
+        return $cacheDir . DIRECTORY_SEPARATOR
+        . $this->getHash() . '.gif';
     }
 
     /**
@@ -259,7 +266,7 @@ class ContentType
      */
     public function getHash()
     {
-        return sha1($this->id.$this->contentType.$this->extension);
+        return sha1($this->id . $this->contentType . $this->extension);
     }
 
     /**
@@ -708,5 +715,21 @@ class ContentType
     public function setExhibitionFloorplan($exhibitionFloorplan)
     {
         $this->exhibitionFloorplan = $exhibitionFloorplan;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Invoice\Entity\Reminder[]
+     */
+    public function getReminder()
+    {
+        return $this->reminder;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Invoice\Entity\Reminder[] $reminder
+     */
+    public function setReminder($reminder)
+    {
+        $this->reminder = $reminder;
     }
 }

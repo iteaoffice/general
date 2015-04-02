@@ -102,10 +102,10 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     private $invoiceRow;
     /**
-     * @ORM\OneToMany(targetEntity="\Invoice\Entity\FinancialRow", cascade={"persist"}, mappedBy="vat")
+     * @ORM\OneToMany(targetEntity="\Invoice\Entity\Financial\Row", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\FinancialRow[]
+     * @var \Invoice\Entity\Financial\Row[]
      */
     private $financialRow;
     /**
@@ -122,17 +122,25 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @var \Event\Entity\Meeting\OptionCosts[]
      */
     private $optionCosts;
+    /**
+     * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vat")
+     * @Annotation\Exclude()
+     *
+     * @var \Invoice\Entity\Vat\Dimension[]|Collections\ArrayCollection
+     */
+    private $dimension;
 
     /**
      * Class constructor.
      */
     public function __construct()
     {
-        $this->type         = new Collections\ArrayCollection();
-        $this->invoiceRow   = new Collections\ArrayCollection();
+        $this->type = new Collections\ArrayCollection();
+        $this->invoiceRow = new Collections\ArrayCollection();
         $this->financialRow = new Collections\ArrayCollection();
-        $this->deskCosts    = new Collections\ArrayCollection();
-        $this->optionCosts  = new Collections\ArrayCollection();
+        $this->deskCosts = new Collections\ArrayCollection();
+        $this->optionCosts = new Collections\ArrayCollection();
+        $this->dimension = new Collections\ArrayCollection();
     }
 
     /**
@@ -165,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->percentage.'%';
+        return (string)$this->percentage . '%';
     }
 
     /**
@@ -175,13 +183,14 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**
      * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
+     * @return void
      *
      * @throws \Exception
      */
@@ -197,45 +206,45 @@ class Vat extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'code',
                         'required' => true,
-                    )
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'percentage',
                         'required' => true,
-                    )
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'dateStart',
                         'required' => true,
-                    )
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'type',
                         'required' => true,
-                    )
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'country',
                         'required' => false,
-                    )
+                    ]
                 )
             );
             $this->inputFilter = $inputFilter;
@@ -251,13 +260,13 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'code'       => $this->code,
             'percentage' => $this->percentage,
             'dateStart'  => $this->dateStart,
             'type'       => $this->type,
             'country'    => $this->country,
-        );
+        ];
     }
 
     public function populate()
@@ -378,7 +387,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Invoice\Entity\FinancialRow[] $financialRow
+     * @param \Invoice\Entity\Financial\Row[] $financialRow
      */
     public function setFinancialRow($financialRow)
     {
@@ -386,7 +395,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Invoice\Entity\FinancialRow[]
+     * @return \Invoice\Entity\Financial\Row[]
      */
     public function getFinancialRow()
     {
@@ -423,5 +432,21 @@ class Vat extends EntityAbstract implements ResourceInterface
     public function getOptionCosts()
     {
         return $this->optionCosts;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[]
+     */
+    public function getDimension()
+    {
+        return $this->dimension;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[] $dimension
+     */
+    public function setDimension($dimension)
+    {
+        $this->dimension = $dimension;
     }
 }

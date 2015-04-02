@@ -85,6 +85,20 @@ class VatType extends EntityAbstract implements ResourceInterface
      * @var \Invoice\Entity\Invoice[]
      */
     private $invoice;
+    /**
+     * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vatType")
+     * @Annotation\Exclude()
+     *
+     * @var \Invoice\Entity\Vat\Dimension[]|Collections\ArrayCollection
+     */
+    private $dimension;
+    /**
+     * @ORM\ManyToMany(targetEntity="Organisation\Entity\Financial", cascade={"persist"}, mappedBy="vatType")
+     * @Annotation\Exclude()
+     *
+     * @var \Organisation\Entity\Financial[]|Collections\ArrayCollection
+     */
+    private $organisationFinancial;
 
     /**
      * Class constructor.
@@ -92,6 +106,8 @@ class VatType extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->invoice = new Collections\ArrayCollection();
+        $this->dimension = new Collections\ArrayCollection();
+        $this->organisationFinancial = new Collections\ArrayCollection();
     }
 
     /**
@@ -124,7 +140,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->type;
+        return (string)$this->type;
     }
 
     /**
@@ -134,14 +150,14 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**
      * Set input filter.
      *
      * @param InputFilterInterface $inputFilter
-     *
+     * @return void
      * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -156,57 +172,57 @@ class VatType extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'type',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 30,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'description',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 64,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'vat',
                         'required' => true,
-                    )
+                    ]
                 )
             );
             $this->inputFilter = $inputFilter;
@@ -222,11 +238,11 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'type'        => $this->type,
             'description' => $this->description,
             'vat'         => $this->vat,
-        );
+        ];
     }
 
     public function populate()
@@ -312,5 +328,37 @@ class VatType extends EntityAbstract implements ResourceInterface
     public function getVat()
     {
         return $this->vat;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[]
+     */
+    public function getDimension()
+    {
+        return $this->dimension;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[] $dimension
+     */
+    public function setDimension($dimension)
+    {
+        $this->dimension = $dimension;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Organisation\Entity\Financial[]
+     */
+    public function getOrganisationFinancial()
+    {
+        return $this->organisationFinancial;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Organisation\Entity\Financial[] $organisationFinancial
+     */
+    public function setOrganisationFinancial($organisationFinancial)
+    {
+        $this->organisationFinancial = $organisationFinancial;
     }
 }

@@ -88,6 +88,13 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $projectChallenge;
     /**
+     * @ORM\OneToMany(targetEntity="Event\Entity\Booth\Challenge", cascade={"persist"}, mappedBy="challenge")
+     * @Annotation\Exclude()
+     *
+     * @var \Event\Entity\Booth\Challenge[]
+     */
+    private $boothChallenge;
+    /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
@@ -100,6 +107,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->projectChallenge = new Collections\ArrayCollection();
+        $this->boothChallenge = new Collections\ArrayCollection();
     }
 
     /**
@@ -142,7 +150,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**
@@ -164,82 +172,82 @@ class Challenge extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'challenge',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'     => 'description',
                         'required' => true,
-                        'filters'  => array(
-                            array('name' => 'StringTrim'),
-                        ),
-                    )
+                        'filters'  => [
+                            ['name' => 'StringTrim'],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'backgroundColor',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $inputFilter->add(
                 $factory->createInput(
-                    array(
+                    [
                         'name'       => 'frontColor',
                         'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
+                        'filters'    => [
+                            ['name' => 'StripTags'],
+                            ['name' => 'StringTrim'],
+                        ],
+                        'validators' => [
+                            [
                                 'name'    => 'StringLength',
-                                'options' => array(
+                                'options' => [
                                     'encoding' => 'UTF-8',
                                     'min'      => 1,
                                     'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
             $this->inputFilter = $inputFilter;
@@ -260,13 +268,13 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'challenge'        => $this->challenge,
             'description'      => $this->description,
             'backgroundColor'  => $this->backgroundColor,
             'frontColor'       => $this->frontColor,
             'projectChallenge' => $this->projectChallenge,
-        );
+        ];
     }
 
     /**
@@ -278,7 +286,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     {
         $arrWords = explode(' ', strip_tags($this->description));
 
-        return implode(' ', array_slice($arrWords, 0, 40)).'...';
+        return implode(' ', array_slice($arrWords, 0, 40)) . '...';
     }
 
     /**
@@ -383,5 +391,21 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function setProjectChallenge($projectChallenge)
     {
         $this->projectChallenge = $projectChallenge;
+    }
+
+    /**
+     * @return \Event\Entity\Booth\Challenge[]
+     */
+    public function getBoothChallenge()
+    {
+        return $this->boothChallenge;
+    }
+
+    /**
+     * @param \Event\Entity\Booth\Challenge[] $boothChallenge
+     */
+    public function setBoothChallenge($boothChallenge)
+    {
+        $this->boothChallenge = $boothChallenge;
     }
 }
