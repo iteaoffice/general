@@ -165,6 +165,13 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Project\Entity\Rationale[]|Collections\ArrayCollection
      */
     private $rationale;
+    /**
+     * @ORM\OneToMany(targetEntity="Ambassador\Entity\Ambassador", cascade={"persist","remove"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection
+     */
+    private $ambassador;
 
     /**
      * Class constructor.
@@ -178,6 +185,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->vat = new Collections\ArrayCollection();
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
+        $this->ambassador = new Collections\ArrayCollection();
     }
 
     /**
@@ -688,5 +696,20 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setRationale($rationale)
     {
         $this->rationale = $rationale;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
+     */
+    public function getAmbassasor(){
+        return $this->ambassador;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
+     */
+    public function setAmbassasor(Collections\ArrayCollection $ambassador){
+        $this->ambassador = $ambassador;
+        return $this;
     }
 }
