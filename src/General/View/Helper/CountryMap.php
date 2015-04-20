@@ -40,7 +40,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
     {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
         $pointer = $clickable ? 'pointer' : 'default';
-        $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#009900';
+        $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
         $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
         $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
         $height = isset($options['height']) ? $options['height'] : '400px';
