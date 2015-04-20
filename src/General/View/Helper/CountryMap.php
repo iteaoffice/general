@@ -40,6 +40,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
     {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
         $pointer = $clickable ? 'pointer' : 'default';
+        $clickable = $clickable ? 'true' : 'false';
         $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
         $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
         $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
@@ -47,6 +48,8 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $tipData = isset($options['tipData']) ? $options['tipData'] : null;
         $focusOn = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
         $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'".$focusOn."'";
+        $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
+        $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
         
         $js = $countryList = [];
         $js[] = "var data = {";
@@ -60,7 +63,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         if(is_array($tipData)){
             $js[] = "            tipData = ".json_encode($tipData).",\n";
         }
-        $js[] = "            clickable = ".($clickable ? "1" : "0").",\n";
+        $js[] = "            clickable = ".$clickable.",\n";
         $js[] = "            countries = [";
         $countryList = [];
         foreach ($this->getGeneralService()->findAll('country') as $country) {
@@ -84,6 +87,7 @@ $(function() {
                 }]
             },
             focusOn: $focusOn,
+            zoomOnScroll: $zoomOnScroll,
             regionStyle: {
                 initial: {
                     fill: '$regionFill'
