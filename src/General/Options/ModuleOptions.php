@@ -26,11 +26,18 @@ class ModuleOptions extends AbstractOptions
     protected $geoIpServiceURL = 'http://freegeoip.net/json/%s';
 
     /**
-     * Wether or not to use the data map.
+     * Color to use on country map.
      *
-     * @var bool
+     * @var string
      */
-    protected $useDataMap = false;
+    protected $countryColor = '#00a651';
+    
+    /**
+     * Color to use on country map for faded countries.
+     *
+     * @var string
+     */
+    protected $countryColorFaded = '#005C00';
 
     /**
      * @param array $styleLocations
@@ -92,21 +99,47 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
-     * @return bool
+     * @param $countryColor
+     *
+     * @return ModuleOptions
      */
-    public function getUseDatamap()
+    public function setCountryColor($countryColor)
     {
-        return $this->useDataMap;
+        $this->countryColor = $countryColor;
+
+        return $this;
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function setUseDatamap($bool)
+    public function getCountryColor()
     {
-        $this->useDataMap = $bool;
+        return $this->countryColor;
+    }
+
+    /**
+     * Returns the assigned hex color of the country map.
+     *
+     * @param string $countryColorFaded
+     *
+     * @return ModuleOptions
+     */
+    public function setCountryColorFaded($countryColorFaded)
+    {
+        $this->countryColorFaded = $countryColorFaded;
 
         return $this;
+    }
+
+    /**
+     * Returns the assigned hex color of the country map.
+     *
+     * @return string
+     */
+    public function getCountryColorFaded()
+    {
+        return $this->countryColorFaded;
     }
 
     /**

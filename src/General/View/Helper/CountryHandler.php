@@ -279,22 +279,19 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMap()
     {
-        switch ($this->getGeneralService()->getOptions()->getUseDatamap()) {
-            case true:
-                return $this->getRenderer()->render(
-                    'general/partial/entity/country-map',
-                    [
-                        'country' => $this->getCountry(),
-                    ]
-                );
-            case false:
-                /*
-                 * @var $countryMap CountryMap
-                 */
-                $countryMap = $this->serviceLocator->get('countryMap');
-
-                return $countryMap->__invoke([$this->getCountry()], $this->getCountry());
-        }
+        $options = $this->getGeneralService()->getOptions();
+        $mapOptions = [
+            'clickable' => false,
+            'colorMin' => $options->getCountryColorFaded(),
+            'colorMax' => $options->getCountryColor(),
+            'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
+            'height' => '340px'
+        ];
+        /**
+         * @var CountryMap
+         */
+        $countryMap = $this->serviceLocator->get('countryMap');
+        return $countryMap([$this->getCountry()], null, $mapOptions);
     }
 
     /**
@@ -366,7 +363,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function getOrganisationService()
     {
-        return $this->getServiceLocator()->get('organisation_organisation_service');
+        return $this->getServiceLocator()->get(OrganisationService::class);
     }
 
     /**
