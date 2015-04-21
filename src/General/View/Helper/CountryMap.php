@@ -97,8 +97,8 @@ $(function() {
                 }
             },
             onRegionClick: function (e, code) {
-                if ((clickable === 1) && jQuery.inArray(code, countries) !== -1) {
-                    window.location='/country/code/'+code;
+                if (clickable && (countries.indexOf(code) !== -1)) {
+                    window.location.href = '/country/code/'+code;
                 }
             },
             onRegionTipShow: function (e, el, code) {
