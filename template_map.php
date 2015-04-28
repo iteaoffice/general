@@ -14,6 +14,7 @@ return array(
     'general/partial/list/country'            => __DIR__ . '//view/general/partial/list/country.twig',
     'general/partial/list/article'            => __DIR__ . '//view/general/partial/list/article.twig',
     'general/partial/list/organisation'       => __DIR__ . '//view/general/partial/list/organisation.twig',
+    'general/partial/list/pagination'         => __DIR__ . '//view/general/partial/list/pagination.twig',
     'twitter/widget'                          => __DIR__ . '//view/twitter/widget.twig',
     'email/newsletter'                        => __DIR__ . '//view/email/newsletter.twig',
 );
