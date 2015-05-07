@@ -31,7 +31,7 @@ class ModuleOptions extends AbstractOptions
      * @var string
      */
     protected $countryColor = '#00a651';
-    
+
     /**
      * Color to use on country map for faded countries.
      *
