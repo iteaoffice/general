@@ -53,6 +53,11 @@ class Country extends EntityRepository
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
+        //only the active countries
+        $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
+
+
+
         return $queryBuilder->getQuery()->getResult();
     }
 

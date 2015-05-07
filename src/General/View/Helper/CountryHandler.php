@@ -366,7 +366,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function getOrganisationService()
     {
-        return $this->getServiceLocator()->get('organisation_organisation_service');
+        return $this->getServiceLocator()->get(OrganisationService::class);
     }
 
     /**
@@ -376,11 +376,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryInfo(Country $country)
     {
-        $whichProjects = $this->getProjectService()->getOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
-
         $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
 
-        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
+        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
         $organisations = $this->getOrganisationService()->findOrganisationByCountry(
             $this->getCountry(),
             $onlyActivePartners

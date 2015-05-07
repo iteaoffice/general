@@ -153,12 +153,13 @@ class EmailService extends ServiceAbstract implements
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
-                    } else {
-                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
-                    }
+//                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+//                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+//                    } else {
+//                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+//                    }
 
+                    $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
                     /*
                      * We have the contact and can now produce the content of the message
                      */
