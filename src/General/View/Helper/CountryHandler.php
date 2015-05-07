@@ -88,7 +88,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                         'social'
                     )
                 );
-
                 return $this->parseCountry();
 
             case 'country_map':
@@ -99,24 +98,25 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
+            
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
+            
             case 'country_info':
                 return $this->parseCountryInfo($this->getCountry());
+            
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseCountryList($page);
+            
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseCountryListItac($page);
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
-
                 return $this->parseOrganisationList($page);
 
             case 'country_project':
@@ -279,22 +279,19 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMap()
     {
-        switch ($this->getGeneralService()->getOptions()->getUseDatamap()) {
-            case true:
-                return $this->getRenderer()->render(
-                    'general/partial/entity/country-map',
-                    [
-                        'country' => $this->getCountry(),
-                    ]
-                );
-            case false:
-                /*
-                 * @var $countryMap CountryMap
-                 */
-                $countryMap = $this->serviceLocator->get('countryMap');
-
-                return $countryMap->__invoke([$this->getCountry()], $this->getCountry());
-        }
+        $options = $this->getGeneralService()->getOptions();
+        $mapOptions = [
+            'clickable' => false,
+            'colorMin' => $options->getCountryColorFaded(),
+            'colorMax' => $options->getCountryColor(),
+            'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
+            'height' => '340px'
+        ];
+        /**
+         * @var CountryMap
+         */
+        $countryMap = $this->serviceLocator->get('countryMap');
+        return $countryMap([$this->getCountry()], null, $mapOptions);
     }
 
     /**
@@ -425,12 +422,10 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     }
 
     /**
-     * Create a list of organisations.
+     * Create a list of organisations for the current country.
      *
      * @param int $page
-     *
      * @throws \InvalidArgumentException
-     *
      * @return string
      */
     public function parseOrganisationList($page)
@@ -438,15 +433,11 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry());
+        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false, true);
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
-
-        /*
-         * Parse the organisationService in to have the these functions available in the view
-         */
 
         return $this->getRenderer()->render(
             'general/partial/list/organisation',

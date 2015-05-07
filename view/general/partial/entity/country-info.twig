@@ -1,19 +1,16 @@
 <h3>{{ translate("txt-country-information") }}</h3>
 <div class="row">
-    <div class="col-md-5">
-        <dl class="project">
+    <div class="col-md-7">
+        <dl class="project dl-horizontal">
             <dt>{{ translate("txt-projects") }}</dt>
             <dd>{{ countryLink(country, 'view-project','custom',projects|length) }}</dd>
             <dt>{{ translate("txt-partners") }}</dt>
             <dd>{{ countryLink(country, 'view-organisation','custom',organisations|length) }}</dd>
         </dl>
     </div>
-    <div class="col-md-7">
-        <div class="pull-left project-image">
-            <div class="thumbnail">
-               <!-- Country Flag here -->
-               {{ countryFlag(country, 91) }}
-            </div>
+    <div class="col-md-5">
+        <div class="pull-left">
+            {{ countryFlag(country, 91) }}
         </div>
     </div>
 </div>

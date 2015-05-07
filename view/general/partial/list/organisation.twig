@@ -1,68 +1,24 @@
+<h1>{{ translate("txt-organisation-list-in-country-%s")|format(country) }}</h1>
+                
 <div id="organisation-list">
-    <h1 id="title">{{ translate("txt-organisation-list-in-country-%s")|format(country) }}</h1>
-
-    <div class="row">
-        <div class="col-md-6">
-            <p class="lead">{{ translate("txt-organisation-list-explanation") }}</p>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="pull-right">
-                <form class="form-inline" role="form" id="organisationSearch">
-                    <div class="form-group">
-                        <label class="sr-only" for="search-box">{{ translate("txt-search") }}</label>
-                        <input type="search" class="form-control col-md-12" id="search" name="q"
-                               placeholder="{{ translate("txt-search-organisation-in-%s-country")|format(country) }}">
-                    </div>
-                    <input type="submit" value="{{ translate("txt-search") }}" class="btn btn-primary">
-                </form>
-            </div>
-        </div>
-    </div>
-
     {% if paginator.pageRange > 0 %}
-        <table class="table table-condensed table-striped table-hover">
-            <thead>
+    <table class="table table-condensed table-striped table-hover">
+         <thead>
             <tr>
                 <th>{{ translate("txt-organisation") }}</th>
-                <th>{{ translate("txt-country") }}</th>
                 <th>{{ translate("txt-type") }}</th>
             </tr>
-            </thead>
-            <tbody>
-            {% for organisation in paginator.getCurrentItems() %}
-                <tr>
-                    {% set organisationService = organisationServiceProxy(organisation) %}
-                    <td>{{ organisationLink(organisationService,'view','name') }}</td>
-                    <td>{{ countryLink(organisation.country,'view','name') }}</td>
-                    <td>{{ organisation.type }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        {% include 'organisation/partial/pagination-control' with {'paginator': paginator} %}
+        </thead>
+        {% for organisation in paginator.getCurrentItems() %}
+            {% set organisationService = organisationServiceProxy(organisation) %}
+         <tr>
+             <td>{{ organisationLink(organisationService,'view','name') }}</td>
+             <td>{{ organisation.type }}</td>
+         </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        {{ ztbalert().info(translate("txt-no-organisations-found"))|raw }}
     {% endif %}
 </div>
-
-<script type="text/javascript">
-    $("#organisationSearch").on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: 'organisation/search',
-                    data: {
-                        max_rows: 12,
-                        country: {{ country.id }},
-                        search_item: $("#search").val()
-                    },
-                    success: function (data) {
-                        $("#organisation-list").html(data);
-                        $("#throbber").remove();
-                    },
-                    error: function (event, ui) {
-                        alert("Search Failed");
-                    }
-                });
-            }
-    );
-</script>
+{% include 'general/partial/list/pagination' with {'paginator': paginator} %}

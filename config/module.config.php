@@ -61,13 +61,20 @@ $config = [
                     "DEBRANOVA_HOST"
                 ) ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js' => [
                     'js/jquery/jquery.mousewheel.min.js',
-                    'js/jquery/jquery-jvectormap-1.1.1.min.js',
+                    'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
+                ],
+                'assets/'.(defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test').'/css/jvectormap.css' => [
+                    'css/jquery-jvectormap-2.0.2.css',
                 ],
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
                 'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js' => [
+                    'cache'   => 'FilePath', //Filesystem for development
+                    'options' => ['dir' => __DIR__ . '/../../../public',],
+                ],
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
