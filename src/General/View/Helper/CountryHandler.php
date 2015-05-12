@@ -19,6 +19,7 @@ use General\Service\GeneralService;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Service\ProjectService;
+use Member\Service\MemberService;
 use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -373,20 +374,29 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryInfo(Country $country)
     {
-        $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
-
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
-        $organisations = $this->getOrganisationService()->findOrganisationByCountry(
-            $this->getCountry(),
-            $onlyActivePartners
-        );
-
+        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false)->getResult();
+        $members = [];
+        foreach($organisations as $organisation){
+            // Direct members
+            if($organisation->getMember()){
+                $members[] = $organisation;
+            // Member through cluster
+            }else{
+                foreach($organisation->getClusterMember() as $cluster){
+                    if($cluster->getOrganisation()->getMember()){
+                        $members[] = $organisation;
+                    }
+                }
+            }
+        }
         return $this->getRenderer()->render(
             'general/partial/entity/country-info',
             [
                 'country'       => $country,
                 'projects'      => $projects,
-                'organisations' => $organisations->getResult(),
+                'organisations' => $organisations,
+                'members'       => $members
             ]
         );
     }
@@ -514,5 +524,13 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function setLimit($limit)
     {
         $this->limit = $limit;
+    }
+    
+    /**
+     * @return ProjectService
+     */
+    public function getMemberService()
+    {
+        return $this->getServiceLocator()->get(MemberService::class);
     }
 }
