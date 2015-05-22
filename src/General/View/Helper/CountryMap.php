@@ -44,7 +44,8 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
         $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
         $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
-        $height = isset($options['height']) ? $options['height'] : '400px';
+        $width = isset($options['width']) ? $options['width'] : null;
+        $height = isset($options['height']) ? $options['height'] : (isset($width) ? null : '400px');
         $tipData = isset($options['tipData']) ? $options['tipData'] : null;
         $focusOn = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
         $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'".$focusOn."'";
@@ -125,7 +126,10 @@ EOT;
         );
         $this->serviceLocator->get('headscript')->appendScript($jQuery);
 
-        return '<div id="country-map" style="height: '.$height.';"></div>';
+        return '<div id="country-map" style="'
+            .(isset($height) ? 'height: '.$height.';' : '')
+            .(isset($width) ? ' width: '.$width.';' : '')
+            .'"></div>';
     }
 
     /**
