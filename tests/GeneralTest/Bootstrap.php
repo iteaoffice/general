@@ -36,7 +36,7 @@ class Bootstrap
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
         static::$serviceManager = $serviceManager;
-        $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
+        $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 //        //Validate the schema;
 //        $validator = new SchemaValidator($entityManager);
 //        $errors    = $validator->validateMapping();

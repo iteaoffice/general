@@ -701,14 +701,16 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
      */
-    public function getAmbassasor(){
+    public function getAmbassasor()
+    {
         return $this->ambassador;
     }
 
     /**
      * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
      */
-    public function setAmbassasor(Collections\ArrayCollection $ambassador){
+    public function setAmbassasor(Collections\ArrayCollection $ambassador)
+    {
         $this->ambassador = $ambassador;
         return $this;
     }

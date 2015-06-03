@@ -60,7 +60,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         }
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "},\n";
-        if(is_array($tipData)){
+        if (is_array($tipData)) {
             $js[] = "            tipData = ".json_encode($tipData).",\n";
         }
         $js[] = "            clickable = ".$clickable.",\n";
@@ -118,10 +118,12 @@ $(function() {
     });
 EOT;
         $this->serviceLocator->get('headlink')->prependStylesheet(
-            'assets/'.DEBRANOVA_HOST.'/css/jvectormap.css', 'screen'
+            'assets/'.DEBRANOVA_HOST.'/css/jvectormap.css',
+            'screen'
         );
         $this->serviceLocator->get('headscript')->appendFile(
-            'assets/'.DEBRANOVA_HOST.'/js/jvectormap.js', 'text/javascript'
+            'assets/'.DEBRANOVA_HOST.'/js/jvectormap.js',
+            'text/javascript'
         );
         $this->serviceLocator->get('headscript')->appendScript($jQuery);
 

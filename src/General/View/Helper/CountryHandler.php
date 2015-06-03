@@ -289,7 +289,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             'height' => '340px'
         ];
         /**
-         * @var CountryMap
+         * @var $countryMap CountryMap
          */
         $countryMap = $this->serviceLocator->get('countryMap');
         return $countryMap([$this->getCountry()], null, $mapOptions);
@@ -377,14 +377,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
         $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false)->getResult();
         $members = [];
-        foreach($organisations as $organisation){
+        foreach ($organisations as $organisation) {
             // Direct members
-            if($organisation->getMember()){
+            if ($organisation->getMember()) {
                 $members[] = $organisation;
             // Member through cluster
-            }else{
-                foreach($organisation->getClusterMember() as $cluster){
-                    if($cluster->getOrganisation()->getMember()){
+            } else {
+                foreach ($organisation->getClusterMember() as $cluster) {
+                    if ($cluster->getOrganisation()->getMember()) {
                         $members[] = $organisation;
                     }
                 }

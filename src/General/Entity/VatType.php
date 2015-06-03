@@ -30,6 +30,11 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class VatType extends EntityAbstract implements ResourceInterface
 {
+    const VAT_TYPE_LOCAL = 1;
+    const VAT_TYPE_IN_EU_SHIFT = 2;
+    const VAT_TYPE_IN_EU_NO_SHIFT = 3;
+    const VAT_TYPE_NON_EU = 4;
+
     /**
      * @ORM\Column(name="type_id",type="integer",nullable=false)
      * @ORM\Id

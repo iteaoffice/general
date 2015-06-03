@@ -31,14 +31,50 @@ class Country extends EntityRepository
      * 'partners' which contains the amount of partners
      * 'projects' which contains the amount of projects
      *
+     *
+     * project_id IN (
+     * SELECT project_id
+     * FROM project_version
+     * WHERE type_id = 2 AND approved = 1)) AND
+     * (project.project_id NOT IN (
+     * SELECT project_id
+     * FROM project_version
+     * WHERE type_id = 4)
+     *
      * @return array
      */
     public function findActive()
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('a affiliation');
-        $queryBuilder->addSelect('COUNT(DISTINCT a.organisation) partners');
-        $queryBuilder->addSelect('COUNT(DISTINCT a.project) projects');
+        $queryBuilder->addSelect(
+            '(SELECT
+                            COUNT(DISTINCT aff.organisation)
+                            FROM Affiliation\Entity\Affiliation aff
+                            JOIN aff.organisation org
+                            JOIN aff.project pro
+                            WHERE org.country = c AND aff.dateEnd IS NULL
+                            AND pro IN (
+                                SELECT proj1 FROM Project\Entity\Version\Version version1 JOIN version1.project proj1 JOIN version1.versionType type1 WHERE type1.id = 2 AND version1.approved = 1
+                            ) AND pro NOT IN (
+                                 SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
+                            )
+                            ) partners'
+        );
+        $queryBuilder->addSelect(
+            '(SELECT
+                            COUNT(DISTINCT aff2.project)
+                            FROM Affiliation\Entity\Affiliation aff2
+                            JOIN aff2.organisation org2
+                            JOIN aff2.project pro2
+                            WHERE org2.country = c AND aff2.dateEnd IS NULL
+                            AND pro2 IN (
+                                SELECT proj3 FROM Project\Entity\Version\Version version3 JOIN version3.project proj3 JOIN version3.versionType type3 WHERE type3.id = 2 AND version3.approved = 1
+                            ) AND pro2 NOT IN (
+                                SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
+                            )
+                            ) projects'
+        );
         $queryBuilder->from('Affiliation\Entity\Affiliation', 'a');
         $queryBuilder->join('a.organisation', 'o');
         $queryBuilder->join('a.project', 'p');
@@ -47,8 +83,8 @@ class Country extends EntityRepository
         $queryBuilder->where('c.id <> 0');
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
-        /*
-         * @var \Project\Repository\Project
+        /**
+         * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
@@ -56,14 +92,12 @@ class Country extends EntityRepository
         //only the active countries
         $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
 
-
-
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 
     /**
      * @param Call $call
-     * @param int  $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -77,12 +111,12 @@ class Country extends EntityRepository
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
     }
 
     /**
      * @param Project $project
-     * @param int     $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -96,7 +130,7 @@ class Country extends EntityRepository
 
         $queryBuilder->addOrderBy('c.country', 'ASC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
     }
 
     /**
@@ -128,7 +162,7 @@ class Country extends EntityRepository
 
         $queryBuilder->setParameter(1, $project);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->getOneOrNullResult();
     }
 
     /**
@@ -166,7 +200,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * @param Call            $call
+     * @param Call $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]
@@ -186,7 +220,7 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
     }
 
     /**
@@ -208,19 +242,35 @@ class Country extends EntityRepository
             '(SELECT
                             COUNT(DISTINCT aff.organisation)
                             FROM Affiliation\Entity\Affiliation aff
-                            JOIN aff.organisation org WHERE org.country = c AND aff.dateEnd IS NULL) partners'
+                            JOIN aff.organisation org
+                            JOIN aff.project pro
+                            WHERE org.country = c AND aff.dateEnd IS NULL
+                            AND pro IN (
+                                SELECT proj1 FROM Project\Entity\Version\Version version1 JOIN version1.project proj1 JOIN version1.versionType type1 WHERE type1.id = 2 AND version1.approved = 1
+                            ) AND pro NOT IN (
+                                 SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
+                            )
+                            ) partners'
         );
         $queryBuilder->addSelect(
             '(SELECT
                             COUNT(DISTINCT aff2.project)
                             FROM Affiliation\Entity\Affiliation aff2
-                            JOIN aff2.organisation org2 WHERE org2.country = c AND aff2.dateEnd IS NULL) projects'
+                            JOIN aff2.organisation org2
+                            JOIN aff2.project pro2
+                            WHERE org2.country = c AND aff2.dateEnd IS NULL
+                            AND pro2 IN (
+                                SELECT proj3 FROM Project\Entity\Version\Version version3 JOIN version3.project proj3 JOIN version3.versionType type3 WHERE type3.id = 2 AND version3.approved = 1
+                            ) AND pro2 NOT IN (
+                                SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
+                            )
+                            ) projects'
         );
         $queryBuilder->innerJoin('c.itac', 'itac');
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 
     /**
@@ -247,6 +297,6 @@ class Country extends EntityRepository
         $query->join('co.organisation', 'o');
         $query->join('o.country', 'country');
 
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->useResultCache(true)->getResult();
     }
 }
