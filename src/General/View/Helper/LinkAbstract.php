@@ -80,12 +80,12 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     public function createLink()
     {
-        /*
-         * @var Url
+        /**
+         * @var $url Url
          */
         $url = $this->serviceLocator->get('url');
-        /*
-         * @var ServerUrl
+        /**
+         * @var $serverUrl ServerUrl
          */
         $serverUrl = $this->serviceLocator->get('serverUrl');
         $this->linkContent = [];
@@ -99,10 +99,11 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
         return sprintf(
             $uri,
-            $serverUrl().$url($this->router, $this->routerParams),
-            $this->text,
+            $serverUrl() . $url($this->router, $this->routerParams),
+            htmlentities($this->text),
             implode(' ', $this->classes),
-            implode('', $this->linkContent)
+            in_array($this->getShow(), ['icon', 'button', 'alternativeShow']) ? implode('',
+                $this->linkContent) : htmlentities(implode('', $this->linkContent))
         );
     }
 
@@ -304,7 +305,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     /**
      * @param string $assertion
      *
-     * @return AssertionAbstract
+     * @return
      */
     public function getAssertion($assertion)
     {
@@ -351,8 +352,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     public function isAllowed($resource, $privilege = null)
     {
-        /*
-         * @var IsAllowed
+        /**
+         * @var $isAllowed IsAllowed
          */
         $isAllowed = $this->serviceLocator->get('isAllowed');
 

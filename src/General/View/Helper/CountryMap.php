@@ -30,12 +30,12 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 
     /**
      * @param Country[] $countries
-     * @param Country   $selectedCountry
-     * @param array     $options
+     * @param Country $selectedCountry
+     * @param array $options
      *
      * @return string
      */
-    
+
     public function __invoke(array $countries, Country $selectedCountry = null, array $options = [])
     {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
@@ -44,36 +44,35 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
         $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
         $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
-        $width = isset($options['width']) ? $options['width'] : null;
-        $height = isset($options['height']) ? $options['height'] : (isset($width) ? null : '400px');
+        $height = isset($options['height']) ? $options['height'] : '400px';
         $tipData = isset($options['tipData']) ? $options['tipData'] : null;
         $focusOn = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'".$focusOn."'";
+        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
         $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
-        
+
         $js = $countryList = [];
         $js[] = "var data = {";
         foreach ($countries as $country) {
-            $countryList[] = '"'.$country->getCd().'": ';
+            $countryList[] = '"' . $country->getCd() . '": ';
             $countryList[] = (!is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2 : 1;
             $countryList[] = ",";
         }
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "},\n";
         if (is_array($tipData)) {
-            $js[] = "            tipData = ".json_encode($tipData).",\n";
+            $js[] = "            tipData = " . json_encode($tipData) . ",\n";
         }
-        $js[] = "            clickable = ".$clickable.",\n";
+        $js[] = "            clickable = " . $clickable . ",\n";
         $js[] = "            countries = [";
         $countryList = [];
         foreach ($this->getGeneralService()->findAll('country') as $country) {
-            $countryList[] = '"'.$country->getCd().'",';
+            $countryList[] = '"' . $country->getCd() . '",';
         }
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "];";
         $data = implode('', $js);
-        
+
         $jQuery = <<< EOT
 $(function() {
         $data
@@ -119,19 +118,16 @@ $(function() {
     });
 EOT;
         $this->serviceLocator->get('headlink')->prependStylesheet(
-            'assets/'.DEBRANOVA_HOST.'/css/jvectormap.css',
+            'assets/' . DEBRANOVA_HOST . '/css/jvectormap.css',
             'screen'
         );
         $this->serviceLocator->get('headscript')->appendFile(
-            'assets/'.DEBRANOVA_HOST.'/js/jvectormap.js',
+            'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js',
             'text/javascript'
         );
         $this->serviceLocator->get('headscript')->appendScript($jQuery);
 
-        return '<div id="country-map" style="'
-            .(isset($height) ? 'height: '.$height.';' : '')
-            .(isset($width) ? ' width: '.$width.';' : '')
-            .'"></div>';
+        return '<div id="country-map" style="height: ' . $height . ';"></div>';
     }
 
     /**
