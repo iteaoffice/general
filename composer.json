@@ -2,7 +2,9 @@
   "name": "debranova/general",
   "type": "library",
   "description": "General shared code for Debranova",
-  "keywords": ["general"],
+  "keywords": [
+    "general"
+  ],
   "license": "proprietary",
   "homepage": "http://debranova.org",
   "authors": [
@@ -17,8 +19,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php":">5.5",
-    "zendframework/zendframework": "~2.4.0",
+    "php": ">5.5",
+    "zendframework/zendframework": "~2.5",
     "doctrine/doctrine-orm-module": "0.9.*@dev"
   },
   "require-dev": {
