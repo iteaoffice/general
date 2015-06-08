@@ -172,6 +172,13 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection
      */
     private $ambassador;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicant;
 
     /**
      * Class constructor.
@@ -701,17 +708,31 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
      */
-    public function getAmbassasor()
-    {
+    public function getAmbassasor(){
         return $this->ambassador;
     }
 
     /**
      * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
      */
-    public function setAmbassasor(Collections\ArrayCollection $ambassador)
-    {
+    public function setAmbassasor(Collections\ArrayCollection $ambassador){
         $this->ambassador = $ambassador;
+        return $this;
+    }
+
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicant
+     */
+    public function getApplicant(){
+        return $this->applicant;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicant
+     */
+    public function setApplicant(Collections\ArrayCollection $applicant){
+        $this->applicant = $applicant;
         return $this;
     }
 }
