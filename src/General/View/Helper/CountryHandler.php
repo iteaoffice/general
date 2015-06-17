@@ -19,7 +19,6 @@ use General\Service\GeneralService;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Service\ProjectService;
-use Member\Service\MemberService;
 use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -282,14 +281,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $options = $this->getGeneralService()->getOptions();
         $mapOptions = [
-            'clickable' => false,
+            'clickable' => true,
             'colorMin' => $options->getCountryColorFaded(),
             'colorMax' => $options->getCountryColor(),
             'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
             'height' => '340px'
         ];
         /**
-         * @var $countryMap CountryMap
+         * @var CountryMap
          */
         $countryMap = $this->serviceLocator->get('countryMap');
         return $countryMap([$this->getCountry()], null, $mapOptions);
@@ -374,29 +373,20 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryInfo(Country $country)
     {
+        $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
+
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
-        $organisations = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false)->getResult();
-        $members = [];
-        foreach ($organisations as $organisation) {
-            // Direct members
-            if ($organisation->getMember()) {
-                $members[] = $organisation;
-            // Member through cluster
-            } else {
-                foreach ($organisation->getClusterMember() as $cluster) {
-                    if ($cluster->getOrganisation()->getMember()) {
-                        $members[] = $organisation;
-                    }
-                }
-            }
-        }
+        $organisations = $this->getOrganisationService()->findOrganisationByCountry(
+            $this->getCountry(),
+            $onlyActivePartners
+        );
+
         return $this->getRenderer()->render(
             'general/partial/entity/country-info',
             [
                 'country'       => $country,
                 'projects'      => $projects,
-                'organisations' => $organisations,
-                'members'       => $members
+                'organisations' => $organisations->getResult(),
             ]
         );
     }
@@ -524,13 +514,5 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function setLimit($limit)
     {
         $this->limit = $limit;
-    }
-    
-    /**
-     * @return ProjectService
-     */
-    public function getMemberService()
-    {
-        return $this->getServiceLocator()->get(MemberService::class);
     }
 }
