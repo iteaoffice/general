@@ -70,7 +70,7 @@ $config = [
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?1' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?' => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],

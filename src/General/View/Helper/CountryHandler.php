@@ -481,7 +481,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /*
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
