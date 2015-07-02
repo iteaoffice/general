@@ -41,13 +41,13 @@ class IndexController extends AbstractActionController
             return $this->notFoundAction();
         }
         $response->getHeaders()
-            ->addHeaderLine('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public");
         $file = stream_get_contents($contentType->getImage());
         $response->getHeaders()
             ->addHeaderLine('Content-Type: image/gif')
-            ->addHeaderLine('Content-Length: '.(string) strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
         $response->setContent($file);
 
         return $response;
@@ -78,11 +78,11 @@ class IndexController extends AbstractActionController
         }
 
         $response->getHeaders()
-            ->addHeaderLine('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public")
             ->addHeaderLine('Content-Type: image/png')
-            ->addHeaderLine('Content-Length: '.(string) strlen($file));
+            ->addHeaderLine('Content-Length: ' . (string)strlen($file));
         $response->setContent($file);
 
         return $response;
@@ -98,7 +98,7 @@ class IndexController extends AbstractActionController
         );
 
         return $this->redirect()->toRoute(
-            'route-'.$country->get('underscore_full_entity_name'),
+            'route-' . $country->get('underscore_full_entity_name'),
             ['docRef' => $country->getDocRef()]
         )->setStatusCode(301);
     }

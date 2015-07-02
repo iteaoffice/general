@@ -1,18 +1,5 @@
 <?php
 /**
- * ZfcUser Configuration
- *
- * If you have a ./config/autoload/ directory set up for your project, you can
- * drop this config file in it and change the values as you wish.
- */
-$settings = [
-    'style_locations' => [
-        __DIR__ . '/../../../../styles/common',
-        __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
-    ],
-    'image_not_found' => 'image_not_found.jpg',
-];
-/**
  * You do not need to edit below this line
  */
 return [
@@ -40,5 +27,11 @@ return [
             __DIR__ . "/../view/email/"
         ],
     ],
-    'general' => $settings,
+    'general' => [
+        'style_locations' => [
+            __DIR__ . '/../../../../styles/common',
+            __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
+        ],
+        'image_not_found' => 'image_not_found.jpg',
+    ],
 ];

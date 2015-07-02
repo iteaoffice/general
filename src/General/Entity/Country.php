@@ -450,7 +450,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \General\Entity\Eu[]|Collections\ArrayCollection $eu
+     * @param \General\Entity\Eu $eu
      */
     public function setEu($eu)
     {
@@ -458,7 +458,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Eu[]|Collections\ArrayCollection
+     * @return \General\Entity\Eu
      */
     public function getEu()
     {

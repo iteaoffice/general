@@ -25,6 +25,9 @@ class ContentType
 {
     const TYPE_UNKNOWN = 0;
     const TYPE_OFFICE_2007 = 16;
+    const TYPE_EXCEL = 13;
+    const TYPE_EXCEL_2007 = 19;
+    const TYPE_EXCEL_MACRO = 143;
     /**
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
@@ -162,9 +165,15 @@ class ContentType
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Idea\Image[]
+     * @var \Project\Entity\Description\Image[]
      */
     private $projectDescriptionImage;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
+     *
+     * @var \Project\Entity\Report\Item[]
+     */
+    private $projectReportItem;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
      *
@@ -229,6 +238,7 @@ class ContentType
         $this->ideaDocument = new Collections\ArrayCollection();
         $this->ideaImage = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
+        $this->projectReportItem = new Collections\ArrayCollection();
         $this->projectDocument = new Collections\ArrayCollection();
         $this->versionDocument = new Collections\ArrayCollection();
         $this->calendarDocument = new Collections\ArrayCollection();
@@ -745,4 +755,25 @@ class ContentType
     {
         $this->reminder = $reminder;
     }
+
+    /**
+     * @return \Project\Entity\Report\Item[]
+     */
+    public function getProjectReportItem()
+    {
+        return $this->projectReportItem;
+    }
+
+    /**
+     * @param \Project\Entity\Report\Item[] $projectReportItem
+     * @return ContentType
+     */
+    public function setProjectReportItem($projectReportItem)
+    {
+        $this->projectReportItem = $projectReportItem;
+
+        return $this;
+    }
+
+
 }

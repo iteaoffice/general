@@ -15,6 +15,7 @@ use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
+use General\Entity\WebInfo;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -53,6 +54,10 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     protected $show;
     /**
+     * @var WebInfo
+     */
+    protected $webInfo;
+    /**
      * @var string
      */
     protected $alternativeShow;
@@ -89,11 +94,11 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
          */
         $serverUrl = $this->serviceLocator->get('serverUrl');
         $this->linkContent = [];
-        $this->classes     = [];
+        $this->classes = [];
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
-            return $serverUrl->__invoke().$url($this->router, $this->routerParams);
+            return $serverUrl->__invoke() . $url($this->router, $this->routerParams);
         }
         $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
@@ -102,7 +107,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
             $serverUrl() . $url($this->router, $this->routerParams),
             htmlentities($this->text),
             implode(' ', $this->classes),
-            in_array($this->getShow(), ['icon', 'button', 'alternativeShow']) ? implode('',
+            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('',
                 $this->linkContent) : htmlentities(implode('', $this->linkContent))
         );
     }
@@ -112,7 +117,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     public function parseAction()
     {
-        return  $this->action = null;
+        return $this->action = null;
     }
 
     /**
@@ -133,7 +138,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                 break;
             case 'button':
                 $this->addClasses("btn btn-primary");
-                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> '.$this->getText());
+                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
                 break;
             case 'text':
                 $this->addLinkContent($this->getText());
@@ -206,7 +211,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function addLinkContent($linkContent)
     {
         if (!is_array($linkContent)) {
-            $linkContent = array($linkContent);
+            $linkContent = [$linkContent];
         }
 
         foreach ($linkContent as $content) {
@@ -224,7 +229,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function addClasses($classes)
     {
         if (!is_array($classes)) {
-            $classes = array($classes);
+            $classes = [$classes];
         }
         foreach ($classes as $class) {
             $this->classes[] = $class;
@@ -283,8 +288,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param EntityAbstract $entity
-     * @param string         $assertion
-     * @param string         $action
+     * @param string $assertion
+     * @param string $action
      *
      * @return bool
      */
@@ -346,7 +351,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param null|EntityAbstract $resource
-     * @param string              $privilege
+     * @param string $privilege
      *
      * @return bool
      */
@@ -365,7 +370,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      *
      * @param string $key
      * @param $value
-     * @param bool   $allowNull
+     * @param bool $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
@@ -436,7 +441,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param Country $country
-     * @param int     $width
+     * @param int $width
      *
      * @return string
      */
@@ -444,4 +449,29 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     {
         return $this->serviceLocator->get('countryFlag')->__invoke($country, $width);
     }
+
+    /**
+     * @return WebInfo
+     */
+    public function getWebInfo()
+    {
+        if (is_null($this->webInfo)) {
+            $this->webInfo = new WebInfo();
+        }
+
+        return $this->webInfo;
+    }
+
+    /**
+     * @param WebInfo $webInfo
+     * @return LinkAbstract
+     */
+    public function setWebInfo($webInfo)
+    {
+        $this->webInfo = $webInfo;
+
+        return $this;
+    }
+
+
 }

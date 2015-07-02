@@ -14,11 +14,13 @@ use Contact\Entity\Contact;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
+use Publication\Entity\Publication;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\Sendmail as SendmailTransport;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -63,6 +65,11 @@ class EmailService extends ServiceAbstract implements
      * @var array
      */
     protected $templateVars = [];
+    /**
+     * @var MimePart[]
+     */
+    protected $attachments = [];
+
 
     /**
      * @param                $config
@@ -147,7 +154,10 @@ class EmailService extends ServiceAbstract implements
                         $contactName = $contact;
                         $contact = new Contact();
                         $contact->setEmail($recipient);
-                        $contact->setFirstName($contactName);
+                        if (!is_null($contactName)) {
+                            $contact->setFirstName($contactName);
+                        }
+
                     }
 
                     /*
@@ -294,7 +304,7 @@ class EmailService extends ServiceAbstract implements
         $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
-        $body->setParts([$htmlContent]);
+        $body->setParts(array_merge_recursive($this->attachments, [$htmlContent]));
         /*
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -347,7 +357,7 @@ class EmailService extends ServiceAbstract implements
         if (!is_null($this->mailing)) {
             $this->message->getHeaders()->addHeaderLine(
                 'X-Mailjet-Campaign',
-                DEBRANOVA_HOST.'-mailing-'.$this->mailing->getId()
+                DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId()
             );
         }
     }
@@ -375,7 +385,7 @@ class EmailService extends ServiceAbstract implements
             )
         );
         $this->templateVars['fullname'] = $contactService->parseFullName();
-        $this->templateVars['country'] = (string) $contactService->parseCountry();
+        $this->templateVars['country'] = (string)$contactService->parseCountry();
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
         $this->templateVars['email'] = $contactService->getContact()->getEmail();
         $this->templateVars['signature'] = $contactService->parseSignature();
@@ -398,6 +408,45 @@ class EmailService extends ServiceAbstract implements
             $content
         );
     }
+
+    /**
+     * @param $content
+     * @param $type
+     * @param $fileName
+     */
+    public function addAttachment($content, $type, $fileName)
+    {
+        /*
+         * Create the attachment
+         */
+        $attachment = new MimePart($content);
+        $attachment->type = $type;
+        $attachment->filename = $fileName;
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        // Setting the encoding is recommended for binary data
+        $attachment->encoding = Mime::ENCODING_BASE64;
+
+        $this->attachments[] = $attachment;
+    }
+
+    /**
+     * @param $publication
+     */
+    public function addPublication(Publication $publication)
+    {
+        /*
+         * Create the attachment
+         */
+        $attachment = new MimePart(stream_get_contents($publication->getObject()->first()->getObject()));
+        $attachment->type = $publication->getContentType()->getContentType();
+        $attachment->filename = $publication->getOriginal();
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        // Setting the encoding is recommended for binary data
+        $attachment->encoding = Mime::ENCODING_BASE64;
+
+        $this->attachments[] = $attachment;
+    }
+
 
     /**
      * Set the BCC and CC recipients to the email (they are the same for every email).

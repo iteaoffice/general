@@ -9,37 +9,13 @@
  */
 namespace News;
 
+use Admin\Entity\Access;
+
 return [
     'bjyauthorize' => [
-        // resource providers provide a list of resources that will be tracked
-        // in the ACL. like roles, they can be hierarchical
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'general' => [],
-            ],
-        ],
-        /* rules can be specified here with the format:
-         * [roles (array] , resource, [privilege (array|string], assertion]]
-         * assertions will be loaded using the service manager and must implement
-         * Zend\Acl\Assertion\AssertionInterface.
-         * *if you use assertions, define them using the service manager!*
-         */
-        'rule_providers'     => [
-            'BjyAuthorize\Provider\Rule\Config' => [
-                'allow' => [
-                    // allow guests and users (and admins, through inheritance]
-                    // the "wear" privilege on the resource "pants"d
-                    [[], 'general', []],
-                ],
-                // Don't mix allow/deny rules if you are using role inheritance.
-                // There are some weird bugs.
-                'deny'  => [ // ...
-                ],
-            ],
-        ],
         /* Currently, only controller and route guards exist
          */
-        'guards'             => [
+        'guards' => [
             /* If this guard is specified here (i.e. it is enabled], it will block
              * access to all routes unless they are specified here.
              */
@@ -50,7 +26,11 @@ return [
                 ['route' => 'assets/style-image', 'roles' => []],
                 ['route' => 'assets/country-flag', 'roles' => []],
                 ['route' => 'assets/content-type-icon', 'roles' => []],
-                ['route' => 'home', 'roles' => []]
+                ['route' => 'home', 'roles' => []],
+                ['route' => 'zfcadmin/web-info/list', 'roles' => [strtolower(Access::ACCESS_OFFICE)]],
+                ['route' => 'zfcadmin/web-info/new', 'roles' => [strtolower(Access::ACCESS_OFFICE)]],
+                ['route' => 'zfcadmin/web-info/edit', 'roles' => [strtolower(Access::ACCESS_OFFICE)]],
+                ['route' => 'zfcadmin/web-info/view', 'roles' => [strtolower(Access::ACCESS_OFFICE)]],
             ],
         ],
     ],

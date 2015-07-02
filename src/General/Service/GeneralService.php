@@ -11,6 +11,7 @@
 namespace General\Service;
 
 use Affiliation\Service\AffiliationService;
+use Doctrine\ORM\Query;
 use Event\Entity\Meeting\Meeting;
 use General\Entity;
 use General\Entity\ContentType;
@@ -33,6 +34,22 @@ class GeneralService extends ServiceAbstract
      * @var ModuleOptions
      */
     protected $options;
+
+    /**
+     * @param  $entity
+     * @param  array $filter
+     *
+     * @return Query
+     */
+    public function findFiltered($entity, array $filter)
+    {
+        if (is_object($entity))
+        {
+            throw new \InvalidArgumentException(sprintf('No object can be given here for findFiltered: %s', get_class($entity)));
+        }
+        return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);
+    }
+
 
     /**
      * @param string $entity

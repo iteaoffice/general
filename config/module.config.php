@@ -9,12 +9,14 @@ namespace General;
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
+use General\Acl\Assertion;
+use General\Controller;
 use General\Controller\ControllerInitializer;
 use General\Listener\SendEmailListener;
 use General\Service\FormService;
 use General\Service\GeneralService;
 use General\Service\ServiceInitializer;
-use General\View\Helper\ViewHelperInitializer;
+use General\View\Helper;
 use Zend\Stdlib\ArrayUtils;
 
 $config = [
@@ -23,8 +25,9 @@ $config = [
             ControllerInitializer::class
         ],
         'invokables'   => [
-            'general-index' => 'General\Controller\IndexController',
-            'general-style' => 'General\Controller\StyleController',
+            Controller\IndexController::class   => Controller\IndexController::class,
+            Controller\StyleController::class   => Controller\StyleController::class,
+            Controller\WebInfoController::class => Controller\WebInfoController::class,
         ],
     ],
     'listeners'       => [
@@ -34,24 +37,31 @@ $config = [
         'template_map' => include __DIR__ . '/../template_map.php',
     ],
     'view_helpers'    => [
-        'initializers' => [ViewHelperInitializer::class],
+        'initializers' => [
+            Helper\ViewHelperInitializer::class
+        ],
         'invokables'   => [
-            'generalServiceProxy' => 'General\View\Helper\GeneralServiceProxy',
-            'countryHandler'      => 'General\View\Helper\CountryHandler',
-            'challengeHandler'    => 'General\View\Helper\ChallengeHandler',
-            'countryMap'          => 'General\View\Helper\CountryMap',
-            'countryFlag'         => 'General\View\Helper\CountryFlag',
-            'countryLink'         => 'General\View\Helper\CountryLink',
-            'challengeLink'       => 'General\View\Helper\ChallengeLink',
-            'contentTypeIcon'     => 'General\View\Helper\ContentTypeIcon',
+            'generalServiceProxy' => Helper\GeneralServiceProxy::class,
+            'countryHandler'      => Helper\CountryHandler::class,
+            'challengeHandler'    => Helper\ChallengeHandler::class,
+            'countryMap'          => Helper\CountryMap::class,
+            'countryFlag'         => Helper\CountryFlag::class,
+            'countryLink'         => Helper\CountryLink::class,
+            'challengeLink'       => Helper\ChallengeLink::class,
+            'webInfoLink'         => Helper\WebInfoLink::class,
+            'contentTypeIcon'     => Helper\ContentTypeIcon::class,
         ]
     ],
     'service_manager' => [
-        'initializers' => [ServiceInitializer::class],
+        'initializers' => [
+            ServiceInitializer::class
+        ],
         'invokables'   => [
-            GeneralService::class    => GeneralService::class,
-            FormService::class       => FormService::class,
-            SendEmailListener::class => SendEmailListener::class
+            'general_web_info_form_filter' => 'General\Form\FilterCreateObject',
+            GeneralService::class          => GeneralService::class,
+            FormService::class             => FormService::class,
+            SendEmailListener::class       => SendEmailListener::class,
+            Assertion\WebInfo::class       => Assertion\WebInfo::class
         ]
     ],
     'asset_manager'   => [
@@ -59,18 +69,18 @@ $config = [
             'collections' => [
                 'assets/' . (defined(
                     "DEBRANOVA_HOST"
-                ) ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js' => [
+                ) ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js'                                        => [
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
                 ],
-                'assets/'.(defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test').'/css/jvectormap.css' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
                     'css/jquery-jvectormap-2.0.2.css',
                 ],
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?'  => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
@@ -104,6 +114,7 @@ $config = [
 ];
 $configFiles = [
     __DIR__ . '/module.config.routes.php',
+    __DIR__ . '/module.config.routes.admin.php',
     __DIR__ . '/module.config.general.php',
     __DIR__ . '/module.config.navigation.php',
     __DIR__ . '/module.config.authorize.php',

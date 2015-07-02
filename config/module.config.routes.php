@@ -7,6 +7,8 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
  */
+use General\Controller;
+
 return [
     'router' => [
         'routes' => [
@@ -16,7 +18,7 @@ return [
                 'options'       => [
                     'route'    => '/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test'),
                     'defaults' => [
-                        'controller' => 'general-index',
+                        'controller' => Controller\IndexController::class,
                     ],
                 ],
                 'may_terminate' => false,
@@ -27,7 +29,7 @@ return [
                             'route'    => "/country-flag/[:iso3].[:ext]",
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => 'general-index',
+                                'controller' => Controller\IndexController::class,
                                 'action'     => 'country-flag',
                             ],
                         ],
@@ -38,7 +40,7 @@ return [
                             'route'    => "/content-type-icon/[:hash].gif",
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => 'general-index',
+                                'controller' => Controller\IndexController::class,
                                 'action'     => 'content-type-icon',
                             ],
                         ],
@@ -49,7 +51,7 @@ return [
                             'route'    => "/style/image/[:source]",
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => 'general-style',
+                                'controller' => Controller\StyleController::class,
                                 'action'     => 'display',
                             ],
                         ],
@@ -62,7 +64,7 @@ return [
                 'options'       => [
                     'route'    => '/country',
                     'defaults' => [
-                        'controller' => 'general-index',
+                        'controller' => Controller\IndexController::class,
                         'action'     => 'country',
                     ],
                 ],
@@ -85,7 +87,7 @@ return [
                 'options'       => [
                     'route'    => '/content-type',
                     'defaults' => [
-                        'controller' => 'general-index',
+                        'controller' => Controller\IndexController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -97,72 +99,6 @@ return [
                             'route'    => '/icon/[:id].gif',
                             'defaults' => [
                                 'action' => 'content-type-icon',
-                            ],
-                        ],
-                    ],
-                ]
-            ],
-            'zfcadmin'     => [
-                'child_routes' => [
-                    'general-manager' => [
-                        'type'          => 'Zend\Mvc\Router\Http\Segment',
-                        'priority'      => 1000,
-                        'options'       => [
-                            'route'    => '/general-manager',
-                            'defaults' => [
-                                'controller' => 'general-manager',
-                                'action'     => 'index',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                        'child_routes'  => [
-                            'messages' => [
-                                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => [
-                                    'route'    => '/messages.html',
-                                    'defaults' => [
-                                        'action' => 'messages',
-                                    ],
-                                ],
-                            ],
-                            'message'  => [
-                                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => [
-                                    'route'       => '/message/[:id].html',
-                                    'constraints' => [
-                                        'id' => '\d+',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'message',
-                                    ],
-                                ],
-                            ],
-                            'new'      => [
-                                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => [
-                                    'route'    => '/new/:entity',
-                                    'defaults' => [
-                                        'action' => 'new',
-                                    ],
-                                ],
-                            ],
-                            'edit'     => [
-                                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => [
-                                    'route'    => '/edit/:entity/:id',
-                                    'defaults' => [
-                                        'action' => 'edit',
-                                    ],
-                                ],
-                            ],
-                            'delete'   => [
-                                'type'    => 'Zend\Mvc\Router\Http\Segment',
-                                'options' => [
-                                    'route'    => '/delete/:entity/:id',
-                                    'defaults' => [
-                                        'action' => 'delete',
-                                    ],
-                                ],
                             ],
                         ],
                     ],

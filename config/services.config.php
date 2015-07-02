@@ -7,12 +7,17 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
  */
+use General\Entity;
+use General\Form;
 use General\Options;
 use General\Service\EmailService;
 use Zend\ServiceManager\ServiceManager;
 
 return [
     'factories' => [
+        'general_web_info_form'  => function ($sm) {
+            return new Form\CreateObject($sm, new Entity\WebInfo());
+        },
         'general_module_options' => function (ServiceManager $sm) {
             $config = $sm->get('Config');
 
