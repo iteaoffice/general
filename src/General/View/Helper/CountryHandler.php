@@ -88,35 +88,40 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                         'social'
                     )
                 );
+
                 return $this->parseCountry();
 
             case 'country_map':
                 /*
                  * @var $countryMap CountryMap
                  */
+
                 return $this->parseCountryMap();
 
             case 'country_funder':
                 return $this->parseCountryFunderList($this->getCountry());
-            
+
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
-            
+
             case 'country_info':
                 return $this->parseCountryInfo($this->getCountry());
-            
+
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
+
                 return $this->parseCountryList($page);
-            
+
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
                 $page = $this->getRouteMatch()->getParam('page');
+
                 return $this->parseCountryListItac($page);
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
+
                 return $this->parseOrganisationList($page);
 
             case 'country_project':
@@ -291,6 +296,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
          * @var CountryMap
          */
         $countryMap = $this->serviceLocator->get('countryMap');
+
         return $countryMap([$this->getCountry()], null, $mapOptions);
     }
 
@@ -424,7 +430,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     /**
      * Create a list of organisations for the current country.
      *
-     * @param int $page
+     * @param  int                       $page
      * @throws \InvalidArgumentException
      * @return string
      */
@@ -481,6 +487,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /*
          * Parse the organisationService in to have the these functions available in the view
          */
+
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [

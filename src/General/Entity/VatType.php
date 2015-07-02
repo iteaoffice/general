@@ -145,7 +145,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->type;
+        return (string) $this->type;
     }
 
     /**
@@ -161,7 +161,7 @@ class VatType extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter.
      *
-     * @param InputFilterInterface $inputFilter
+     * @param  InputFilterInterface $inputFilter
      * @return void
      * @throws \Exception
      */
