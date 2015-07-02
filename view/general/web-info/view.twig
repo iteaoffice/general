@@ -1,0 +1,17 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-web-info-%s")|format(webInfo)) %}
+
+<h1>{{ translate("txt-web-info-%s")|format(webInfo) }}</h1>
+
+<h2><strong>{{ translate("txt-web-info-information") }}</strong></h2>
+<dl class="dl-horizontal">
+    <dt>{{ translate("txt-web-info-name") }}</dt>
+    <dd>{{ webInfo.info }}</dd>
+    <dt>{{ translate("txt-subject") }}</dt>
+    <dd>{{ webInfo.subject }}</dd>
+</dl>
+
+<h2>{{ translate("txt-content") }}</h2>
+<pre>{{ webInfo.content }}</pre>
+
+{{ webInfoLink(webInfo,'edit','button') }}

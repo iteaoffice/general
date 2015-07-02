@@ -358,6 +358,4 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
         return $this;
     }
-
-
 }

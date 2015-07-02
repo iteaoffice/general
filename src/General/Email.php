@@ -339,8 +339,7 @@ class Email
                 $result = isset($args[0]) ? $args[0] : null;
 
                 //Only keep the item when it can be set to a toString
-                if (
-                    (!is_array($result)) &&
+                if ((!is_array($result)) &&
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {

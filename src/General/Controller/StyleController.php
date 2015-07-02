@@ -58,18 +58,18 @@ class StyleController extends AbstractActionController
             (defined(
                 "DEBRANOVA_HOST"
             ) ? DEBRANOVA_HOST : 'test').DIRECTORY_SEPARATOR.'style'.DIRECTORY_SEPARATOR.'image';
-        if (!file_exists($cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'))) {
-            //Save a copy of the file in the caching-folder
-            file_put_contents(
-                $cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'),
-                file_get_contents($requestedFile)
-            );
-        }
-        $response->getHeaders()
+            if (!file_exists($cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'))) {
+                //Save a copy of the file in the caching-folder
+                file_put_contents(
+                    $cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'),
+                    file_get_contents($requestedFile)
+                );
+            }
+            $response->getHeaders()
             ->addHeaderLine('Content-Type: image/jpg')
             ->addHeaderLine('Content-Length: '.(string) filesize($requestedFile));
-        $response->setContent(file_get_contents($requestedFile));
+            $response->setContent(file_get_contents($requestedFile));
 
-        return $response;
+            return $response;
     }
 }

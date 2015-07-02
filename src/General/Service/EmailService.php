@@ -157,7 +157,6 @@ class EmailService extends ServiceAbstract implements
                         if (!is_null($contactName)) {
                             $contact->setFirstName($contactName);
                         }
-
                     }
 
                     /*
@@ -187,7 +186,6 @@ class EmailService extends ServiceAbstract implements
                 }
                 break;
             case false:
-
                 /*
                  * Create a new message for everyone
                  */

@@ -1,0 +1,31 @@
+{% do form.prepare() %}
+{% do form.setAttribute('class','form-horizontal') %}
+
+{{ form().openTag(form)|raw }}
+
+{% set template = form.get('web_info') %}
+
+{{ ztbformelement(template.get('info')) }}
+{{ ztbformelement(template.get('subject')) }}
+{{ ztbformelement(template.get('sync')) }}
+{{ ztbformelement(template.get('plain')) }}
+{{ ztbformelement(template.get('content')) }}
+
+
+<div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+        {{ ztbformelement(form.get('submit')) }}
+        {% if form.has('delete') %}
+            {{ ztbformelement(form.get('delete')) }}
+        {% endif %}
+        {{ ztbformelement(form.get('cancel')) }}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}
+
+<style type="text/css">
+    textarea {
+        font-family: "Courier New", Courier, monospace;
+    }
+</style>

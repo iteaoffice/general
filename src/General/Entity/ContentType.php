@@ -772,6 +772,4 @@ class ContentType
 
         return $this;
     }
-
-
 }
