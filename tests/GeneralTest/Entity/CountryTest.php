@@ -24,7 +24,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityManager;
 
-
     /**
      * @return array
      */
@@ -99,6 +98,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $country = new Country();
         $country->setCountry('test');
-        $this->assertEquals((string)$country, 'test');
+        $this->assertEquals((string) $country, 'test');
     }
 }

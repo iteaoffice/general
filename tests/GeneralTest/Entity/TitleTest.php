@@ -25,7 +25,6 @@ class TitleTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityManager;
 
-
     public function setUp()
     {
         $this->serviceManager = Bootstrap::getServiceManager();
@@ -46,7 +45,6 @@ class TitleTest extends \PHPUnit_Framework_TestCase
             [$title]
         ];
     }
-
 
     public function testCanCreateEntity()
     {

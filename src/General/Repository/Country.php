@@ -97,7 +97,7 @@ class Country extends EntityRepository
 
     /**
      * @param Call $call
-     * @param int $which
+     * @param int  $which
      *
      * @throws \InvalidArgumentException
      *
@@ -116,7 +116,7 @@ class Country extends EntityRepository
 
     /**
      * @param Project $project
-     * @param int $which
+     * @param int     $which
      *
      * @throws \InvalidArgumentException
      *
@@ -200,7 +200,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * @param Call $call
+     * @param Call            $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]

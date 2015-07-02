@@ -246,7 +246,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string)$this->contentType;
+        return (string) $this->contentType;
     }
 
     /**
@@ -628,7 +628,6 @@ class ContentType
         $this->projectDescriptionImage = $projectDescriptionImage;
     }
 
-
     /**
      * @return \Ambassador\Entity\Document[]
      */
@@ -648,7 +647,6 @@ class ContentType
 
         return $this;
     }
-
 
     /**
      * @return \Project\Entity\Version\Document[]

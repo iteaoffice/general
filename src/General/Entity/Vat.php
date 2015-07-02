@@ -173,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string)$this->percentage . '%';
+        return (string) $this->percentage . '%';
     }
 
     /**
@@ -189,7 +189,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     /**
      * Set input filter.
      *
-     * @param InputFilterInterface $inputFilter
+     * @param  InputFilterInterface $inputFilter
      * @return void
      *
      * @throws \Exception

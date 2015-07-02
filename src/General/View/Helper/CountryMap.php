@@ -30,8 +30,8 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 
     /**
      * @param Country[] $countries
-     * @param Country $selectedCountry
-     * @param array $options
+     * @param Country   $selectedCountry
+     * @param array     $options
      *
      * @return string
      */
@@ -74,7 +74,7 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $data = implode('', $js);
 
         $jQuery = <<< EOT
-$(function() {
+$(function () {
         $data
         $('#country-map').vectorMap({
             map: 'europe_mill_en',
@@ -110,7 +110,7 @@ $(function() {
                         };
                     }
                     el.html(html);
-                }else{
+                } else {
                     return false;
                 }
             }
