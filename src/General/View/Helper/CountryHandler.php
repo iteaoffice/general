@@ -380,7 +380,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryInfo(Country $country)
     {
         $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
-
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
         $organisations = $this->getOrganisationService()->findOrganisationByCountry(
             $this->getCountry(),
@@ -388,17 +387,17 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         );
 
         $members = [];
-        foreach($organisations as $organisation){
+
+        foreach ($organisations->getResult() as $organisation) {
             // Direct members
-            if($organisation->getMember()){
+            if ($organisation->getMember()) {
                 $members[] = $organisation;
                 // Member through cluster
-            }else{
-                foreach($organisation->getClusterMember() as $cluster){
-                    if($cluster->getOrganisation()->getMember()){
+            } else {
+                foreach ($organisation->getClusterMember() as $cluster) {
+                    if ($cluster->getOrganisation()->getMember()) {
                         $members[] = $organisation;
                     }
-
                 }
             }
         }
@@ -410,6 +409,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
                 'members' => $members
+
             ]
         );
     }
