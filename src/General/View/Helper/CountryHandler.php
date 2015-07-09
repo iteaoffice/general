@@ -387,12 +387,29 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             $onlyActivePartners
         );
 
+        $members = [];
+        foreach($organisations as $organisation){
+            // Direct members
+            if($organisation->getMember()){
+                $members[] = $organisation;
+                // Member through cluster
+            }else{
+                foreach($organisation->getClusterMember() as $cluster){
+                    if($cluster->getOrganisation()->getMember()){
+                        $members[] = $organisation;
+                    }
+
+                }
+            }
+        }
+
         return $this->getRenderer()->render(
             'general/partial/entity/country-info',
             [
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
+                'members' => $members
             ]
         );
     }
