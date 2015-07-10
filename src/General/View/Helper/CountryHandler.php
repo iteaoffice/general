@@ -387,7 +387,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         );
 
         $members = [];
-
         foreach ($organisations->getResult() as $organisation) {
             // Direct members
             if ($organisation->getMember()) {
@@ -409,7 +408,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
                 'members' => $members
-
             ]
         );
     }
@@ -504,7 +502,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /*
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
