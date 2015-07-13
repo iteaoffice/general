@@ -109,15 +109,13 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryList($page);
+                return $this->parseCountryList();
 
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryListItac($page);
+                return $this->parseCountryListItac();
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
@@ -287,13 +285,13 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         $options = $this->getGeneralService()->getOptions();
         $mapOptions = [
             'clickable' => true,
-            'colorMin' => $options->getCountryColorFaded(),
-            'colorMax' => $options->getCountryColor(),
-            'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
-            'height' => '340px'
+            'colorMin'  => $options->getCountryColorFaded(),
+            'colorMax'  => $options->getCountryColor(),
+            'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
+            'height'    => '340px'
         ];
         /**
-         * @var CountryMap
+         * @var $countryMap CountryMap
          */
         $countryMap = $this->serviceLocator->get('countryMap');
 
@@ -445,7 +443,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     /**
      * Create a list of organisations for the current country.
      *
-     * @param  int                       $page
+     * @param  int $page
      * @throws \InvalidArgumentException
      * @return string
      */
@@ -454,7 +452,8 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false, true);
+        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false,
+            true);
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);

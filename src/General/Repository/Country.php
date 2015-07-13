@@ -46,7 +46,7 @@ class Country extends EntityRepository
     public function findActive()
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('a affiliation');
+        $queryBuilder->select('partial a.{id}', 'c');
         $queryBuilder->addSelect(
             '(SELECT
                             COUNT(DISTINCT aff.organisation)
@@ -92,12 +92,12 @@ class Country extends EntityRepository
         //only the active countries
         $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
      * @param Call $call
-     * @param int  $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -111,12 +111,12 @@ class Country extends EntityRepository
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 
     /**
      * @param Project $project
-     * @param int     $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -130,7 +130,7 @@ class Country extends EntityRepository
 
         $queryBuilder->addOrderBy('c.country', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 
     /**
@@ -200,7 +200,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * @param Call            $call
+     * @param Call $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]
@@ -210,8 +210,8 @@ class Country extends EntityRepository
         $queryBuilder = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
         $queryBuilder->addOrderBy('c.country');
-        /*
-         * @var \Project\Repository\Project
+        /**
+         * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
@@ -220,7 +220,7 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 
     /**
@@ -297,6 +297,6 @@ class Country extends EntityRepository
         $query->join('co.organisation', 'o');
         $query->join('o.country', 'country');
 
-        return $query->getQuery()->useResultCache(true)->getResult();
+        return $query->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
     }
 }
