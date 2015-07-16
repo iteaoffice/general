@@ -44,8 +44,10 @@ class GeneralService extends ServiceAbstract
     public function findFiltered($entity, array $filter)
     {
         if (is_object($entity)) {
-            throw new \InvalidArgumentException(sprintf('No object can be given here for findFiltered: %s',
-                get_class($entity)));
+            throw new \InvalidArgumentException(sprintf(
+                'No object can be given here for findFiltered: %s',
+                get_class($entity)
+            ));
         }
 
         return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);

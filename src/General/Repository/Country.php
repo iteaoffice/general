@@ -111,7 +111,7 @@ class Country extends EntityRepository
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -130,7 +130,7 @@ class Country extends EntityRepository
 
         $queryBuilder->addOrderBy('c.country', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -220,7 +220,7 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -270,7 +270,7 @@ class Country extends EntityRepository
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -297,6 +297,6 @@ class Country extends EntityRepository
         $query->join('co.organisation', 'o');
         $query->join('o.country', 'country');
 
-        return $query->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $query->getQuery()->useQueryCache(true)->getResult();
     }
 }

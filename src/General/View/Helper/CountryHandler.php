@@ -452,8 +452,11 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false,
-            true);
+        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry(
+            $this->getCountry(),
+            false,
+            true
+        );
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
