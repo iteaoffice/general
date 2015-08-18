@@ -11,7 +11,7 @@ return array(
     'General\View\Helper\TwitterHandler'           => __DIR__ . '/src/General/View/Helper/TwitterHandler.php',
     'General\View\Helper\ContentTypeIcon'          => __DIR__ . '/src/General/View/Helper/ContentTypeIcon.php',
     'General\View\Helper\WebInfoLink'              => __DIR__ . '/src/General/View/Helper/WebInfoLink.php',
-    'Content\View\Helper\PaginationLink'           => __DIR__ . '/src/General/View/Helper/PaginationLink.php',
+    'General\View\Helper\PaginationLink'           => __DIR__ . '/src/General/View/Helper/PaginationLink.php',
     'General\View\Helper\CountryFlag'              => __DIR__ . '/src/General/View/Helper/CountryFlag.php',
     'General\View\Helper\CountryMap'               => __DIR__ . '/src/General/View/Helper/CountryMap.php',
     'General\View\Helper\GeneralServiceProxy'      => __DIR__ . '/src/General/View/Helper/GeneralServiceProxy.php',

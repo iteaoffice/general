@@ -93,13 +93,21 @@ class IndexController extends AbstractActionController
      */
     public function codeAction()
     {
-        $country = $this->getGeneralService()->findCountryByCD(
-            $this->getEvent()->getRouteMatch()->getParam('cd')
-        );
+        if (is_null($this->params('cd'))) {
+            return $this->notFoundAction();
+        }
+
+        $country = $this->getGeneralService()->findCountryByCD($this->params('cd'));
+
+        if (is_null($country)) {
+            return $this->notFoundAction();
+        }
 
         return $this->redirect()->toRoute(
             'route-' . $country->get('underscore_full_entity_name'),
-            ['docRef' => $country->getDocRef()]
+            [
+                'docRef' => $country->getDocRef()
+            ]
         )->setStatusCode(301);
     }
 

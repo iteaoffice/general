@@ -288,7 +288,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             'colorMin'  => $options->getCountryColorFaded(),
             'colorMax'  => $options->getCountryColor(),
             'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
-            'height'    => '340px'
+            'height'    => '340px',
         ];
         /**
          * @var $countryMap CountryMap
@@ -405,7 +405,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
-                'members' => $members
+                'members'       => $members,
             ]
         );
     }

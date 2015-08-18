@@ -11,7 +11,7 @@
  * @link       http://debranova.org
  */
 
-namespace Content\View\Helper;
+namespace General\View\Helper;
 
 use Zend\View\Helper\Url;
 
@@ -45,8 +45,8 @@ class PaginationLink extends LinkAbstract
             ]
         );
 
-        /*
-         * @var Url
+        /**
+         * @var $url Url
          */
         $url = $this->serviceLocator->get('url');
 

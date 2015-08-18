@@ -46,7 +46,7 @@ class Country extends EntityRepository
     public function findActive()
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('partial a.{id}', 'c');
+        $queryBuilder->select('a affiliation');
         $queryBuilder->addSelect(
             '(SELECT
                             COUNT(DISTINCT aff.organisation)
@@ -90,9 +90,7 @@ class Country extends EntityRepository
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
-        $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
-
-        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
 
     /**
