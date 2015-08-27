@@ -74,6 +74,14 @@ class Title extends EntityAbstract implements ResourceInterface
      * @var \Contact\Entity\Contact[]
      */
     private $contacts;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="title")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]
+     */
+    private $applicant;
+
 
     /**
      * Class constructor.

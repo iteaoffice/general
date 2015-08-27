@@ -179,6 +179,20 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicant;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="mailCountry")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantMail;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="legalCountry")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantLegal;
 
     /**
      * Class constructor.
