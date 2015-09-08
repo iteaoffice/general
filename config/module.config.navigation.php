@@ -12,12 +12,16 @@ return [
         'admin' => [
             // And finally, here is where we define our page hierarchy
             'content' => [
-                'label' => _("txt-content-admin"),
-                'route' => 'zfcadmin/node-manager',
-//                'pages' => [
-//                    'label' => _("txt-web-info"),
-//                    'route' => 'zfcadmin/web-info/list',
-//                ],
+                'pages' => [
+                    'web-info' => [
+                        'label' => _("txt-web-info-list"),
+                        'route' => 'zfcadmin/web-info/list',
+                    ],
+                    'country'  => [
+                        'label' => _("txt-country-list"),
+                        'route' => 'zfcadmin/country/list',
+                    ]
+                ],
             ],
         ],
     ],

@@ -55,12 +55,15 @@ class WebInfoLink extends LinkAbstract
         return $this->createLink();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function parseAction()
     {
         switch ($this->getAction()) {
             case 'list':
                 $this->setRouter('zfcadmin/web-info/list');
-                $this->setText(sprintf($this->translate('txt-view-web-info-%s'), $this->getWebInfo()));
+                $this->setText(sprintf($this->translate('txt-web-info-list')));
                 break;
             case 'new':
                 $this->setRouter('zfcadmin/web-info/new');

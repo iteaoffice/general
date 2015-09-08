@@ -15,6 +15,7 @@ namespace General;
 use General\Listener\SendEmailListener;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature;
+use General\Controller\Plugin\GetFilter;
 
 /**
  *
@@ -84,6 +85,19 @@ class Module implements
         $app = $e->getParam('application');
 
         $em = $app->getEventManager();
-        $em->trigger(SendEmailListener::class, $this, ['id' => 1]);
+    }
+
+    /**
+     * Move this to here to have config cache working.
+     *
+     * @return array
+     */
+    public function getControllerPluginConfig()
+    {
+        return [
+            'invokables' => [
+                'getGeneralFilter' => GetFilter::class,
+            ],
+        ];
     }
 }

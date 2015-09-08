@@ -529,10 +529,10 @@ class EmailService extends ServiceAbstract implements
          * Clone the twigRenderer and overrule to loader to be a string
          */
         $twigRenderer = new \Twig_Environment();
-        $twigRenderer->setLoader(new \Twig_Loader_String());
+        $twigRenderer->setLoader(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
 
         return $twigRenderer->render(
-            $this->createTwigTemplate($content),
+            'email',
             $this->templateVars
         );
     }

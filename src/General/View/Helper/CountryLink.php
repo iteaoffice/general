@@ -27,16 +27,16 @@ class CountryLink extends LinkAbstract
 
     /**
      * @param Country $country
-     * @param string  $action
-     * @param string  $show
-     * @param string  $alternativeShow
+     * @param string $action
+     * @param string $show
+     * @param string $alternativeShow
      *
      * @return string
      *
      * @throws \Exception
      */
     public function __invoke(
-        Country $country,
+        Country $country = null,
         $action = 'view',
         $show = 'name',
         $alternativeShow = null
@@ -45,14 +45,14 @@ class CountryLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
         $this->setAlternativeShow($alternativeShow);
-        $this->addRouterParam('id', $country->getId());
-        $this->addRouterParam('docRef', $country->getDocRef());
+        $this->addRouterParam('id', $this->getCountry()->getId());
+        $this->addRouterParam('docRef', $this->getCountry()->getDocRef());
         $this->setShowOptions(
             [
-                'name'   => $country,
+                'name'   => $this->getCountry(),
                 'more'   => $this->translate("txt-read-more"),
                 'custom' => $this->getAlternativeShow(),
-                'flag'   => $this->getCountryFlag($country, 40),
+                'flag'   => $this->getCountryFlag($this->getCountry(), 40),
             ]
         );
 
@@ -66,41 +66,41 @@ class CountryLink extends LinkAbstract
     {
         switch ($this->getAction()) {
             case 'view':
-                $this->setRouter('route-'.$this->getCountry()->get('underscore_full_entity_name'));
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name'));
                 $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
                 break;
             case 'view-project':
-                $this->setRouter('route-'.$this->getCountry()->get('underscore_full_entity_name').'-project');
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-project');
                 $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-organisation':
-                $this->setRouter('route-'.$this->getCountry()->get('underscore_full_entity_name').'-organisation');
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-organisation');
                 $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-article':
-                $this->setRouter('route-'.$this->getCountry()->get('underscore_full_entity_name').'-article');
+                $this->setRouter('route-' . $this->getCountry()->get('underscore_full_entity_name') . '-article');
                 $this->setText(sprintf($this->translate("txt-view-article-for-country-%s"), $this->getCountry()));
+                break;
+            case 'list':
+                $this->setRouter('zfcadmin/country/list');
+                $this->setText(sprintf($this->translate('txt-country-list')));
+                break;
+            case 'new':
+                $this->setRouter('zfcadmin/country/new');
+                $this->setText(sprintf($this->translate('txt-create-new-country')));
+                break;
+            case 'view-admin':
+                $this->setRouter('zfcadmin/country/view');
+                $this->setText(sprintf($this->translate('txt-view-country-%s'), $this->getCountry()));
+                break;
+            case 'edit':
+                $this->setRouter('zfcadmin/country/edit');
+                $this->setText(sprintf($this->translate('txt-edit-country-%s'), $this->getCountry()));
                 break;
             default:
                 throw new \InvalidArgumentException(
                     sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__)
                 );
         }
-    }
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
     }
 }

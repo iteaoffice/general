@@ -85,7 +85,8 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
-     * @Annotation\Options({"label":"txt-web-info-content-label"})
+     * @Annotation\Options({"label":"txt-web-info-content-label","rows":"20"})
+     * @Annotation\Attributes({"rows":"20"})
      *
      * @var string
      */

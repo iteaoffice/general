@@ -67,6 +67,59 @@ return [
                             ],
                         ],
                     ],
+                    'country'  => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/country',
+                            'defaults' => [
+                                'controller' => Controller\CountryController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                            'edit' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/edit/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'new'  => [
+                                'type'     => 'Literal',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/new.html',
+                                    'defaults' => [
+                                        'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],

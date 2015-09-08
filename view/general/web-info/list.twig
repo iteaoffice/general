@@ -1,30 +1,66 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-web-info-list")) %}
 
-<h1>{{ translate("txt-web-info-list") }}</h1>
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+{% set filter = form.get('filter') %}
 
-{% if paginator.pageRange > 0 %}
-    <table class="table table-hover table-striped">
-        <thead>
-        <tr>
-            <th>{{ translate("txt-web-info-id") }}</th>
-            <th>{{ translate("txt-web-info-name") }}</th>
-            <th>{{ translate("txt-web-info-subject") }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for webInfo in paginator.getCurrentItems() %}
-            <tr>
-                <td>{{ webInfo.id }} {{ webInfoLink(webInfo,'edit', 'icon') }}</td>
-                <td>{{ webInfoLink(webInfo,'view','name') }} </td>
-                <td>{{ webInfo.subject }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% include 'general/partial/pagination-control' %}
-{% else %}
-    {{ ztbalert().info(translate("txt-no-templates-could-be-found"))|raw }}
-{% endif %}
+<input type="hidden" name="filter[order]" value="{{ order }}">
+<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
+<div class="row">
+
+    <div class="col-md-10">
+        <h1>{{ translate("txt-web-info-list") }}</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="lead">{{ translate("txt-web-info-list-explanation") }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+            </div>
+        </div>
+
+
+        {% if paginator.pageRange > 0 %}
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>{{ translate("txt-web-info-id") }}</th>
+                    <th>{{ translate("txt-web-info-name") }}</th>
+                    <th>{{ translate("txt-web-info-subject") }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for webInfo in paginator.getCurrentItems() %}
+                    <tr>
+                        <td>{{ webInfo.id }} {{ webInfoLink(webInfo,'edit', 'icon') }}</td>
+                        <td>{{ webInfoLink(webInfo,'view','name') }} </td>
+                        <td>{{ webInfo.subject }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'general/partial/pagination-control' %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-web-info-could-be-found"))|raw }}
+        {% endif %}
+    </div>
+    <div class="col-md-2">
+        <div class="well well-sm">
+            <fieldset>
+
+
+                <div class="form-group">
+                    {{ ztbformelement(form.get('submit')) }}
+                    {{ ztbformelement(form.get('clear')) }}
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
 
 {{ webInfoLink(null, 'new','button') }}

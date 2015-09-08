@@ -58,6 +58,10 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     protected $webInfo;
     /**
+     * @var Country
+     */
+    protected $country;
+    /**
      * @var string
      */
     protected $alternativeShow;
@@ -472,6 +476,29 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function setWebInfo($webInfo)
     {
         $this->webInfo = $webInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        if (is_null($this->country)) {
+            $this->country = new Country();
+        }
+
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     * @return LinkAbstract
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
 
         return $this;
     }

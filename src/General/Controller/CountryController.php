@@ -12,16 +12,15 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
-use General\Entity\Web;
-use General\Entity\WebInfo;
-use General\Form\WebInfoFilter;
+use General\Entity\Country;
+use General\Form\CountryFilter;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
  *
  */
-class WebInfoController extends GeneralAbstractController
+class CountryController extends GeneralAbstractController
 {
     /**
      * @return \Zend\View\Model\ViewModel
@@ -30,17 +29,14 @@ class WebInfoController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(
-            'webInfo',
-            $filterPlugin->getFilter()
-        );
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('country', $filterPlugin->getFilter());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
-        $form = new WebInfoFilter($this->getGeneralService());
+        $form = new CountryFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -59,12 +55,12 @@ class WebInfoController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
-        if (is_null($webInfo)) {
+        $country = $this->getGeneralService()->findEntityById('country', $this->params('id'));
+        if (is_null($country)) {
             return $this->notFoundAction();
         }
 
-        return new ViewModel(['webInfo' => $webInfo]);
+        return new ViewModel(['country' => $country]);
     }
 
     /**
@@ -79,24 +75,23 @@ class WebInfoController extends GeneralAbstractController
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare('webInfo', null, $data);
+        $form = $this->getFormService()->prepare('country', null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/web-info/list');
+                $this->redirect()->toRoute('zfcadmin/country/list');
             }
 
             if ($form->isValid()) {
-                /* @var $webInfo WebInfo */
-                $webInfo = $form->getData();
-                $webInfo->setWeb($this->getGeneralService()->getEntityManager()->getReference(Web::class, 1));
+                /* @var $country Country */
+                $country = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($form->getData());
                 $this->redirect()->toRoute(
-                    'zfcadmin/web-info/view',
+                    'zfcadmin/country/view',
                     [
                         'id' => $result->getId(),
                     ]
@@ -104,7 +99,7 @@ class WebInfoController extends GeneralAbstractController
             }
         }
 
-        return new ViewModel(['form' => $form, 'fullVersion' => true]);
+        return new ViewModel(['form' => $form]);
     }
 
     /**
@@ -114,30 +109,30 @@ class WebInfoController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
+        $country = $this->getGeneralService()->findEntityById('country', $this->params('id'));
 
         $data = array_merge_recursive(
             $this->getRequest()->getPost()->toArray(),
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare($webInfo->get('entity_name'), $webInfo, $data);
+        $form = $this->getFormService()->prepare($country->get('entity_name'), $country, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                return $this->redirect()->toRoute('zfcadmin/web-info/list');
+                return $this->redirect()->toRoute('zfcadmin/country/list');
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($webInfo);
+                $this->getGeneralService()->removeEntity($country);
 
-                return $this->redirect()->toRoute('zfcadmin/web-info/list');
+                return $this->redirect()->toRoute('zfcadmin/country/list');
             }
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
                 $this->redirect()->toRoute(
-                    'zfcadmin/web-info/view',
+                    'zfcadmin/country/view',
                     [
                         'id' => $result->getId(),
                     ]
@@ -145,6 +140,6 @@ class WebInfoController extends GeneralAbstractController
             }
         }
 
-        return new ViewModel(['form' => $form, 'webInfo' => $webInfo]);
+        return new ViewModel(['form' => $form, 'country' => $country]);
     }
 }

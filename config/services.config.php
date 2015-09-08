@@ -18,6 +18,9 @@ return [
         'general_web_info_form'  => function ($sm) {
             return new Form\CreateObject($sm, new Entity\WebInfo());
         },
+        'general_country_form'   => function ($sm) {
+            return new Form\CreateObject($sm, new Entity\Country());
+        },
         'general_module_options' => function (ServiceManager $sm) {
             $config = $sm->get('Config');
 

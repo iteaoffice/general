@@ -13,6 +13,7 @@ namespace General\Controller;
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use Contact\Service\ContactService;
 use Contact\Service\ContactServiceAwareInterface;
+use General\Controller\Plugin\GetFilter;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\FormServiceAwareInterface;
@@ -28,6 +29,7 @@ use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
  * @method      ZfcUserAuthentication zfcUserAuthentication()
  * @method      FlashMessenger flashMessenger()
  * @method      isAllowed isAllowed($resource, $action)
+ * @method      GetFilter getGeneralFilter()
  */
 abstract class GeneralAbstractController extends AbstractActionController implements
     FormServiceAwareInterface,
