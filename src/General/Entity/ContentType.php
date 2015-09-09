@@ -24,6 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ContentType
 {
     const TYPE_UNKNOWN = 0;
+    const TYPE_PDF = 1;
     const TYPE_OFFICE_2007 = 16;
     const TYPE_EXCEL = 13;
     const TYPE_EXCEL_2007 = 19;
