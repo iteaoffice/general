@@ -53,7 +53,6 @@ class GeneralService extends ServiceAbstract
         return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);
     }
 
-
     /**
      * @param string $entity
      * @param        $docRef
