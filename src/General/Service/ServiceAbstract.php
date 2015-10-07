@@ -11,6 +11,8 @@
 namespace General\Service;
 
 use Contact\Service\ContactService;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\Vat;
@@ -76,6 +78,22 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     }
 
     /**
+     * @param string $entity
+     * @param  $filter
+     *
+     * @return Query
+     */
+    public function findEntitiesFiltered($entity, $filter)
+    {
+        $equipmentList = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findFiltered(
+            $filter,
+            AbstractQuery::HYDRATE_SIMPLEOBJECT
+        );
+
+        return $equipmentList;
+    }
+
+    /**
      * @return \Zend\ServiceManager\ServiceManager
      */
     public function getServiceLocator()
@@ -109,10 +127,10 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
          */
         if (strpos($entity, '-') !== false) {
             $entity = explode('-', $entity);
-            $entity = $entity[0].ucfirst($entity[1]);
+            $entity = $entity[0] . ucfirst($entity[1]);
         }
 
-        return ucfirst(implode('', array_slice(explode('\\', __NAMESPACE__), 0, 1))).'\\'.'Entity'.'\\'.ucfirst(
+        return ucfirst(implode('', array_slice(explode('\\', __NAMESPACE__), 0, 1))) . '\\' . 'Entity' . '\\' . ucfirst(
             $entity
         );
     }
@@ -120,7 +138,7 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     /**
      * Find 1 entity based on the id.
      *
-     * @param string  $entity
+     * @param string $entity
      * @param integer $id
      *
      * @return null|\General\Entity\Country|\General\Entity\Gender|Vat|\General\Entity\Title

@@ -58,6 +58,7 @@ class ContentTypeIcon extends HelperAbstract
                 $class = "fa-file-word-o";
                 break;
             case 'application/octet-stream':
+            case 'application/csv':
             case 'text/xml':
                 $class = "fa-file-o";
                 break;

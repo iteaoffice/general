@@ -102,7 +102,7 @@ $(function () {
                 }
             },
             onRegionTipShow: function (e, el, code) {
-                if (tipData[code]) {
+                if (typeof tipData != 'undefined' && tipData[code]) {
                     var html = '<div class="tip-title">'+tipData[code]['title']+'</div>', list = tipData[code]['data'];
                     for (var i in list) {
                         for (var key in list[i]) {

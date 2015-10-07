@@ -12,6 +12,7 @@ namespace General\Repository;
 
 use Affiliation\Service\AffiliationService;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Event\Entity\Meeting\Meeting;
 use Event\Entity\Registration;
 use General\Entity;
@@ -24,6 +25,88 @@ use Project\Entity\Project;
  */
 class Country extends EntityRepository
 {
+    /**
+     * @param array ()
+     *
+     * @return QueryBuilder
+     */
+    public function findFiltered($filter)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('general_entity_country');
+        $queryBuilder->from('General\Entity\Country', 'general_entity_country');
+
+        if (!is_null($filter)) {
+            /**
+             * Get the webInfo repository
+             * @var  $webInfoRepository WebInfo
+             */
+            $queryBuilder = $this->applyWebInfoFilter($queryBuilder, $filter);
+        }
+
+        $direction = 'ASC';
+        if (isset($filter['direction']) && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])) {
+            $direction = strtoupper($filter['direction']);
+        }
+
+        if (!array_key_exists('order', $filter)) {
+            $filter['order'] = 'id';
+        }
+
+        switch ($filter['order']) {
+            case 'id':
+                $queryBuilder->addOrderBy('general_entity_country.id', $direction);
+                break;
+            case 'name':
+                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
+                break;
+            case 'iso3':
+                $queryBuilder->addOrderBy('general_entity_country.iso3', $direction);
+                break;
+            case 'cd':
+                $queryBuilder->addOrderBy('general_entity_country.cd', $direction);
+                break;
+            case 'numcode':
+                $queryBuilder->addOrderBy('general_entity_country.numcode', $direction);
+                break;
+            default:
+                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
+
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param array $filter
+     *
+     * @return QueryBuilder
+     */
+    public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter)
+    {
+        if (!empty($filter['search'])) {
+            $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
+            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+        }
+
+        if (!empty($filter['eu'])) {
+            $queryBuilder->innerJoin('general_entity_country.eu', 'eu');
+        }
+
+        if (!empty($filter['eureka'])) {
+            $queryBuilder->innerJoin('general_entity_country.eureka', 'eureka');
+        }
+
+        if (!empty($filter['itac'])) {
+            $queryBuilder->innerJoin('general_entity_country.itac', 'itac');
+        }
+
+        return $queryBuilder;
+    }
+
     /**
      * This function returns an array with three elements.
      *
@@ -90,14 +173,12 @@ class Country extends EntityRepository
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
-        $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
-
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
 
     /**
      * @param Call $call
-     * @param int  $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -111,12 +192,12 @@ class Country extends EntityRepository
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->addOrderBy('c.iso3', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
      * @param Project $project
-     * @param int     $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
@@ -130,7 +211,7 @@ class Country extends EntityRepository
 
         $queryBuilder->addOrderBy('c.country', 'ASC');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -200,7 +281,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * @param Call            $call
+     * @param Call $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]
@@ -210,8 +291,8 @@ class Country extends EntityRepository
         $queryBuilder = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
         $queryBuilder->addOrderBy('c.country');
-        /*
-         * @var \Project\Repository\Project
+        /**
+         * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
@@ -220,7 +301,7 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('e.type = ?11');
         $queryBuilder->setParameter(11, $type);
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -270,7 +351,7 @@ class Country extends EntityRepository
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
 
-        return $queryBuilder->getQuery()->useResultCache(true)->useQueryCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
     /**
@@ -297,6 +378,6 @@ class Country extends EntityRepository
         $query->join('co.organisation', 'o');
         $query->join('o.country', 'country');
 
-        return $query->getQuery()->useResultCache(true)->getResult();
+        return $query->getQuery()->useQueryCache(true)->getResult();
     }
 }

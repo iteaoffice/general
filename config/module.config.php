@@ -11,7 +11,6 @@ namespace General;
  */
 use General\Acl\Assertion;
 use General\Controller;
-use General\Controller\ControllerInitializer;
 use General\Listener\SendEmailListener;
 use General\Service\FormService;
 use General\Service\GeneralService;
@@ -22,16 +21,14 @@ use Zend\Stdlib\ArrayUtils;
 $config = [
     'controllers'     => [
         'initializers' => [
-            ControllerInitializer::class
+            Controller\ControllerInitializer::class
         ],
         'invokables'   => [
             Controller\IndexController::class   => Controller\IndexController::class,
             Controller\StyleController::class   => Controller\StyleController::class,
             Controller\WebInfoController::class => Controller\WebInfoController::class,
+            Controller\CountryController::class => Controller\CountryController::class,
         ],
-    ],
-    'listeners'       => [
-        SendEmailListener::class
     ],
     'view_manager'    => [
         'template_map' => include __DIR__ . '/../template_map.php',
@@ -58,6 +55,7 @@ $config = [
         ],
         'invokables'   => [
             'general_web_info_form_filter' => 'General\Form\FilterCreateObject',
+            'general_country_form_filter'  => 'General\Form\FilterCreateObject',
             GeneralService::class          => GeneralService::class,
             FormService::class             => FormService::class,
             SendEmailListener::class       => SendEmailListener::class,
