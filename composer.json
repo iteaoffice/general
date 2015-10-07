@@ -1,20 +1,16 @@
 {
-  "name": "debranova/general",
+  "name": "iteaoffice/general",
   "type": "library",
-  "description": "General shared code for Debranova",
+  "description": "General shared code for ITEA",
   "keywords": [
     "general"
   ],
   "license": "proprietary",
-  "homepage": "http://debranova.org",
+  "homepage": "https://itea3.org",
   "authors": [
     {
       "name": "Johan van der Heide",
       "email": "johan.van.der.heide@itea3.org"
-    },
-    {
-      "name": "Andre Hebben",
-      "email": "andre.hebben@artemis-ia.eu"
     }
   ],
   "minimum-stability": "dev",
