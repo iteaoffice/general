@@ -106,7 +106,7 @@ class EmailService extends ServiceAbstract implements
                 $options = new SmtpOptions($transportConfig);
                 $transport->setOptions($options);
             }
-            //$transport->send($message);
+
             $this->transport = $transport;
         }
     }
@@ -168,13 +168,12 @@ class EmailService extends ServiceAbstract implements
                         $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
                     }
 
-                    //$this->message->addTo($contact->getEmail(), $contact->getDisplayName());
-                    /*
+                    /**
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseSubject();
 
-                    /*
+                    /**
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseBody();

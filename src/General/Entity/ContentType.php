@@ -58,7 +58,7 @@ class ContentType
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Logo[]
+     * @var \Project\Entity\Logo[]|Collections\ArrayCollection
      */
     private $projectLogo;
     /**
@@ -70,145 +70,145 @@ class ContentType
     /**
      * @ORM\OneToMany(targetEntity="Content\Entity\Image", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Content\Entity\Image[]
+     * @var \Content\Entity\Image[]|Collections\ArrayCollection
      */
     private $contentImage;
     /**
      * @ORM\OneToMany(targetEntity="Press\Entity\Article", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Content\Entity\Image[]
+     * @var \Content\Entity\Image[]|Collections\ArrayCollection
      */
     private $pressArticle;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Nda", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Program\Entity\Nda[]
+     * @var \Program\Entity\Nda[]|Collections\ArrayCollection
      */
     private $programNna;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Program\Entity\Doa[]
+     * @var \Program\Entity\Doa[]|Collections\ArrayCollection
      */
     private $programDoa;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Affiliation\Entity\Doa[]
+     * @var \Affiliation\Entity\Doa[]|Collections\ArrayCollection
      */
     private $affiliationDoa;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Contact\Entity\Dnd[]
+     * @var \Contact\Entity\Dnd[]|Collections\ArrayCollection
      */
     private $contactDnd;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
      *
-     * @var \Contact\Entity\Photo[]
+     * @var \Contact\Entity\Photo[]|Collections\ArrayCollection
      */
     private $contactPhoto;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Organisation\Entity\Logo[]
+     * @var \Organisation\Entity\Logo[]|Collections\ArrayCollection
      */
     private $organisationLogo;
     /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Publication\Entity\Publication[]
+     * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
      */
     private $publication;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Publication\Entity\Publication[]
+     * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
      */
     private $badgeAttachment;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Result\Result[]
+     * @var \Project\Entity\Result\Result[]|Collections\ArrayCollection
      */
     private $result;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Workpackage\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Workpackage\Document[]
+     * @var \Project\Entity\Workpackage\Document[]|Collections\ArrayCollection
      */
     private $workpackageDocument;
     /**
      * @ORM\OneToMany(targetEntity="Ambassador\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Ambassador\Entity\Document[]
+     * @var \Ambassador\Entity\Document[]|Collections\ArrayCollection
      */
     private $ambassadorDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Poster\Poster[]
+     * @var \Project\Entity\Poster\Poster[]|Collections\ArrayCollection
      */
     private $poster;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Idea\Document[]
+     * @var \Project\Entity\Idea\Document[]|Collections\ArrayCollection
      */
     private $ideaDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Idea\Image[]
+     * @var \Project\Entity\Idea\Image[]|Collections\ArrayCollection
      */
     private $ideaImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Description\Image[]
+     * @var \Project\Entity\Description\Image[]|Collections\ArrayCollection
      */
     private $projectDescriptionImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Report\Item[]
+     * @var \Project\Entity\Report\Item[]|Collections\ArrayCollection
      */
     private $projectReportItem;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Document\Document[]
+     * @var \Project\Entity\Document\Document[]|Collections\ArrayCollection
      */
     private $projectDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Version\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Project\Entity\Version\Document[]
+     * @var \Project\Entity\Version\Document[]|Collections\ArrayCollection
      */
     private $versionDocument;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Calendar\Entity\Document[]
+     * @var \Calendar\Entity\Document[]|Collections\ArrayCollection
      */
     private $calendarDocument;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Affiliation\Entity\Loi[]
+     * @var \Affiliation\Entity\Loi[]|Collections\ArrayCollection
      */
     private $loi;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Event\Entity\Meeting\Floorplan[]
+     * @var \Event\Entity\Meeting\Floorplan[]|Collections\ArrayCollection
      */
     private $meetingFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Exhibition\Floorplan", cascade={"persist"}, mappedBy="contentType")
      *
-     * @var \Event\Entity\Exhibition\Floorplan[]
+     * @var \Event\Entity\Exhibition\Floorplan[]|Collections\ArrayCollection
      */
     private $exhibitionFloorplan;
     /**
@@ -257,7 +257,7 @@ class ContentType
      */
     public function __toString()
     {
-        return (string) $this->contentType;
+        return (string)$this->contentType;
     }
 
     /**
@@ -268,13 +268,12 @@ class ContentType
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR .
-            (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') .
-            DIRECTORY_SEPARATOR . 'content-type-icon';
+        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR
+            . 'assets' . DIRECTORY_SEPARATOR . (defined("DEBRANOVA_HOST")
+                ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR
+            . 'content-type-icon';
 
-        return $cacheDir . DIRECTORY_SEPARATOR
-        . $this->getHash() . '.gif';
+        return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
     }
 
     /**
@@ -660,6 +659,14 @@ class ContentType
     }
 
     /**
+     * @return Collections\ArrayCollection|\Project\Entity\Document\Document[]
+     */
+    public function getProjectDocument()
+    {
+        return $this->projectDocument;
+    }
+
+    /**
      * @return \Project\Entity\Version\Document[]
      */
     public function getVersionDocument()
@@ -765,6 +772,7 @@ class ContentType
 
     /**
      * @param \Project\Entity\Report\Item[] $projectReportItem
+     *
      * @return ContentType
      */
     public function setProjectReportItem($projectReportItem)

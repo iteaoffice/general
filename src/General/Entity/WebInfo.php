@@ -37,18 +37,20 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     /**
      * @var array
      */
-    protected static $plainTemplates = [
-        self::PLAIN     => "txt-plain",
-        self::NOT_PLAIN => "txt-not-plain"
-    ];
+    protected static $plainTemplates
+        = [
+            self::PLAIN     => "txt-plain",
+            self::NOT_PLAIN => "txt-not-plain"
+        ];
 
     /**
      * @var array
      */
-    protected static $syncTemplates = [
-        self::SYNC    => "txt-sync",
-        self::NO_SYNC => "txt-no-sync"
-    ];
+    protected static $syncTemplates
+        = [
+            self::SYNC    => "txt-sync",
+            self::NO_SYNC => "txt-no-sync"
+        ];
 
     /**
      * @ORM\Column(name="info_id", type="integer", nullable=false)
@@ -170,30 +172,18 @@ class WebInfo extends EntityAbstract implements ResourceInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'key',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'subject',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'content',
-                        'required' => true,
-                    ]
-                )
-            );
+            $inputFilter->add($factory->createInput([
+                    'name'     => 'key',
+                    'required' => true,
+                ]));
+            $inputFilter->add($factory->createInput([
+                    'name'     => 'subject',
+                    'required' => true,
+                ]));
+            $inputFilter->add($factory->createInput([
+                    'name'     => 'content',
+                    'required' => true,
+                ]));
 
             $this->inputFilter = $inputFilter;
         }
@@ -227,6 +217,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $id
+     *
      * @return WebInfo
      */
     public function setId($id)
@@ -246,6 +237,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $info
+     *
      * @return WebInfo
      */
     public function setInfo($info)
@@ -257,6 +249,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param bool $textual
+     *
      * @return int|string
      */
     public function getPlain($textual = false)
@@ -270,6 +263,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $plain
+     *
      * @return WebInfo
      */
     public function setPlain($plain)
@@ -289,6 +283,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $subject
+     *
      * @return WebInfo
      */
     public function setSubject($subject)
@@ -308,6 +303,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $content
+     *
      * @return WebInfo
      */
     public function setContent($content)
@@ -319,6 +315,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param bool $textual
+     *
      * @return int|string
      */
     public function getSync($textual = false)
@@ -332,6 +329,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $sync
+     *
      * @return WebInfo
      */
     public function setSync($sync)
@@ -351,6 +349,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Web $web
+     *
      * @return WebInfo
      */
     public function setWeb($web)
