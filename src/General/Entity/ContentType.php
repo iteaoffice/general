@@ -5,23 +5,28 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Form\Annotation;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the Country.
  *
  * @ORM\Table(name="contenttype")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\ContentType")
  *
  * @category General
  */
-class ContentType
+class ContentType extends EntityAbstract implements ResourceInterface
 {
     const TYPE_UNKNOWN = 0;
     const TYPE_PDF = 1;
@@ -33,187 +38,191 @@ class ContentType
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
+     * @Annotation\Exclude()
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="description", type="string", unique=true)
-     *
+     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"txt-content-type-description-label","help-block":"txt-content-type-description-help-block"})
      * @var string
      */
     private $description;
     /**
      * @ORM\Column(name="contenttype", type="string", unique=true)
+     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"txt-content-type-label","help-block":"txt-content-type-help-block"})
      *
      * @var string
      */
     private $contentType;
     /**
      * @ORM\Column(name="extension", type="string", unique=true)
-     *
+     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"txt-content-type-extension-label","help-block":"txt-content-type-extension-help-block"})
      * @var string
      */
     private $extension;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Logo[]|Collections\ArrayCollection
      */
     private $projectLogo;
     /**
      * @ORM\Column(name="gifimage",  type="blob", nullable=true)
-     *
+     * @Annotation\Exclude()
      * @var resource
      */
     private $image;
     /**
      * @ORM\OneToMany(targetEntity="Content\Entity\Image", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Content\Entity\Image[]|Collections\ArrayCollection
      */
     private $contentImage;
     /**
      * @ORM\OneToMany(targetEntity="Press\Entity\Article", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Content\Entity\Image[]|Collections\ArrayCollection
      */
     private $pressArticle;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Nda", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Program\Entity\Nda[]|Collections\ArrayCollection
      */
     private $programNna;
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Program\Entity\Doa[]|Collections\ArrayCollection
      */
     private $programDoa;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Affiliation\Entity\Doa[]|Collections\ArrayCollection
      */
     private $affiliationDoa;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Contact\Entity\Dnd[]|Collections\ArrayCollection
      */
     private $contactDnd;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Contact\Entity\Photo[]|Collections\ArrayCollection
      */
     private $contactPhoto;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Organisation\Entity\Logo[]|Collections\ArrayCollection
      */
     private $organisationLogo;
     /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
      */
     private $publication;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
      */
     private $badgeAttachment;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Result\Result[]|Collections\ArrayCollection
      */
     private $result;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Workpackage\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Workpackage\Document[]|Collections\ArrayCollection
      */
     private $workpackageDocument;
     /**
      * @ORM\OneToMany(targetEntity="Ambassador\Entity\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Ambassador\Entity\Document[]|Collections\ArrayCollection
      */
     private $ambassadorDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Poster\Poster[]|Collections\ArrayCollection
      */
     private $poster;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Idea\Document[]|Collections\ArrayCollection
      */
     private $ideaDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Idea\Image[]|Collections\ArrayCollection
      */
     private $ideaImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Description\Image[]|Collections\ArrayCollection
      */
     private $projectDescriptionImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Report\Item[]|Collections\ArrayCollection
      */
     private $projectReportItem;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Document\Document[]|Collections\ArrayCollection
      */
     private $projectDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Version\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Project\Entity\Version\Document[]|Collections\ArrayCollection
      */
     private $versionDocument;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Calendar\Entity\Document[]|Collections\ArrayCollection
      */
     private $calendarDocument;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Affiliation\Entity\Loi[]|Collections\ArrayCollection
      */
     private $loi;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Event\Entity\Meeting\Floorplan[]|Collections\ArrayCollection
      */
     private $meetingFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Exhibition\Floorplan", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Event\Entity\Exhibition\Floorplan[]|Collections\ArrayCollection
      */
     private $exhibitionFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Reminder", cascade={"persist"}, mappedBy="contentType")
-     *
+     * @Annotation\Exclude()
      * @var \Invoice\Entity\Reminder[]|Collections\ArrayCollection()
      */
     private $reminder;
@@ -274,6 +283,55 @@ class ContentType
             . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
+    }
+
+    /**
+     * Magic Getter.
+     *
+     * @param $property
+     *
+     * @return mixed
+     */
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    /**
+     * Magic Setter.
+     *
+     * @param $property
+     * @param $value
+     */
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+
+    /**
+     * @param InputFilterInterface $inputFilter
+     *
+     * @return void|InputFilterAwareInterface
+     *
+     * @throws \Exception
+     */
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        throw new \Exception("Setting an inputFilter is currently not supported");
+    }
+
+    /**
+     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
+     */
+    public function getInputFilter()
+    {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
     }
 
     /**

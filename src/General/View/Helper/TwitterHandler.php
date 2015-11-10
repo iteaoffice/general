@@ -4,8 +4,8 @@
  *
  * @category   Twitter
  *
- * @author     Andre Hebben <andre.hebben@artemis-ia.eu>
- * @copyright  Copyright (c) 2007-2014 ARTEMIS-IA (http://artemis-ia.eu)
+ * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -48,9 +48,9 @@ class TwitterHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
             case 'twitter':
-            //generate handler through this
-            //append the java script
-            //generate through partial
+                //generate handler through this
+                //append the java script
+                //generate through partial
                 break;
         }
     }

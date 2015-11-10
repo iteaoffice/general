@@ -3,13 +3,13 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set template = form.get('web_info') %}
+{% set webInfo = form.get('web_info') %}
 
-{{ ztbformelement(template.get('info')) }}
-{{ ztbformelement(template.get('subject')) }}
-{{ ztbformelement(template.get('sync')) }}
-{{ ztbformelement(template.get('plain')) }}
-{{ ztbformelement(template.get('content')) }}
+{{ ztbformelement(webInfo.get('info')) }}
+{{ ztbformelement(webInfo.get('subject')) }}
+{{ ztbformelement(webInfo.get('sync')) }}
+{{ ztbformelement(webInfo.get('plain')) }}
+{{ ztbformelement(webInfo.get('content')) }}
 
 
 <div class="form-group">

@@ -19,7 +19,9 @@ use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class WebInfoController
  *
+ * @package General\Controller
  */
 class WebInfoController extends GeneralAbstractController
 {
@@ -30,28 +32,30 @@ class WebInfoController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(
-            'webInfo',
-            $filterPlugin->getFilter()
-        );
+        $contactQuery = $this->getGeneralService()
+            ->findEntitiesFiltered('webInfo', $filterPlugin->getFilter());
 
-        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
+        $paginator
+            = new Paginator(new PaginatorAdapter(new ORMPaginator(
+                $contactQuery,
+                false
+            )));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
+            : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
+            / $paginator->getDefaultItemCountPerPage()));
 
         $form = new WebInfoFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel(
-            [
-                'paginator'     => $paginator,
-                'form'          => $form,
-                'encodedFilter' => urlencode($filterPlugin->getHash()),
-                'order'         => $filterPlugin->getOrder(),
-                'direction'     => $filterPlugin->getDirection(),
-            ]
-        );
+        return new ViewModel([
+            'paginator'     => $paginator,
+            'form'          => $form,
+            'encodedFilter' => urlencode($filterPlugin->getHash()),
+            'order'         => $filterPlugin->getOrder(),
+            'direction'     => $filterPlugin->getDirection(),
+        ]);
     }
 
     /**
@@ -59,7 +63,8 @@ class WebInfoController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
+        $webInfo = $this->getGeneralService()
+            ->findEntityById('webInfo', $this->params('id'));
         if (is_null($webInfo)) {
             return $this->notFoundAction();
         }
@@ -74,7 +79,7 @@ class WebInfoController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge_recursive(
+        $data = array_merge(
             $this->getRequest()->getPost()->toArray(),
             $this->getRequest()->getFiles()->toArray()
         );
@@ -92,15 +97,13 @@ class WebInfoController extends GeneralAbstractController
             if ($form->isValid()) {
                 /* @var $webInfo WebInfo */
                 $webInfo = $form->getData();
-                $webInfo->setWeb($this->getGeneralService()->getEntityManager()->getReference(Web::class, 1));
+                $webInfo->setWeb($this->getGeneralService()->getEntityManager()
+                    ->getReference(Web::class, 1));
 
-                $result = $this->getGeneralService()->newEntity($form->getData());
-                $this->redirect()->toRoute(
-                    'zfcadmin/web-info/view',
-                    [
-                        'id' => $result->getId(),
-                    ]
-                );
+                $result = $this->getGeneralService()->newEntity($webInfo);
+                $this->redirect()->toRoute('zfcadmin/web-info/view', [
+                    'id' => $result->getId(),
+                ]);
             }
         }
 
@@ -114,14 +117,16 @@ class WebInfoController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
+        $webInfo = $this->getGeneralService()
+            ->findEntityById('webInfo', $this->params('id'));
 
-        $data = array_merge_recursive(
+        $data = array_merge(
             $this->getRequest()->getPost()->toArray(),
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare($webInfo->get('entity_name'), $webInfo, $data);
+        $form = $this->getFormService()
+            ->prepare($webInfo->get('entity_name'), $webInfo, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -135,13 +140,11 @@ class WebInfoController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute(
-                    'zfcadmin/web-info/view',
-                    [
-                        'id' => $result->getId(),
-                    ]
-                );
+                $result = $this->getGeneralService()
+                    ->updateEntity($form->getData());
+                $this->redirect()->toRoute('zfcadmin/web-info/view', [
+                    'id' => $result->getId(),
+                ]);
             }
         }
 

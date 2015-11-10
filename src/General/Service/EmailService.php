@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
@@ -280,14 +280,14 @@ class EmailService extends ServiceAbstract implements
         try {
             $htmlView = $this->renderer->render(
                 $this->email->getHtmlLayoutName(),
-                array_merge_recursive(
+                array_merge(
                     ['content' => $this->personaliseMessage($this->email->getMessage())],
                     $this->templateVars
                 )
             );
             $textView = $this->renderer->render(
                 'plain',
-                array_merge_recursive(
+                array_merge(
                     ['content' => $this->personaliseMessage($this->email->getMessage())],
                     $this->templateVars
                 )
@@ -301,7 +301,7 @@ class EmailService extends ServiceAbstract implements
         $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
-        $body->setParts(array_merge_recursive($this->attachments, [$htmlContent]));
+        $body->setParts(array_merge($this->attachments, [$htmlContent]));
         /*
          * Set specific headers
          * https://eu.mailjet.com/docs/emails_headers
@@ -552,7 +552,7 @@ class EmailService extends ServiceAbstract implements
         try {
             return $this->renderer->render(
                 $this->mailing->getTemplate()->getTemplate(),
-                array_merge_recursive(
+                array_merge(
                     ['content' => $this->personaliseMessage($this->email->getMessage())],
                     $this->templateVars
                 )

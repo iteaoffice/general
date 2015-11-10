@@ -5,7 +5,7 @@
  * @category  Content
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
@@ -14,7 +14,6 @@ use Affiliation\Service\AffiliationService;
 use Doctrine\ORM\Query;
 use Event\Entity\Meeting\Meeting;
 use General\Entity;
-use General\Entity\ContentType;
 use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
 use Project\Entity\Evaluation;
@@ -36,7 +35,7 @@ class GeneralService extends ServiceAbstract
     protected $options;
 
     /**
-     * @param  $entity
+     * @param        $entity
      * @param  array $filter
      *
      * @return Query
@@ -50,7 +49,8 @@ class GeneralService extends ServiceAbstract
             ));
         }
 
-        return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);
+        return $this->getEntityManager()->getRepository($entity)
+            ->findFiltered($filter);
     }
 
     /**
@@ -69,11 +69,21 @@ class GeneralService extends ServiceAbstract
         if (is_null($docRef)) {
             throw new \InvalidArgumentException("A docRef is required to find an entity");
         }
-        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findOneBy(
-            ['docRef' => $docRef]
-        );
+        $entity = $this->getEntityManager()
+            ->getRepository($this->getFullEntityName($entity))
+            ->findOneBy(['docRef' => $docRef]);
 
         return $entity;
+    }
+
+    /**
+     * @return Entity\ContentType[]
+     */
+    public function findContentTypeByImage()
+    {
+        return $this->getEntityManager()
+            ->getRepository(Entity\ContentType::class)
+            ->findContentTypeByImage();
     }
 
     /**
@@ -81,7 +91,8 @@ class GeneralService extends ServiceAbstract
      */
     public function findActiveCountries()
     {
-        return $this->getEntityManager()->getRepository(Entity\Country::class)->findActive();
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findActive();
     }
 
     /**
@@ -89,7 +100,8 @@ class GeneralService extends ServiceAbstract
      */
     public function findItacCountries()
     {
-        return $this->getEntityManager()->getRepository(Entity\Country::class)->findItac();
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findItac();
     }
 
     /**
@@ -104,9 +116,9 @@ class GeneralService extends ServiceAbstract
         if (is_null($iso3)) {
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
-        $entity = $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(
-            ['iso3' => strtoupper($iso3)]
-        );
+        $entity = $this->getEntityManager()
+            ->getRepository(Entity\Country::class)
+            ->findOneBy(['iso3' => strtoupper($iso3)]);
 
         return $entity;
     }
@@ -123,9 +135,9 @@ class GeneralService extends ServiceAbstract
         if (is_null($cd)) {
             throw new \InvalidArgumentException("A name is required to find an entity");
         }
-        $entity = $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(
-            ['cd' => strtoupper($cd)]
-        );
+        $entity = $this->getEntityManager()
+            ->getRepository(Entity\Country::class)
+            ->findOneBy(['cd' => strtoupper($cd)]);
 
         return $entity;
     }
@@ -145,28 +157,30 @@ class GeneralService extends ServiceAbstract
      * Produce a list of countries active in a program call.
      *
      * @param Call $call
-     * @param int $which
+     * @param int  $which
      *
      * @return \Doctrine\ORM\Query
      */
-    public function findCountryByCall(Call $call, $which = AffiliationService::WHICH_ONLY_ACTIVE)
-    {
-        return $this->getEntityManager()->getRepository(
-            Entity\Country::class
-        )->findCountryByCall($call, $which);
+    public function findCountryByCall(
+        Call $call,
+        $which = AffiliationService::WHICH_ONLY_ACTIVE
+    ) {
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findCountryByCall($call, $which);
     }
 
     /**
      * @param Project $project
-     * @param int $which
+     * @param int     $which
      *
      * @return Entity\Country[]
      */
-    public function findCountryByProject(Project $project, $which = AffiliationService::WHICH_ONLY_ACTIVE)
-    {
-        return $this->getEntityManager()->getRepository(
-            Entity\Country::class
-        )->findCountryByProject($project, $which);
+    public function findCountryByProject(
+        Project $project,
+        $which = AffiliationService::WHICH_ONLY_ACTIVE
+    ) {
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findCountryByProject($project, $which);
     }
 
     /**
@@ -178,24 +192,24 @@ class GeneralService extends ServiceAbstract
      */
     public function findCountryOfProjectContact(Project $project)
     {
-        return $this->getEntityManager()->getRepository(
-            Entity\Country::class
-        )->findCountryOfProjectContact($project);
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findCountryOfProjectContact($project);
     }
 
     /**
      * Produce a list of countries active in a call and evaluation type.
      *
      * @param Evaluation\Type $type
-     * @param Call|null $call
+     * @param Call|null       $call
      *
      * @return Entity\Country[]
      */
-    public function findCountryByEvaluationTypeAndCall(Evaluation\Type $type, Call $call = null)
-    {
-        return $this->getEntityManager()->getRepository(
-            Entity\Country::class
-        )->findCountryByEvaluationTypeAndCall($call, $type);
+    public function findCountryByEvaluationTypeAndCall(
+        Evaluation\Type $type,
+        Call $call = null
+    ) {
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
+            ->findCountryByEvaluationTypeAndCall($call, $type);
     }
 
     /**
@@ -211,15 +225,15 @@ class GeneralService extends ServiceAbstract
             throw new \InvalidArgumentException("A info-tag is required to find an entity");
         }
 
-        return $this->getEntityManager()->getRepository($this->getFullEntityName('webInfo'))->findOneBy(
-            ['info' => $info]
-        );
+        return $this->getEntityManager()
+            ->getRepository($this->getFullEntityName('webInfo'))
+            ->findOneBy(['info' => $info]);
     }
 
     /**
      * @param $contentTypeName
      *
-     * @return null|\General\Entity\ContentType
+     * @return null|Entity\ContentType
      *
      * @throws \InvalidArgumentException
      */
@@ -228,15 +242,15 @@ class GeneralService extends ServiceAbstract
         if (is_null($contentTypeName)) {
             throw new \InvalidArgumentException("A content type name is required to find an entity");
         }
-        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->findOneBy(
-            ['contentType' => $contentTypeName]
-        );
+        $entity = $this->getEntityManager()
+            ->getRepository($this->getFullEntityName('contentType'))
+            ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
         if (is_null($entity)) {
-            $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))->find(
-                ContentType::TYPE_UNKNOWN
-            );
+            $entity = $this->getEntityManager()
+                ->getRepository($this->getFullEntityName('contentType'))
+                ->find(Entity\ContentType::TYPE_UNKNOWN);
         }
 
         return $entity;
@@ -250,16 +264,19 @@ class GeneralService extends ServiceAbstract
     public function findLocationByIPAddress()
     {
         $client = new Client();
-        $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
+        $client->setUri(sprintf(
+            $this->getOptions()->getGeoIpServiceURL(),
+            $_SERVER['REMOTE_ADDR']
+        ));
         if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
             /*
              * We have the country, try to find the country in our database
              */
             $countryResult = Json::decode($client->send()->getContent());
 
-            return $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(
-                ['cd' => $countryResult->country_code]
-            );
+            return $this->getEntityManager()
+                ->getRepository(Entity\Country::class)
+                ->findOneBy(['cd' => $countryResult->country_code]);
         }
 
         return $this->findEntityById('country', 0); //Unknown
@@ -273,7 +290,8 @@ class GeneralService extends ServiceAbstract
     public function getOptions()
     {
         if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceLocator()->get('general_module_options'));
+            $this->setOptions($this->getServiceLocator()
+                ->get('general_module_options'));
         }
 
         return $this->options;
@@ -298,6 +316,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findChallengeById($id)
     {
-        return $this->getEntityManager()->getRepository($this->getFullEntityName('challenge'))->find($id);
+        return $this->getEntityManager()
+            ->getRepository($this->getFullEntityName('challenge'))->find($id);
     }
 }

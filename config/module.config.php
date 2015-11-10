@@ -7,7 +7,7 @@ namespace General;
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2014 ITEA Office (http://itea3.org]
+ * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
  */
 use General\Acl\Assertion;
 use General\Controller;
@@ -24,10 +24,11 @@ $config = [
             Controller\ControllerInitializer::class
         ],
         'invokables'   => [
-            Controller\IndexController::class   => Controller\IndexController::class,
-            Controller\StyleController::class   => Controller\StyleController::class,
-            Controller\WebInfoController::class => Controller\WebInfoController::class,
-            Controller\CountryController::class => Controller\CountryController::class,
+            Controller\IndexController::class       => Controller\IndexController::class,
+            Controller\StyleController::class       => Controller\StyleController::class,
+            Controller\WebInfoController::class     => Controller\WebInfoController::class,
+            Controller\CountryController::class     => Controller\CountryController::class,
+            Controller\ContentTypeController::class => Controller\ContentTypeController::class,
         ],
     ],
     'view_manager'    => [
@@ -46,6 +47,7 @@ $config = [
             'countryLink'         => Helper\CountryLink::class,
             'challengeLink'       => Helper\ChallengeLink::class,
             'webInfoLink'         => Helper\WebInfoLink::class,
+            'contentTypeLink'     => Helper\ContentTypeLink::class,
             'contentTypeIcon'     => Helper\ContentTypeIcon::class,
         ]
     ],
@@ -54,35 +56,39 @@ $config = [
             ServiceInitializer::class
         ],
         'invokables'   => [
-            'general_web_info_form_filter' => 'General\Form\FilterCreateObject',
-            'general_country_form_filter'  => 'General\Form\FilterCreateObject',
-            GeneralService::class          => GeneralService::class,
-            FormService::class             => FormService::class,
-            SendEmailListener::class       => SendEmailListener::class,
-            Assertion\WebInfo::class       => Assertion\WebInfo::class
+            'general_web_info_form_filter'     => 'General\Form\FilterCreateObject',
+            'general_country_form_filter'      => 'General\Form\FilterCreateObject',
+            'general_content_type_form_filter' => 'General\Form\FilterCreateObject',
+            GeneralService::class              => GeneralService::class,
+            FormService::class                 => FormService::class,
+            Assertion\WebInfo::class           => Assertion\WebInfo::class,
+            Assertion\Country::class           => Assertion\Country::class,
+            Assertion\ContentType::class       => Assertion\ContentType::class
         ]
     ],
     'asset_manager'   => [
         'resolver_configs' => [
             'collections' => [
-                'assets/' . (defined(
-                    "DEBRANOVA_HOST"
-                ) ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js'                                        => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+                    : 'test') . '/js/jvectormap.js'   => [
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+                    : 'test') . '/css/jvectormap.css' => [
                     'css/jquery-jvectormap-2.0.2.css',
                 ],
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?'  => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+                    : 'test') . '/js/jvectormap.js?'  => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+                    : 'test') . '/css/jvectormap.css' => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
@@ -97,7 +103,9 @@ $config = [
             ],
             'orm_default'               => [
                 'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
-                'drivers' => [__NAMESPACE__ . '\Entity' => 'general_annotation_driver',]
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => 'general_annotation_driver',
+                ]
             ]
         ],
         'eventmanager' => [

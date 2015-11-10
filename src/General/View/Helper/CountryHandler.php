@@ -5,7 +5,7 @@
  * @category   Country
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -454,7 +454,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         }
         $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry(
             $this->getCountry(),
-            false,
+            true,
             true
         );
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));

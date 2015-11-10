@@ -15,7 +15,7 @@ use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
-class Country extends AssertionAbstract
+class ContentType extends AssertionAbstract
 {
     /**
      * Returns true if and only if the assertion conditions are met.

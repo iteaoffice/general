@@ -1,11 +1,11 @@
 <?php
 /**
- * DebraNova copyright message placeholder.
+ * ITEA Office copyright message placeholder.
  *
  * @category  Contact
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Repository;
@@ -39,13 +39,16 @@ class Country extends EntityRepository
         if (!is_null($filter)) {
             /**
              * Get the webInfo repository
+             *
              * @var  $webInfoRepository WebInfo
              */
             $queryBuilder = $this->applyWebInfoFilter($queryBuilder, $filter);
         }
 
         $direction = 'ASC';
-        if (isset($filter['direction']) && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])) {
+        if (isset($filter['direction'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+        ) {
             $direction = strtoupper($filter['direction']);
         }
 
@@ -55,22 +58,40 @@ class Country extends EntityRepository
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('general_entity_country.id', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.id',
+                    $direction
+                );
                 break;
             case 'name':
-                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.country',
+                    $direction
+                );
                 break;
             case 'iso3':
-                $queryBuilder->addOrderBy('general_entity_country.iso3', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.iso3',
+                    $direction
+                );
                 break;
             case 'cd':
-                $queryBuilder->addOrderBy('general_entity_country.cd', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.cd',
+                    $direction
+                );
                 break;
             case 'numcode':
-                $queryBuilder->addOrderBy('general_entity_country.numcode', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.numcode',
+                    $direction
+                );
                 break;
             default:
-                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
+                $queryBuilder->addOrderBy(
+                    'general_entity_country.country',
+                    $direction
+                );
 
         }
 
@@ -81,15 +102,21 @@ class Country extends EntityRepository
      * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
      *
      * @param QueryBuilder $queryBuilder
-     * @param array $filter
+     * @param array        $filter
      *
      * @return QueryBuilder
      */
-    public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter)
-    {
+    public function applyWebInfoFilter(
+        QueryBuilder $queryBuilder,
+        array $filter
+    ) {
         if (!empty($filter['search'])) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->andWhere($queryBuilder->expr()
+                ->like('general_entity_country.country', ':like'));
+            $queryBuilder->setParameter(
+                'like',
+                sprintf("%%%s%%", $filter['search'])
+            );
         }
 
         if (!empty($filter['eu'])) {
@@ -130,8 +157,7 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('a affiliation');
-        $queryBuilder->addSelect(
-            '(SELECT
+        $queryBuilder->addSelect('(SELECT
                             COUNT(DISTINCT aff.organisation)
                             FROM Affiliation\Entity\Affiliation aff
                             JOIN aff.organisation org
@@ -142,10 +168,8 @@ class Country extends EntityRepository
                             ) AND pro NOT IN (
                                  SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
                             )
-                            ) partners'
-        );
-        $queryBuilder->addSelect(
-            '(SELECT
+                            ) partners');
+        $queryBuilder->addSelect('(SELECT
                             COUNT(DISTINCT aff2.project)
                             FROM Affiliation\Entity\Affiliation aff2
                             JOIN aff2.organisation org2
@@ -156,29 +180,31 @@ class Country extends EntityRepository
                             ) AND pro2 NOT IN (
                                 SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
                             )
-                            ) projects'
-        );
+                            ) projects');
         $queryBuilder->from('Affiliation\Entity\Affiliation', 'a');
         $queryBuilder->join('a.organisation', 'o');
         $queryBuilder->join('a.project', 'p');
         $queryBuilder->join('o.country', 'c');
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');
+        $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
         $queryBuilder->addGroupBy('c.id');
         $queryBuilder->addOrderBy('c.country');
         /**
          * @var $projectRepository \Project\Repository\Project
          */
-        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
+        $projectRepository = $this->getEntityManager()
+            ->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
-        return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)
+            ->useResultCache(true)->getResult();
     }
 
     /**
      * @param Call $call
-     * @param int $which
+     * @param int  $which
      *
      * @throws \InvalidArgumentException
      *
@@ -197,7 +223,7 @@ class Country extends EntityRepository
 
     /**
      * @param Project $project
-     * @param int $which
+     * @param int     $which
      *
      * @throws \InvalidArgumentException
      *
@@ -237,13 +263,13 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('country');
         $queryBuilder->from('General\Entity\Country', 'country');
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->in('country', $findQueryBuilder->getDQL())
-        );
+        $queryBuilder->andWhere($queryBuilder->expr()
+            ->in('country', $findQueryBuilder->getDQL()));
 
         $queryBuilder->setParameter(1, $project);
 
-        return $queryBuilder->getQuery()->useResultCache(true)->getOneOrNullResult();
+        return $queryBuilder->getQuery()->useResultCache(true)
+            ->getOneOrNullResult();
     }
 
     /**
@@ -268,13 +294,18 @@ class Country extends EntityRepository
             case AffiliationService::WHICH_ALL:
                 break;
             case AffiliationService::WHICH_ONLY_ACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
+                $queryBuilder->andWhere($queryBuilder->expr()
+                    ->isNull('a.dateEnd'));
                 break;
             case AffiliationService::WHICH_ONLY_INACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('a.dateEnd'));
+                $queryBuilder->andWhere($queryBuilder->expr()
+                    ->isNotNull('a.dateEnd'));
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
+                throw new \InvalidArgumentException(sprintf(
+                    "Incorrect value (%s) for which",
+                    $which
+                ));
         }
 
         return $queryBuilder;
@@ -286,15 +317,19 @@ class Country extends EntityRepository
      *
      * @return Entity\Country[]
      */
-    public function findCountryByEvaluationTypeAndCall(Evaluation\Type $type, Call $call = null)
-    {
-        $queryBuilder = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
+    public function findCountryByEvaluationTypeAndCall(
+        Evaluation\Type $type,
+        Call $call = null
+    ) {
+        $queryBuilder
+            = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
         $queryBuilder->addOrderBy('c.country');
         /**
          * @var $projectRepository \Project\Repository\Project
          */
-        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
+        $projectRepository = $this->getEntityManager()
+            ->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
@@ -319,8 +354,7 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('c country');
         $queryBuilder->from('General\Entity\Country', 'c');
-        $queryBuilder->addSelect(
-            '(SELECT
+        $queryBuilder->addSelect('(SELECT
                             COUNT(DISTINCT aff.organisation)
                             FROM Affiliation\Entity\Affiliation aff
                             JOIN aff.organisation org
@@ -331,10 +365,8 @@ class Country extends EntityRepository
                             ) AND pro NOT IN (
                                  SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
                             )
-                            ) partners'
-        );
-        $queryBuilder->addSelect(
-            '(SELECT
+                            ) partners');
+        $queryBuilder->addSelect('(SELECT
                             COUNT(DISTINCT aff2.project)
                             FROM Affiliation\Entity\Affiliation aff2
                             JOIN aff2.organisation org2
@@ -345,8 +377,7 @@ class Country extends EntityRepository
                             ) AND pro2 NOT IN (
                                 SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
                             )
-                            ) projects'
-        );
+                            ) projects');
         $queryBuilder->innerJoin('c.itac', 'itac');
         //Remove the 0 country (unknown)
         $queryBuilder->where('c.id <> 0');

@@ -12,15 +12,17 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
-use General\Entity\Country;
-use General\Form\CountryFilter;
+use General\Entity\ContentType;
+use General\Form\ContentTypeFilter;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class ContentTypeController
  *
+ * @package General\Controller
  */
-class CountryController extends GeneralAbstractController
+class ContentTypeController extends GeneralAbstractController
 {
     /**
      * @return \Zend\View\Model\ViewModel
@@ -30,7 +32,7 @@ class CountryController extends GeneralAbstractController
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered('country', $filterPlugin->getFilter());
+            ->findEntitiesFiltered('contentType', $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator(
@@ -43,7 +45,7 @@ class CountryController extends GeneralAbstractController
         $paginator->setPageRange(ceil($paginator->getTotalItemCount()
             / $paginator->getDefaultItemCountPerPage()));
 
-        $form = new CountryFilter($this->getGeneralService());
+        $form = new ContentTypeFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel([
@@ -60,13 +62,13 @@ class CountryController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $country = $this->getGeneralService()
-            ->findEntityById('country', $this->params('id'));
-        if (is_null($country)) {
+        $contentType = $this->getGeneralService()
+            ->findEntityById('contentType', $this->params('id'));
+        if (is_null($contentType)) {
             return $this->notFoundAction();
         }
 
-        return new ViewModel(['country' => $country]);
+        return new ViewModel(['contentType' => $contentType]);
     }
 
     /**
@@ -81,28 +83,28 @@ class CountryController extends GeneralAbstractController
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare('country', null, $data);
+        $form = $this->getFormService()->prepare('contentType', null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/country/list');
+                $this->redirect()->toRoute('zfcadmin/content-type/list');
             }
 
             if ($form->isValid()) {
-                /* @var $country Country */
-                $country = $form->getData();
+                /* @var $contentType ContentType */
+                $contentType = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($country);
-                $this->redirect()->toRoute('zfcadmin/country/view', [
+                $result = $this->getGeneralService()->newEntity($contentType);
+                $this->redirect()->toRoute('zfcadmin/content-type/view', [
                     'id' => $result->getId(),
                 ]);
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        return new ViewModel(['form' => $form, 'fullVersion' => true]);
     }
 
     /**
@@ -112,8 +114,8 @@ class CountryController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $country = $this->getGeneralService()
-            ->findEntityById('country', $this->params('id'));
+        $contentType = $this->getGeneralService()
+            ->findEntityById('contentType', $this->params('id'));
 
         $data = array_merge(
             $this->getRequest()->getPost()->toArray(),
@@ -121,28 +123,28 @@ class CountryController extends GeneralAbstractController
         );
 
         $form = $this->getFormService()
-            ->prepare($country->get('entity_name'), $country, $data);
+            ->prepare($contentType->get('entity_name'), $contentType, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                return $this->redirect()->toRoute('zfcadmin/country/list');
+                return $this->redirect()->toRoute('zfcadmin/content-type/list');
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($country);
+                $this->getGeneralService()->removeEntity($contentType);
 
-                return $this->redirect()->toRoute('zfcadmin/country/list');
+                return $this->redirect()->toRoute('zfcadmin/content-type/list');
             }
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()
                     ->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/country/view', [
+                $this->redirect()->toRoute('zfcadmin/content-type/view', [
                     'id' => $result->getId(),
                 ]);
             }
         }
 
-        return new ViewModel(['form' => $form, 'country' => $country]);
+        return new ViewModel(['form' => $form, 'contentType' => $contentType]);
     }
 }

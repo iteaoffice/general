@@ -3,12 +3,11 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set country = form.get('country') %}
+{% set contentType = form.get('content_type') %}
 
-{{ ztbformelement(country.get('country')) }}
-{{ ztbformelement(country.get('cd')) }}
-{{ ztbformelement(country.get('iso3')) }}
-{{ ztbformelement(country.get('numcode')) }}
+{{ ztbformelement(contentType.get('description')) }}
+{{ ztbformelement(contentType.get('contentType')) }}
+{{ ztbformelement(contentType.get('extension')) }}
 
 
 <div class="form-group">

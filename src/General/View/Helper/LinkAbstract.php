@@ -6,13 +6,14 @@
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
+use General\Entity\ContentType;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\WebInfo;
@@ -58,6 +59,10 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     protected $webInfo;
     /**
+     * @var ContentType
+     */
+    protected $contentType;
+    /**
      * @var Country
      */
     protected $country;
@@ -102,7 +107,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
-            return $serverUrl->__invoke() . $url($this->router, $this->routerParams);
+            return $serverUrl->__invoke() . $url($this->router,
+                $this->routerParams);
         }
         $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
@@ -111,10 +117,14 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
             $serverUrl() . $url($this->router, $this->routerParams),
             htmlentities($this->text),
             implode(' ', $this->classes),
-            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode(
+            in_array(
+                $this->getShow(),
+                ['icon', 'button', 'flag', 'alternativeShow']
+            ) ? implode(
                 '',
                 $this->linkContent
-            ) : htmlentities(implode('', $this->linkContent))
+            )
+            : htmlentities(implode('', $this->linkContent))
         );
     }
 
@@ -144,16 +154,15 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                 break;
             case 'button':
                 $this->addClasses("btn btn-primary");
-                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
+                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> '
+                    . $this->getText());
                 break;
             case 'text':
                 $this->addLinkContent($this->getText());
                 break;
             case 'paginator':
                 if (is_null($this->getAlternativeShow())) {
-                    throw new \InvalidArgumentException(
-                        sprintf("this->alternativeShow cannot be null for a paginator link")
-                    );
+                    throw new \InvalidArgumentException(sprintf("this->alternativeShow cannot be null for a paginator link"));
                 }
                 $this->addLinkContent($this->getAlternativeShow());
                 break;
@@ -165,13 +174,11 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                 return;
             default:
                 if (!array_key_exists($this->getShow(), $this->showOptions)) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
-                            $this->getShow(),
-                            implode(', ', array_keys($this->showOptions))
-                        )
-                    );
+                    throw new \InvalidArgumentException(sprintf(
+                        "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
+                        $this->getShow(),
+                        implode(', ', array_keys($this->showOptions))
+                    ));
                 }
                 $this->addLinkContent($this->showOptions[$this->getShow()]);
                 break;
@@ -295,17 +302,20 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param EntityAbstract $entity
-     * @param string $assertion
-     * @param string $action
+     * @param string         $assertion
+     * @param string         $action
      *
      * @return bool
      */
     public function hasAccess(EntityAbstract $entity, $assertion, $action)
     {
         $assertion = $this->getAssertion($assertion);
-        if (!is_null($entity) && !$this->getAuthorizeService()->getAcl()->hasResource($entity)) {
+        if (!is_null($entity)
+            && !$this->getAuthorizeService()->getAcl()->hasResource($entity)
+        ) {
             $this->getAuthorizeService()->getAcl()->addResource($entity);
-            $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
+            $this->getAuthorizeService()->getAcl()
+                ->allow([], $entity, [], $assertion);
         }
         if (!$this->isAllowed($entity, $action)) {
             return false;
@@ -353,12 +363,13 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      */
     public function getAuthorizeService()
     {
-        return $this->getServiceLocator()->get('BjyAuthorize\Service\Authorize');
+        return $this->getServiceLocator()
+            ->get('BjyAuthorize\Service\Authorize');
     }
 
     /**
      * @param null|EntityAbstract $resource
-     * @param string $privilege
+     * @param string              $privilege
      *
      * @return bool
      */
@@ -376,13 +387,16 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      * Add a parameter to the list of parameters for the router.
      *
      * @param string $key
-     * @param $value
-     * @param bool $allowNull
+     * @param        $value
+     * @param bool   $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
         if (!$allowNull && is_null($value)) {
-            throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
+            throw new \InvalidArgumentException(sprintf(
+                "null is not allowed for %s",
+                $key
+            ));
         }
         if (!is_null($value)) {
             $this->routerParams[$key] = $value;
@@ -422,7 +436,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function getRouteMatch()
     {
         if (is_null($this->routeMatch)) {
-            $this->routeMatch = $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
+            $this->routeMatch = $this->getServiceLocator()->get('application')
+                ->getMvcEvent()->getRouteMatch();
         }
 
         return $this->routeMatch;
@@ -448,13 +463,14 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param Country $country
-     * @param int $width
+     * @param int     $width
      *
      * @return string
      */
     public function getCountryFlag(Country $country, $width)
     {
-        return $this->serviceLocator->get('countryFlag')->__invoke($country, $width);
+        return $this->serviceLocator->get('countryFlag')
+            ->__invoke($country, $width);
     }
 
     /**
@@ -471,6 +487,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param WebInfo $webInfo
+     *
      * @return LinkAbstract
      */
     public function setWebInfo($webInfo)
@@ -494,11 +511,36 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param Country $country
+     *
      * @return LinkAbstract
      */
     public function setCountry($country)
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return ContentType
+     */
+    public function getContentType()
+    {
+        if (is_null($this->contentType)) {
+            $this->contentType = new ContentType();
+        }
+
+        return $this->contentType;
+    }
+
+    /**
+     * @param ContentType $contentType
+     *
+     * @return LinkAbstract
+     */
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
 
         return $this;
     }

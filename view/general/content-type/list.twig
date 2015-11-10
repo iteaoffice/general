@@ -1,0 +1,68 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-content-type-list")) %}
+
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+{% set filter = form.get('filter') %}
+
+<input type="hidden" name="filter[order]" value="{{ order }}">
+<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
+<div class="row">
+
+    <div class="col-md-10">
+        <h1>{{ translate("txt-content-type-list") }}</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="lead">{{ translate("txt-content-type-list-explanation") }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+            </div>
+        </div>
+
+
+        {% if paginator.pageRange > 0 %}
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'description', 'text': translate('txt-description')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'content-type', 'text': translate('txt-content-type')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'extension', 'text': translate('txt-extension')} %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for contentType in paginator.getCurrentItems() %}
+                    <tr>
+                        <td>{{ contentType.id }} {{ contentTypeLink(contentType,'edit', 'icon') }}</td>
+                        <td>{{ contentTypeLink(contentType,'view','description') }} </td>
+                        <td>{{ contentTypeLink(contentType,'view','content-type') }} </td>
+                        <td>{{ contentTypeLink(contentType,'view','extension') }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'general/partial/pagination-control' %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-content-type-could-be-found"))|raw }}
+        {% endif %}
+    </div>
+    <div class="col-md-2">
+        <div class="well well-sm">
+            <fieldset>
+
+
+                <div class="form-group">
+                    {{ ztbformelement(form.get('submit')) }}
+                    {{ ztbformelement(form.get('clear')) }}
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+{{ contentTypeLink(null, 'new','button') }}
