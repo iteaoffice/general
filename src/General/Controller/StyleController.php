@@ -25,27 +25,29 @@ class StyleController extends AbstractActionController
     public function displayAction()
     {
         $requestedFile = '';
-        $response      = $this->getResponse();
-        $response->getHeaders()
-            ->addHeaderLine('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+        $response = $this->getResponse();
+        $response->getHeaders()->addHeaderLine('Expires: '
+                . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
             ->addHeaderLine("Pragma: public");
-        $options            = $this->getServiceLocator()->get('general_module_options');
+        $options = $this->getServiceLocator()->get('general_module_options');
         $requestedFileFound = false;
         foreach ($options->getStyleLocations() as $location) {
-            $requestedFile = $location.DIRECTORY_SEPARATOR
-                .$options->getImageLocation().DIRECTORY_SEPARATOR
-                .$this->getEvent()->getRouteMatch()->getParam('source');
+            $requestedFile = $location . DIRECTORY_SEPARATOR
+                . $options->getImageLocation() . DIRECTORY_SEPARATOR
+                . $this->getEvent()->getRouteMatch()->getParam('source');
             if (!$requestedFileFound && file_exists($requestedFile)) {
                 $requestedFileFound = true;
                 break;
             }
         }
-        if (!$requestedFileFound || is_null($this->getEvent()->getRouteMatch()->getParam('source'))) {
+        if (!$requestedFileFound
+            || is_null($this->getEvent()->getRouteMatch()->getParam('source'))
+        ) {
             foreach ($options->getStyleLocations() as $location) {
-                $requestedFile = $location.DIRECTORY_SEPARATOR
-                    .$options->getImageLocation().DIRECTORY_SEPARATOR
-                    .$options->getImageNotFound();
+                $requestedFile = $location . DIRECTORY_SEPARATOR
+                    . $options->getImageLocation() . DIRECTORY_SEPARATOR
+                    . $options->getImageNotFound();
                 if (file_exists($requestedFile)) {
                     break;
                 }
@@ -54,22 +56,22 @@ class StyleController extends AbstractActionController
         /*
          * Create a cache-version of the file
          */
-        $cacheDir = __DIR__.'/../../../../../../public/assets/'.
-            (defined(
-                "DEBRANOVA_HOST"
-            ) ? DEBRANOVA_HOST : 'test').DIRECTORY_SEPARATOR.'style'.DIRECTORY_SEPARATOR.'image';
-            if (!file_exists($cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'))) {
-                //Save a copy of the file in the caching-folder
-                file_put_contents(
-                    $cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'),
-                    file_get_contents($requestedFile)
-                );
-            }
-            $response->getHeaders()
-            ->addHeaderLine('Content-Type: image/jpg')
-            ->addHeaderLine('Content-Length: '.(string) filesize($requestedFile));
-            $response->setContent(file_get_contents($requestedFile));
+        $cacheDir = __DIR__ . '/../../../../../../public/assets/'
+            . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
+            . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
+        if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->getEvent()
+                ->getRouteMatch()->getParam('source'))
+        ) {
+            //Save a copy of the file in the caching-folder
+            file_put_contents($cacheDir . DIRECTORY_SEPARATOR
+                . $this->getEvent()->getRouteMatch()->getParam('source'),
+                file_get_contents($requestedFile));
+        }
+        $response->getHeaders()->addHeaderLine('Content-Type: image/jpg')
+            ->addHeaderLine('Content-Length: '
+                . (string)filesize($requestedFile));
+        $response->setContent(file_get_contents($requestedFile));
 
-            return $response;
+        return $response;
     }
 }
