@@ -35,14 +35,14 @@ class StyleController extends AbstractActionController
         foreach ($options->getStyleLocations() as $location) {
             $requestedFile = $location . DIRECTORY_SEPARATOR
                 . $options->getImageLocation() . DIRECTORY_SEPARATOR
-                . $this->getEvent()->getRouteMatch()->getParam('source');
+                . $this->params('source');
             if (!$requestedFileFound && file_exists($requestedFile)) {
                 $requestedFileFound = true;
                 break;
             }
         }
         if (!$requestedFileFound
-            || is_null($this->getEvent()->getRouteMatch()->getParam('source'))
+            || is_null($this->params('source'))
         ) {
             foreach ($options->getStyleLocations() as $location) {
                 $requestedFile = $location . DIRECTORY_SEPARATOR
@@ -64,7 +64,7 @@ class StyleController extends AbstractActionController
         ) {
             //Save a copy of the file in the caching-folder
             file_put_contents($cacheDir . DIRECTORY_SEPARATOR
-                . $this->getEvent()->getRouteMatch()->getParam('source'),
+                . $this->params('source'),
                 file_get_contents($requestedFile));
         }
         $response->getHeaders()->addHeaderLine('Content-Type: image/jpg')

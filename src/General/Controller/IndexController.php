@@ -35,7 +35,7 @@ class IndexController extends AbstractActionController
         $response = $this->getResponse();
         $contentType = $this->getGeneralService()->findEntityById(
             'content-type',
-            $this->getEvent()->getRouteMatch()->getParam('id')
+            $this->params('id')
         );
         if (is_null($contentType)) {
             return $this->notFoundAction();
@@ -59,7 +59,7 @@ class IndexController extends AbstractActionController
     public function countryFlagAction()
     {
         $country = $this->getGeneralService()->findCountryByIso3(
-            strtolower($this->getEvent()->getRouteMatch()->getParam('iso3'))
+            strtolower($this->params('iso3'))
         );
         $response = $this->getResponse();
         /*

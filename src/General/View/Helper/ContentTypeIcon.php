@@ -12,21 +12,42 @@
 namespace General\View\Helper;
 
 use General\Entity\ContentType;
+use General\Service\GeneralService;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\View\HelperPluginManager;
 
 /**
  * Create a link to an project.
  *
  * @category   General
  */
-class ContentTypeIcon extends HelperAbstract
+class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInterface
 {
     /**
-     * @param ContentType $contentType
+     * @var HelperPluginManager
+     */
+    protected $serviceLocator;
+
+    /**
+     * @param ContentType|null $contentType
+     * @param string|null      $contentTypeName
      *
      * @return string
      */
-    public function __invoke(ContentType $contentType)
+    public function __invoke(ContentType $contentType = null, $contentTypeName = null)
     {
+        if (!is_null($contentTypeName)) {
+
+            /** @var GeneralService $generalService */
+            $generalService = $this->serviceLocator->getServiceLocator()->get(GeneralService::class);
+
+            $contentType = $generalService->findContentTypeByContentTypeName($contentTypeName);
+        }
+
+        if (is_null($contentType)) {
+            return null;
+        }
+
         switch (trim($contentType->getContentType())) {
             case 'image/jpeg':
             case 'image/tiff':
