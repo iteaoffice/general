@@ -173,17 +173,17 @@ class WebInfo extends EntityAbstract implements ResourceInterface
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
             $inputFilter->add($factory->createInput([
-                    'name'     => 'key',
-                    'required' => true,
-                ]));
+                'name'     => 'info',
+                'required' => true,
+            ]));
             $inputFilter->add($factory->createInput([
-                    'name'     => 'subject',
-                    'required' => true,
-                ]));
+                'name'     => 'subject',
+                'required' => true,
+            ]));
             $inputFilter->add($factory->createInput([
-                    'name'     => 'content',
-                    'required' => true,
-                ]));
+                'name'     => 'content',
+                'required' => true,
+            ]));
 
             $this->inputFilter = $inputFilter;
         }

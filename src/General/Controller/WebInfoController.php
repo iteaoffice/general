@@ -145,6 +145,8 @@ class WebInfoController extends GeneralAbstractController
                 $this->redirect()->toRoute('zfcadmin/web-info/view', [
                     'id' => $result->getId(),
                 ]);
+            } else {
+                var_dump($form->getInputFilter()->getMessages());
             }
         }
 

@@ -37,7 +37,6 @@ class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInter
     public function __invoke(ContentType $contentType = null, $contentTypeName = null)
     {
         if (!is_null($contentTypeName)) {
-
             /** @var GeneralService $generalService */
             $generalService = $this->serviceLocator->getServiceLocator()->get(GeneralService::class);
 

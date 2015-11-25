@@ -59,7 +59,7 @@ abstract class GeneralAbstractController extends AbstractActionController implem
     protected $emailService;
 
     /**
-     * @return \Calendar\Service\FormService
+     * @return \General\Service\FormService
      */
     public function getFormService()
     {
