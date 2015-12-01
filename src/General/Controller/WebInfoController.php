@@ -95,7 +95,7 @@ class WebInfoController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                /* @var $webInfo WebInfo */
+                /** @var $webInfo WebInfo */
                 $webInfo = $form->getData();
                 $webInfo->setWeb($this->getGeneralService()->getEntityManager()
                     ->getReference(Web::class, 1));
@@ -145,8 +145,6 @@ class WebInfoController extends GeneralAbstractController
                 $this->redirect()->toRoute('zfcadmin/web-info/view', [
                     'id' => $result->getId(),
                 ]);
-            } else {
-                var_dump($form->getInputFilter()->getMessages());
             }
         }
 
