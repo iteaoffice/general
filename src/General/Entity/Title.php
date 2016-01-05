@@ -75,12 +75,26 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $contacts;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="title")
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="applicantTitle")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
-    private $applicant;
+    private $applicantTitle;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="contactTitle")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantContactTitle;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="financialTitle")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantFinancialTitle;
 
 
     /**
@@ -89,6 +103,9 @@ class Title extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->contacts = new Collections\ArrayCollection();
+        $this->applicantTitle = new Collections\ArrayCollection();
+        $this->applicantContactTitle = new Collections\ArrayCollection();
+        $this->applicantFinancialTitle = new Collections\ArrayCollection();
     }
 
     /**
@@ -121,7 +138,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->name;
+        return (string)$this->name;
     }
 
     /**
@@ -153,51 +170,43 @@ class Title extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'       => 'name',
-                        'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
-                                'name'    => 'StringLength',
-                                'options' => array(
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'       => 'salutation',
-                        'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
-                                'name'    => 'StringLength',
-                                'options' => array(
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
-                )
-            );
+            $factory = new InputFactory();
+            $inputFilter->add($factory->createInput([
+                    'name'       => 'name',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => 'StripTags'],
+                        ['name' => 'StringTrim'],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => 'StringLength',
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 100,
+                            ],
+                        ],
+                    ],
+                ]));
+            $inputFilter->add($factory->createInput([
+                    'name'       => 'salutation',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => 'StripTags'],
+                        ['name' => 'StringTrim'],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => 'StringLength',
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 100,
+                            ],
+                        ],
+                    ],
+                ]));
             $this->inputFilter = $inputFilter;
         }
 
@@ -211,9 +220,9 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'contacts' => $this->contacts,
-        );
+        ];
     }
 
     public function populate()

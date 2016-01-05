@@ -173,19 +173,19 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $ambassador;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
      * @Annotation\Exclude()
      *
      * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
-    private $applicant;
+    private $applicantOrganisationAddressCountry;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="legalCountry")
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="financialAddressCountry")
      * @Annotation\Exclude()
      *
      * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
-    private $applicantLegal;
+    private $applicantFinancialAddressCountry;
 
     /**
      * Class constructor.
@@ -200,7 +200,8 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
         $this->ambassador = new Collections\ArrayCollection();
-        $this->applicantLegal = new Collections\ArrayCollection();
+        $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
+        $this->applicantFinancialAddressCountry = new Collections\ArrayCollection();
     }
 
     /**
@@ -738,19 +739,39 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
      */
-    public function getApplicantLegal()
+    public function getApplicantOrganisationAddressCountry()
     {
-        return $this->applicantLegal;
+        return $this->applicantOrganisationAddressCountry;
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantLegal
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantOrganisationAddressCountry
      *
      * @return Country
      */
-    public function setApplicantLegal($applicantLegal)
+    public function setApplicantOrganisationAddressCountry($applicantOrganisationAddressCountry)
     {
-        $this->applicantLegal = $applicantLegal;
+        $this->applicantOrganisationAddressCountry = $applicantOrganisationAddressCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantFinancialAddressCountry()
+    {
+        return $this->applicantFinancialAddressCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialAddressCountry
+     *
+     * @return Country
+     */
+    public function setApplicantFinancialAddressCountry($applicantFinancialAddressCountry)
+    {
+        $this->applicantFinancialAddressCountry = $applicantFinancialAddressCountry;
 
         return $this;
     }

@@ -62,6 +62,10 @@ class EmailService extends ServiceAbstract implements
      */
     protected $message;
     /**
+     * @var string
+     */
+    protected $htmlView;
+    /**
      * @var array
      */
     protected $templateVars = [];
@@ -295,6 +299,8 @@ class EmailService extends ServiceAbstract implements
         } catch (\Twig_Error_Syntax $e) {
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
+
+        $this->htmlView = $textView;
 
         $htmlContent = new MimePart($htmlView);
         $htmlContent->type = "text/html";
@@ -595,5 +601,13 @@ class EmailService extends ServiceAbstract implements
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlView()
+    {
+        return $this->htmlView;
     }
 }
