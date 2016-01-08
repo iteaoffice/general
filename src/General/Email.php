@@ -286,7 +286,7 @@ class Email
         if ($var instanceof Contact) {
             $this->cc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->cc[$var] = $user;
+            $this->cc[$var] = is_null($user) ? $var : $user;
         }
     }
 
@@ -301,7 +301,7 @@ class Email
         if ($var instanceof Contact) {
             $this->bcc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->bcc[$var] = $user;
+            $this->bcc[$var] = is_null($user) ? $var : $user;
         }
     }
 
