@@ -29,9 +29,7 @@ use ZfcTwig\View\TwigRenderer;
 /**
  * Class EmailService.
  */
-class EmailService extends ServiceAbstract implements
-    ServiceLocatorAwareInterface,
-    GeneralServiceAwareInterface
+class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterface, GeneralServiceAwareInterface
 {
     /**
      * @var Email
@@ -155,12 +153,8 @@ class EmailService extends ServiceAbstract implements
                     if ($contact instanceof Contact) {
                         $this->updateTemplateVarsWithContact($contact);
                     } else {
-                        $contactName = $contact;
                         $contact = new Contact();
                         $contact->setEmail($recipient);
-                        if (!is_null($contactName)) {
-                            $contact->setFirstName($contactName);
-                        }
                     }
 
                     /*
@@ -169,7 +163,8 @@ class EmailService extends ServiceAbstract implements
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
                         $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                        $this->message->addTo($contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null);
                     }
 
                     /**
@@ -206,10 +201,8 @@ class EmailService extends ServiceAbstract implements
                      * and fill the templateVars with extra options
                      */
                     if (!$contact instanceof Contact) {
-                        $contactName = $contact;
                         $contact = new Contact();
                         $contact->setEmail($recipient);
-                        $contact->setFirstName($contactName);
                     }
 
                     /*
@@ -218,7 +211,8 @@ class EmailService extends ServiceAbstract implements
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
                         $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                        $this->message->addTo($contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null);
                     }
                 }
 
@@ -282,20 +276,10 @@ class EmailService extends ServiceAbstract implements
     public function parseBody()
     {
         try {
-            $htmlView = $this->renderer->render(
-                $this->email->getHtmlLayoutName(),
-                array_merge(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
-            );
-            $textView = $this->renderer->render(
-                'plain',
-                array_merge(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
-            );
+            $htmlView = $this->renderer->render($this->email->getHtmlLayoutName(),
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
+            $textView = $this->renderer->render('plain',
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
         } catch (\Twig_Error_Syntax $e) {
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
@@ -329,10 +313,8 @@ class EmailService extends ServiceAbstract implements
     {
         //Reply to
         if ($this->config["defaults"]["reply_to"] && is_null($this->email->getReplyTo())) {
-            $this->message->addReplyTo(
-                $this->config["defaults"]["reply_to"],
-                $this->config["defaults"]["reply_to_name"]
-            );
+            $this->message->addReplyTo($this->config["defaults"]["reply_to"],
+                $this->config["defaults"]["reply_to_name"]);
         }
 
         /*
@@ -358,10 +340,8 @@ class EmailService extends ServiceAbstract implements
          * Force the mailing as header if we have a mailing
          */
         if (!is_null($this->mailing)) {
-            $this->message->getHeaders()->addHeaderLine(
-                'X-Mailjet-Campaign',
-                DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId()
-            );
+            $this->message->getHeaders()
+                ->addHeaderLine('X-Mailjet-Campaign', DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId());
         }
     }
 
@@ -380,13 +360,8 @@ class EmailService extends ServiceAbstract implements
 
         $this->templateVars['attention'] = $contactService->parseAttention();
         $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
-        $this->templateVars['lastname'] = trim(
-            sprintf(
-                "%s %s",
-                $contactService->getContact()->getMiddleName(),
-                $contactService->getContact()->getLastName()
-            )
-        );
+        $this->templateVars['lastname'] = trim(sprintf("%s %s", $contactService->getContact()->getMiddleName(),
+            $contactService->getContact()->getLastName()));
         $this->templateVars['fullname'] = $contactService->parseFullName();
         $this->templateVars['country'] = (string)$contactService->parseCountry();
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
@@ -401,15 +376,11 @@ class EmailService extends ServiceAbstract implements
      */
     protected function createTwigTemplate($content)
     {
-        return preg_replace(
-            [
-                '~\[(.*?)\]~',
-            ],
-            [
-                "{{ $1|raw }}",
-            ],
-            $content
-        );
+        return preg_replace([
+            '~\[(.*?)\]~',
+        ], [
+            "{{ $1|raw }}",
+        ], $content);
     }
 
     /**
@@ -463,7 +434,7 @@ class EmailService extends ServiceAbstract implements
             if ($contact instanceof Contact) {
                 $this->message->addCc($contact->getEmail(), $contact);
             } else {
-                $this->message->addCc($emailAddress, $contact);
+                $this->message->addCc($emailAddress);
             }
         }
         //Bcc recipients
@@ -471,7 +442,7 @@ class EmailService extends ServiceAbstract implements
             if ($contact instanceof Contact) {
                 $this->message->addBcc($contact->getEmail(), $contact);
             } else {
-                $this->message->addBcc($emailAddress, $contact);
+                $this->message->addBcc($emailAddress);
             }
         }
         if (!is_null($this->email->getReplyTo())) {
@@ -512,23 +483,19 @@ class EmailService extends ServiceAbstract implements
         /*
          * Replace first the content of the mailing with the required (new) short tags
          */
-        $content = preg_replace(
-            [
-                '~\[parent::getContact\(\)::firstname\]~',
-                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~',
-            ],
-            [
-                "[firstname]",
-                "[lastname]",
-                "[fullname]",
-                "[organisation]",
-                "[country]",
-            ],
-            $message
-        );
+        $content = preg_replace([
+            '~\[parent::getContact\(\)::firstname\]~',
+            '~\[parent::getContact\(\)::parseLastname\(\)\]~',
+            '~\[parent::getContact\(\)::parseFullname\(\)\]~',
+            '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
+            '~\[parent::getContact\(\)::country\]~',
+        ], [
+            "[firstname]",
+            "[lastname]",
+            "[fullname]",
+            "[organisation]",
+            "[country]",
+        ], $message);
 
         /*
          * Clone the twigRenderer and overrule to loader to be a string
@@ -536,10 +503,7 @@ class EmailService extends ServiceAbstract implements
         $twigRenderer = new \Twig_Environment();
         $twigRenderer->setLoader(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
 
-        return $twigRenderer->render(
-            'email',
-            $this->templateVars
-        );
+        return $twigRenderer->render('email', $this->templateVars);
     }
 
     /**
@@ -556,13 +520,8 @@ class EmailService extends ServiceAbstract implements
         }
 
         try {
-            return $this->renderer->render(
-                $this->mailing->getTemplate()->getTemplate(),
-                array_merge(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
-            );
+            return $this->renderer->render($this->mailing->getTemplate()->getTemplate(),
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
         } catch (\Twig_Error_Syntax $e) {
             print sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
