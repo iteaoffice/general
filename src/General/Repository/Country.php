@@ -275,6 +275,8 @@ class Country extends EntityRepository
     /**
      * Produces a default query to get a country and the required joins.
      *
+     * This one is not folly correct as I need to exclude the still actives as well.
+     *
      * @param $which
      *
      * @return \Doctrine\ORM\QueryBuilder
@@ -300,6 +302,7 @@ class Country extends EntityRepository
             case AffiliationService::WHICH_ONLY_INACTIVE:
                 $queryBuilder->andWhere($queryBuilder->expr()
                     ->isNotNull('a.dateEnd'));
+
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf(

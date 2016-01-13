@@ -186,6 +186,13 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantFinancialAddressCountry;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Changerequest\Country", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Changerequest\Country[]|Collections\ArrayCollection
+     */
+    private $changerequestCountry;
 
     /**
      * Class constructor.
@@ -200,6 +207,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
         $this->ambassador = new Collections\ArrayCollection();
+        $this->changerequestCountry = new Collections\ArrayCollection();
         $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
         $this->applicantFinancialAddressCountry = new Collections\ArrayCollection();
     }
@@ -772,6 +780,26 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setApplicantFinancialAddressCountry($applicantFinancialAddressCountry)
     {
         $this->applicantFinancialAddressCountry = $applicantFinancialAddressCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Changerequest\Country[]
+     */
+    public function getChangerequestCountry()
+    {
+        return $this->changerequestCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Changerequest\Country[] $changerequestCountry
+     *
+     * @return Country
+     */
+    public function setChangerequestCountry($changerequestCountry)
+    {
+        $this->changerequestCountry = $changerequestCountry;
 
         return $this;
     }

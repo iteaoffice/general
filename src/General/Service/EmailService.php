@@ -163,8 +163,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
                         $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null);
+                        $this->message->addTo(
+                            $contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                        );
                     }
 
                     /**
@@ -211,8 +213,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
                         $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null);
+                        $this->message->addTo(
+                            $contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                        );
                     }
                 }
 
@@ -276,10 +280,14 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
     public function parseBody()
     {
         try {
-            $htmlView = $this->renderer->render($this->email->getHtmlLayoutName(),
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
-            $textView = $this->renderer->render('plain',
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
+            $htmlView = $this->renderer->render(
+                $this->email->getHtmlLayoutName(),
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+            );
+                $textView = $this->renderer->render(
+                    'plain',
+                    array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+                );
         } catch (\Twig_Error_Syntax $e) {
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
@@ -313,8 +321,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
     {
         //Reply to
         if ($this->config["defaults"]["reply_to"] && is_null($this->email->getReplyTo())) {
-            $this->message->addReplyTo($this->config["defaults"]["reply_to"],
-                $this->config["defaults"]["reply_to_name"]);
+            $this->message->addReplyTo(
+                $this->config["defaults"]["reply_to"],
+                $this->config["defaults"]["reply_to_name"]
+            );
         }
 
         /*
@@ -360,8 +370,11 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
 
         $this->templateVars['attention'] = $contactService->parseAttention();
         $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
-        $this->templateVars['lastname'] = trim(sprintf("%s %s", $contactService->getContact()->getMiddleName(),
-            $contactService->getContact()->getLastName()));
+        $this->templateVars['lastname'] = trim(sprintf(
+            "%s %s",
+            $contactService->getContact()->getMiddleName(),
+            $contactService->getContact()->getLastName()
+        ));
         $this->templateVars['fullname'] = $contactService->parseFullName();
         $this->templateVars['country'] = (string)$contactService->parseCountry();
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
@@ -520,8 +533,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         }
 
         try {
-            return $this->renderer->render($this->mailing->getTemplate()->getTemplate(),
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars));
+            return $this->renderer->render(
+                $this->mailing->getTemplate()->getTemplate(),
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+            );
         } catch (\Twig_Error_Syntax $e) {
             print sprintf("Something went wrong. Error message: %s", $e->getMessage());
         }
