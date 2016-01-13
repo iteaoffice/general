@@ -284,10 +284,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                 $this->email->getHtmlLayoutName(),
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-                $textView = $this->renderer->render(
-                    'plain',
-                    array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
-                );
+            $textView = $this->renderer->render(
+                'plain',
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+            );
         } catch (\Twig_Error_Syntax $e) {
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
