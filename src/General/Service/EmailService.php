@@ -250,7 +250,7 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (!empty($this->message->getSubject()) && !is_null($this->template)) {
+        if (empty($this->message->getSubject()) && !is_null($this->template)) {
             $this->message->setSubject($this->template->getSubject());
         }
 
