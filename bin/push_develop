@@ -8,4 +8,4 @@ git push origin master
 
 REV="`git rev-parse HEAD`"
 
-php ocular.phar code-coverage:upload --format=php-clover --repository=g/debranova/general --revision="$REV" clover.xml
+php ocular.phar code-coverage:upload --format=php-clover --repository=g/iteaoffice/general --revision="$REV" clover.xml
