@@ -68,6 +68,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
      */
     protected $templateVars = [];
     /**
+     * @var array
+     */
+    protected $headers = [];
+    /**
      * @var MimePart[]
      */
     protected $attachments = [];
@@ -161,7 +165,7 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                        $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
@@ -173,6 +177,16 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseSubject();
+
+                    /**
+                     * If we have a deeplink, parse it
+                     */
+                    $this->parseDeeplink();
+
+                    /**
+                     * If we have an unsubscribe, parse it
+                     */
+                    $this->parseUnsubscribe();
 
                     /**
                      * We have the contact and can now produce the content of the message
@@ -211,7 +225,7 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                        $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
@@ -224,6 +238,16 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                  * We have the contact and can now produce the content of the message
                  */
                 $this->parseSubject();
+
+                /**
+                 * If we have a deeplink, parse it
+                 */
+                $this->parseDeeplink();
+
+                /**
+                 * If we have an unsubscribe, parse it
+                 */
+                $this->parseUnsubscribe();
 
                 /*
                  * We have the contact and can now produce the content of the message
@@ -275,6 +299,22 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
     }
 
     /**
+     * Inject the deeplink in the email
+     */
+    public function parseDeeplink()
+    {
+        $this->templateVars['deeplink'] = $this->email->getDeeplink();
+    }
+
+    /**
+     * Inject the unsubscribe in the email
+     */
+    public function parseUnsubscribe()
+    {
+        $this->templateVars['unsubscribe'] = $this->email->getUnsubscribe();
+    }
+
+    /**
      * @return string|null
      */
     public function parseBody()
@@ -292,7 +332,11 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
 
-        $this->htmlView = $textView;
+        $this->htmlView = $htmlView;
+
+        //Download the embedded files ad attach them to the mailing
+        $htmlView = $this->embedImagesAsAttachment($htmlView);
+
 
         $htmlContent = new MimePart($htmlView);
         $htmlContent->type = "text/html";
@@ -300,18 +344,69 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
         $body->setParts(array_merge($this->attachments, [$htmlContent]));
-        /*
-         * Set specific headers
-         * https://eu.mailjet.com/docs/emails_headers
-         */
-        //message->getHeaders()->addHeaderLine('X-Mailjet-Campaign', $campaign);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
+
+
+        foreach ($this->headers as $name => $value) {
+            $this->message->getHeaders()->addHeaderLine($name, trim($value));
+        }
+
+        $this->message->getHeaders()->addHeaderLine('content-type', Mime::MULTIPART_RELATED);
 
         $this->message->setBody($body);
 
         return true;
+    }
+
+    /**
+     * @param $htmlView
+     *
+     * @return mixed
+     */
+    protected function embedImagesAsAttachment($htmlView)
+    {
+        $matches = [];
+        preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
+
+        $matches = array_unique($matches[1]);
+
+        if (count($matches) > 0) {
+            foreach ($matches as $key => $filename) {
+                if (($filename)) {
+                    $attachment = $this->addInlineAttachment($filename);
+                    $htmlView = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
+                }
+            }
+        }
+
+        return $htmlView;
+    }
+
+    /**
+     * @param $filename
+     *
+     * @return string
+     */
+    protected function mimeByExtension($filename)
+    {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+
+        switch ($extension) {
+            case 'gif':
+                $type = 'image/gif';
+                break;
+            case 'jpg':
+            case 'jpeg':
+                $type = 'image/jpg';
+                break;
+            case 'png':
+                $type = 'image/png';
+                break;
+            default:
+                $type = 'application/octet-stream';
+        }
+
+        return $type;
     }
 
     /**
@@ -345,14 +440,6 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
         }
-
-        /*
-         * Force the mailing as header if we have a mailing
-         */
-        if (!is_null($this->mailing)) {
-            $this->message->getHeaders()
-                ->addHeaderLine('X-Mailjet-Campaign', DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId());
-        }
     }
 
     /**
@@ -380,6 +467,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
         $this->templateVars['email'] = $contactService->getContact()->getEmail();
         $this->templateVars['signature'] = $contactService->parseSignature();
+
+        //Fill the unsubscribe with temp data
+        $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
+        $this->templateVars['deeplink'] = 'http://deeplink.example';
     }
 
     /**
@@ -397,13 +488,14 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
     }
 
     /**
-     * @param $content
-     * @param $type
-     * @param $fileName
+     * @param             $content
+     * @param             $type
+     * @param             $fileName
+     * @param null|string $id
      */
-    public function addAttachment($content, $type, $fileName)
+    public function addAttachment($content, $type, $fileName, $id = null)
     {
-        /*
+        /**
          * Create the attachment
          */
         $attachment = new MimePart($content);
@@ -414,6 +506,38 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
         $attachment->encoding = Mime::ENCODING_BASE64;
 
         $this->attachments[] = $attachment;
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return MimePart
+     */
+    public function addInlineAttachment($fileName)
+    {
+        /**
+         * Create the attachment
+         */
+        $attachment = new MimePart(file_get_contents($fileName));
+        $attachment->id = 'cid_' . md5_file($fileName);
+        $attachment->type = $this->mimeByExtension($fileName);
+        $attachment->filename = substr(md5($attachment->id), 0, 10);
+        $attachment->disposition = Mime::DISPOSITION_INLINE;
+        // Setting the encoding is recommended for binary data
+        $attachment->encoding = Mime::ENCODING_BASE64;
+
+        $this->attachments[] = $attachment;
+
+        return $attachment;
+    }
+
+    /**
+     * @param $name
+     * @param $content
+     */
+    public function addHeader($name, $content)
+    {
+        $this->headers[$name] = $content;
     }
 
     /**
@@ -476,8 +600,16 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
             throw new \RuntimeException("The email object is empty. Did you call create() first?");
         }
 
-        $this->email->setFrom($this->mailing->getSender()->getEmail());
-        $this->email->setFromName($this->mailing->getSender()->getSender());
+        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self
+        if ($this->mailing->getSender()->getEmail() === '_self') {
+            if ($this->getAuthenticationService()->hasIdentity()) {
+                $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
+                $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
+            } else {
+                $this->email->setFrom($this->mailing->getContact()->getEmail());
+                $this->email->setFromName($this->mailing->getContact()->getDisplayName());
+            }
+        }
 
         $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());

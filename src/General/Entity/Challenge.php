@@ -23,7 +23,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="challenge")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Challenge")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_challenge")
  *
@@ -43,7 +43,8 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="challenge",type="string",length=20,unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-challenge"})
+     * @Annotation\Options({"label":"txt-challenge","rows":30})
+     * @Annotation\Attributes({"rows":30})
      *
      * @var string
      */
@@ -60,6 +61,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="description",type="string")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-description"})
+     * @Annotation\Attributes({"rows":30})
      *
      * @var string
      */

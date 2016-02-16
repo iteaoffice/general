@@ -12,7 +12,6 @@
 
 namespace General;
 
-use General\Listener\SendEmailListener;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature;
 use General\Controller\Plugin\GetFilter;

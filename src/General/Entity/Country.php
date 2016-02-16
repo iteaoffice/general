@@ -193,6 +193,20 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Project\Entity\Changerequest\Country[]|Collections\ArrayCollection
      */
     private $changerequestCountry;
+    /**
+     * @ORM\ManyToMany(targetEntity="Project\Entity\Log", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Log[]|Collections\ArrayCollection
+     */
+    private $projectLog;
+    /**
+     * @ORM\OneToMany(targetEntity="Program\Entity\Call\Country", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Program\Entity\Call\Country[]|Collections\ArrayCollection
+     */
+    private $callCountry;
 
     /**
      * Class constructor.
@@ -208,8 +222,10 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->evaluation = new Collections\ArrayCollection();
         $this->ambassador = new Collections\ArrayCollection();
         $this->changerequestCountry = new Collections\ArrayCollection();
+        $this->projectLog = new Collections\ArrayCollection();
         $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
         $this->applicantFinancialAddressCountry = new Collections\ArrayCollection();
+        $this->callCountry = new Collections\ArrayCollection();
     }
 
     /**
@@ -800,6 +816,46 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setChangerequestCountry($changerequestCountry)
     {
         $this->changerequestCountry = $changerequestCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Log[]
+     */
+    public function getProjectLog()
+    {
+        return $this->projectLog;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Log[] $projectLog
+     *
+     * @return Country
+     */
+    public function setProjectLog($projectLog)
+    {
+        $this->projectLog = $projectLog;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Program\Entity\Call\Country[]
+     */
+    public function getCallCountry()
+    {
+        return $this->callCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Program\Entity\Call\Country[] $callCountry
+     *
+     * @return Country
+     */
+    public function setCallCountry($callCountry)
+    {
+        $this->callCountry = $callCountry;
 
         return $this;
     }

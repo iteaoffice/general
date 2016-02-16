@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="gender")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Gender")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
@@ -145,118 +145,65 @@ class Gender extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
+            $factory = new InputFactory();
+            $inputFilter->add($factory->createInput([
+                'name'       => 'name',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'name',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'attention',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'attention',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'salutation',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'salutation',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
+                    ],
+                ],
+            ]));
             $this->inputFilter = $inputFilter;
         }
 
         return $this->inputFilter;
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return array(
-            'contacts' => $this->contacts,
-        );
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * @param string $attention
-     */
-    public function setAttention($attention)
-    {
-        $this->attention = $attention;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttention()
-    {
-        return $this->attention;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -268,11 +215,15 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $name
+     * @param int $id
+     *
+     * @return Gender
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -284,11 +235,35 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $salutation
+     * @param string $name
+     *
+     * @return Gender
      */
-    public function setSalutation($salutation)
+    public function setName($name)
     {
-        $this->salutation = $salutation;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttention()
+    {
+        return $this->attention;
+    }
+
+    /**
+     * @param string $attention
+     *
+     * @return Gender
+     */
+    public function setAttention($attention)
+    {
+        $this->attention = $attention;
+
+        return $this;
     }
 
     /**
@@ -297,5 +272,37 @@ class Gender extends EntityAbstract implements ResourceInterface
     public function getSalutation()
     {
         return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     *
+     * @return Gender
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
+     * @return \Contact\Entity\Contact[]
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param \Contact\Entity\Contact[] $contacts
+     *
+     * @return Gender
+     */
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+
+        return $this;
     }
 }

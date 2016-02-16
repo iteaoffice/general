@@ -11,7 +11,6 @@ namespace General;
  */
 use General\Acl\Assertion;
 use General\Controller;
-use General\Listener\SendEmailListener;
 use General\Service\FormService;
 use General\Service\GeneralService;
 use General\Service\ServiceInitializer;
@@ -26,8 +25,13 @@ $config = [
         'invokables'   => [
             Controller\IndexController::class       => Controller\IndexController::class,
             Controller\StyleController::class       => Controller\StyleController::class,
+            Controller\VatController::class         => Controller\VatController::class,
+            Controller\VatTypeController::class     => Controller\VatTypeController::class,
+            Controller\GenderController::class      => Controller\GenderController::class,
+            Controller\TitleController::class       => Controller\TitleController::class,
             Controller\WebInfoController::class     => Controller\WebInfoController::class,
             Controller\CountryController::class     => Controller\CountryController::class,
+            Controller\ChallengeController::class   => Controller\ChallengeController::class,
             Controller\ContentTypeController::class => Controller\ContentTypeController::class,
         ],
     ],
@@ -45,6 +49,10 @@ $config = [
             'countryMap'          => Helper\CountryMap::class,
             'countryFlag'         => Helper\CountryFlag::class,
             'countryLink'         => Helper\CountryLink::class,
+            'vatLink'             => Helper\VatLink::class,
+            'genderLink'          => Helper\GenderLink::class,
+            'titleLink'           => Helper\TitleLink::class,
+            'vatTypeLink'         => Helper\VatTypeLink::class,
             'challengeLink'       => Helper\ChallengeLink::class,
             'webInfoLink'         => Helper\WebInfoLink::class,
             'contentTypeLink'     => Helper\ContentTypeLink::class,
@@ -58,6 +66,11 @@ $config = [
         'invokables'   => [
             'general_web_info_form_filter'     => 'General\Form\FilterCreateObject',
             'general_country_form_filter'      => 'General\Form\FilterCreateObject',
+            'general_challenge_form_filter'    => 'General\Form\FilterCreateObject',
+            'general_gender_form_filter'       => 'General\Form\FilterCreateObject',
+            'general_title_form_filter'        => 'General\Form\FilterCreateObject',
+            'general_vat_form_filter'          => 'General\Form\FilterCreateObject',
+            'general_vat_type_form_filter'     => 'General\Form\FilterCreateObject',
             'general_content_type_form_filter' => 'General\Form\FilterCreateObject',
             GeneralService::class              => GeneralService::class,
             FormService::class                 => FormService::class,
@@ -69,26 +82,22 @@ $config = [
     'asset_manager'   => [
         'resolver_configs' => [
             'collections' => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
-                    : 'test') . '/js/jvectormap.js'   => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js'   => [
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
-                    : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
                     'css/jquery-jvectormap-2.0.2.css',
                 ],
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
-                    : 'test') . '/js/jvectormap.js?'  => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?'  => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
-                    : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],

@@ -27,7 +27,7 @@ use Zend\InputFilter\InputFilterInterface;
 class CommunityType extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="type_id", type="integer", nullable=false)
+     * @ORM\Column(name="type_id", length=10, type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *

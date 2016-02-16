@@ -21,10 +21,26 @@ return [
                         'label' => _("txt-country-list"),
                         'route' => 'zfcadmin/country/list',
                     ],
+                    'challenge'    => [
+                        'label' => _("txt-challenge-list"),
+                        'route' => 'zfcadmin/challenge/list',
+                    ],
+                    'vat'          => [
+                        'label' => _("txt-vat-list"),
+                        'route' => 'zfcadmin/vat/list',
+                    ],
                     'content-type' => [
                         'label' => _("txt-content-type-list"),
                         'route' => 'zfcadmin/content-type/list',
-                    ]
+                    ],
+                    'gender'       => [
+                        'label' => _("txt-gender-list"),
+                        'route' => 'zfcadmin/gender/list',
+                    ],
+                    'title'        => [
+                        'label' => _("txt-title-list"),
+                        'route' => 'zfcadmin/title/list',
+                    ],
                 ],
             ],
         ],

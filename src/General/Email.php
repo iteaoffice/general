@@ -22,7 +22,6 @@ use Zend\ServiceManager\ServiceManager;
  * @method void setHtmlContent($htmlContent)
  * @method string getTextContent()
  * @method void setTextContent($textContent)
- * @method void setDeeplink($deeplink)
  * @method void setCode($code)
  * @method void setUrl($url)
  * @method void setProject($project)
@@ -80,6 +79,14 @@ class Email
      * @var string
      */
     protected $fromName;
+    /**
+     * @var string
+     */
+    protected $unsubscribe;
+    /**
+     * @var string
+     */
+    protected $deeplink;
     /**
      * To recipients.
      */
@@ -247,6 +254,8 @@ class Email
     {
         $this->bcc = $bcc;
     }
+
+
 
     /**
      * @return string
@@ -462,6 +471,46 @@ class Email
     public function setPersonal($personal)
     {
         $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnsubscribe()
+    {
+        return $this->unsubscribe;
+    }
+
+    /**
+     * @param string $unsubscribe
+     *
+     * @return Email
+     */
+    public function setUnsubscribe($unsubscribe)
+    {
+        $this->unsubscribe = $unsubscribe;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeeplink()
+    {
+        return $this->deeplink;
+    }
+
+    /**
+     * @param string $deeplink
+     *
+     * @return Email
+     */
+    public function setDeeplink($deeplink)
+    {
+        $this->deeplink = $deeplink;
 
         return $this;
     }

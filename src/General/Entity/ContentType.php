@@ -35,7 +35,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
     const TYPE_EXCEL_2007 = 19;
     const TYPE_EXCEL_MACRO = 143;
     /**
-     * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
+     * @ORM\Column(name="contenttype_id", length=10, type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

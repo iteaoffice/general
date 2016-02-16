@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="title")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Title")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
@@ -214,47 +214,6 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'contacts' => $this->contacts,
-        ];
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * @param string $attention
-     */
-    public function setAttention($attention)
-    {
-        $this->attention = $attention;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttention()
-    {
-        return $this->attention;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return int
      */
     public function getId()
@@ -263,11 +222,15 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $name
+     * @param int $id
+     *
+     * @return Title
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -279,11 +242,35 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $salutation
+     * @param string $name
+     *
+     * @return Title
      */
-    public function setSalutation($salutation)
+    public function setName($name)
     {
-        $this->salutation = $salutation;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttention()
+    {
+        return $this->attention;
+    }
+
+    /**
+     * @param string $attention
+     *
+     * @return Title
+     */
+    public function setAttention($attention)
+    {
+        $this->attention = $attention;
+
+        return $this;
     }
 
     /**
@@ -292,5 +279,97 @@ class Title extends EntityAbstract implements ResourceInterface
     public function getSalutation()
     {
         return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     *
+     * @return Title
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
+     * @return \Contact\Entity\Contact[]
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param \Contact\Entity\Contact[] $contacts
+     *
+     * @return Title
+     */
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantTitle()
+    {
+        return $this->applicantTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantTitle
+     *
+     * @return Title
+     */
+    public function setApplicantTitle($applicantTitle)
+    {
+        $this->applicantTitle = $applicantTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantContactTitle()
+    {
+        return $this->applicantContactTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantContactTitle
+     *
+     * @return Title
+     */
+    public function setApplicantContactTitle($applicantContactTitle)
+    {
+        $this->applicantContactTitle = $applicantContactTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantFinancialTitle()
+    {
+        return $this->applicantFinancialTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialTitle
+     *
+     * @return Title
+     */
+    public function setApplicantFinancialTitle($applicantFinancialTitle)
+    {
+        $this->applicantFinancialTitle = $applicantFinancialTitle;
+
+        return $this;
     }
 }

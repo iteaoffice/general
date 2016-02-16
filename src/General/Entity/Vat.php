@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="vat")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Vat")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("vat")
  *
@@ -173,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->percentage . '%';
+        return (string) sprintf("%s (%s %%)", $this->code, $this->percentage);
     }
 
     /**

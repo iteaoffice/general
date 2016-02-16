@@ -1,0 +1,22 @@
+{% do form.prepare() %}
+{% do form.setAttribute('class','form-horizontal') %}
+
+{{ form().openTag(form)|raw }}
+
+{% set vat = form.get('vat') %}
+
+{{ ztbformelement(vat.get('code')) }}
+{{ ztbformelement(vat.get('percentage')) }}
+{{ ztbformelement(vat.get('dateStart')) }}
+{{ ztbformelement(vat.get('type')) }}
+{{ ztbformelement(vat.get('country')) }}
+
+
+<div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+        {{ ztbformelement(form.get('submit')) }}
+        {{ ztbformelement(form.get('cancel')) }}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}

@@ -1,0 +1,22 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-gender-%s")|format(gender)) %}
+
+<h1>{{ translate("txt-gender-%s")|format(gender) }}</h1>
+
+<h2><strong>{{ translate("txt-gender-information") }}</strong></h2>
+<dl class="dl-horizontal">
+    <dt>{{ translate("txt-gender-id") }}</dt>
+    <dd>{{ gender.id }}</dd>
+
+    <dt>{{ translate("txt-gender-name") }}</dt>
+    <dd>{{ gender.name }}</dd>
+
+    <dt>{{ translate("txt-gender-attention") }}</dt>
+    <dd>{{ gender.attention|raw }}</dd>
+
+    <dt>{{ translate("txt-gender-salutation") }}</dt>
+    <dd>{{ gender.salutation|raw }}</dd>
+</dl>
+
+
+{{ genderLink(gender,'edit','button') }} {{ genderLink(null, 'new','button') }} {{ genderLink(null, 'list','button') }}

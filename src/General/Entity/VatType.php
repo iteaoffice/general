@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="vat_type")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\VatType")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("vat_type")
  *
@@ -73,7 +73,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      *          "params": {
      *              "criteria":{},
      *              "orderBy":{
-     *                  "vat":"ASC"}
+     *                  "code":"ASC"}
      *              }
      *          }
      *      }

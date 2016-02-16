@@ -1,0 +1,68 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-title-list")) %}
+
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+{% set filter = form.get('filter') %}
+
+<input type="hidden" name="filter[order]" value="{{ order }}">
+<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
+<div class="row">
+
+    <div class="col-md-10">
+        <h1>{{ translate("txt-title-list") }}</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="lead">{{ translate("txt-title-list-explanation") }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+            </div>
+        </div>
+
+        {% if paginator.pageRange > 0 %}
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/title/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/title/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/title/list', 'criteria': 'attention', 'text': translate('txt-attention')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/title/list', 'criteria': 'salutation', 'text': translate('txt-salutation')} %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for title in paginator.getCurrentItems() %}
+                    <tr>
+                        <td>{{ title.id }} {{ titleLink(title,'edit', 'icon') }}</td>
+                        <td>{{ titleLink(title,'view','name') }}</td>
+                        <td>{{ title.attention }}</td>
+                        <td>{{ title.salutation }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'general/partial/pagination-control' %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-title-could-be-found"))|raw }}
+        {% endif %}
+    </div>
+    <div class="col-md-2">
+        <div class="well well-sm">
+            <fieldset>
+
+                <div class="form-group">
+                    {{ ztbformelement(form.get('submit')) }}
+                    {{ ztbformelement(form.get('clear')) }}
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}
+
+{{ titleLink(null, 'new','button') }}
