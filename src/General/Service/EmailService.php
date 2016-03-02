@@ -193,7 +193,7 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
                      */
                     $this->parseBody();
 
-                    /*
+                    /**
                      * Send the email
                      */
                     $this->transport->send($this->message);

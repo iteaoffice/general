@@ -58,40 +58,22 @@ class Country extends EntityRepository
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.id',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.id', $direction);
                 break;
             case 'name':
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.country',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
                 break;
             case 'iso3':
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.iso3',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.iso3', $direction);
                 break;
             case 'cd':
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.cd',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.cd', $direction);
                 break;
             case 'numcode':
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.numcode',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.numcode', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy(
-                    'general_entity_country.country',
-                    $direction
-                );
+                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
 
         }
 
@@ -111,12 +93,8 @@ class Country extends EntityRepository
         array $filter
     ) {
         if (!empty($filter['search'])) {
-            $queryBuilder->andWhere($queryBuilder->expr()
-                ->like('general_entity_country.country', ':like'));
-            $queryBuilder->setParameter(
-                'like',
-                sprintf("%%%s%%", $filter['search'])
-            );
+            $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
+            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
         if (!empty($filter['eu'])) {
@@ -193,13 +171,11 @@ class Country extends EntityRepository
         /**
          * @var $projectRepository \Project\Repository\Project
          */
-        $projectRepository = $this->getEntityManager()
-            ->getRepository('Project\Entity\Project');
+        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
-        return $queryBuilder->getQuery()->useQueryCache(true)
-            ->useResultCache(true)->getResult();
+        return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
     }
 
     /**
@@ -263,13 +239,11 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('country');
         $queryBuilder->from('General\Entity\Country', 'country');
-        $queryBuilder->andWhere($queryBuilder->expr()
-            ->in('country', $findQueryBuilder->getDQL()));
+        $queryBuilder->andWhere($queryBuilder->expr()->in('country', $findQueryBuilder->getDQL()));
 
         $queryBuilder->setParameter(1, $project);
 
-        return $queryBuilder->getQuery()->useResultCache(true)
-            ->getOneOrNullResult();
+        return $queryBuilder->getQuery()->useResultCache(true)->getOneOrNullResult();
     }
 
     /**
@@ -296,26 +270,21 @@ class Country extends EntityRepository
             case AffiliationService::WHICH_ALL:
                 break;
             case AffiliationService::WHICH_ONLY_ACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()
-                    ->isNull('a.dateEnd'));
+                $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.dateEnd'));
                 break;
             case AffiliationService::WHICH_ONLY_INACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()
-                    ->isNotNull('a.dateEnd'));
+                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('a.dateEnd'));
 
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf(
-                    "Incorrect value (%s) for which",
-                    $which
-                ));
+                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
         }
 
         return $queryBuilder;
     }
 
     /**
-     * @param Call $call
+     * @param Call            $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]
@@ -331,8 +300,7 @@ class Country extends EntityRepository
         /**
          * @var $projectRepository \Project\Repository\Project
          */
-        $projectRepository = $this->getEntityManager()
-            ->getRepository('Project\Entity\Project');
+        $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
         $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
@@ -413,5 +381,19 @@ class Country extends EntityRepository
         $query->join('o.country', 'country');
 
         return $query->getQuery()->useQueryCache(true)->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function findCountryInProjectLog()
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('c');
+        $queryBuilder->from(Entity\Country::class, 'c');
+        $queryBuilder->innerJoin("c.projectLog", 'l');
+        $queryBuilder->orderBy("c.country", 'ASC');
+
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 }
