@@ -15,9 +15,8 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">5.5",
-    "zendframework/zendframework": "~2.5",
-    "doctrine/doctrine-orm-module": "0.9.*@dev"
+    "php": ">=5.6",
+    "zendframework/zendframework": "~2.5"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
@@ -34,6 +33,9 @@
       "General\\": "src/General/",
       "GeneralTest\\": "tests/GeneralTest"
     }
+  },
+  "config": {
+    "secure-http": false
   },
   "extra": {
     "branch-alias": {
