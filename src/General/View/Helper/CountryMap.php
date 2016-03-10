@@ -13,15 +13,13 @@ namespace General\View\Helper;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
-use General\Service\GeneralServiceAwareInterface;
-use Zend\View\Helper\AbstractHelper;
 
 /**
  * Create a country map based on a list of countries.
  *
  * @category   General
  */
-class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
+class CountryMap extends HelperAbstract
 {
     /**
      * @var GeneralService
@@ -30,8 +28,8 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
 
     /**
      * @param Country[] $countries
-     * @param Country   $selectedCountry
-     * @param array     $options
+     * @param Country $selectedCountry
+     * @param array $options
      *
      * @return string
      */
@@ -135,20 +133,6 @@ EOT;
      */
     public function getGeneralService()
     {
-        return $this->generalService;
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param GeneralService $generalService
-     *
-     * @return AbstractHelper
-     */
-    public function setGeneralService(GeneralService $generalService)
-    {
-        $this->generalService = $generalService;
-
-        return $this;
+        return $this->getGeneralService()->get(GeneralService::class);
     }
 }

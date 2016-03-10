@@ -30,7 +30,7 @@ class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInter
 
     /**
      * @param ContentType|null $contentType
-     * @param string|null      $contentTypeName
+     * @param string|null $contentTypeName
      *
      * @return string
      */
@@ -70,6 +70,7 @@ class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInter
             case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
             case 'application/vnd.openxmlformats-officedocument.presentationml.template':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
                 $class = 'fa-file-powerpoint-o';
                 break;
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':

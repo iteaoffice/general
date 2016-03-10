@@ -63,7 +63,7 @@ abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAw
 
     /**
      * @param string $router
-     * @param array  $params
+     * @param array $params
      *
      * @return Url
      */

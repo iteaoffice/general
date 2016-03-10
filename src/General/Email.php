@@ -119,13 +119,12 @@ class Email
     protected $serviceManager;
 
     /**
-     * @param array          $data
-     * @param ServiceManager $serviceManager
+     * Email constructor.
+     * @param array $data
      */
-    public function __construct(array $data, ServiceManager $serviceManager)
+    public function __construct(array $data)
     {
         $this->setProperties($data);
-        $this->setServiceManager($serviceManager);
     }
 
     /**
@@ -256,7 +255,6 @@ class Email
     }
 
 
-
     /**
      * @return string
      */
@@ -274,7 +272,7 @@ class Email
     }
 
     /**
-     * @param Selection      $selection
+     * @param Selection $selection
      * @param ContactService $contactService
      */
     public function addSelection(Selection $selection, ContactService $contactService)
@@ -352,13 +350,13 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string) $result;
+                    $this->$key = (string)$result;
 
-                    return (string) $result;
+                    return (string)$result;
                 }
 
         }
-        throw new \Exception("Invalid method ".$method);
+        throw new \Exception("Invalid method " . $method);
     }
 
     /**

@@ -30,11 +30,6 @@ use Zend\Json\Json;
 class GeneralService extends ServiceAbstract
 {
     /**
-     * @var ModuleOptions
-     */
-    protected $options;
-
-    /**
      * @param        $entity
      * @param  array $filter
      *
@@ -292,7 +287,7 @@ class GeneralService extends ServiceAbstract
     public function findLocationByIPAddress()
     {
         $client = new Client();
-        $client->setUri(sprintf($this->getOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
+        $client->setUri(sprintf($this->getModuleOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
         if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
             /*
              * We have the country, try to find the country in our database
@@ -307,38 +302,12 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * get options.
-     *
-     * @return ModuleOptions
-     */
-    public function getOptions()
-    {
-        if (!$this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceLocator()->get('general_module_options'));
-        }
-
-        return $this->options;
-    }
-
-    /**
-     * @param $options
-     *
-     * @return GeneralService
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
      * @param $id
      *
      * @return \General\Entity\Challenge
      */
     public function findChallengeById($id)
     {
-        return $this->getEntityManager()->getRepository($this->getFullEntityName('challenge'))->find($id);
+        return $this->getEntityManager()->getRepository(Entity\Challenge::class)->find($id);
     }
 }

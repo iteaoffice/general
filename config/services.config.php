@@ -10,8 +10,6 @@
 use General\Entity;
 use General\Form;
 use General\Options;
-use General\Service\EmailService;
-use Zend\ServiceManager\ServiceManager;
 
 return [
     'factories' => [
@@ -39,15 +37,7 @@ return [
         'general_content_type_form' => function ($sm) {
             return new Form\CreateObject($sm, new Entity\ContentType());
         },
-        'general_module_options'    => function (ServiceManager $sm) {
-            $config = $sm->get('Config');
 
-            return new Options\ModuleOptions(isset($config['general']) ? $config['general'] : []);
-        },
-        EmailService::class         => function (ServiceManager $sm) {
-            $config = $sm->get('Config');
 
-            return new EmailService($config["email"], $sm);
-        }
     ],
 ];

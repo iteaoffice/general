@@ -11,6 +11,7 @@
 namespace General\Service;
 
 use Contact\Entity\Contact;
+use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -22,14 +23,13 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class EmailService.
  */
-class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterface, GeneralServiceAwareInterface
+class EmailService extends ServiceAbstract
 {
     /**
      * @var Email
@@ -78,12 +78,14 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
 
 
     /**
-     * @param                $config
+     * @param                              $config
      * @param ServiceManager $serviceManager
      */
     public function __construct($config, ServiceManager $serviceManager)
     {
         $this->config = $config;
+
+        $this->setServiceLocator($serviceManager);
 
         if ($this->config["active"]) {
             $this->renderer = $serviceManager->get('ZfcTwigRenderer');
@@ -118,15 +120,12 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
     }
 
     /**
-     * Create a new email.
-     *
      * @param array $data
-     *
      * @return Email
      */
     public function create($data = [])
     {
-        $this->email = new Email($data, $this->getServiceLocator());
+        $this->email = new Email($data);
 
         return $this->email;
     }
@@ -449,11 +448,10 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
-        /*
-         * @var ContactService
+        /**
+         * @var $contactService ContactService
          */
-        $contactService = clone $this->getServiceLocator()->get('contact_contact_service');
-        $contactService->setContact($contact);
+        $contactService = $this->getContactService()->setContact($contact);
 
         $this->templateVars['attention'] = $contactService->parseAttention();
         $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
@@ -658,7 +656,7 @@ class EmailService extends ServiceAbstract implements ServiceLocatorAwareInterfa
      */
     public function generatePreview()
     {
-        $this->updateTemplateVarsWithContact($this->getContactService()->getContact());
+        $this->updateTemplateVarsWithContact($this->getAuthenticationService()->getIdentity());
 
         if (is_null($this->mailing)) {
             throw new \RuntimeException("The mailing object is empty. Did set the template");

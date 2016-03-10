@@ -80,7 +80,7 @@ return [
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             'content-type' => [
                 'type'          => 'Literal',

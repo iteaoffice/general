@@ -16,23 +16,19 @@ use Doctrine\ORM\Query;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\Vat;
+use General\Options\ModuleOptions;
 use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * ServiceAbstract.
  */
-abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceInterface
+abstract class ServiceAbstract implements ServiceInterface
 {
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     protected $entityManager;
-    /**
-     * @var AuthenticationService;
-     */
-    protected $authenticationService;
     /**
      * @var ServiceLocatorInterface
      */
@@ -42,9 +38,17 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      */
     protected $generalService;
     /**
+     * @var ModuleOptions;
+     */
+    protected $moduleOptions;
+    /**
      * @var ContactService
      */
     protected $contactService;
+    /**
+     * @var AuthenticationService
+     */
+    protected $authenticationService;
 
     /**
      * @param      $entity
@@ -57,60 +61,19 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
         return $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findAll();
     }
 
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (null === $this->entityManager) {
-            $this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        }
-
-        return $this->entityManager;
-    }
-
-    /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     */
-    public function setEntityManager($entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
 
     /**
      * @param string $entity
-     * @param  $filter
+     * @param        $filter
      *
      * @return Query
      */
     public function findEntitiesFiltered($entity, $filter)
     {
-        $equipmentList = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))->findFiltered(
-            $filter,
-            AbstractQuery::HYDRATE_SIMPLEOBJECT
-        );
+        $equipmentList = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))
+            ->findFiltered($filter, AbstractQuery::HYDRATE_SIMPLEOBJECT);
 
         return $equipmentList;
-    }
-
-    /**
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ServiceAbstract
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
     }
 
     /**
@@ -130,15 +93,14 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
             $entity = $entity[0] . ucfirst($entity[1]);
         }
 
-        return ucfirst(implode('', array_slice(explode('\\', __NAMESPACE__), 0, 1))) . '\\' . 'Entity' . '\\' . ucfirst(
-            $entity
-        );
+        return ucfirst(implode('', array_slice(explode('\\', __NAMESPACE__), 0, 1))) . '\\' . 'Entity' . '\\'
+        . ucfirst($entity);
     }
 
     /**
      * Find 1 entity based on the id.
      *
-     * @param string $entity
+     * @param string  $entity
      * @param integer $id
      *
      * @return null|\General\Entity\Country|\General\Entity\Gender|Vat|\General\Entity\Title
@@ -202,33 +164,41 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
     }
 
     /**
-     * @return AuthenticationService
+     * @return \Doctrine\ORM\EntityManager
      */
-    public function getAuthenticationService()
+    public function getEntityManager()
     {
-        if (null === $this->authenticationService) {
-            $this->authenticationService = $this->getServiceLocator()->get('zfcuser_auth_service');
-        }
-
-        return $this->authenticationService;
+        return $this->entityManager;
     }
 
     /**
-     * @return ContactService
-     */
-    public function getContactService()
-    {
-        return $this->contactService;
-    }
-
-    /**
-     * @param ContactService $contactService
+     * @param \Doctrine\ORM\EntityManager $entityManager
      *
      * @return ServiceAbstract
      */
-    public function setContactService(ContactService $contactService)
+    public function setEntityManager($entityManager)
     {
-        $this->contactService = $contactService;
+        $this->entityManager = $entityManager;
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return ServiceAbstract
+     */
+    public function setServiceLocator($serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
 
         return $this;
     }
@@ -246,10 +216,68 @@ abstract class ServiceAbstract implements ServiceLocatorAwareInterface, ServiceI
      *
      * @return ServiceAbstract
      */
-    public function setGeneralService(GeneralService $generalService)
+    public function setGeneralService($generalService)
     {
         $this->generalService = $generalService;
 
+        return $this;
+    }
+
+    /**
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        return $this->moduleOptions;
+    }
+
+    /**
+     * @param ModuleOptions $moduleOptions
+     *
+     * @return ServiceAbstract
+     */
+    public function setModuleOptions($moduleOptions)
+    {
+        $this->moduleOptions = $moduleOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return ContactService
+     */
+    public function getContactService()
+    {
+        return $this->contactService;
+    }
+
+    /**
+     * @param ContactService $contactService
+     *
+     * @return ServiceAbstract
+     */
+    public function setContactService($contactService)
+    {
+        $this->contactService = $contactService;
+
+        return $this;
+    }
+
+    /**
+     * @return AuthenticationService
+     */
+    public function getAuthenticationService()
+    {
+        return $this->authenticationService;
+    }
+
+    /**
+     * @param AuthenticationService $authenticationService
+     * @return ServiceAbstract
+     */
+    public function setAuthenticationService($authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
         return $this;
     }
 }
