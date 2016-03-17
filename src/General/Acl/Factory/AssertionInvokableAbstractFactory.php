@@ -19,7 +19,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Class AssertionInvokableAbstractFactory
  *
- * @package Affiliation\Acl\Factory
+ * @package General\Acl\Factory
  */
 class AssertionInvokableAbstractFactory implements AbstractFactoryInterface
 {

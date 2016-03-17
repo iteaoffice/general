@@ -152,7 +152,7 @@ abstract class GeneralAbstractController extends AbstractActionController
         /*
          * @var Translate
          */
-        $translate = $this->getServiceLocator()->get('ViewHelperManager')->get('translate');
+        $translate = $this->getPluginManager()->getServiceLocator()->get('ViewHelperManager')->get('translate');
 
         return $translate($string);
     }

@@ -23,6 +23,7 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
@@ -78,17 +79,17 @@ class EmailService extends ServiceAbstract
 
 
     /**
-     * @param                              $config
-     * @param ServiceManager $serviceManager
+     * EmailService constructor.
+     *
+     * @param                         $config
      */
-    public function __construct($config, ServiceManager $serviceManager)
+    public function __construct($config)
     {
         $this->config = $config;
-
-        $this->setServiceLocator($serviceManager);
+        
 
         if ($this->config["active"]) {
-            $this->renderer = $serviceManager->get('ZfcTwigRenderer');
+            
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
@@ -121,6 +122,7 @@ class EmailService extends ServiceAbstract
 
     /**
      * @param array $data
+     *
      * @return Email
      */
     public function create($data = [])
@@ -319,11 +321,11 @@ class EmailService extends ServiceAbstract
     public function parseBody()
     {
         try {
-            $htmlView = $this->renderer->render(
+            $htmlView = $this->getRenderer()->render(
                 $this->email->getHtmlLayoutName(),
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-            $textView = $this->renderer->render(
+            $textView = $this->getRenderer()->render(
                 'plain',
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
@@ -663,7 +665,7 @@ class EmailService extends ServiceAbstract
         }
 
         try {
-            return $this->renderer->render(
+            return $this->getRenderer()->render(
                 $this->mailing->getTemplate()->getTemplate(),
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
@@ -683,7 +685,7 @@ class EmailService extends ServiceAbstract
      */
     public function setTemplate($templateName)
     {
-        $this->template = $this->generalService->findWebInfoByInfo($templateName);
+        $this->template = $this->getGeneralService()->findWebInfoByInfo($templateName);
 
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
@@ -713,5 +715,25 @@ class EmailService extends ServiceAbstract
     public function getHtmlView()
     {
         return $this->htmlView;
+    }
+
+    /**
+     * @return TwigRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->renderer;
+    }
+
+    /**
+     * @param TwigRenderer $renderer
+     *
+     * @return EmailService
+     */
+    public function setRenderer($renderer)
+    {
+        $this->renderer = $renderer;
+
+        return $this;
     }
 }

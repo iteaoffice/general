@@ -58,7 +58,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     private $percentage;
     /**
      * @ORM\Column(name="vat_date_start",type="datetime",nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Zend\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-date-start"})
      *
      * @var \DateTime

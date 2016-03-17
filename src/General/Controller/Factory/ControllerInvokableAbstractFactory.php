@@ -23,6 +23,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class ControllerInvokableAbstractFactory
+ *
  * @package General\Controller\Factory
  */
 class ControllerInvokableAbstractFactory implements AbstractFactoryInterface
@@ -46,49 +47,43 @@ class ControllerInvokableAbstractFactory implements AbstractFactoryInterface
      * Create service with name
      *
      * @param ServiceLocatorInterface|ControllerManager $serviceLocator
-     * @param string $name
-     * @param string $requestedName
+     * @param string                                    $name
+     * @param string                                    $requestedName
      *
      * @return mixed
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        try {
+        /** @var GeneralAbstractController $controller */
+        $controller = new $requestedName();
+        $controller->setServiceLocator($serviceLocator);
 
-            /** @var GeneralAbstractController $controller */
-            $controller = new $requestedName();
-            $controller->setServiceLocator($serviceLocator);
+        $serviceManager = $serviceLocator->getServiceLocator();
 
-            $serviceManager = $serviceLocator->getServiceLocator();
+        /** @var FormService $formService */
+        $formService = $serviceManager->get(FormService::class);
+        $controller->setFormService($formService);
 
-            /** @var FormService $formService */
-            $formService = $serviceManager->get(FormService::class);
-            $controller->setFormService($formService);
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceManager->get(EntityManager::class);
+        $controller->setEntityManager($entityManager);
 
-            /** @var EntityManager $entityManager */
-            $entityManager = $serviceManager->get(EntityManager::class);
-            $controller->setEntityManager($entityManager);
+        /** @var GeneralService $generalService */
+        $generalService = $serviceManager->get(GeneralService::class);
+        $controller->setGeneralService($generalService);
 
-            /** @var GeneralService $generalService */
-            $generalService = $serviceManager->get(GeneralService::class);
-            $controller->setGeneralService($generalService);
+        /** @var EmailService $emailService */
+        $emailService = $serviceManager->get(EmailService::class);
+        $controller->setEmailService($emailService);
 
-            /** @var EmailService $emailService */
-            $emailService = $serviceManager->get(EmailService::class);
-            $controller->setEmailService($emailService);
+        /** @var ContactService $contactService */
+        $contactService = $serviceManager->get(ContactService::class);
+        $controller->setContactService($contactService);
 
-            /** @var ContactService $contactService */
-            $contactService = $serviceManager->get(ContactService::class);
-            $controller->setContactService($contactService);
+        /** @var ModuleOptions $moduleOptions */
+        $moduleOptions = $serviceManager->get(ModuleOptions::class);
+        $controller->setModuleOptions($moduleOptions);
 
-            /** @var ModuleOptions $moduleOptions */
-            $moduleOptions = $serviceManager->get(ModuleOptions::class);
-            $controller->setModuleOptions($moduleOptions);
-
-            return $controller;
-        } catch (\Exception $e) {
-            var_dump($e);
-            die();
-        }
+        return $controller;
     }
 }

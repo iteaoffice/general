@@ -34,19 +34,13 @@ class VatController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered('vat', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('vat', $filterPlugin->getFilter());
 
         $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator(
-                $contactQuery,
-                false
-            )));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
-            : 20);
+            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
-            / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         $form = new VatFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
@@ -65,8 +59,7 @@ class VatController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $vat = $this->getGeneralService()
-            ->findEntityById('vat', $this->params('id'));
+        $vat = $this->getGeneralService()->findEntityById('vat', $this->params('id'));
         if (is_null($vat)) {
             return $this->notFoundAction();
         }
@@ -81,10 +74,7 @@ class VatController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
         $form = $this->getFormService()->prepare('vat', null, $data);
         $form->remove('delete');
@@ -117,16 +107,12 @@ class VatController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $vat = $this->getGeneralService()
-            ->findEntityById('vat', $this->params('id'));
+        /** @var Vat $vat */
+        $vat = $this->getGeneralService()->findEntityById('vat', $this->params('id'));
 
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()
-            ->prepare($vat->get('entity_name'), $vat, $data);
+        $form = $this->getFormService()->prepare($vat->get('entity_name'), $vat, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -140,8 +126,9 @@ class VatController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()
-                    ->updateEntity($form->getData());
+                /** @var Vat $vat */
+                $vat = $form->getData();
+                $result = $this->getGeneralService()->updateEntity($vat);
                 $this->redirect()->toRoute('zfcadmin/vat/view', [
                     'id' => $result->getId(),
                 ]);

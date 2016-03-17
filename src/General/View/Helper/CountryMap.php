@@ -28,8 +28,8 @@ class CountryMap extends HelperAbstract
 
     /**
      * @param Country[] $countries
-     * @param Country $selectedCountry
-     * @param array $options
+     * @param Country   $selectedCountry
+     * @param array     $options
      *
      * @return string
      */
@@ -71,7 +71,8 @@ class CountryMap extends HelperAbstract
         $js[] = "];";
         $data = implode('', $js);
 
-        $jQuery = <<< EOT
+        $jQuery
+            = <<< EOT
 $(function () {
         $data
         $('#country-map').vectorMap({
@@ -133,6 +134,6 @@ EOT;
      */
     public function getGeneralService()
     {
-        return $this->getGeneralService()->get(GeneralService::class);
+        return $this->getServiceLocator()->get(GeneralService::class);
     }
 }

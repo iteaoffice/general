@@ -34,19 +34,13 @@ class ChallengeController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered('challenge', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('challenge', $filterPlugin->getFilter());
 
         $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator(
-                $contactQuery,
-                false
-            )));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
-            : 20);
+            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
-            / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         $form = new ChallengeFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
@@ -65,8 +59,7 @@ class ChallengeController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $challenge = $this->getGeneralService()
-            ->findEntityById('challenge', $this->params('id'));
+        $challenge = $this->getGeneralService()->findEntityById('challenge', $this->params('id'));
         if (is_null($challenge)) {
             return $this->notFoundAction();
         }
@@ -81,10 +74,7 @@ class ChallengeController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
         $form = $this->getFormService()->prepare('challenge', null, $data);
         $form->remove('delete');
@@ -117,16 +107,11 @@ class ChallengeController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $challenge = $this->getGeneralService()
-            ->findEntityById('challenge', $this->params('id'));
+        $challenge = $this->getGeneralService()->findEntityById('challenge', $this->params('id'));
 
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()
-            ->prepare($challenge->get('entity_name'), $challenge, $data);
+        $form = $this->getFormService()->prepare($challenge->get('entity_name'), $challenge, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -140,8 +125,7 @@ class ChallengeController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()
-                    ->updateEntity($form->getData());
+                $result = $this->getGeneralService()->updateEntity($form->getData());
                 $this->redirect()->toRoute('zfcadmin/challenge/view', [
                     'id' => $result->getId(),
                 ]);

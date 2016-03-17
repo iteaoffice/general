@@ -14,13 +14,16 @@
  */
 namespace General\Factory;
 
+use Contact\Service\ContactService;
 use General\Service\EmailService;
+use General\Service\GeneralService;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class GeneralServiceFactory
+ * Class EmailServiceFactory
  *
  * @package General\Factory
  */
@@ -34,11 +37,23 @@ class EmailServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-        $emailService = new EmailService($config["email"], $serviceLocator);
+        $emailService = new EmailService($config["email"]);
 
         /** @var AuthenticationService $authenticationService */
         $authenticationService = $serviceLocator->get('Application\Authentication\Service');
         $emailService->setAuthenticationService($authenticationService);
+
+        /** @var GeneralService $generalService */
+        $generalService = $serviceLocator->get(GeneralService::class);
+        $emailService->setGeneralService($generalService);
+
+        /** @var TwigRenderer $renderer */
+        $renderer = $serviceLocator->get('ZfcTwigRenderer');
+        $emailService->setRenderer($renderer);
+
+        /** @var ContactService $contactService */
+        $contactService = $serviceLocator->get(ContactService::class);
+        $emailService->setContactService($contactService);
 
         return $emailService;
     }
