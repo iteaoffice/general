@@ -5,7 +5,7 @@
  * @category   Country
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -15,7 +15,9 @@ use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Country;
+use General\Options\ModuleOptions;
 use General\Service\GeneralService;
+use Organisation\Entity\Organisation;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Service\ProjectService;
@@ -109,15 +111,13 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
 
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryList($page);
+                return $this->parseCountryList();
 
             case 'country_list_itac':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
-                $page = $this->getRouteMatch()->getParam('page');
 
-                return $this->parseCountryListItac($page);
+                return $this->parseCountryListItac();
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
@@ -284,16 +284,15 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMap()
     {
-        $options = $this->getGeneralService()->getOptions();
         $mapOptions = [
             'clickable' => true,
-            'colorMin' => $options->getCountryColorFaded(),
-            'colorMax' => $options->getCountryColor(),
-            'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
-            'height' => '340px'
+            'colorMin'  => $this->getModuleOptions()->getCountryColorFaded(),
+            'colorMax'  => $this->getModuleOptions()->getCountryColor(),
+            'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
+            'height'    => '340px',
         ];
         /**
-         * @var CountryMap
+         * @var $countryMap CountryMap
          */
         $countryMap = $this->serviceLocator->get('countryMap');
 
@@ -336,9 +335,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMetadata(Country $country)
     {
-        $whichProjects = $this->getProjectService()->getOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+        $whichProjects = $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
 
-        $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
+        $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
 
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
         $organisations = $this->getOrganisationService()->findOrganisationByCountry(
@@ -379,7 +378,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryInfo(Country $country)
     {
-        $onlyActivePartners = $this->getProjectService()->getOptions()->getProjectHasVersions() ? true : false;
+        $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
         $organisations = $this->getOrganisationService()->findOrganisationByCountry(
             $this->getCountry(),
@@ -387,7 +386,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         );
 
         $members = [];
-
+        /** @var Organisation $organisation */
         foreach ($organisations->getResult() as $organisation) {
             // Direct members
             if ($organisation->getMember()) {
@@ -408,7 +407,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
-                'members'        => $members
+                'members'       => $members,
             ]
         );
     }
@@ -446,7 +445,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     /**
      * Create a list of organisations for the current country.
      *
-     * @param  int                       $page
+     * @param  int $page
      * @throws \InvalidArgumentException
      * @return string
      */
@@ -455,7 +454,11 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry($this->getCountry(), false, true);
+        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry(
+            $this->getCountry(),
+            true,
+            true
+        );
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
@@ -478,12 +481,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function parseCountryProjectList(Country $country)
     {
         $whichProjects =
-            $this->getProjectService()->getOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+            $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
 
         $projects = $this->getProjectService()->findProjectByCountry($country, $whichProjects);
 
         return $this->getRenderer()->render(
-            ($this->getProjectService()->getOptions()->getProjectHasVersions() ? 'general/partial/list/project' : 'general/partial/list/project_eu'),
+            'general/partial/list/project',
             [
                 'country'  => $country,
                 'projects' => $projects,
@@ -503,7 +506,6 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /*
          * Parse the organisationService in to have the these functions available in the view
          */
-
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
@@ -520,6 +522,22 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     public function getArticleService()
     {
         return $this->getServiceLocator()->get(ArticleService::class);
+    }
+
+    /**
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        return $this->getServiceLocator()->get(ModuleOptions::class);
+    }
+
+    /**
+     * @return \Project\Options\ModuleOptions
+     */
+    public function getProjectModuleOptions()
+    {
+        return $this->getServiceLocator()->get(\Project\Options\ModuleOptions::class);
     }
 
     /**

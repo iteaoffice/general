@@ -1,0 +1,20 @@
+{% do form.prepare() %}
+{% do form.setAttribute('class','form-horizontal') %}
+
+{{ form().openTag(form)|raw }}
+
+{% set contentType = form.get('content_type') %}
+
+{{ ztbformelement(contentType.get('description')) }}
+{{ ztbformelement(contentType.get('contentType')) }}
+{{ ztbformelement(contentType.get('extension')) }}
+
+
+<div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+        {{ ztbformelement(form.get('submit')) }}
+        {{ ztbformelement(form.get('cancel')) }}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}

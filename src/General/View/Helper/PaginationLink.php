@@ -5,13 +5,13 @@
  * @category   Content
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  2004-2014 ITEA Office
- * @license    http://debranova.org/license.txt proprietary
+ * @copyright  2004-2015 ITEA Office
+ * @license    https://itea3.org/license.txt proprietary
  *
- * @link       http://debranova.org
+ * @link       https://itea3.org
  */
 
-namespace Content\View\Helper;
+namespace General\View\Helper;
 
 use Zend\View\Helper\Url;
 
@@ -22,9 +22,9 @@ use Zend\View\Helper\Url;
  *
  * @author     Johan van der Heide < johan . van . der . heide@itea3 . org >
  * @copyright  2004 - 2014 ITEA Office
- * @license    http://debranova.org/license.txt proprietary
+ * @license    https://itea3.org/license.txt proprietary
  *
- * @link       http://debranova.org
+ * @link       https://itea3.org
  */
 class PaginationLink extends LinkAbstract
 {
@@ -38,15 +38,12 @@ class PaginationLink extends LinkAbstract
     {
         $router = $this->getRouteMatch()->getMatchedRouteName();
 
-        $params = array_merge(
-            $this->getRouteMatch()->getParams(),
-            [
+        $params = array_merge($this->getRouteMatch()->getParams(), [
                 'page' => $page,
-            ]
-        );
+            ]);
 
-        /*
-         * @var Url
+        /**
+         * @var $url Url
          */
         $url = $this->serviceLocator->get('url');
 

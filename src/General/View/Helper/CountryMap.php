@@ -6,22 +6,20 @@
  * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2015 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
-use General\Service\GeneralServiceAwareInterface;
-use Zend\View\Helper\AbstractHelper;
 
 /**
  * Create a country map based on a list of countries.
  *
  * @category   General
  */
-class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
+class CountryMap extends HelperAbstract
 {
     /**
      * @var GeneralService
@@ -73,7 +71,8 @@ class CountryMap extends HelperAbstract implements GeneralServiceAwareInterface
         $js[] = "];";
         $data = implode('', $js);
 
-        $jQuery = <<< EOT
+        $jQuery
+            = <<< EOT
 $(function () {
         $data
         $('#country-map').vectorMap({
@@ -102,7 +101,7 @@ $(function () {
                 }
             },
             onRegionTipShow: function (e, el, code) {
-                if (tipData[code]) {
+                if (typeof tipData != 'undefined' && tipData[code]) {
                     var html = '<div class="tip-title">'+tipData[code]['title']+'</div>', list = tipData[code]['data'];
                     for (var i in list) {
                         for (var key in list[i]) {
@@ -135,20 +134,6 @@ EOT;
      */
     public function getGeneralService()
     {
-        return $this->generalService;
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param GeneralService $generalService
-     *
-     * @return AbstractHelper
-     */
-    public function setGeneralService(GeneralService $generalService)
-    {
-        $this->generalService = $generalService;
-
-        return $this;
+        return $this->getServiceLocator()->get(GeneralService::class);
     }
 }

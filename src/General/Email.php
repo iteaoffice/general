@@ -22,7 +22,6 @@ use Zend\ServiceManager\ServiceManager;
  * @method void setHtmlContent($htmlContent)
  * @method string getTextContent()
  * @method void setTextContent($textContent)
- * @method void setDeeplink($deeplink)
  * @method void setCode($code)
  * @method void setUrl($url)
  * @method void setProject($project)
@@ -81,6 +80,14 @@ class Email
      */
     protected $fromName;
     /**
+     * @var string
+     */
+    protected $unsubscribe;
+    /**
+     * @var string
+     */
+    protected $deeplink;
+    /**
      * To recipients.
      */
     protected $to = [];
@@ -112,13 +119,12 @@ class Email
     protected $serviceManager;
 
     /**
-     * @param array          $data
-     * @param ServiceManager $serviceManager
+     * Email constructor.
+     * @param array $data
      */
-    public function __construct(array $data, ServiceManager $serviceManager)
+    public function __construct(array $data)
     {
         $this->setProperties($data);
-        $this->setServiceManager($serviceManager);
     }
 
     /**
@@ -248,6 +254,7 @@ class Email
         $this->bcc = $bcc;
     }
 
+
     /**
      * @return string
      */
@@ -265,7 +272,7 @@ class Email
     }
 
     /**
-     * @param Selection      $selection
+     * @param Selection $selection
      * @param ContactService $contactService
      */
     public function addSelection(Selection $selection, ContactService $contactService)
@@ -286,7 +293,7 @@ class Email
         if ($var instanceof Contact) {
             $this->cc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->cc[$var] = $user;
+            $this->cc[$var] = is_null($user) ? $var : $user;
         }
     }
 
@@ -301,7 +308,7 @@ class Email
         if ($var instanceof Contact) {
             $this->bcc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->bcc[$var] = $user;
+            $this->bcc[$var] = is_null($user) ? $var : $user;
         }
     }
 
@@ -343,13 +350,13 @@ class Email
                     ((!is_object($result) && settype($result, 'string') !== false) ||
                         (is_object($result) && method_exists($result, '__toString')))
                 ) {
-                    $this->$key = (string) $result;
+                    $this->$key = (string)$result;
 
-                    return (string) $result;
+                    return (string)$result;
                 }
 
         }
-        throw new \Exception("Invalid method ".$method);
+        throw new \Exception("Invalid method " . $method);
     }
 
     /**
@@ -462,6 +469,46 @@ class Email
     public function setPersonal($personal)
     {
         $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnsubscribe()
+    {
+        return $this->unsubscribe;
+    }
+
+    /**
+     * @param string $unsubscribe
+     *
+     * @return Email
+     */
+    public function setUnsubscribe($unsubscribe)
+    {
+        $this->unsubscribe = $unsubscribe;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeeplink()
+    {
+        return $this->deeplink;
+    }
+
+    /**
+     * @param string $deeplink
+     *
+     * @return Email
+     */
+    public function setDeeplink($deeplink)
+    {
+        $this->deeplink = $deeplink;
 
         return $this;
     }

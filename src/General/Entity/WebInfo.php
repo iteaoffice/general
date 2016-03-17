@@ -1,11 +1,11 @@
 <?php
 /**
- * Debranova copyright message placeholder.
+ * ITEA Office copyright message placeholder.
  *
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 Debranova
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -37,21 +37,23 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     /**
      * @var array
      */
-    protected static $plainTemplates = [
-        self::PLAIN     => "txt-plain",
-        self::NOT_PLAIN => "txt-not-plain"
-    ];
+    protected static $plainTemplates
+        = [
+            self::PLAIN     => "txt-plain",
+            self::NOT_PLAIN => "txt-not-plain"
+        ];
 
     /**
      * @var array
      */
-    protected static $syncTemplates = [
-        self::SYNC    => "txt-sync",
-        self::NO_SYNC => "txt-no-sync"
-    ];
+    protected static $syncTemplates
+        = [
+            self::SYNC    => "txt-sync",
+            self::NO_SYNC => "txt-no-sync"
+        ];
 
     /**
-     * @ORM\Column(name="info_id", type="integer", nullable=false)
+     * @ORM\Column(name="info_id", length=10, type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -85,7 +87,8 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
-     * @Annotation\Options({"label":"txt-web-info-content-label"})
+     * @Annotation\Options({"label":"txt-web-info-content-label","rows":"20"})
+     * @Annotation\Attributes({"rows":"20"})
      *
      * @var string
      */
@@ -169,30 +172,18 @@ class WebInfo extends EntityAbstract implements ResourceInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'key',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'subject',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'content',
-                        'required' => true,
-                    ]
-                )
-            );
+            $inputFilter->add($factory->createInput([
+                'name'     => 'info',
+                'required' => true,
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'     => 'subject',
+                'required' => true,
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'     => 'content',
+                'required' => true,
+            ]));
 
             $this->inputFilter = $inputFilter;
         }
@@ -226,6 +217,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $id
+     *
      * @return WebInfo
      */
     public function setId($id)
@@ -245,6 +237,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $info
+     *
      * @return WebInfo
      */
     public function setInfo($info)
@@ -256,6 +249,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param bool $textual
+     *
      * @return int|string
      */
     public function getPlain($textual = false)
@@ -269,6 +263,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $plain
+     *
      * @return WebInfo
      */
     public function setPlain($plain)
@@ -288,6 +283,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $subject
+     *
      * @return WebInfo
      */
     public function setSubject($subject)
@@ -307,6 +303,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $content
+     *
      * @return WebInfo
      */
     public function setContent($content)
@@ -318,6 +315,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param bool $textual
+     *
      * @return int|string
      */
     public function getSync($textual = false)
@@ -331,6 +329,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $sync
+     *
      * @return WebInfo
      */
     public function setSync($sync)
@@ -350,6 +349,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Web $web
+     *
      * @return WebInfo
      */
     public function setWeb($web)

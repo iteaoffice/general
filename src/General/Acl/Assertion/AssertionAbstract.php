@@ -5,24 +5,19 @@
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  2004-2014 ITEA Office
- * @license    http://debranova.org/license.txt proprietary
+ * @copyright  2004-2015 ITEA Office
+ * @license    https://itea3.org/license.txt proprietary
  *
- * @link       http://debranova.org
+ * @link       https://itea3.org
  */
 
 namespace General\Acl\Assertion;
 
 use Admin\Service\AdminService;
-use Contact\Service\ContactService;
-use General\Acl\Assertion\General as GeneralAssertion;
-use General\Service\GeneralService;
-use Project\Service\ProjectService;
-use Project\Service\ReportService;
+use Contact\Entity\Contact;
 use Zend\Http\Request;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Permissions\Acl\Assertion\AssertionInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -31,21 +26,25 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  2004-2014 ITEA Office
- * @license    http://debranova.org/license.txt proprietary
+ * @copyright  2004-2015 ITEA Office
+ * @license    https://itea3.org/license.txt proprietary
  *
- * @link       http://debranova.org
+ * @link       https://itea3.org
  */
-abstract class AssertionAbstract implements AssertionInterface, ServiceLocatorAwareInterface
+abstract class AssertionAbstract implements AssertionInterface
 {
     /**
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
     /**
-     * @var ContactService
+     * @var Contact
      */
-    protected $contactService;
+    protected $contact;
+    /**
+     * @var AdminService
+     */
+    protected $adminService;
     /**
      * @var array
      */
@@ -70,87 +69,11 @@ abstract class AssertionAbstract implements AssertionInterface, ServiceLocatorAw
     }
 
     /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AssertionAbstract
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
-    }
-
-    /**
-     * Gateway to the General Service.
-     *
-     * @return GeneralService
-     */
-    public function getGeneralService()
-    {
-        return $this->getServiceLocator()->get(GeneralService::class);
-    }
-
-    /**
-     * @return ProjectService
-     */
-    public function getProjectService()
-    {
-        return $this->getServiceLocator()->get(ProjectService::class);
-    }
-
-
-    /**
-     * @return ReportService
-     */
-    public function getReportService()
-    {
-        return $this->getServiceLocator()->get(ReportService::class);
-    }
-
-    /**
      * @return bool
      */
     public function hasContact()
     {
-        return !$this->getContactService()->isEmpty();
-    }
-
-    /**
-     * @return ContactService
-     */
-    public function getContactService()
-    {
-        if (is_null($this->contactService)) {
-            $this->contactService = $this->getServiceLocator()->get('contact_contact_service');
-            if ($this->getServiceLocator()->get('zfcuser_auth_service')->hasIdentity()) {
-                $this->contactService->setContact(
-                    $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity()
-                );
-            }
-        }
-
-        return $this->contactService;
-    }
-
-    /**
-     * @return AdminService
-     */
-    public function getAdminService()
-    {
-        return $this->getServiceLocator()->get(AdminService::class);
+        return !$this->getContact()->isEmpty();
     }
 
     /**
@@ -165,6 +88,9 @@ abstract class AssertionAbstract implements AssertionInterface, ServiceLocatorAw
         if (!is_array($roles)) {
             $roles = [$roles];
         }
+
+        $roles = array_map('strtolower', $roles);
+
         foreach ($this->getAccessRoles() as $access) {
             if (in_array(strtolower($access), $roles)) {
                 return true;
@@ -179,12 +105,74 @@ abstract class AssertionAbstract implements AssertionInterface, ServiceLocatorAw
      */
     public function getAccessRoles()
     {
-        if (empty($this->accessRoles) && !$this->getContactService()->isEmpty()) {
-            $this->accessRoles = $this->getAdminService()->findAccessRolesByContactAsArray(
-                $this->getContactService()->getContact()
-            );
+        if (empty($this->accessRoles) && $this->hasContact()) {
+            $this->accessRoles = $this->getAdminService()->findAccessRolesByContactAsArray($this->getContact());
         }
 
         return $this->accessRoles;
+    }
+
+    /**
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return AssertionAbstract
+     */
+    public function setServiceLocator($serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getContact()
+    {
+        if (is_null($this->contact)) {
+            $this->contact = new Contact();
+        }
+        
+        return $this->contact;
+    }
+
+    /**
+     * @param Contact $contact
+     *
+     * @return AssertionAbstract
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * @return AdminService
+     */
+    public function getAdminService()
+    {
+        return $this->adminService;
+    }
+
+    /**
+     * @param AdminService $adminService
+     *
+     * @return AssertionAbstract
+     */
+    public function setAdminService($adminService)
+    {
+        $this->adminService = $adminService;
+
+        return $this;
     }
 }

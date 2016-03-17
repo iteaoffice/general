@@ -21,7 +21,7 @@ return [
             "company" => "Development ITEA office",
             "site"    => "Development ITEA office",
             "slogan"  => "",
-            "baseUrl" => "http://itea3.org",
+            "baseUrl" => "https://itea3.org",
         ],
         "template_path_stack" => [
             __DIR__ . "/../view/email/"
@@ -30,7 +30,8 @@ return [
     'general' => [
         'style_locations' => [
             __DIR__ . '/../../../../styles/common',
-            __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
+            __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST")
+                ? DEBRANOVA_HOST : 'test')
         ],
         'image_not_found' => 'image_not_found.jpg',
     ],

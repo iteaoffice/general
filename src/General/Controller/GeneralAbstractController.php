@@ -5,35 +5,31 @@
  * @category  Calendar
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Controller;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use Contact\Service\ContactService;
-use Contact\Service\ContactServiceAwareInterface;
+use Doctrine\ORM\EntityManager;
+use General\Controller\Plugin\GetFilter;
+use General\Options\ModuleOptions;
 use General\Service\EmailService;
 use General\Service\FormService;
-use General\Service\FormServiceAwareInterface;
 use General\Service\GeneralService;
-use General\Service\GeneralServiceAwareInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 
 /**
  * @method      ZfcUserAuthentication zfcUserAuthentication()
  * @method      FlashMessenger flashMessenger()
- * @method      isAllowed isAllowed($resource, $action)
+ * @method      IsAllowed isAllowed($resource, $action)
+ * @method      GetFilter getGeneralFilter()
  */
-abstract class GeneralAbstractController extends AbstractActionController implements
-    FormServiceAwareInterface,
-    ServiceLocatorAwareInterface,
-    ContactServiceAwareInterface,
-    GeneralServiceAwareInterface
+abstract class GeneralAbstractController extends AbstractActionController
 {
     /**
      * @var FormService
@@ -55,9 +51,17 @@ abstract class GeneralAbstractController extends AbstractActionController implem
      * @var EmailService
      */
     protected $emailService;
+    /**
+     * @var ModuleOptions
+     */
+    protected $moduleOptions;
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
     /**
-     * @return \Calendar\Service\FormService
+     * @return \General\Service\FormService
      */
     public function getFormService()
     {
@@ -148,7 +152,7 @@ abstract class GeneralAbstractController extends AbstractActionController implem
         /*
          * @var Translate
          */
-        $translate = $this->getServiceLocator()->get('ViewHelperManager')->get('translate');
+        $translate = $this->getPluginManager()->getServiceLocator()->get('ViewHelperManager')->get('translate');
 
         return $translate($string);
     }
@@ -170,6 +174,44 @@ abstract class GeneralAbstractController extends AbstractActionController implem
     {
         $this->serviceLocator = $serviceLocator;
 
+        return $this;
+    }
+
+    /**
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        return $this->moduleOptions;
+    }
+
+    /**
+     * @param ModuleOptions $moduleOptions
+     *
+     * @return GeneralAbstractController
+     */
+    public function setModuleOptions($moduleOptions)
+    {
+        $this->moduleOptions = $moduleOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     * @return GeneralAbstractController
+     */
+    public function setEntityManager($entityManager)
+    {
+        $this->entityManager = $entityManager;
         return $this;
     }
 }

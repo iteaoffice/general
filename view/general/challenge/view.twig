@@ -1,0 +1,40 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-challenge-%s")|format(challenge)) %}
+
+<h1>{{ translate("txt-challenge-%s")|format(challenge) }}</h1>
+
+<h2><strong>{{ translate("txt-challenge-information") }}</strong></h2>
+<dl class="dl-horizontal">
+    <dt>{{ translate("txt-challenge-name") }}</dt>
+    <dd>{{ challenge.challenge }}</dd>
+
+    <dt>{{ translate("txt-challenge-description") }}</dt>
+    <dd>{{ challenge.description|raw }}</dd>
+
+    <dt>{{ translate("txt-front-color") }}</dt>
+    <dd>{{ challenge.frontColor }}</dd>
+
+    <dt>{{ translate("txt-background-color") }}</dt>
+    <dd>{{ challenge.backgroundColor }}</dd>
+
+    <dt>{{ translate("txt-sample") }}</dt>
+    <dd><a class="btn" style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a></dd>
+
+    <dt>{{ translate('txt-projects') }}</dt>
+    {% for projectChallenge in challenge.projectChallenge %}
+        {% set projectService = projectServiceProxy(projectChallenge.project) %}
+        <dd>{{ projectLink(projectService,'view-admin','name') }}</dd>
+    {% else %}
+        <dd>{{ translate("txt-project-for-this-challenge") }}</dd>
+    {% endfor %}
+
+    <dt>{{ translate('txt-booths') }}</dt>
+    {% for boothChallenge in challenge.boothChallenge %}
+        <dd>{{ boothLink(boothChallenge.booth,'view','name') }}</dd>
+    {% else %}
+        <dd>{{ translate("txt-booth-for-this-challenge") }}</dd>
+    {% endfor %}
+</dl>
+
+
+{{ challengeLink(challenge,'edit','button') }} {{ challengeLink(null, 'new','button') }} {{ challengeLink(null, 'list','button') }}

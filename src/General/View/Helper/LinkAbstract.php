@@ -6,13 +6,14 @@
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
+use General\Entity\ContentType;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\WebInfo;
@@ -57,6 +58,14 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      * @var WebInfo
      */
     protected $webInfo;
+    /**
+     * @var ContentType
+     */
+    protected $contentType;
+    /**
+     * @var Country
+     */
+    protected $country;
     /**
      * @var string
      */
@@ -107,10 +116,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
             $serverUrl() . $url($this->router, $this->routerParams),
             htmlentities($this->text),
             implode(' ', $this->classes),
-            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode(
-                '',
-                $this->linkContent
-            ) : htmlentities(implode('', $this->linkContent))
+            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
+            : htmlentities(implode('', $this->linkContent))
         );
     }
 
@@ -128,28 +135,45 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
     public function parseShow()
     {
         switch ($this->getShow()) {
+            case 'button':
             case 'icon':
                 switch ($this->getAction()) {
+                    case 'new':
+                        $this->addLinkContent('<i class="fa fa-plus"></i>');
+                        break;
+                    case 'list':
+                    case 'list-admin':
+                        $this->addLinkContent('<i class="fa fa-list-ul"></i>');
+                        break;
+                    case 'delete':
+                        $this->addLinkContent('<i class="fa fa-trash-o"></i>');
+                        break;
                     case 'edit':
-                        $this->addLinkContent('<i class="fa fa-pencil-square-o"></i>');
+                        $this->addLinkContent('<i class="fa fa-edit"></i>');
+                        break;
+                    case 'view':
+                        $this->addLinkContent('<i class="fa fa-external-link"></i>');
                         break;
                     default:
-                        $this->addLinkContent('<i class="fa fa-link"></i>');
+                        $this->addLinkContent('<i class="fa fa-file-o"></i>');
                         break;
                 }
-                break;
-            case 'button':
-                $this->addClasses("btn btn-primary");
-                $this->addLinkContent('<span class="glyphicon glyphicon-info"></span> ' . $this->getText());
+
+                if ($this->getShow() === 'button') {
+                    $this->addLinkContent(' ' . $this->getText());
+                    if ($this->getAction() === 'delete') {
+                        $this->addClasses("btn btn-danger");
+                    } else {
+                        $this->addClasses("btn btn-primary");
+                    }
+                }
                 break;
             case 'text':
                 $this->addLinkContent($this->getText());
                 break;
             case 'paginator':
                 if (is_null($this->getAlternativeShow())) {
-                    throw new \InvalidArgumentException(
-                        sprintf("this->alternativeShow cannot be null for a paginator link")
-                    );
+                    throw new \InvalidArgumentException(sprintf("this->alternativeShow cannot be null for a paginator link"));
                 }
                 $this->addLinkContent($this->getAlternativeShow());
                 break;
@@ -161,13 +185,11 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
                 return;
             default:
                 if (!array_key_exists($this->getShow(), $this->showOptions)) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
-                            $this->getShow(),
-                            implode(', ', array_keys($this->showOptions))
-                        )
-                    );
+                    throw new \InvalidArgumentException(sprintf(
+                        "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
+                        $this->getShow(),
+                        implode(', ', array_keys($this->showOptions))
+                    ));
                 }
                 $this->addLinkContent($this->showOptions[$this->getShow()]);
                 break;
@@ -291,15 +313,17 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param EntityAbstract $entity
-     * @param string $assertion
-     * @param string $action
+     * @param string         $assertion
+     * @param string         $action
      *
      * @return bool
      */
     public function hasAccess(EntityAbstract $entity, $assertion, $action)
     {
         $assertion = $this->getAssertion($assertion);
-        if (!is_null($entity) && !$this->getAuthorizeService()->getAcl()->hasResource($entity)) {
+        if (!is_null($entity)
+            && !$this->getAuthorizeService()->getAcl()->hasResource($entity)
+        ) {
             $this->getAuthorizeService()->getAcl()->addResource($entity);
             $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
         }
@@ -354,7 +378,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param null|EntityAbstract $resource
-     * @param string $privilege
+     * @param string              $privilege
      *
      * @return bool
      */
@@ -372,8 +396,8 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
      * Add a parameter to the list of parameters for the router.
      *
      * @param string $key
-     * @param $value
-     * @param bool $allowNull
+     * @param        $value
+     * @param bool   $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
@@ -444,7 +468,7 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param Country $country
-     * @param int $width
+     * @param int     $width
      *
      * @return string
      */
@@ -467,11 +491,60 @@ abstract class LinkAbstract extends AbstractHelper implements ServiceLocatorAwar
 
     /**
      * @param WebInfo $webInfo
+     *
      * @return LinkAbstract
      */
     public function setWebInfo($webInfo)
     {
         $this->webInfo = $webInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        if (is_null($this->country)) {
+            $this->country = new Country();
+        }
+
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return LinkAbstract
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return ContentType
+     */
+    public function getContentType()
+    {
+        if (is_null($this->contentType)) {
+            $this->contentType = new ContentType();
+        }
+
+        return $this->contentType;
+    }
+
+    /**
+     * @param ContentType $contentType
+     *
+     * @return LinkAbstract
+     */
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
 
         return $this;
     }

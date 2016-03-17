@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -43,7 +43,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="country_cd",type="string",length=2, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-country-cd"})
+     * @Annotation\Options({"label":"txt-country-cd-label","help-block":"txt-country-cd-help-block"})
      *
      * @var string
      */
@@ -51,7 +51,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="country",type="string",length=80, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-country"})
+     * @Annotation\Options({"label":"txt-country-name-label","help-block":"txt-country-name-help-block"})
      *
      * @var string
      */
@@ -67,7 +67,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="iso3",type="string",length=20)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-iso3"})
+     * @Annotation\Options({"label":"txt-country-iso3-label","help-block":"txt-country-iso3-help-block"})
      *
      * @var string
      */
@@ -75,7 +75,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="numcode",type="integer",length=6)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-numcode"})
+     * @Annotation\Options({"label":"txt-country-numcode-label","help-block":"txt-country-numcode-help-block"})
      *
      * @var int
      */
@@ -83,7 +83,7 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="country_vat",type="string",length=2,nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-vat"})
+     * @Annotation\Options({"label":"txt-country-vat-label","help-block":"txt-country-vat-help-block"})
      *
      * @var int
      */
@@ -173,12 +173,40 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $ambassador;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
      * @Annotation\Exclude()
      *
      * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
      */
-    private $applicant;
+    private $applicantOrganisationAddressCountry;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="financialAddressCountry")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantFinancialAddressCountry;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Changerequest\Country", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Changerequest\Country[]|Collections\ArrayCollection
+     */
+    private $changerequestCountry;
+    /**
+     * @ORM\ManyToMany(targetEntity="Project\Entity\Log", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Log[]|Collections\ArrayCollection
+     */
+    private $projectLog;
+    /**
+     * @ORM\OneToMany(targetEntity="Program\Entity\Call\Country", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Program\Entity\Call\Country[]|Collections\ArrayCollection
+     */
+    private $callCountry;
 
     /**
      * Class constructor.
@@ -193,6 +221,11 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
         $this->ambassador = new Collections\ArrayCollection();
+        $this->changerequestCountry = new Collections\ArrayCollection();
+        $this->projectLog = new Collections\ArrayCollection();
+        $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
+        $this->applicantFinancialAddressCountry = new Collections\ArrayCollection();
+        $this->callCountry = new Collections\ArrayCollection();
     }
 
     /**
@@ -225,7 +258,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->country;
+        return (string)$this->country;
     }
 
     /**
@@ -235,7 +268,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function getResourceId()
     {
-        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**
@@ -244,6 +277,8 @@ class Country extends EntityAbstract implements ResourceInterface
      * @param InputFilterInterface $inputFilter
      *
      * @throws \Exception
+     * @return void
+     *
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -258,116 +293,96 @@ class Country extends EntityAbstract implements ResourceInterface
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
+            $inputFilter->add($factory->createInput([
+                'name'       => 'country',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'country',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 80,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 80,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'cd',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'cd',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 2,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 2,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'iso3',
+                'required'   => false,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'iso3',
-                        'required'   => false,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 3,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 3,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'numcode',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'numcode',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 6,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 6,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
+                    ],
+                ],
+            ]));
+            $inputFilter->add($factory->createInput([
+                'name'       => 'countryVat',
+                'required'   => false,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
                     [
-                        'name'       => 'countryVat',
-                        'required'   => false,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 2,
                         ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 2,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
+                    ],
+                ],
+            ]));
             $this->inputFilter = $inputFilter;
         }
 
@@ -706,17 +721,19 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
+     * @return \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection
      */
-    public function getAmbassasor()
+    public function getAmbassador()
     {
         return $this->ambassador;
     }
 
     /**
-     * @param Collections\ArrayCollection|\Ambassador\Entity\Ambassador[] $ambassador
+     * @param \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection $ambassador
+     *
+     * @return Country
      */
-    public function setAmbassasor(Collections\ArrayCollection $ambassador)
+    public function setAmbassador($ambassador)
     {
         $this->ambassador = $ambassador;
 
@@ -724,7 +741,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicant
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
      */
     public function getApplicant()
     {
@@ -733,10 +750,112 @@ class Country extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicant
+     *
+     * @return Country
      */
-    public function setApplicant(Collections\ArrayCollection $applicant)
+    public function setApplicant($applicant)
     {
         $this->applicant = $applicant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantOrganisationAddressCountry()
+    {
+        return $this->applicantOrganisationAddressCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantOrganisationAddressCountry
+     *
+     * @return Country
+     */
+    public function setApplicantOrganisationAddressCountry($applicantOrganisationAddressCountry)
+    {
+        $this->applicantOrganisationAddressCountry = $applicantOrganisationAddressCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantFinancialAddressCountry()
+    {
+        return $this->applicantFinancialAddressCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialAddressCountry
+     *
+     * @return Country
+     */
+    public function setApplicantFinancialAddressCountry($applicantFinancialAddressCountry)
+    {
+        $this->applicantFinancialAddressCountry = $applicantFinancialAddressCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Changerequest\Country[]
+     */
+    public function getChangerequestCountry()
+    {
+        return $this->changerequestCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Changerequest\Country[] $changerequestCountry
+     *
+     * @return Country
+     */
+    public function setChangerequestCountry($changerequestCountry)
+    {
+        $this->changerequestCountry = $changerequestCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Log[]
+     */
+    public function getProjectLog()
+    {
+        return $this->projectLog;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Log[] $projectLog
+     *
+     * @return Country
+     */
+    public function setProjectLog($projectLog)
+    {
+        $this->projectLog = $projectLog;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Program\Entity\Call\Country[]
+     */
+    public function getCallCountry()
+    {
+        return $this->callCountry;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Program\Entity\Call\Country[] $callCountry
+     *
+     * @return Country
+     */
+    public function setCallCountry($callCountry)
+    {
+        $this->callCountry = $callCountry;
 
         return $this;
     }

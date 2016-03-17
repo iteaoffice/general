@@ -6,30 +6,15 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
 
 use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
-class FormService implements ServiceLocatorAwareInterface
+class FormService extends ServiceAbstract
 {
-    /**
-     * @var Form
-     */
-    protected $form;
-    /**
-     * @var \General\Service\GeneralService
-     */
-    protected $generalService;
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
     /**
      * @param null $className
      * @param null $entity
@@ -42,10 +27,10 @@ class FormService implements ServiceLocatorAwareInterface
         if (!$entity) {
             $entity = $this->getGeneralService()->getEntity($className);
         }
-        $formName   = 'general_'.$entity->get('underscore_entity_name').'_form';
-        $form       = $this->getServiceLocator()->get($formName);
-        $filterName = 'general_'.$entity->get('underscore_entity_name').'_form_filter';
-        $filter     = $this->getServiceLocator()->get($filterName);
+        $formName = 'general_' . $entity->get('underscore_entity_name') . '_form';
+        $form = $this->getServiceLocator()->get($formName);
+        $filterName = 'general_' . $entity->get('underscore_entity_name') . '_form_filter';
+        $filter = $this->getServiceLocator()->get($filterName);
         $form->setInputFilter($filter);
         if ($bind) {
             $form->bind($entity);
@@ -59,7 +44,7 @@ class FormService implements ServiceLocatorAwareInterface
      * @param null  $entity
      * @param array $data
      *
-     * @return array|object
+     * @return Form
      */
     public function prepare($className, $entity = null, $data = [])
     {
@@ -67,47 +52,5 @@ class FormService implements ServiceLocatorAwareInterface
         $form->setData($data);
 
         return $form;
-    }
-
-    /**
-     * @param GeneralService $generalService
-     */
-    public function setGeneralService($generalService)
-    {
-        $this->generalService = $generalService;
-    }
-
-    /**
-     * Get generalService.
-     *
-     * @return GeneralService.
-     */
-    public function getGeneralService()
-    {
-        if (null === $this->generalService) {
-            $this->generalService = $this->getServiceLocator()->get(GeneralService::class);
-        }
-
-        return $this->generalService;
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 }

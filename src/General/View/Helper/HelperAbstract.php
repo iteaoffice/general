@@ -6,7 +6,7 @@
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -63,7 +63,7 @@ abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAw
 
     /**
      * @param string $router
-     * @param array  $params
+     * @param array $params
      *
      * @return Url
      */

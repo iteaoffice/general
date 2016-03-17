@@ -8,7 +8,7 @@
          processIsolation="false"
          backupGlobals="false"
          syntaxCheck="true"
-        >
+>
     <testsuite name="debranova/general Test Suite">
         <directory>./tests/GeneralTest</directory>
     </testsuite>

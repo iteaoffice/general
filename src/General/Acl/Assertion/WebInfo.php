@@ -1,11 +1,11 @@
 <?php
 /**
- * Debranova copyright message placeholder.
+ * ITEA Office copyright message placeholder.
  *
  * @category    Contact
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 Debranova
+ * @copyright   Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Acl\Assertion;
@@ -33,13 +33,6 @@ class WebInfo extends AssertionAbstract
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
-        /*
-         * A meeting can be shown when we have a contact
-         */
-        if (strpos($this->getRouteMatch()->getMatchedRouteName(), 'zfcadmin')) {
-            return $this->rolesHaveAccess(Access::ACCESS_OFFICE);
-        }
-
-        return $this->hasContact();
+        return $this->rolesHaveAccess(Access::ACCESS_OFFICE);
     }
 }

@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="vat")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Vat")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("vat")
  *
@@ -58,7 +58,7 @@ class Vat extends EntityAbstract implements ResourceInterface
     private $percentage;
     /**
      * @ORM\Column(name="vat_date_start",type="datetime",nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Zend\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-date-start"})
      *
      * @var \DateTime
@@ -173,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->percentage . '%';
+        return (string) sprintf("%s (%s %%)", $this->code, $this->percentage);
     }
 
     /**

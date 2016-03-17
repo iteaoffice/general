@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -22,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * Entity for the General.
  *
  * @ORM\Table(name="title")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\Title")
  * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
@@ -74,6 +74,28 @@ class Title extends EntityAbstract implements ResourceInterface
      * @var \Contact\Entity\Contact[]
      */
     private $contacts;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="applicantTitle")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantTitle;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="contactTitle")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantContactTitle;
+    /**
+     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="financialTitle")
+     * @Annotation\Exclude()
+     *
+     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     */
+    private $applicantFinancialTitle;
+
 
     /**
      * Class constructor.
@@ -81,6 +103,9 @@ class Title extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->contacts = new Collections\ArrayCollection();
+        $this->applicantTitle = new Collections\ArrayCollection();
+        $this->applicantContactTitle = new Collections\ArrayCollection();
+        $this->applicantFinancialTitle = new Collections\ArrayCollection();
     }
 
     /**
@@ -113,7 +138,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->name;
+        return (string)$this->name;
     }
 
     /**
@@ -145,96 +170,47 @@ class Title extends EntityAbstract implements ResourceInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'       => 'name',
-                        'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
-                                'name'    => 'StringLength',
-                                'options' => array(
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'       => 'salutation',
-                        'required'   => true,
-                        'filters'    => array(
-                            array('name' => 'StripTags'),
-                            array('name' => 'StringTrim'),
-                        ),
-                        'validators' => array(
-                            array(
-                                'name'    => 'StringLength',
-                                'options' => array(
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ),
-                            ),
-                        ),
-                    )
-                )
-            );
+            $factory = new InputFactory();
+            $inputFilter->add($factory->createInput([
+                    'name'       => 'name',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => 'StripTags'],
+                        ['name' => 'StringTrim'],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => 'StringLength',
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 100,
+                            ],
+                        ],
+                    ],
+                ]));
+            $inputFilter->add($factory->createInput([
+                    'name'       => 'salutation',
+                    'required'   => true,
+                    'filters'    => [
+                        ['name' => 'StripTags'],
+                        ['name' => 'StringTrim'],
+                    ],
+                    'validators' => [
+                        [
+                            'name'    => 'StringLength',
+                            'options' => [
+                                'encoding' => 'UTF-8',
+                                'min'      => 1,
+                                'max'      => 100,
+                            ],
+                        ],
+                    ],
+                ]));
             $this->inputFilter = $inputFilter;
         }
 
         return $this->inputFilter;
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return array(
-            'contacts' => $this->contacts,
-        );
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * @param string $attention
-     */
-    public function setAttention($attention)
-    {
-        $this->attention = $attention;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAttention()
-    {
-        return $this->attention;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -246,11 +222,15 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $name
+     * @param int $id
+     *
+     * @return Title
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -262,11 +242,35 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $salutation
+     * @param string $name
+     *
+     * @return Title
      */
-    public function setSalutation($salutation)
+    public function setName($name)
     {
-        $this->salutation = $salutation;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttention()
+    {
+        return $this->attention;
+    }
+
+    /**
+     * @param string $attention
+     *
+     * @return Title
+     */
+    public function setAttention($attention)
+    {
+        $this->attention = $attention;
+
+        return $this;
     }
 
     /**
@@ -275,5 +279,97 @@ class Title extends EntityAbstract implements ResourceInterface
     public function getSalutation()
     {
         return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     *
+     * @return Title
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
+     * @return \Contact\Entity\Contact[]
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * @param \Contact\Entity\Contact[] $contacts
+     *
+     * @return Title
+     */
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantTitle()
+    {
+        return $this->applicantTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantTitle
+     *
+     * @return Title
+     */
+    public function setApplicantTitle($applicantTitle)
+    {
+        $this->applicantTitle = $applicantTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantContactTitle()
+    {
+        return $this->applicantContactTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantContactTitle
+     *
+     * @return Title
+     */
+    public function setApplicantContactTitle($applicantContactTitle)
+    {
+        $this->applicantContactTitle = $applicantContactTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     */
+    public function getApplicantFinancialTitle()
+    {
+        return $this->applicantFinancialTitle;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialTitle
+     *
+     * @return Title
+     */
+    public function setApplicantFinancialTitle($applicantFinancialTitle)
+    {
+        $this->applicantFinancialTitle = $applicantFinancialTitle;
+
+        return $this;
     }
 }

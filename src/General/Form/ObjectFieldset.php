@@ -5,7 +5,7 @@
  * @category    Content
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright   Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Form;
@@ -43,7 +43,7 @@ class ObjectFieldset extends Fieldset
              */
             if ($element instanceof EntitySelect || $element instanceof EntityMultiCheckbox) {
                 $element->setOptions(
-                    array_merge_recursive(
+                    array_merge(
                         $element->getOptions(),
                         [
                             'object_manager' => $entityManager,
@@ -55,7 +55,7 @@ class ObjectFieldset extends Fieldset
                 $attributes = $element->getAttributes();
                 $valueOptionsArray = 'get' . ucfirst($attributes['array']);
                 $element->setOptions(
-                    array_merge_recursive(
+                    array_merge(
                         $element->getOptions(),
                         [
                             'value_options' => $object->$valueOptionsArray(),

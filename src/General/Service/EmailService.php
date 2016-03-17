@@ -5,12 +5,13 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
 
 use Contact\Entity\Contact;
+use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -22,16 +23,14 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class EmailService.
  */
-class EmailService extends ServiceAbstract implements
-    ServiceLocatorAwareInterface,
-    GeneralServiceAwareInterface
+class EmailService extends ServiceAbstract
 {
     /**
      * @var Email
@@ -62,9 +61,17 @@ class EmailService extends ServiceAbstract implements
      */
     protected $message;
     /**
+     * @var string
+     */
+    protected $htmlView;
+    /**
      * @var array
      */
     protected $templateVars = [];
+    /**
+     * @var array
+     */
+    protected $headers = [];
     /**
      * @var MimePart[]
      */
@@ -72,15 +79,17 @@ class EmailService extends ServiceAbstract implements
 
 
     /**
-     * @param                $config
-     * @param ServiceManager $serviceManager
+     * EmailService constructor.
+     *
+     * @param                         $config
      */
-    public function __construct($config, ServiceManager $serviceManager)
+    public function __construct($config)
     {
         $this->config = $config;
+        
 
         if ($this->config["active"]) {
-            $this->renderer = $serviceManager->get('ZfcTwigRenderer');
+            
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
@@ -106,21 +115,19 @@ class EmailService extends ServiceAbstract implements
                 $options = new SmtpOptions($transportConfig);
                 $transport->setOptions($options);
             }
-            //$transport->send($message);
+
             $this->transport = $transport;
         }
     }
 
     /**
-     * Create a new email.
-     *
      * @param array $data
      *
      * @return Email
      */
     public function create($data = [])
     {
-        $this->email = new Email($data, $this->getServiceLocator());
+        $this->email = new Email($data);
 
         return $this->email;
     }
@@ -151,35 +158,43 @@ class EmailService extends ServiceAbstract implements
                     if ($contact instanceof Contact) {
                         $this->updateTemplateVarsWithContact($contact);
                     } else {
-                        $contactName = $contact;
                         $contact = new Contact();
                         $contact->setEmail($recipient);
-                        if (!is_null($contactName)) {
-                            $contact->setFirstName($contactName);
-                        }
                     }
 
                     /*
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                        $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                        $this->message->addTo(
+                            $contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                        );
                     }
 
-                    //$this->message->addTo($contact->getEmail(), $contact->getDisplayName());
-                    /*
+                    /**
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseSubject();
 
-                    /*
+                    /**
+                     * If we have a deeplink, parse it
+                     */
+                    $this->parseDeeplink();
+
+                    /**
+                     * If we have an unsubscribe, parse it
+                     */
+                    $this->parseUnsubscribe();
+
+                    /**
                      * We have the contact and can now produce the content of the message
                      */
                     $this->parseBody();
 
-                    /*
+                    /**
                      * Send the email
                      */
                     $this->transport->send($this->message);
@@ -203,19 +218,20 @@ class EmailService extends ServiceAbstract implements
                      * and fill the templateVars with extra options
                      */
                     if (!$contact instanceof Contact) {
-                        $contactName = $contact;
                         $contact = new Contact();
                         $contact->setEmail($recipient);
-                        $contact->setFirstName($contactName);
                     }
 
                     /*
                      * Overrule the to when we are in development
                      */
                     if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
-                        $this->message->addTo($this->config["emails"]["admin"], $contact->getDisplayName());
+                        $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
-                        $this->message->addTo($contact->getEmail(), $contact->getDisplayName());
+                        $this->message->addTo(
+                            $contact->getEmail(),
+                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                        );
                     }
                 }
 
@@ -223,6 +239,16 @@ class EmailService extends ServiceAbstract implements
                  * We have the contact and can now produce the content of the message
                  */
                 $this->parseSubject();
+
+                /**
+                 * If we have a deeplink, parse it
+                 */
+                $this->parseDeeplink();
+
+                /**
+                 * If we have an unsubscribe, parse it
+                 */
+                $this->parseUnsubscribe();
 
                 /*
                  * We have the contact and can now produce the content of the message
@@ -249,7 +275,7 @@ class EmailService extends ServiceAbstract implements
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (!empty($this->message->getSubject()) && !is_null($this->template)) {
+        if (empty($this->message->getSubject()) && !is_null($this->template)) {
             $this->message->setSubject($this->template->getSubject());
         }
 
@@ -274,47 +300,114 @@ class EmailService extends ServiceAbstract implements
     }
 
     /**
+     * Inject the deeplink in the email
+     */
+    public function parseDeeplink()
+    {
+        $this->templateVars['deeplink'] = $this->email->getDeeplink();
+    }
+
+    /**
+     * Inject the unsubscribe in the email
+     */
+    public function parseUnsubscribe()
+    {
+        $this->templateVars['unsubscribe'] = $this->email->getUnsubscribe();
+    }
+
+    /**
      * @return string|null
      */
     public function parseBody()
     {
         try {
-            $htmlView = $this->renderer->render(
+            $htmlView = $this->getRenderer()->render(
                 $this->email->getHtmlLayoutName(),
-                array_merge_recursive(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-            $textView = $this->renderer->render(
+            $textView = $this->getRenderer()->render(
                 'plain',
-                array_merge_recursive(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
         } catch (\Twig_Error_Syntax $e) {
             $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
         }
+
+        $this->htmlView = $htmlView;
+
+        //Download the embedded files ad attach them to the mailing
+        $htmlView = $this->embedImagesAsAttachment($htmlView);
+
 
         $htmlContent = new MimePart($htmlView);
         $htmlContent->type = "text/html";
         $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
-        $body->setParts(array_merge_recursive($this->attachments, [$htmlContent]));
-        /*
-         * Set specific headers
-         * https://eu.mailjet.com/docs/emails_headers
-         */
-        //message->getHeaders()->addHeaderLine('X-Mailjet-Campaign', $campaign);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-DeduplicateCampaign', $duplicateCampaign);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackOpen', $trackOpen);
-        //message->getHeaders()->addHeaderLine('X-Mailjet-TrackClick', $trackClick);
+        $body->setParts(array_merge($this->attachments, [$htmlContent]));
+
+
+        foreach ($this->headers as $name => $value) {
+            $this->message->getHeaders()->addHeaderLine($name, trim($value));
+        }
+
+        $this->message->getHeaders()->addHeaderLine('content-type', Mime::MULTIPART_RELATED);
 
         $this->message->setBody($body);
 
         return true;
+    }
+
+    /**
+     * @param $htmlView
+     *
+     * @return mixed
+     */
+    protected function embedImagesAsAttachment($htmlView)
+    {
+        $matches = [];
+        preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
+
+        $matches = array_unique($matches[1]);
+
+        if (count($matches) > 0) {
+            foreach ($matches as $key => $filename) {
+                if (($filename)) {
+                    $attachment = $this->addInlineAttachment($filename);
+                    $htmlView = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
+                }
+            }
+        }
+
+        return $htmlView;
+    }
+
+    /**
+     * @param $filename
+     *
+     * @return string
+     */
+    protected function mimeByExtension($filename)
+    {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+
+        switch ($extension) {
+            case 'gif':
+                $type = 'image/gif';
+                break;
+            case 'jpg':
+            case 'jpeg':
+                $type = 'image/jpg';
+                break;
+            case 'png':
+                $type = 'image/png';
+                break;
+            default:
+                $type = 'application/octet-stream';
+        }
+
+        return $type;
     }
 
     /**
@@ -348,16 +441,6 @@ class EmailService extends ServiceAbstract implements
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
         }
-
-        /*
-         * Force the mailing as header if we have a mailing
-         */
-        if (!is_null($this->mailing)) {
-            $this->message->getHeaders()->addHeaderLine(
-                'X-Mailjet-Campaign',
-                DEBRANOVA_HOST . '-mailing-' . $this->mailing->getId()
-            );
-        }
     }
 
     /**
@@ -367,26 +450,27 @@ class EmailService extends ServiceAbstract implements
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
-        /*
-         * @var ContactService
+        /**
+         * @var $contactService ContactService
          */
-        $contactService = clone $this->getServiceLocator()->get('contact_contact_service');
-        $contactService->setContact($contact);
+        $contactService = $this->getContactService()->setContact($contact);
 
         $this->templateVars['attention'] = $contactService->parseAttention();
         $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
-        $this->templateVars['lastname'] = trim(
-            sprintf(
-                "%s %s",
-                $contactService->getContact()->getMiddleName(),
-                $contactService->getContact()->getLastName()
-            )
-        );
+        $this->templateVars['lastname'] = trim(sprintf(
+            "%s %s",
+            $contactService->getContact()->getMiddleName(),
+            $contactService->getContact()->getLastName()
+        ));
         $this->templateVars['fullname'] = $contactService->parseFullName();
         $this->templateVars['country'] = (string)$contactService->parseCountry();
         $this->templateVars['organisation'] = $contactService->parseOrganisation();
         $this->templateVars['email'] = $contactService->getContact()->getEmail();
         $this->templateVars['signature'] = $contactService->parseSignature();
+
+        //Fill the unsubscribe with temp data
+        $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
+        $this->templateVars['deeplink'] = 'http://deeplink.example';
     }
 
     /**
@@ -396,25 +480,22 @@ class EmailService extends ServiceAbstract implements
      */
     protected function createTwigTemplate($content)
     {
-        return preg_replace(
-            [
-                '~\[(.*?)\]~',
-            ],
-            [
-                "{{ $1|raw }}",
-            ],
-            $content
-        );
+        return preg_replace([
+            '~\[(.*?)\]~',
+        ], [
+            "{{ $1|raw }}",
+        ], $content);
     }
 
     /**
-     * @param $content
-     * @param $type
-     * @param $fileName
+     * @param             $content
+     * @param             $type
+     * @param             $fileName
+     * @param null|string $id
      */
-    public function addAttachment($content, $type, $fileName)
+    public function addAttachment($content, $type, $fileName, $id = null)
     {
-        /*
+        /**
          * Create the attachment
          */
         $attachment = new MimePart($content);
@@ -425,6 +506,38 @@ class EmailService extends ServiceAbstract implements
         $attachment->encoding = Mime::ENCODING_BASE64;
 
         $this->attachments[] = $attachment;
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return MimePart
+     */
+    public function addInlineAttachment($fileName)
+    {
+        /**
+         * Create the attachment
+         */
+        $attachment = new MimePart(file_get_contents($fileName));
+        $attachment->id = 'cid_' . md5_file($fileName);
+        $attachment->type = $this->mimeByExtension($fileName);
+        $attachment->filename = substr(md5($attachment->id), 0, 10);
+        $attachment->disposition = Mime::DISPOSITION_INLINE;
+        // Setting the encoding is recommended for binary data
+        $attachment->encoding = Mime::ENCODING_BASE64;
+
+        $this->attachments[] = $attachment;
+
+        return $attachment;
+    }
+
+    /**
+     * @param $name
+     * @param $content
+     */
+    public function addHeader($name, $content)
+    {
+        $this->headers[$name] = $content;
     }
 
     /**
@@ -458,7 +571,7 @@ class EmailService extends ServiceAbstract implements
             if ($contact instanceof Contact) {
                 $this->message->addCc($contact->getEmail(), $contact);
             } else {
-                $this->message->addCc($emailAddress, $contact);
+                $this->message->addCc($emailAddress);
             }
         }
         //Bcc recipients
@@ -466,7 +579,7 @@ class EmailService extends ServiceAbstract implements
             if ($contact instanceof Contact) {
                 $this->message->addBcc($contact->getEmail(), $contact);
             } else {
-                $this->message->addBcc($emailAddress, $contact);
+                $this->message->addBcc($emailAddress);
             }
         }
         if (!is_null($this->email->getReplyTo())) {
@@ -487,8 +600,16 @@ class EmailService extends ServiceAbstract implements
             throw new \RuntimeException("The email object is empty. Did you call create() first?");
         }
 
-        $this->email->setFrom($this->mailing->getSender()->getEmail());
-        $this->email->setFromName($this->mailing->getSender()->getSender());
+        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self
+        if ($this->mailing->getSender()->getEmail() === '_self') {
+            if ($this->getAuthenticationService()->hasIdentity()) {
+                $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
+                $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
+            } else {
+                $this->email->setFrom($this->mailing->getContact()->getEmail());
+                $this->email->setFromName($this->mailing->getContact()->getDisplayName());
+            }
+        }
 
         $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
@@ -507,34 +628,27 @@ class EmailService extends ServiceAbstract implements
         /*
          * Replace first the content of the mailing with the required (new) short tags
          */
-        $content = preg_replace(
-            [
-                '~\[parent::getContact\(\)::firstname\]~',
-                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~',
-            ],
-            [
-                "[firstname]",
-                "[lastname]",
-                "[fullname]",
-                "[organisation]",
-                "[country]",
-            ],
-            $message
-        );
+        $content = preg_replace([
+            '~\[parent::getContact\(\)::firstname\]~',
+            '~\[parent::getContact\(\)::parseLastname\(\)\]~',
+            '~\[parent::getContact\(\)::parseFullname\(\)\]~',
+            '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
+            '~\[parent::getContact\(\)::country\]~',
+        ], [
+            "[firstname]",
+            "[lastname]",
+            "[fullname]",
+            "[organisation]",
+            "[country]",
+        ], $message);
 
         /*
          * Clone the twigRenderer and overrule to loader to be a string
          */
         $twigRenderer = new \Twig_Environment();
-        $twigRenderer->setLoader(new \Twig_Loader_String());
+        $twigRenderer->setLoader(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
 
-        return $twigRenderer->render(
-            $this->createTwigTemplate($content),
-            $this->templateVars
-        );
+        return $twigRenderer->render('email', $this->templateVars);
     }
 
     /**
@@ -544,19 +658,16 @@ class EmailService extends ServiceAbstract implements
      */
     public function generatePreview()
     {
-        $this->updateTemplateVarsWithContact($this->getContactService()->getContact());
+        $this->updateTemplateVarsWithContact($this->getAuthenticationService()->getIdentity());
 
         if (is_null($this->mailing)) {
             throw new \RuntimeException("The mailing object is empty. Did set the template");
         }
 
         try {
-            return $this->renderer->render(
+            return $this->getRenderer()->render(
                 $this->mailing->getTemplate()->getTemplate(),
-                array_merge_recursive(
-                    ['content' => $this->personaliseMessage($this->email->getMessage())],
-                    $this->templateVars
-                )
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
         } catch (\Twig_Error_Syntax $e) {
             print sprintf("Something went wrong. Error message: %s", $e->getMessage());
@@ -574,7 +685,7 @@ class EmailService extends ServiceAbstract implements
      */
     public function setTemplate($templateName)
     {
-        $this->template = $this->generalService->findWebInfoByInfo($templateName);
+        $this->template = $this->getGeneralService()->findWebInfoByInfo($templateName);
 
         if (is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
@@ -596,5 +707,33 @@ class EmailService extends ServiceAbstract implements
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlView()
+    {
+        return $this->htmlView;
+    }
+
+    /**
+     * @return TwigRenderer
+     */
+    public function getRenderer()
+    {
+        return $this->renderer;
+    }
+
+    /**
+     * @param TwigRenderer $renderer
+     *
+     * @return EmailService
+     */
+    public function setRenderer($renderer)
+    {
+        $this->renderer = $renderer;
+
+        return $this;
     }
 }

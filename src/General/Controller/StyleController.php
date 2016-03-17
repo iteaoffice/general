@@ -5,19 +5,17 @@
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2014 ITEA Office (http://itea3.org)
+ * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
  */
 
 namespace General\Controller;
-
-use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * The index of the system.
  *
  * @category Application
  */
-class StyleController extends AbstractActionController
+class StyleController extends GeneralAbstractController
 {
     /**
      * Index of the Index.
@@ -25,27 +23,26 @@ class StyleController extends AbstractActionController
     public function displayAction()
     {
         $requestedFile = '';
-        $response      = $this->getResponse();
-        $response->getHeaders()
-            ->addHeaderLine('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public");
-        $options            = $this->getServiceLocator()->get('general_module_options');
+        $response = $this->getResponse();
+        $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
+
+
         $requestedFileFound = false;
-        foreach ($options->getStyleLocations() as $location) {
-            $requestedFile = $location.DIRECTORY_SEPARATOR
-                .$options->getImageLocation().DIRECTORY_SEPARATOR
-                .$this->getEvent()->getRouteMatch()->getParam('source');
+        foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
+            $requestedFile = $location . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageLocation()
+                . DIRECTORY_SEPARATOR . $this->params('source');
             if (!$requestedFileFound && file_exists($requestedFile)) {
                 $requestedFileFound = true;
                 break;
             }
         }
-        if (!$requestedFileFound || is_null($this->getEvent()->getRouteMatch()->getParam('source'))) {
-            foreach ($options->getStyleLocations() as $location) {
-                $requestedFile = $location.DIRECTORY_SEPARATOR
-                    .$options->getImageLocation().DIRECTORY_SEPARATOR
-                    .$options->getImageNotFound();
+        if (!$requestedFileFound
+            || is_null($this->params('source'))
+        ) {
+            foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
+                $requestedFile = $location . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageLocation()
+                    . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageNotFound();
                 if (file_exists($requestedFile)) {
                     break;
                 }
@@ -54,22 +51,19 @@ class StyleController extends AbstractActionController
         /*
          * Create a cache-version of the file
          */
-        $cacheDir = __DIR__.'/../../../../../../public/assets/'.
-            (defined(
-                "DEBRANOVA_HOST"
-            ) ? DEBRANOVA_HOST : 'test').DIRECTORY_SEPARATOR.'style'.DIRECTORY_SEPARATOR.'image';
-            if (!file_exists($cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'))) {
-                //Save a copy of the file in the caching-folder
-                file_put_contents(
-                    $cacheDir.DIRECTORY_SEPARATOR.$this->getEvent()->getRouteMatch()->getParam('source'),
-                    file_get_contents($requestedFile)
-                );
-            }
-            $response->getHeaders()
-            ->addHeaderLine('Content-Type: image/jpg')
-            ->addHeaderLine('Content-Length: '.(string) filesize($requestedFile));
-            $response->setContent(file_get_contents($requestedFile));
+        $cacheDir = __DIR__ . '/../../../../../../public/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+                : 'test') . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
+        if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->params('source'))) {
+            //Save a copy of the file in the caching-folder
+            file_put_contents(
+                $cacheDir . DIRECTORY_SEPARATOR . $this->params('source'),
+                file_get_contents($requestedFile)
+            );
+        }
+        $response->getHeaders()->addHeaderLine('Content-Type: image/jpg')->addHeaderLine('Content-Length: '
+            . (string)filesize($requestedFile));
+        $response->setContent(file_get_contents($requestedFile));
 
-            return $response;
+        return $response;
     }
 }

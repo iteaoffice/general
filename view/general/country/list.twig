@@ -1,0 +1,83 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-country-list")) %}
+
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+{% set filter = form.get('filter') %}
+
+<input type="hidden" name="filter[order]" value="{{ order }}">
+<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
+<div class="row">
+
+    <div class="col-md-10">
+        <h1>{{ translate("txt-country-list") }}</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="lead">{{ translate("txt-country-list-explanation") }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+            </div>
+        </div>
+
+        {% if paginator.pageRange > 0 %}
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'iso3', 'text': translate('txt-iso3')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'cd', 'text': translate('txt-cd')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'numcode', 'text': translate('txt-numcode')} %}</th>
+                    <th>{{ translate("txt-eu") }}</th>
+                    <th>{{ translate("txt-eureka") }}</th>
+                    <th>{{ translate("txt-itac") }}</th>
+                    <th>{{ translate("txt-funders") }}</th>
+                    <th>{{ translate("txt-flag") }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for country in paginator.getCurrentItems() %}
+                    <tr>
+                        <td>{{ country.id }} {{ countryLink(country,'edit', 'icon') }}</td>
+                        <td>{{ countryLink(country,'view-admin','name') }} {{ countryLink(country,'view','icon') }}</td>
+                        <td>{{ country.iso3 }}</td>
+                        <td>{{ country.cd }}</td>
+                        <td>{{ country.numcode }}</td>
+                        <td>{% if country.eu %}YES{% endif %}</td>
+                        <td>{% if country.eureka %}YES{% endif %}</td>
+                        <td>{% if country.itac %}YES{% endif %}</td>
+                        <td>{{ country.funder.count }}</td>
+                        <td>{% if country.flag %}{{ countryLink(country,'view','flag') }}{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'general/partial/pagination-control' %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-countries-could-be-found"))|raw }}
+        {% endif %}
+    </div>
+    <div class="col-md-2">
+        <div class="well well-sm">
+            <fieldset>
+                {{ ztbformelement(filter.get('eu')) }}
+                {{ ztbformelement(filter.get('eureka')) }}
+                {{ ztbformelement(filter.get('itac')) }}
+
+                <div class="form-group">
+                    {{ ztbformelement(form.get('submit')) }}
+                    {{ ztbformelement(form.get('clear')) }}
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}
+
+{{ countryLink(null, 'new','button') }}
