@@ -40,7 +40,8 @@ class WebInfoLabel extends AbstractNavigationInvokable
             $webInfo = $this->getEntities()->get(WebInfo::class);
 
             $page->setParams(array_merge(
-                $page->getParams(), ['id' => $webInfo->getId()]
+                $page->getParams(),
+                ['id' => $webInfo->getId()]
             ));
             $label = (string) $webInfo;
         } else {

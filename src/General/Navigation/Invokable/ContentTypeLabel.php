@@ -40,7 +40,8 @@ class ContentTypeLabel extends AbstractNavigationInvokable
             $type = $this->getEntities()->get(ContentType::class);
 
             $page->setParams(array_merge(
-                $page->getParams(), ['id' => $type->getId()]
+                $page->getParams(),
+                ['id' => $type->getId()]
             ));
             $label = $type->getDescription();
         } else {

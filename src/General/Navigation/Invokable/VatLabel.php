@@ -40,7 +40,8 @@ class VatLabel extends AbstractNavigationInvokable
             $vat = $this->getEntities()->get(Vat::class);
 
             $page->setParams(array_merge(
-                $page->getParams(), ['id' => $vat->getId()]
+                $page->getParams(),
+                ['id' => $vat->getId()]
             ));
             $label = (string) $vat;
         } else {

@@ -149,12 +149,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $workpackageDocument;
     /**
-     * @ORM\OneToMany(targetEntity="Ambassador\Entity\Document", cascade={"persist"}, mappedBy="contentType")
-     * @Annotation\Exclude()
-     * @var \Ambassador\Entity\Document[]|Collections\ArrayCollection
-     */
-    private $ambassadorDocument;
-    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      * @var \Project\Entity\Poster\Poster[]|Collections\ArrayCollection
@@ -256,7 +250,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->meetingFloorplan = new Collections\ArrayCollection();
         $this->exhibitionFloorplan = new Collections\ArrayCollection();
         $this->reminder = new Collections\ArrayCollection();
-        $this->ambassadorDocument = new Collections\ArrayCollection();
     }
 
     /**
@@ -694,14 +687,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setProjectDescriptionImage($projectDescriptionImage)
     {
         $this->projectDescriptionImage = $projectDescriptionImage;
-    }
-
-    /**
-     * @return \Ambassador\Entity\Document[]
-     */
-    public function getAmbassadorDocument()
-    {
-        return $this->ambassadorDocument;
     }
 
     /**

@@ -166,13 +166,6 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $rationale;
     /**
-     * @ORM\OneToMany(targetEntity="Ambassador\Entity\Ambassador", cascade={"persist","remove"}, mappedBy="country")
-     * @Annotation\Exclude()
-     *
-     * @var \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection
-     */
-    private $ambassador;
-    /**
      * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
      * @Annotation\Exclude()
      *
@@ -220,7 +213,6 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->vat = new Collections\ArrayCollection();
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
-        $this->ambassador = new Collections\ArrayCollection();
         $this->changerequestCountry = new Collections\ArrayCollection();
         $this->projectLog = new Collections\ArrayCollection();
         $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
@@ -387,25 +379,6 @@ class Country extends EntityAbstract implements ResourceInterface
         }
 
         return $this->inputFilter;
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'address'      => $this->address,
-            'organisation' => $this->organisation,
-            'vat'          => $this->vat,
-        ];
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
     }
 
     /**
@@ -718,46 +691,6 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setRationale($rationale)
     {
         $this->rationale = $rationale;
-    }
-
-    /**
-     * @return \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection
-     */
-    public function getAmbassador()
-    {
-        return $this->ambassador;
-    }
-
-    /**
-     * @param \Ambassador\Entity\Ambassador[]|Collections\ArrayCollection $ambassador
-     *
-     * @return Country
-     */
-    public function setAmbassador($ambassador)
-    {
-        $this->ambassador = $ambassador;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
-     */
-    public function getApplicant()
-    {
-        return $this->applicant;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicant
-     *
-     * @return Country
-     */
-    public function setApplicant($applicant)
-    {
-        $this->applicant = $applicant;
-
-        return $this;
     }
 
     /**

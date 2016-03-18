@@ -40,7 +40,8 @@ class GenderLabel extends AbstractNavigationInvokable
             $gender = $this->getEntities()->get(Gender::class);
 
             $page->setParams(array_merge(
-                $page->getParams(), ['id' => $gender->getId()]
+                $page->getParams(),
+                ['id' => $gender->getId()]
             ));
             $label = $gender->getName();
         } else {
