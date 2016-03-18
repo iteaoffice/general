@@ -16,6 +16,7 @@ namespace General\Factory;
 
 use Doctrine\ORM\EntityManager;
 use General\Service\FormService;
+use General\Service\GeneralService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -38,6 +39,9 @@ class FormServiceFactory implements FactoryInterface
         /** @var EntityManager $entityManager */
         $entityManager = $serviceLocator->get(EntityManager::class);
         $formService->setEntityManager($entityManager);
+        /** @var GeneralService $generalService */
+        $generalService = $serviceLocator->get(GeneralService::class);
+        $formService->setGeneralService($generalService);
 
         return $formService;
     }

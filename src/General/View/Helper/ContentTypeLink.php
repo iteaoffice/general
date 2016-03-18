@@ -77,14 +77,14 @@ class ContentTypeLink extends LinkAbstract
                 $this->setRouter('zfcadmin/content-type/view');
                 $this->setText(sprintf(
                     $this->translate('txt-view-content-type-%s'),
-                    $this->getContentType()
+                    $this->getContentType()->getDescription()
                 ));
                 break;
             case 'edit':
                 $this->setRouter('zfcadmin/content-type/edit');
                 $this->setText(sprintf(
                     $this->translate('txt-edit-content-type-%s'),
-                    $this->getContentType()
+                    $this->getContentType()->getDescription()
                 ));
                 break;
             default:

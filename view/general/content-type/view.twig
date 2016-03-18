@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
-{% do headTitle().append(translate("txt-content-type-%s")|format(contentType)) %}
+{% do headTitle().append(translate("txt-content-type-%s")|format(contentType.description)) %}
 
-<h1>{{ translate("txt-content-type-%s")|format(contentType) }}</h1>
+<h1>{{ translate("txt-content-type-%s")|format(contentType.description) }}</h1>
 
 <h2><strong>{{ translate("txt-content-type-information") }}</strong></h2>
 <dl class="dl-horizontal">
@@ -11,9 +11,6 @@
     <dd>{{ contentType.description }}</dd>
     <dt>{{ translate("txt-content-type") }}</dt>
     <dd>{{ contentType.contentType }}</dd>
-    <dt>{{ translate("txt-description") }}</dt>
-    <dd>{{ contentType.description }}</dd>
 </dl>
-
 
 {{ contentTypeLink(contentType,'edit','button') }} {{ contentTypeLink(null, 'new','button') }} {{ contentTypeLink(null, 'list','button') }}
