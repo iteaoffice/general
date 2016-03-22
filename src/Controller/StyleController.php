@@ -51,7 +51,7 @@ class StyleController extends GeneralAbstractController
         /*
          * Create a cache-version of the file
          */
-        $cacheDir = __DIR__ . '/../../../../../../public/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
+        $cacheDir = __DIR__ . '/../../../../../public/assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST
                 : 'test') . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
         if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->params('source'))) {
             //Save a copy of the file in the caching-folder

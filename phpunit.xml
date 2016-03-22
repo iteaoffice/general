@@ -1,4 +1,4 @@
-<phpunit bootstrap="tests/GeneralTest/Bootstrap.php"
+<phpunit bootstrap="tests/Bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -10,7 +10,7 @@
          syntaxCheck="true"
 >
     <testsuite name="iteaoffice/general">
-        <directory>./tests/GeneralTest</directory>
+        <directory>./tests</directory>
     </testsuite>
 
     <filter>

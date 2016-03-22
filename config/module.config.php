@@ -105,7 +105,7 @@ $config = [
         'driver'       => [
             'general_annotation_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'paths' => [__DIR__ . '/../src/General/Entity/'],
+                'paths' => [__DIR__ . '/../src/Entity/'],
             ],
             'orm_default'               => [
                 'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
