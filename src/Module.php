@@ -21,8 +21,7 @@ use Zend\ModuleManager\Feature;
 /**
  *
  */
-class Module
-    implements Feature\AutoloaderProviderInterface, Feature\ServiceProviderInterface, Feature\ConfigProviderInterface
+class Module implements Feature\AutoloaderProviderInterface, Feature\ServiceProviderInterface, Feature\ConfigProviderInterface
 {
     /**
      * @return array
