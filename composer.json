@@ -30,8 +30,8 @@
   },
   "autoload": {
     "psr-4": {
-      "General\\": "src/General/",
-      "GeneralTest\\": "tests/GeneralTest"
+      "General\\": "src/",
+      "GeneralTest\\": "tests"
     }
   },
   "config": {
