@@ -11,17 +11,17 @@
 namespace General\View\Helper;
 
 use General\Service\GeneralService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
 
 /**
  * Class VersionServiceProxy.
  */
-class GeneralServiceProxy extends AbstractHelper implements ServiceLocatorAwareInterface
+class GeneralServiceProxy extends AbstractHelper
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var HelperPluginManager
      */
     protected $serviceLocator;
 

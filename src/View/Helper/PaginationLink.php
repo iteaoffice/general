@@ -39,8 +39,8 @@ class PaginationLink extends LinkAbstract
         $router = $this->getRouteMatch()->getMatchedRouteName();
 
         $params = array_merge($this->getRouteMatch()->getParams(), [
-                'page' => $page,
-            ]);
+            'page' => $page,
+        ]);
 
         /**
          * @var $url Url
@@ -49,11 +49,6 @@ class PaginationLink extends LinkAbstract
 
         $uri = '<a href="%s" title="%s">%s</a>';
 
-        return sprintf(
-            $uri,
-            $url($router, $params),
-            sprintf($this->translate("txt-go-to-page-%s"), $show),
-            $show
-        );
+        return sprintf($uri, $url($router, $params), sprintf($this->translate("txt-go-to-page-%s"), $show), $show);
     }
 }

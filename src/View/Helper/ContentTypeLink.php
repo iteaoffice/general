@@ -38,12 +38,7 @@ class ContentTypeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!$this->hasAccess(
-            $this->getContentType(),
-            'General\Acl\Assertion\ContentType',
-            $this->getAction()
-        )
-        ) {
+        if (!$this->hasAccess($this->getContentType(), \General\Acl\Assertion\ContentType::class, $this->getAction())) {
             return $action === 'view' ? (string)$this->getContentType() : null;
         }
 
@@ -88,11 +83,7 @@ class ContentTypeLink extends LinkAbstract
                 ));
                 break;
             default:
-                throw new \Exception(sprintf(
-                    '%s is an incorrect action for %s',
-                    $this->getAction(),
-                    __CLASS__
-                ));
+                throw new \Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));
         }
     }
 }

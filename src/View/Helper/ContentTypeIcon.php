@@ -13,7 +13,6 @@ namespace General\View\Helper;
 
 use General\Entity\ContentType;
 use General\Service\GeneralService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\View\HelperPluginManager;
 
 /**
@@ -21,7 +20,7 @@ use Zend\View\HelperPluginManager;
  *
  * @category   General
  */
-class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInterface
+class ContentTypeIcon extends HelperAbstract
 {
     /**
      * @var HelperPluginManager
@@ -30,7 +29,7 @@ class ContentTypeIcon extends HelperAbstract implements ServiceLocatorAwareInter
 
     /**
      * @param ContentType|null $contentType
-     * @param string|null $contentTypeName
+     * @param string|null      $contentTypeName
      *
      * @return string
      */

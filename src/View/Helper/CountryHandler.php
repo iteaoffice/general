@@ -23,7 +23,6 @@ use Program\Service\ProgramService;
 use Project\Service\ProjectService;
 use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\HelperPluginManager;
@@ -32,7 +31,7 @@ use ZfcTwig\View\TwigRenderer;
 /**
  * Class CountryHandler.
  */
-class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterface
+class CountryHandler extends AbstractHelper
 {
     /**
      * @var HelperPluginManager
@@ -56,18 +55,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $this->extractContentParam($content);
 
-        if (in_array(
-            $content->getHandler()->getHandler(),
-            [
+        if (in_array($content->getHandler()->getHandler(), [
                 'country',
                 'country_map',
                 'country_funder',
                 'country_project',
                 'country_metadata',
                 'country_article',
-            ]
-        )
-        ) {
+            ])) {
             if (is_null($this->getCountry())) {
                 $this->getServiceLocator()->get("response")->setStatusCode(404);
 
@@ -82,14 +77,8 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
                 $countryLink = $this->serviceLocator->get('countryLink');
                 $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
                 $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
-                $this->serviceLocator->get('headmeta')->setProperty(
-                    'og:url',
-                    $countryLink->__invoke(
-                        $this->getCountry(),
-                        'view',
-                        'social'
-                    )
-                );
+                $this->serviceLocator->get('headmeta')
+                    ->setProperty('og:url', $countryLink->__invoke($this->getCountry(), 'view', 'social'));
 
                 return $this->parseCountry();
 
@@ -263,12 +252,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountry()
     {
-        return $this->getRenderer()->render(
-            'general/partial/entity/country',
-            [
+        return $this->getRenderer()->render('general/partial/entity/country', [
                 'country' => $this->getCountry(),
-            ]
-        );
+            ]);
     }
 
     /**
@@ -312,12 +298,9 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getRenderer()->render(
-            'program/partial/list/funder',
-            [
+        return $this->getRenderer()->render('program/partial/list/funder', [
                 'funder' => $funder,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -335,24 +318,20 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryMetadata(Country $country)
     {
-        $whichProjects = $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+        $whichProjects = $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE
+            : ProjectService::WHICH_ALL;
 
         $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
 
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
-        $organisations = $this->getOrganisationService()->findOrganisationByCountry(
-            $this->getCountry(),
-            $onlyActivePartners
-        );
+        $organisations = $this->getOrganisationService()
+            ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
-        return $this->getRenderer()->render(
-            'general/partial/entity/country-metadata',
-            [
+        return $this->getRenderer()->render('general/partial/entity/country-metadata', [
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
-            ]
-        );
+            ]);
     }
 
     /**
@@ -380,10 +359,8 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
         $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
-        $organisations = $this->getOrganisationService()->findOrganisationByCountry(
-            $this->getCountry(),
-            $onlyActivePartners
-        );
+        $organisations = $this->getOrganisationService()
+            ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
         $members = [];
         /** @var Organisation $organisation */
@@ -401,15 +378,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
             }
         }
 
-        return $this->getRenderer()->render(
-            'general/partial/entity/country-info',
-            [
+        return $this->getRenderer()->render('general/partial/entity/country-info', [
                 'country'       => $country,
                 'projects'      => $projects,
                 'organisations' => $organisations->getResult(),
                 'members'       => $members,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -421,10 +395,7 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $countries = $this->getGeneralService()->findActiveCountries();
 
-        return $this->getRenderer()->render(
-            'general/partial/list/country',
-            ['countries' => $countries]
-        );
+        return $this->getRenderer()->render('general/partial/list/country', ['countries' => $countries]);
     }
 
     /**
@@ -436,16 +407,14 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
     {
         $countries = $this->getGeneralService()->findItacCountries();
 
-        return $this->getRenderer()->render(
-            'general/partial/list/country-itac',
-            ['countries' => $countries]
-        );
+        return $this->getRenderer()->render('general/partial/list/country-itac', ['countries' => $countries]);
     }
 
     /**
      * Create a list of organisations for the current country.
      *
      * @param  int $page
+     *
      * @throws \InvalidArgumentException
      * @return string
      */
@@ -454,23 +423,17 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
-        $organisationQuery = $this->getOrganisationService()->findOrganisationByCountry(
-            $this->getCountry(),
-            true,
-            true
-        );
+        $organisationQuery = $this->getOrganisationService()
+            ->findOrganisationByCountry($this->getCountry(), true, true);
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
-        return $this->getRenderer()->render(
-            'general/partial/list/organisation',
-            [
+        return $this->getRenderer()->render('general/partial/list/organisation', [
                 'country'   => $this->getCountry(),
                 'paginator' => $paginator,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -480,18 +443,16 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
      */
     public function parseCountryProjectList(Country $country)
     {
-        $whichProjects =
-            $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE : ProjectService::WHICH_ALL;
+        $whichProjects
+            = $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE
+            : ProjectService::WHICH_ALL;
 
         $projects = $this->getProjectService()->findProjectByCountry($country, $whichProjects);
 
-        return $this->getRenderer()->render(
-            'general/partial/list/project',
-            [
+        return $this->getRenderer()->render('general/partial/list/project', [
                 'country'  => $country,
                 'projects' => $projects,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -506,14 +467,12 @@ class CountryHandler extends AbstractHelper implements ServiceLocatorAwareInterf
         /*
          * Parse the organisationService in to have the these functions available in the view
          */
-        return $this->getRenderer()->render(
-            'general/partial/list/article',
-            [
+
+        return $this->getRenderer()->render('general/partial/list/article', [
                 'country'  => $country,
                 'articles' => $articles,
                 'limit'    => $this->getLimit(),
-            ]
-        );
+            ]);
     }
 
     /**

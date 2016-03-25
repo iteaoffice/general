@@ -14,22 +14,11 @@ use General\Controller;
 use General\Factory;
 use General\Options;
 use General\Service;
-use General\View\Helper;
+use General\View;
 use Zend\Stdlib\ArrayUtils;
 
 $config = [
     'controllers'     => [
-        'invokables'         => [
-            //Controller\IndexController::class      ,
-            //Controller\VatController::class        ,
-            //Controller\VatTypeController::class    ,
-            //Controller\GenderController::class     ,
-            //Controller\TitleController::class      ,
-            //Controller\WebInfoController::class    ,
-            //Controller\CountryController::class    ,
-            //Controller\ChallengeController::class  ,
-            //Controller\ContentTypeController::class,
-        ],
         'abstract_factories' => [
             Controller\Factory\ControllerInvokableAbstractFactory::class,
         ],
@@ -38,22 +27,39 @@ $config = [
         'template_map' => include __DIR__ . '/../template_map.php',
     ],
     'view_helpers'    => [
-        'invokables' => [
-            'generalServiceProxy' => Helper\GeneralServiceProxy::class,
-            'countryHandler'      => Helper\CountryHandler::class,
-            'challengeHandler'    => Helper\ChallengeHandler::class,
-            'countryMap'          => Helper\CountryMap::class,
-            'countryFlag'         => Helper\CountryFlag::class,
-            'countryLink'         => Helper\CountryLink::class,
-            'vatLink'             => Helper\VatLink::class,
-            'genderLink'          => Helper\GenderLink::class,
-            'titleLink'           => Helper\TitleLink::class,
-            'vatTypeLink'         => Helper\VatTypeLink::class,
-            'challengeLink'       => Helper\ChallengeLink::class,
-            'webInfoLink'         => Helper\WebInfoLink::class,
-            'contentTypeLink'     => Helper\ContentTypeLink::class,
-            'contentTypeIcon'     => Helper\ContentTypeIcon::class,
+        'aliases'   => [
+            'generalServiceProxy' => View\Helper\GeneralServiceProxy::class,
+            'countryHandler'      => View\Helper\CountryHandler::class,
+            'challengeHandler'    => View\Helper\ChallengeHandler::class,
+            'countryMap'          => View\Helper\CountryMap::class,
+            'countryFlag'         => View\Helper\CountryFlag::class,
+            'countryLink'         => View\Helper\CountryLink::class,
+            'vatLink'             => View\Helper\VatLink::class,
+            'genderLink'          => View\Helper\GenderLink::class,
+            'titleLink'           => View\Helper\TitleLink::class,
+            'vatTypeLink'         => View\Helper\VatTypeLink::class,
+            'challengeLink'       => View\Helper\ChallengeLink::class,
+            'webInfoLink'         => View\Helper\WebInfoLink::class,
+            'contentTypeLink'     => View\Helper\ContentTypeLink::class,
+            'contentTypeIcon'     => View\Helper\ContentTypeIcon::class,
         ],
+        'factories' => [
+            View\Helper\GeneralServiceProxy::class => View\Factory\LinkInvokableFactory::class,
+            View\Helper\CountryHandler::class      => View\Factory\LinkInvokableFactory::class,
+            View\Helper\ChallengeHandler::class    => View\Factory\LinkInvokableFactory::class,
+            View\Helper\CountryMap::class          => View\Factory\LinkInvokableFactory::class,
+            View\Helper\CountryFlag::class         => View\Factory\LinkInvokableFactory::class,
+            View\Helper\CountryLink::class         => View\Factory\LinkInvokableFactory::class,
+            View\Helper\VatLink::class             => View\Factory\LinkInvokableFactory::class,
+            View\Helper\GenderLink::class          => View\Factory\LinkInvokableFactory::class,
+            View\Helper\TitleLink::class           => View\Factory\LinkInvokableFactory::class,
+            View\Helper\VatTypeLink::class         => View\Factory\LinkInvokableFactory::class,
+            View\Helper\ChallengeLink::class       => View\Factory\LinkInvokableFactory::class,
+            View\Helper\WebInfoLink::class         => View\Factory\LinkInvokableFactory::class,
+            View\Helper\ContentTypeLink::class     => View\Factory\LinkInvokableFactory::class,
+            View\Helper\ContentTypeIcon::class     => View\Factory\LinkInvokableFactory::class,
+
+        ]
     ],
     'service_manager' => [
         'factories'          => [

@@ -10,6 +10,11 @@
 
 namespace General\Entity;
 
+/**
+ * Interface EntityInterface
+ *
+ * @package General\Entity
+ */
 interface EntityInterface
 {
     public function __get($property);

@@ -11,7 +11,6 @@
 
 namespace General\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\Url;
@@ -20,7 +19,7 @@ use Zend\View\HelperPluginManager;
 /**
  * Class LinkAbstract.
  */
-abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAwareInterface
+abstract class HelperAbstract extends AbstractHelper
 {
     /**
      * @var HelperPluginManager
@@ -63,7 +62,7 @@ abstract class HelperAbstract extends AbstractHelper implements ServiceLocatorAw
 
     /**
      * @param string $router
-     * @param array $params
+     * @param array  $params
      *
      * @return Url
      */

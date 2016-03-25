@@ -10,9 +10,8 @@
             </tr>
         </thead>
         {% for organisation in paginator.getCurrentItems() %}
-            {% set organisationService = organisationServiceProxy(organisation) %}
          <tr>
-             <td>{{ organisationLink(organisationService,'view','name') }}</td>
+             <td>{{ organisationLink(organisation,'view','name') }}</td>
              <td>{{ organisation.type }}</td>
          </tr>
         {% endfor %}

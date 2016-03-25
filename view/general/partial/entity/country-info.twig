@@ -61,9 +61,8 @@
                         </tr>
                     </thead>
                     {% for organisation in organisations %}
-                        {% set organisationService = organisationServiceProxy(organisation) %}
                      <tr>
-                         <td>{{ organisationLink(organisationService, 'view', 'name') }}</td>
+                         <td>{{ organisationLink(organisation, 'view', 'name') }}</td>
                          <td>{{ organisation.type }}</td>
                      </tr>
                     {% endfor %}
@@ -80,9 +79,8 @@
                         </tr>
                     </thead>
                     {% for organisation in members %}
-                        {% set organisationService = organisationServiceProxy(organisation) %}
                      <tr>
-                         <td>{{ organisationLink(organisationService,'view','name') }}</td>
+                         <td>{{ organisationLink(organisation,'view','name') }}</td>
                          <td>
                              {% if organisation.member %}
                                 {{ organisation.member.type }}

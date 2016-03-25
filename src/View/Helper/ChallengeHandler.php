@@ -15,7 +15,6 @@ use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
 use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\HelperPluginManager;
@@ -24,7 +23,7 @@ use ZfcTwig\View\TwigRenderer;
 /**
  * Class ChallengeHandler.
  */
-class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInterface
+class ChallengeHandler extends AbstractHelper
 {
     /**
      * @var HelperPluginManager
@@ -50,9 +49,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
 
                 return $this->parseChallenge();
             case 'challenge_list':
-                $page = $this->getRouteMatch()->getParam('page');
-
-                return $this->parseChallengeList($page);
+                return $this->parseChallengeList();
             case 'challenge_project':
                 return $this->parseChallengeProjectList($this->getChallenge());
             default:
@@ -180,10 +177,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
      */
     public function parseChallenge()
     {
-        return $this->getRenderer()->render(
-            'general/partial/entity/challenge',
-            array('challenge' => $this->getChallenge())
-        );
+        return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $this->getChallenge()]);
     }
 
     /**
@@ -201,10 +195,7 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
     {
         $challenge = $this->getGeneralService()->findAll('challenge');
 
-        return $this->getRenderer()->render(
-            'general/partial/list/challenge',
-            array('challenge' => $challenge)
-        );
+        return $this->getRenderer()->render('general/partial/list/challenge', ['challenge' => $challenge]);
     }
 
     /**
@@ -216,13 +207,10 @@ class ChallengeHandler extends AbstractHelper implements ServiceLocatorAwareInte
     {
         $projects = $this->getProjectService()->findProjectByChallenge($challenge);
 
-        return $this->getRenderer()->render(
-            'general/partial/list/project-challenge',
-            array(
-                'projects'  => $projects,
-                'challenge' => $challenge,
-            )
-        );
+        return $this->getRenderer()->render('general/partial/list/project-challenge', [
+            'projects'  => $projects,
+            'challenge' => $challenge,
+        ]);
     }
 
     /**

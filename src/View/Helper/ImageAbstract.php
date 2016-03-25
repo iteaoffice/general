@@ -12,7 +12,6 @@
 namespace General\View\Helper;
 
 use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\Url;
@@ -21,7 +20,7 @@ use Zend\View\HelperPluginManager;
 /**
  * Class LinkAbstract.
  */
-abstract class ImageAbstract extends AbstractHelper implements ServiceLocatorAwareInterface
+abstract class ImageAbstract extends AbstractHelper
 {
     /**
      * @var HelperPluginManager

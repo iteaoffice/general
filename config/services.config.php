@@ -9,7 +9,6 @@
  */
 use General\Entity;
 use General\Form;
-use General\Options;
 
 return [
     'factories' => [
@@ -37,7 +36,5 @@ return [
         'general_content_type_form' => function ($sm) {
             return new Form\CreateObject($sm, new Entity\ContentType());
         },
-
-
     ],
 ];
