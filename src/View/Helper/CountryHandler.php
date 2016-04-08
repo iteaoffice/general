@@ -10,6 +10,7 @@
 
 namespace General\View\Helper;
 
+use Contact\Service\ContactService;
 use Content\Entity\Content;
 use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -17,7 +18,6 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Country;
 use General\Options\ModuleOptions;
 use General\Service\GeneralService;
-use Organisation\Entity\Organisation;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Service\ProjectService;
@@ -56,13 +56,13 @@ class CountryHandler extends AbstractHelper
         $this->extractContentParam($content);
 
         if (in_array($content->getHandler()->getHandler(), [
-                'country',
-                'country_map',
-                'country_funder',
-                'country_project',
-                'country_metadata',
-                'country_article',
-            ])) {
+            'country',
+            'country_map',
+            'country_funder',
+            'country_project',
+            'country_metadata',
+            'country_article',
+        ])) {
             if (is_null($this->getCountry())) {
                 $this->getServiceLocator()->get("response")->setStatusCode(404);
 
@@ -95,8 +95,6 @@ class CountryHandler extends AbstractHelper
             case 'country_metadata':
                 return $this->parseCountryMetadata($this->getCountry());
 
-            case 'country_info':
-                return $this->parseCountryInfo($this->getCountry());
 
             case 'country_list':
                 $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
@@ -111,9 +109,15 @@ class CountryHandler extends AbstractHelper
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
 
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
+                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
+
                 return $this->parseOrganisationList($page);
 
             case 'country_project':
+                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
+                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
+
                 return $this->parseCountryProjectList($this->getCountry());
 
             case 'country_article':
@@ -135,13 +139,13 @@ class CountryHandler extends AbstractHelper
     {
         //Give default the docRef to the handler, this does not harm
         if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
-            $this->setCountryDocRef($this->getRouteMatch()->getParam('docRef'));
+            $this->setCountryByDocRef($this->getRouteMatch()->getParam('docRef'));
         }
         foreach ($content->getContentParam() as $param) {
             switch ($param->getParameter()->getParam()) {
                 case 'docRef':
                     if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
-                        $this->setCountryDocRef($docRef);
+                        $this->setCountryByDocRef($docRef);
                     }
                     break;
                 case 'limit':
@@ -153,7 +157,7 @@ class CountryHandler extends AbstractHelper
                     $this->setLimit($limit);
                     break;
                 default:
-                    $this->setCountryId($param->getParameterId());
+                    $this->setCountryById($param->getParameterId());
                     break;
             }
         }
@@ -193,12 +197,10 @@ class CountryHandler extends AbstractHelper
 
     /**
      * @param $docRef
-     *
-     * @return Country
      */
-    public function setCountryDocRef($docRef)
+    public function setCountryByDocRef($docRef)
     {
-        $this->setCountry($this->getGeneralService()->findEntityByDocRef('country', $docRef));
+        $this->setCountry($this->getGeneralService()->findEntityByDocRef(Country::class, $docRef));
     }
 
     /**
@@ -211,14 +213,10 @@ class CountryHandler extends AbstractHelper
 
     /**
      * @param $id
-     *
-     * @return Country
      */
-    public function setCountryId($id)
+    public function setCountryById($id)
     {
-        $this->setCountry($this->getGeneralService()->findEntityById('country', $id));
-
-        return $this->getCountry();
+        $this->setCountry($this->getGeneralService()->findEntityById(Country::class, $id));
     }
 
     /**
@@ -253,8 +251,8 @@ class CountryHandler extends AbstractHelper
     public function parseCountry()
     {
         return $this->getRenderer()->render('general/partial/entity/country', [
-                'country' => $this->getCountry(),
-            ]);
+            'country' => $this->getCountry(),
+        ]);
     }
 
     /**
@@ -299,8 +297,9 @@ class CountryHandler extends AbstractHelper
          */
 
         return $this->getRenderer()->render('program/partial/list/funder', [
-                'funder' => $funder,
-            ]);
+            'funder'         => $funder,
+            'contactService' => $this->getContactService(),
+        ]);
     }
 
     /**
@@ -328,10 +327,10 @@ class CountryHandler extends AbstractHelper
             ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
         return $this->getRenderer()->render('general/partial/entity/country-metadata', [
-                'country'       => $country,
-                'projects'      => $projects,
-                'organisations' => $organisations->getResult(),
-            ]);
+            'country'       => $country,
+            'projects'      => $projects,
+            'organisations' => $organisations->getResult(),
+        ]);
     }
 
     /**
@@ -351,39 +350,11 @@ class CountryHandler extends AbstractHelper
     }
 
     /**
-     * @param Country $country
-     *
-     * @return string
+     * @return ContactService
      */
-    public function parseCountryInfo(Country $country)
+    public function getContactService()
     {
-        $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
-        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry());
-        $organisations = $this->getOrganisationService()
-            ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
-
-        $members = [];
-        /** @var Organisation $organisation */
-        foreach ($organisations->getResult() as $organisation) {
-            // Direct members
-            if ($organisation->getMember()) {
-                $members[] = $organisation;
-                // Member through cluster
-            } else {
-                foreach ($organisation->getClusterMember() as $cluster) {
-                    if ($cluster->getOrganisation()->getMember()) {
-                        $members[] = $organisation;
-                    }
-                }
-            }
-        }
-
-        return $this->getRenderer()->render('general/partial/entity/country-info', [
-                'country'       => $country,
-                'projects'      => $projects,
-                'organisations' => $organisations->getResult(),
-                'members'       => $members,
-            ]);
+        return $this->getServiceLocator()->get(ContactService::class);
     }
 
     /**
@@ -431,9 +402,9 @@ class CountryHandler extends AbstractHelper
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         return $this->getRenderer()->render('general/partial/list/organisation', [
-                'country'   => $this->getCountry(),
-                'paginator' => $paginator,
-            ]);
+            'country'   => $this->getCountry(),
+            'paginator' => $paginator,
+        ]);
     }
 
     /**
@@ -450,9 +421,10 @@ class CountryHandler extends AbstractHelper
         $projects = $this->getProjectService()->findProjectByCountry($country, $whichProjects);
 
         return $this->getRenderer()->render('general/partial/list/project', [
-                'country'  => $country,
-                'projects' => $projects,
-            ]);
+            'country'        => $country,
+            'projectService' => $this->getProjectService(),
+            'projects'       => $projects,
+        ]);
     }
 
     /**
@@ -469,10 +441,10 @@ class CountryHandler extends AbstractHelper
          */
 
         return $this->getRenderer()->render('general/partial/list/article', [
-                'country'  => $country,
-                'articles' => $articles,
-                'limit'    => $this->getLimit(),
-            ]);
+            'country'  => $country,
+            'articles' => $articles,
+            'limit'    => $this->getLimit(),
+        ]);
     }
 
     /**

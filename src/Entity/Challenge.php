@@ -14,9 +14,6 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -146,140 +143,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Returns the string identifier of the Resource.
-     *
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
-    }
-
-    /**
-     * Set input filter.
-     *
-     * @param InputFilterInterface $inputFilter
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'       => 'challenge',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
-                        ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'description',
-                        'required' => true,
-                        'filters'  => [
-                            ['name' => 'StringTrim'],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'       => 'backgroundColor',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
-                        ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'       => 'frontColor',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
-                        ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 100,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'challenge'        => $this->challenge,
-            'description'      => $this->description,
-            'backgroundColor'  => $this->backgroundColor,
-            'frontColor'       => $this->frontColor,
-            'projectChallenge' => $this->projectChallenge,
-        ];
-    }
-
-    /**
      * Auto-generate an abstract of a article-item.
      *
      * @return string
@@ -292,19 +155,23 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getBackgroundColor()
+    public function getId()
     {
-        return $this->backgroundColor;
+        return $this->id;
     }
 
     /**
-     * @param string $backgroundColor
+     * @param int $id
+     *
+     * @return Challenge
      */
-    public function setBackgroundColor($backgroundColor)
+    public function setId($id)
     {
-        $this->backgroundColor = $backgroundColor;
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -317,10 +184,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $challenge
+     *
+     * @return Challenge
      */
     public function setChallenge($challenge)
     {
         $this->challenge = $challenge;
+
+        return $this;
     }
 
     /**
@@ -329,6 +200,18 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function getDocRef()
     {
         return $this->docRef;
+    }
+
+    /**
+     * @param string $docRef
+     *
+     * @return Challenge
+     */
+    public function setDocRef($docRef)
+    {
+        $this->docRef = $docRef;
+
+        return $this;
     }
 
     /**
@@ -341,10 +224,34 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $description
+     *
+     * @return Challenge
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->backgroundColor;
+    }
+
+    /**
+     * @param string $backgroundColor
+     *
+     * @return Challenge
+     */
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->backgroundColor = $backgroundColor;
+
+        return $this;
     }
 
     /**
@@ -357,26 +264,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $frontColor
+     *
+     * @return Challenge
      */
     public function setFrontColor($frontColor)
     {
         $this->frontColor = $frontColor;
-    }
 
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -389,10 +284,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \Project\Entity\Challenge[] $projectChallenge
+     *
+     * @return Challenge
      */
     public function setProjectChallenge($projectChallenge)
     {
         $this->projectChallenge = $projectChallenge;
+
+        return $this;
     }
 
     /**
@@ -405,9 +304,13 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \Event\Entity\Booth\Challenge[] $boothChallenge
+     *
+     * @return Challenge
      */
     public function setBoothChallenge($boothChallenge)
     {
         $this->boothChallenge = $boothChallenge;
+
+        return $this;
     }
 }

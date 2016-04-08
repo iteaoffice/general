@@ -22,8 +22,7 @@
 
     <dt>{{ translate('txt-projects') }}</dt>
     {% for projectChallenge in challenge.projectChallenge %}
-        {% set projectService = projectServiceProxy(projectChallenge.project) %}
-        <dd>{{ projectLink(projectService,'view-admin','name') }}</dd>
+        <dd>{{ projectLink(project,'view-admin','name') }}</dd>
     {% else %}
         <dd>{{ translate("txt-project-for-this-challenge") }}</dd>
     {% endfor %}

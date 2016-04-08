@@ -32,18 +32,13 @@ class ContentTypeController extends GeneralAbstractController
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered('contentType', $filterPlugin->getFilter());
+            ->findEntitiesFiltered(ContentType::class, $filterPlugin->getFilter());
 
         $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator(
-                $contactQuery,
-                false
-            )));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
-            : 20);
+            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
-            / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         $form = new ContentTypeFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
@@ -62,8 +57,7 @@ class ContentTypeController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $contentType = $this->getGeneralService()
-            ->findEntityById('contentType', $this->params('id'));
+        $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
         if (is_null($contentType)) {
             return $this->notFoundAction();
         }
@@ -78,12 +72,9 @@ class ContentTypeController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('contentType', null, $data);
+        $form = $this->getFormService()->prepare(ContentType::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -114,16 +105,11 @@ class ContentTypeController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $contentType = $this->getGeneralService()
-            ->findEntityById('contentType', $this->params('id'));
+        $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
 
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()
-            ->prepare($contentType->get('entity_name'), $contentType, $data);
+        $form = $this->getFormService()->prepare($contentType, $contentType, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -137,8 +123,7 @@ class ContentTypeController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()
-                    ->updateEntity($form->getData());
+                $result = $this->getGeneralService()->updateEntity($form->getData());
                 $this->redirect()->toRoute('zfcadmin/content-type/view', [
                     'id' => $result->getId(),
                 ]);

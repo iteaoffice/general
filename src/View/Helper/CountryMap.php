@@ -64,7 +64,7 @@ class CountryMap extends HelperAbstract
         $js[] = "            clickable = " . $clickable . ",\n";
         $js[] = "            countries = [";
         $countryList = [];
-        foreach ($this->getGeneralService()->findAll('country') as $country) {
+        foreach ($this->getGeneralService()->findAll(Country::class) as $country) {
             $countryList[] = '"' . $country->getCd() . '",';
         }
         $js[] = substr(implode('', $countryList), 0, -1);

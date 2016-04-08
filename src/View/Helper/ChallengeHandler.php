@@ -125,7 +125,7 @@ class ChallengeHandler extends AbstractHelper
      */
     public function setChallengeDocRef($docRef)
     {
-        $this->setChallenge($this->getGeneralService()->findEntityByDocRef('challenge', $docRef));
+        $this->setChallenge($this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef));
     }
 
     /**
@@ -193,7 +193,7 @@ class ChallengeHandler extends AbstractHelper
      */
     public function parseChallengeList()
     {
-        $challenge = $this->getGeneralService()->findAll('challenge');
+        $challenge = $this->getGeneralService()->findAll(Challenge::class);
 
         return $this->getRenderer()->render('general/partial/list/challenge', ['challenge' => $challenge]);
     }
@@ -208,8 +208,9 @@ class ChallengeHandler extends AbstractHelper
         $projects = $this->getProjectService()->findProjectByChallenge($challenge);
 
         return $this->getRenderer()->render('general/partial/list/project-challenge', [
-            'projects'  => $projects,
-            'challenge' => $challenge,
+            'projects'       => $projects,
+            'projectService' => $this->getProjectService(),
+            'challenge'      => $challenge,
         ]);
     }
 

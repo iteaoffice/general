@@ -29,19 +29,13 @@ class CountryController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered('country', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Country::class, $filterPlugin->getFilter());
 
         $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator(
-                $contactQuery,
-                false
-            )));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
-            : 20);
+            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
-            / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
         $form = new CountryFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
@@ -60,8 +54,7 @@ class CountryController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $country = $this->getGeneralService()
-            ->findEntityById('country', $this->params('id'));
+        $country = $this->getGeneralService()->findEntityById(Country::class, $this->params('id'));
         if (is_null($country)) {
             return $this->notFoundAction();
         }
@@ -76,12 +69,9 @@ class CountryController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('country', null, $data);
+        $form = $this->getFormService()->prepare(Country::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -112,16 +102,11 @@ class CountryController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $country = $this->getGeneralService()
-            ->findEntityById('country', $this->params('id'));
+        $country = $this->getGeneralService()->findEntityById(Country::class, $this->params('id'));
 
-        $data = array_merge(
-            $this->getRequest()->getPost()->toArray(),
-            $this->getRequest()->getFiles()->toArray()
-        );
+        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()
-            ->prepare($country->get('entity_name'), $country, $data);
+        $form = $this->getFormService()->prepare($country, $country, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -135,8 +120,7 @@ class CountryController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()
-                    ->updateEntity($form->getData());
+                $result = $this->getGeneralService()->updateEntity($form->getData());
                 $this->redirect()->toRoute('zfcadmin/country/view', [
                     'id' => $result->getId(),
                 ]);

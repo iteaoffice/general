@@ -14,7 +14,6 @@ use Affiliation\Service\AffiliationService;
 use Doctrine\ORM\Query;
 use Event\Entity\Meeting\Meeting;
 use General\Entity;
-use General\Options\ModuleOptions;
 use Program\Entity\Call\Call;
 use Project\Entity\Evaluation;
 use Project\Entity\Project;
@@ -57,16 +56,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findEntityByDocRef($entity, $docRef)
     {
-        if (is_null($entity)) {
-            throw new \InvalidArgumentException("An entity is required to find an entity");
-        }
-        if (is_null($docRef)) {
-            throw new \InvalidArgumentException("A docRef is required to find an entity");
-        }
-        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName($entity))
-            ->findOneBy(['docRef' => $docRef]);
-
-        return $entity;
+        return $this->getEntityManager()->getRepository($entity)->findOneBy(['docRef' => $docRef]);
     }
 
     /**
@@ -102,40 +92,27 @@ class GeneralService extends ServiceAbstract
      */
     public function findCountryByIso3($iso3)
     {
-        if (is_null($iso3)) {
-            throw new \InvalidArgumentException("A name is required to find an entity");
-        }
-        $entity = $this->getEntityManager()->getRepository(Entity\Country::class)
+        return $this->getEntityManager()->getRepository(Entity\Country::class)
             ->findOneBy(['iso3' => strtoupper($iso3)]);
-
-        return $entity;
     }
 
     /**
      * @param $gender
      *
-     * @return null|object
+     * @return null|Entity\Gender
      */
     public function findGenderByGender($gender)
     {
-        if (is_null($gender)) {
-            throw new \InvalidArgumentException("A gender is required to find an entity");
-        }
-
         return $this->getEntityManager()->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
     }
 
     /**
      * @param $title
      *
-     * @return null|object
+     * @return null|Entity\Title
      */
     public function findTitleByTitle($title)
     {
-        if (is_null($title)) {
-            throw new \InvalidArgumentException("A title is required to find an entity");
-        }
-
         return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['title' => $title]);
     }
 
@@ -148,10 +125,6 @@ class GeneralService extends ServiceAbstract
      */
     public function findCountryByName($name)
     {
-        if (is_null($name)) {
-            throw new \InvalidArgumentException("A name is required to find an entity");
-        }
-
         return $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(['country' => $name]);
     }
 
@@ -164,12 +137,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findCountryByCD($cd)
     {
-        if (is_null($cd)) {
-            throw new \InvalidArgumentException("A name is required to find an entity");
-        }
-        $entity = $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
-
-        return $entity;
+        return $this->getEntityManager()->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
     }
 
     /**
@@ -247,12 +215,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findWebInfoByInfo($info)
     {
-        if (is_null($info)) {
-            throw new \InvalidArgumentException("A info-tag is required to find an entity");
-        }
-
-        return $this->getEntityManager()->getRepository($this->getFullEntityName('webInfo'))
-            ->findOneBy(['info' => $info]);
+        return $this->getEntityManager()->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
     }
 
     /**
@@ -264,15 +227,12 @@ class GeneralService extends ServiceAbstract
      */
     public function findContentTypeByContentTypeName($contentTypeName)
     {
-        if (is_null($contentTypeName)) {
-            throw new \InvalidArgumentException("A content type name is required to find an entity");
-        }
-        $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))
+        $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
             ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
         if (is_null($entity)) {
-            $entity = $this->getEntityManager()->getRepository($this->getFullEntityName('contentType'))
+            $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
                 ->find(Entity\ContentType::TYPE_UNKNOWN);
         }
 
@@ -298,7 +258,7 @@ class GeneralService extends ServiceAbstract
                 ->findOneBy(['cd' => $countryResult->country_code]);
         }
 
-        return $this->findEntityById('country', 0); //Unknown
+        return $this->findEntityById(Entity\Country::class, 0); //Unknown
     }
 
     /**

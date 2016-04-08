@@ -23,7 +23,9 @@ use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class ChallengeController
  *
+ * @package General\Controller
  */
 class ChallengeController extends GeneralAbstractController
 {
@@ -34,7 +36,7 @@ class ChallengeController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('challenge', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Challenge::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -59,7 +61,7 @@ class ChallengeController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $challenge = $this->getGeneralService()->findEntityById('challenge', $this->params('id'));
+        $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
         if (is_null($challenge)) {
             return $this->notFoundAction();
         }
@@ -76,7 +78,7 @@ class ChallengeController extends GeneralAbstractController
     {
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('challenge', null, $data);
+        $form = $this->getFormService()->prepare(Challenge::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -107,11 +109,11 @@ class ChallengeController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $challenge = $this->getGeneralService()->findEntityById('challenge', $this->params('id'));
+        $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare($challenge->get('entity_name'), $challenge, $data);
+        $form = $this->getFormService()->prepare($challenge, $challenge, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

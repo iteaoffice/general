@@ -42,13 +42,13 @@ class ChallengeLink extends LinkAbstract
         $this->setChallenge($challenge);
         $this->setAction($action);
         $this->setShow($show);
-        $this->addRouterParam('entity', 'Challenge');
+        
         if (!is_null($challenge)) {
             $this->addRouterParam('id', $challenge->getId());
             $this->addRouterParam('docRef', $challenge->getDocRef());
             $this->setShowOptions([
-                    'name' => $challenge,
-                ]);
+                'name' => $challenge,
+            ]);
         }
 
         return $this->createLink();
@@ -79,7 +79,7 @@ class ChallengeLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             case 'view':
-                $this->setRouter('route-' . $this->getChallenge()->get("underscore_full_entity_name"));
+                $this->setRouter('route-' . $this->getChallenge()->get("underscore_entity_name"));
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             default:

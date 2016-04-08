@@ -13,9 +13,6 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -270,10 +267,8 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR
-            . 'assets' . DIRECTORY_SEPARATOR . (defined("DEBRANOVA_HOST")
-                ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR
-            . 'content-type-icon';
+        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
+            . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
     }
@@ -302,32 +297,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param InputFilterInterface $inputFilter
-     *
-     * @return void|InputFilterAwareInterface
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-
-    /**
      * Although an alternative does not have a clear hash, we can create one based on the id;.
      *
      * @return string
@@ -335,54 +304,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function getHash()
     {
         return sha1($this->id . $this->contentType . $this->extension);
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-
-    /**
-     * @param string $contentType
-     */
-    public function setContentType($contentType)
-    {
-        $this->contentType = $contentType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
-     * @param string $extension
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
     }
 
     /**
@@ -395,10 +316,94 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $id
+     *
+     * @return ContentType
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return ContentType
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * @param string $contentType
+     *
+     * @return ContentType
+     */
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
+     * @param string $extension
+     *
+     * @return ContentType
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Logo[]
+     */
+    public function getProjectLogo()
+    {
+        return $this->projectLogo;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Logo[] $projectLogo
+     *
+     * @return ContentType
+     */
+    public function setProjectLogo($projectLogo)
+    {
+        $this->projectLogo = $projectLogo;
+
+        return $this;
     }
 
     /**
@@ -411,14 +416,18 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param resource $image
+     *
+     * @return ContentType
      */
     public function setImage($image)
     {
         $this->image = $image;
+
+        return $this;
     }
 
     /**
-     * @return \Content\Entity\Image[]
+     * @return \Content\Entity\Image[]|Collections\ArrayCollection
      */
     public function getContentImage()
     {
@@ -426,15 +435,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Content\Entity\Image[] $contentImage
+     * @param \Content\Entity\Image[]|Collections\ArrayCollection $contentImage
+     *
+     * @return ContentType
      */
     public function setContentImage($contentImage)
     {
         $this->contentImage = $contentImage;
+
+        return $this;
     }
 
     /**
-     * @return \Content\Entity\Image[]
+     * @return \Content\Entity\Image[]|Collections\ArrayCollection
      */
     public function getPressArticle()
     {
@@ -442,31 +455,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Content\Entity\Image[] $pressArticle
+     * @param \Content\Entity\Image[]|Collections\ArrayCollection $pressArticle
+     *
+     * @return ContentType
      */
     public function setPressArticle($pressArticle)
     {
         $this->pressArticle = $pressArticle;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Logo[]
-     */
-    public function getProjectLogo()
-    {
-        return $this->projectLogo;
-    }
-
-    /**
-     * @param \Project\Entity\Logo[] $projectLogo
-     */
-    public function setProjectLogo($projectLogo)
-    {
-        $this->projectLogo = $projectLogo;
-    }
-
-    /**
-     * @return \Program\Entity\Nda[]
+     * @return Collections\ArrayCollection|\Program\Entity\Nda[]
      */
     public function getProgramNna()
     {
@@ -474,15 +475,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Program\Entity\Nda[] $programNna
+     * @param Collections\ArrayCollection|\Program\Entity\Nda[] $programNna
+     *
+     * @return ContentType
      */
     public function setProgramNna($programNna)
     {
         $this->programNna = $programNna;
+
+        return $this;
     }
 
     /**
-     * @return \Program\Entity\Doa[]
+     * @return Collections\ArrayCollection|\Program\Entity\Doa[]
      */
     public function getProgramDoa()
     {
@@ -490,15 +495,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Program\Entity\Doa[] $programDoa
+     * @param Collections\ArrayCollection|\Program\Entity\Doa[] $programDoa
+     *
+     * @return ContentType
      */
     public function setProgramDoa($programDoa)
     {
         $this->programDoa = $programDoa;
+
+        return $this;
     }
 
     /**
-     * @return \Affiliation\Entity\Doa[]
+     * @return \Affiliation\Entity\Doa[]|Collections\ArrayCollection
      */
     public function getAffiliationDoa()
     {
@@ -506,15 +515,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Affiliation\Entity\Doa[] $affiliationDoa
+     * @param \Affiliation\Entity\Doa[]|Collections\ArrayCollection $affiliationDoa
+     *
+     * @return ContentType
      */
     public function setAffiliationDoa($affiliationDoa)
     {
         $this->affiliationDoa = $affiliationDoa;
+
+        return $this;
     }
 
     /**
-     * @return \Contact\Entity\Dnd[]
+     * @return \Contact\Entity\Dnd[]|Collections\ArrayCollection
      */
     public function getContactDnd()
     {
@@ -522,47 +535,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Contact\Entity\Dnd[] $contactDnd
+     * @param \Contact\Entity\Dnd[]|Collections\ArrayCollection $contactDnd
+     *
+     * @return ContentType
      */
     public function setContactDnd($contactDnd)
     {
         $this->contactDnd = $contactDnd;
+
+        return $this;
     }
 
     /**
-     * @return \Organisation\Entity\Logo[]
-     */
-    public function getOrganisationLogo()
-    {
-        return $this->organisationLogo;
-    }
-
-    /**
-     * @param \Organisation\Entity\Logo[] $organisationLogo
-     */
-    public function setOrganisationLogo($organisationLogo)
-    {
-        $this->organisationLogo = $organisationLogo;
-    }
-
-    /**
-     * @return \Publication\Entity\Publication[]
-     */
-    public function getPublication()
-    {
-        return $this->publication;
-    }
-
-    /**
-     * @param \Publication\Entity\Publication[] $publication
-     */
-    public function setPublication($publication)
-    {
-        $this->publication = $publication;
-    }
-
-    /**
-     * @return \Contact\Entity\Photo[]
+     * @return \Contact\Entity\Photo[]|Collections\ArrayCollection
      */
     public function getContactPhoto()
     {
@@ -570,15 +555,59 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Contact\Entity\Photo[] $contactPhoto
+     * @param \Contact\Entity\Photo[]|Collections\ArrayCollection $contactPhoto
+     *
+     * @return ContentType
      */
     public function setContactPhoto($contactPhoto)
     {
         $this->contactPhoto = $contactPhoto;
+
+        return $this;
     }
 
     /**
-     * @return \Publication\Entity\Publication[]
+     * @return Collections\ArrayCollection|\Organisation\Entity\Logo[]
+     */
+    public function getOrganisationLogo()
+    {
+        return $this->organisationLogo;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Organisation\Entity\Logo[] $organisationLogo
+     *
+     * @return ContentType
+     */
+    public function setOrganisationLogo($organisationLogo)
+    {
+        $this->organisationLogo = $organisationLogo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Publication\Entity\Publication[]
+     */
+    public function getPublication()
+    {
+        return $this->publication;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Publication\Entity\Publication[] $publication
+     *
+     * @return ContentType
+     */
+    public function setPublication($publication)
+    {
+        $this->publication = $publication;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Publication\Entity\Publication[]
      */
     public function getBadgeAttachment()
     {
@@ -586,15 +615,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Publication\Entity\Publication[] $badgeAttachment
+     * @param Collections\ArrayCollection|\Publication\Entity\Publication[] $badgeAttachment
+     *
+     * @return ContentType
      */
     public function setBadgeAttachment($badgeAttachment)
     {
         $this->badgeAttachment = $badgeAttachment;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Result\Result[]
+     * @return Collections\ArrayCollection|\Project\Entity\Result\Result[]
      */
     public function getResult()
     {
@@ -602,15 +635,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Result\Result[] $result
+     * @param Collections\ArrayCollection|\Project\Entity\Result\Result[] $result
+     *
+     * @return ContentType
      */
     public function setResult($result)
     {
         $this->result = $result;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Workpackage\Document[]
+     * @return Collections\ArrayCollection|\Project\Entity\Workpackage\Document[]
      */
     public function getWorkpackageDocument()
     {
@@ -618,15 +655,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Workpackage\Document[] $workpackageDocument
+     * @param Collections\ArrayCollection|\Project\Entity\Workpackage\Document[] $workpackageDocument
+     *
+     * @return ContentType
      */
     public function setWorkpackageDocument($workpackageDocument)
     {
         $this->workpackageDocument = $workpackageDocument;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Poster\Poster[]
+     * @return Collections\ArrayCollection|\Project\Entity\Poster\Poster[]
      */
     public function getPoster()
     {
@@ -634,15 +675,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Poster\Poster[] $poster
+     * @param Collections\ArrayCollection|\Project\Entity\Poster\Poster[] $poster
+     *
+     * @return ContentType
      */
     public function setPoster($poster)
     {
         $this->poster = $poster;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Idea\Document[]
+     * @return Collections\ArrayCollection|\Project\Entity\Idea\Document[]
      */
     public function getIdeaDocument()
     {
@@ -650,15 +695,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Idea\Document[] $ideaDocument
+     * @param Collections\ArrayCollection|\Project\Entity\Idea\Document[] $ideaDocument
+     *
+     * @return ContentType
      */
     public function setIdeaDocument($ideaDocument)
     {
         $this->ideaDocument = $ideaDocument;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Idea\Image[]
+     * @return Collections\ArrayCollection|\Project\Entity\Idea\Image[]
      */
     public function getIdeaImage()
     {
@@ -666,15 +715,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Idea\Image[] $ideaImage
+     * @param Collections\ArrayCollection|\Project\Entity\Idea\Image[] $ideaImage
+     *
+     * @return ContentType
      */
     public function setIdeaImage($ideaImage)
     {
         $this->ideaImage = $ideaImage;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Idea\Image[]
+     * @return Collections\ArrayCollection|\Project\Entity\Description\Image[]
      */
     public function getProjectDescriptionImage()
     {
@@ -682,21 +735,33 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Idea\Image[] $projectDescriptionImage
+     * @param Collections\ArrayCollection|\Project\Entity\Description\Image[] $projectDescriptionImage
+     *
+     * @return ContentType
      */
     public function setProjectDescriptionImage($projectDescriptionImage)
     {
         $this->projectDescriptionImage = $projectDescriptionImage;
+
+        return $this;
     }
 
     /**
-     * @param \Project\Entity\Document\Document[] $projectDocument
+     * @return Collections\ArrayCollection|\Project\Entity\Report\Item[]
+     */
+    public function getProjectReportItem()
+    {
+        return $this->projectReportItem;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Report\Item[] $projectReportItem
      *
      * @return ContentType
      */
-    public function setProjectDocument($projectDocument)
+    public function setProjectReportItem($projectReportItem)
     {
-        $this->projectDocument = $projectDocument;
+        $this->projectReportItem = $projectReportItem;
 
         return $this;
     }
@@ -710,7 +775,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Project\Entity\Version\Document[]
+     * @param Collections\ArrayCollection|\Project\Entity\Document\Document[] $projectDocument
+     *
+     * @return ContentType
+     */
+    public function setProjectDocument($projectDocument)
+    {
+        $this->projectDocument = $projectDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Version\Document[]
      */
     public function getVersionDocument()
     {
@@ -718,15 +795,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Version\Document[] $versionDocument
+     * @param Collections\ArrayCollection|\Project\Entity\Version\Document[] $versionDocument
+     *
+     * @return ContentType
      */
     public function setVersionDocument($versionDocument)
     {
         $this->versionDocument = $versionDocument;
+
+        return $this;
     }
 
     /**
-     * @return \Project\Entity\Version\Document[]
+     * @return \Calendar\Entity\Document[]|Collections\ArrayCollection
      */
     public function getCalendarDocument()
     {
@@ -734,15 +815,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Version\Document[] $calendarDocument
+     * @param \Calendar\Entity\Document[]|Collections\ArrayCollection $calendarDocument
+     *
+     * @return ContentType
      */
     public function setCalendarDocument($calendarDocument)
     {
         $this->calendarDocument = $calendarDocument;
+
+        return $this;
     }
 
     /**
-     * @return \Affiliation\Entity\Loi[]
+     * @return \Affiliation\Entity\Loi[]|Collections\ArrayCollection
      */
     public function getLoi()
     {
@@ -750,15 +835,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Affiliation\Entity\Loi[] $loi
+     * @param \Affiliation\Entity\Loi[]|Collections\ArrayCollection $loi
+     *
+     * @return ContentType
      */
     public function setLoi($loi)
     {
         $this->loi = $loi;
+
+        return $this;
     }
 
     /**
-     * @return \Event\Entity\Meeting\Floorplan[]
+     * @return Collections\ArrayCollection|\Event\Entity\Meeting\Floorplan[]
      */
     public function getMeetingFloorplan()
     {
@@ -766,15 +855,19 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Event\Entity\Meeting\Floorplan[] $meetingFloorplan
+     * @param Collections\ArrayCollection|\Event\Entity\Meeting\Floorplan[] $meetingFloorplan
+     *
+     * @return ContentType
      */
     public function setMeetingFloorplan($meetingFloorplan)
     {
         $this->meetingFloorplan = $meetingFloorplan;
+
+        return $this;
     }
 
     /**
-     * @return \Event\Entity\Exhibition\Floorplan[]
+     * @return Collections\ArrayCollection|\Event\Entity\Exhibition\Floorplan[]
      */
     public function getExhibitionFloorplan()
     {
@@ -782,11 +875,15 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Event\Entity\Exhibition\Floorplan[] $exhibitionFloorplan
+     * @param Collections\ArrayCollection|\Event\Entity\Exhibition\Floorplan[] $exhibitionFloorplan
+     *
+     * @return ContentType
      */
     public function setExhibitionFloorplan($exhibitionFloorplan)
     {
         $this->exhibitionFloorplan = $exhibitionFloorplan;
+
+        return $this;
     }
 
     /**
@@ -799,28 +896,12 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Invoice\Entity\Reminder[] $reminder
+     *
+     * @return ContentType
      */
     public function setReminder($reminder)
     {
         $this->reminder = $reminder;
-    }
-
-    /**
-     * @return \Project\Entity\Report\Item[]
-     */
-    public function getProjectReportItem()
-    {
-        return $this->projectReportItem;
-    }
-
-    /**
-     * @param \Project\Entity\Report\Item[] $projectReportItem
-     *
-     * @return ContentType
-     */
-    public function setProjectReportItem($projectReportItem)
-    {
-        $this->projectReportItem = $projectReportItem;
 
         return $this;
     }

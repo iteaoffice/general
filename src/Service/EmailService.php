@@ -11,7 +11,6 @@
 namespace General\Service;
 
 use Contact\Entity\Contact;
-use Contact\Service\ContactService;
 use General\Email as Email;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
@@ -23,7 +22,6 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcTwig\View\TwigRenderer;
 
@@ -86,10 +84,10 @@ class EmailService extends ServiceAbstract
     public function __construct($config)
     {
         $this->config = $config;
-        
+
 
         if ($this->config["active"]) {
-            
+
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
@@ -444,29 +442,20 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     * Extract the contactService and include the variables in the template array settings.
+     * Extract the contact and include the variables in the template array settings.
      *
      * @var Contact
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
-        /**
-         * @var $contactService ContactService
-         */
-        $contactService = $this->getContactService()->setContact($contact);
-
-        $this->templateVars['attention'] = $contactService->parseAttention();
-        $this->templateVars['firstname'] = $contactService->getContact()->getFirstName();
-        $this->templateVars['lastname'] = trim(sprintf(
-            "%s %s",
-            $contactService->getContact()->getMiddleName(),
-            $contactService->getContact()->getLastName()
-        ));
-        $this->templateVars['fullname'] = $contactService->parseFullName();
-        $this->templateVars['country'] = (string)$contactService->parseCountry();
-        $this->templateVars['organisation'] = $contactService->parseOrganisation();
-        $this->templateVars['email'] = $contactService->getContact()->getEmail();
-        $this->templateVars['signature'] = $contactService->parseSignature();
+        $this->templateVars['attention'] = $this->getContactService()->parseAttention($contact);
+        $this->templateVars['firstname'] = $contact->getFirstName();
+        $this->templateVars['lastname'] = trim(sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName()));
+        $this->templateVars['fullname'] = $contact->parseFullName();
+        $this->templateVars['country'] = (string)$this->getContactService()->parseCountry($contact);
+        $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation($contact);
+        $this->templateVars['email'] = $contact->getEmail();
+        $this->templateVars['signature'] = $this->getContactService()->parseSignature($contact);
 
         //Fill the unsubscribe with temp data
         $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
@@ -491,9 +480,8 @@ class EmailService extends ServiceAbstract
      * @param             $content
      * @param             $type
      * @param             $fileName
-     * @param null|string $id
      */
-    public function addAttachment($content, $type, $fileName, $id = null)
+    public function addAttachment($content, $type, $fileName)
     {
         /**
          * Create the attachment

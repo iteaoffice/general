@@ -21,7 +21,7 @@ use Zend\ModuleManager\Feature;
 /**
  *
  */
-class Module implements Feature\AutoloaderProviderInterface, Feature\ServiceProviderInterface, Feature\ConfigProviderInterface
+class Module implements Feature\AutoloaderProviderInterface, Feature\ConfigProviderInterface
 {
     /**
      * @return array
@@ -31,11 +31,6 @@ class Module implements Feature\AutoloaderProviderInterface, Feature\ServiceProv
         return [
             'Zend\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/../autoload_classmap.php',
-            ],
-            'Zend\Loader\StandardAutoloader' => [
-                'namespaces' => [
-                    __NAMESPACE__ => __DIR__ . '/../../src/',
-                ],
             ],
         ];
     }
@@ -48,15 +43,6 @@ class Module implements Feature\AutoloaderProviderInterface, Feature\ServiceProv
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    /**
-     * Go to the service configuration.
-     *
-     * @return array
-     */
-    public function getServiceConfig()
-    {
-        return include __DIR__ . '/../config/services.config.php';
-    }
 
     /**
      * Move this to here to have config cache working.

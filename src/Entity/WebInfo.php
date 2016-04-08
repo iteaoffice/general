@@ -13,10 +13,6 @@ namespace General\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -152,44 +148,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
         return (string)$this->info;
     }
 
-    /**
-     * @param InputFilterInterface $inputFilter
-     *
-     * @return void|InputFilterAwareInterface
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-            $inputFilter->add($factory->createInput([
-                'name'     => 'info',
-                'required' => true,
-            ]));
-            $inputFilter->add($factory->createInput([
-                'name'     => 'subject',
-                'required' => true,
-            ]));
-            $inputFilter->add($factory->createInput([
-                'name'     => 'content',
-                'required' => true,
-            ]));
-
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
+   
 
     /**
      * @return array

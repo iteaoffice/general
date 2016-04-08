@@ -34,7 +34,7 @@ class TitleController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('title', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Title::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -59,7 +59,7 @@ class TitleController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $title = $this->getGeneralService()->findEntityById('title', $this->params('id'));
+        $title = $this->getGeneralService()->findEntityById(Title::class, $this->params('id'));
         if (is_null($title)) {
             return $this->notFoundAction();
         }
@@ -76,7 +76,7 @@ class TitleController extends GeneralAbstractController
     {
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('title', null, $data);
+        $form = $this->getFormService()->prepare(Title::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -107,11 +107,11 @@ class TitleController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $title = $this->getGeneralService()->findEntityById('title', $this->params('id'));
+        $title = $this->getGeneralService()->findEntityById(Title::class, $this->params('id'));
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare($title->get('entity_name'), $title, $data);
+        $form = $this->getFormService()->prepare($title, $title, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

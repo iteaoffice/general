@@ -28,7 +28,7 @@ class IndexController extends GeneralAbstractController
     {
         $response = $this->getResponse();
         /** @var ContentType $contentType */
-        $contentType = $this->getGeneralService()->findEntityById('content-type', $this->params('id'));
+        $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
         if (is_null($contentType)) {
             return $this->notFoundAction();
         }
@@ -36,7 +36,7 @@ class IndexController extends GeneralAbstractController
             ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
         $file = stream_get_contents($contentType->getImage());
         $response->getHeaders()->addHeaderLine('Content-Type: image/gif')->addHeaderLine('Content-Length: '
-                . (string)strlen($file));
+            . (string)strlen($file));
         $response->setContent($file);
 
         return $response;
@@ -87,8 +87,8 @@ class IndexController extends GeneralAbstractController
             return $this->notFoundAction();
         }
 
-        return $this->redirect()->toRoute('route-' . $country->get('underscore_full_entity_name'), [
-                'docRef' => $country->getDocRef()
-            ])->setStatusCode(301);
+        return $this->redirect()->toRoute('route-' . $country->get('underscore_entity_name'), [
+            'docRef' => $country->getDocRef()
+        ])->setStatusCode(301);
     }
 }

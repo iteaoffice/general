@@ -18,6 +18,7 @@ namespace General\Controller;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Vat;
+use General\Entity\VatType;
 use General\Form\VatFilter;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
@@ -34,7 +35,7 @@ class VatTypeController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('VatType', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(VatType::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -59,7 +60,7 @@ class VatTypeController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $vatType = $this->getGeneralService()->findEntityById('vatType', $this->params('id'));
+        $vatType = $this->getGeneralService()->findEntityById(VatType::class, $this->params('id'));
         if (is_null($vatType)) {
             return $this->notFoundAction();
         }
@@ -76,7 +77,7 @@ class VatTypeController extends GeneralAbstractController
     {
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('vatType', null, $data);
+        $form = $this->getFormService()->prepare(VatType::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -107,12 +108,12 @@ class VatTypeController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $vatType = $this->getGeneralService()->findEntityById('vatType', $this->params('id'));
+        $vatType = $this->getGeneralService()->findEntityById(VatType::class, $this->params('id'));
 
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare($vatType->get('entity_name'), $vatType, $data);
+        $form = $this->getFormService()->prepare($vatType, $vatType, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

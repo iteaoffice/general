@@ -34,7 +34,7 @@ class VatController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('vat', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Vat::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -59,7 +59,7 @@ class VatController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $vat = $this->getGeneralService()->findEntityById('vat', $this->params('id'));
+        $vat = $this->getGeneralService()->findEntityById(Vat::class, $this->params('id'));
         if (is_null($vat)) {
             return $this->notFoundAction();
         }
@@ -76,7 +76,7 @@ class VatController extends GeneralAbstractController
     {
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('vat', null, $data);
+        $form = $this->getFormService()->prepare(Vat::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -108,11 +108,11 @@ class VatController extends GeneralAbstractController
     public function editAction()
     {
         /** @var Vat $vat */
-        $vat = $this->getGeneralService()->findEntityById('vat', $this->params('id'));
+        $vat = $this->getGeneralService()->findEntityById(Vat::class, $this->params('id'));
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare($vat->get('entity_name'), $vat, $data);
+        $form = $this->getFormService()->prepare($vat, $vat, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

@@ -32,7 +32,7 @@ class WebInfoController extends GeneralAbstractController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered('webInfo', $filterPlugin->getFilter());
+        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(WebInfo::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -57,7 +57,7 @@ class WebInfoController extends GeneralAbstractController
      */
     public function viewAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
+        $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
         if (is_null($webInfo)) {
             return $this->notFoundAction();
         }
@@ -74,7 +74,7 @@ class WebInfoController extends GeneralAbstractController
     {
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare('webInfo', null, $data);
+        $form = $this->getFormService()->prepare(WebInfo::class, null, $data);
         $form->remove('delete');
 
         $form->setAttribute('class', 'form-horizontal');
@@ -106,11 +106,11 @@ class WebInfoController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $webInfo = $this->getGeneralService()->findEntityById('webInfo', $this->params('id'));
+        $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
 
-        $form = $this->getFormService()->prepare($webInfo->get('entity_name'), $webInfo, $data);
+        $form = $this->getFormService()->prepare($webInfo, $webInfo, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

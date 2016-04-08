@@ -15,11 +15,6 @@ use General\Entity\EntityAbstract;
 interface ServiceInterface
 {
     /**
-     * @return string
-     */
-    public function getFullEntityName($entity);
-
-    /**
      * @return EntityAbstract
      */
     public function updateEntity(EntityAbstract $entity);
