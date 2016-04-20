@@ -45,7 +45,7 @@ class PaginationLink extends LinkAbstract
         /**
          * @var $url Url
          */
-        $url = $this->serviceLocator->get('url');
+        $url = $this->getHelperPluginManager()->get('url');
 
         $uri = '<a href="%s" title="%s">%s</a>';
 

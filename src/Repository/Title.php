@@ -57,7 +57,6 @@ class Title extends EntityRepository
                 break;
             default:
                 $queryBuilder->addOrderBy('g.id', $direction);
-
         }
 
         return $queryBuilder->getQuery();

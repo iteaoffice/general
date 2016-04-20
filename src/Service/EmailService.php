@@ -87,7 +87,6 @@ class EmailService extends ServiceAbstract
 
 
         if ($this->config["active"]) {
-
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP

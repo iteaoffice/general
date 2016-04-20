@@ -58,7 +58,6 @@ class VatType extends EntityRepository
                 break;
             default:
                 $queryBuilder->addOrderBy('vt.type', $direction);
-
         }
 
         return $queryBuilder->getQuery();

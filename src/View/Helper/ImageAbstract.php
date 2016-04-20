@@ -11,25 +11,13 @@
 
 namespace General\View\Helper;
 
-use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\Url;
-use Zend\View\HelperPluginManager;
 
 /**
  * Class LinkAbstract.
  */
-abstract class ImageAbstract extends AbstractHelper
+abstract class ImageAbstract extends AbstractViewHelper
 {
-    /**
-     * @var HelperPluginManager
-     */
-    protected $serviceLocator;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch = null;
     /**
      * @var string Text to be placed as title or as part of the linkContent
      */
@@ -69,11 +57,11 @@ abstract class ImageAbstract extends AbstractHelper
         /**
          * @var Url $url
          */
-        $url = $this->serviceLocator->get('url');
+        $url = $this->getHelperPluginManager()->get('url');
         /*
          * @var array
          */
-        $config = $this->serviceLocator->getServiceLocator()->get('config');
+        $config = $this->getServiceManager()->get('config');
 
         $cdn = null;
         if (isset($config['cdn']) && $config['cdn']['enable']) {
@@ -96,30 +84,6 @@ abstract class ImageAbstract extends AbstractHelper
         } else {
             return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
         }
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator->getServiceLocator();
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AbstractHelper
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
     }
 
     /**

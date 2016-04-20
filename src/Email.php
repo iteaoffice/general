@@ -120,6 +120,7 @@ class Email
 
     /**
      * Email constructor.
+     *
      * @param array $data
      */
     public function __construct(array $data)
@@ -272,7 +273,7 @@ class Email
     }
 
     /**
-     * @param Selection $selection
+     * @param Selection      $selection
      * @param ContactService $contactService
      */
     public function addSelection(Selection $selection, ContactService $contactService)
@@ -346,15 +347,14 @@ class Email
                 $result = isset($args[0]) ? $args[0] : null;
 
                 //Only keep the item when it can be set to a toString
-                if ((!is_array($result)) &&
-                    ((!is_object($result) && settype($result, 'string') !== false) ||
-                        (is_object($result) && method_exists($result, '__toString')))
+                if ((!is_array($result))
+                    && ((!is_object($result) && settype($result, 'string') !== false)
+                        || (is_object($result) && method_exists($result, '__toString')))
                 ) {
                     $this->$key = (string)$result;
 
                     return (string)$result;
                 }
-
         }
         throw new \Exception("Invalid method " . $method);
     }

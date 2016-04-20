@@ -57,7 +57,6 @@ class WebInfo extends EntityRepository
                 break;
             default:
                 $queryBuilder->addOrderBy('general_entity_web_info.info', $direction);
-
         }
 
         return $queryBuilder;

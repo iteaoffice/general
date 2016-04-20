@@ -61,7 +61,6 @@ class Vat extends EntityRepository
                 break;
             default:
                 $queryBuilder->addOrderBy('v.id', $direction);
-
         }
 
         return $queryBuilder->getQuery();

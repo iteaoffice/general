@@ -40,9 +40,9 @@ class WebInfoLink extends LinkAbstract
         }
 
         $this->setShowOptions([
-                'name'            => $this->getWebInfo(),
-                'alternativeShow' => $this->getAlternativeShow(),
-            ]);
+            'name'            => $this->getWebInfo(),
+            'alternativeShow' => $this->getAlternativeShow(),
+        ]);
         $this->addRouterParam('id', $this->getWebInfo()->getId());
 
         return $this->createLink();

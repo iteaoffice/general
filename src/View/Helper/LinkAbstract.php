@@ -13,30 +13,19 @@ namespace General\View\Helper;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
+use General\Acl\Assertion\AssertionAbstract;
 use General\Entity\ContentType;
 use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\WebInfo;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
-use Zend\View\HelperPluginManager;
 
 /**
  * Class LinkAbstract.
  */
-abstract class LinkAbstract extends AbstractHelper
+abstract class LinkAbstract extends AbstractViewHelper
 {
-    /**
-     * @var HelperPluginManager
-     */
-    protected $serviceLocator;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch = null;
     /**
      * @var string Text to be placed as title or as part of the linkContent
      */
@@ -96,11 +85,11 @@ abstract class LinkAbstract extends AbstractHelper
         /**
          * @var $url Url
          */
-        $url = $this->serviceLocator->get('url');
+        $url = $this->getHelperPluginManager()->get('url');
         /**
          * @var $serverUrl ServerUrl
          */
-        $serverUrl = $this->serviceLocator->get('serverUrl');
+        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
         $this->linkContent = [];
         $this->classes = [];
         $this->parseAction();
@@ -334,37 +323,13 @@ abstract class LinkAbstract extends AbstractHelper
     }
 
     /**
-     * @param string $assertion
+     * @param $assertion
      *
-     * @return
+     * @return AssertionAbstract
      */
     public function getAssertion($assertion)
     {
-        return $this->getServiceLocator()->get($assertion);
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator->getServiceLocator();
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AbstractHelper
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
+        return $this->getServiceManager()->get($assertion);
     }
 
     /**
@@ -372,7 +337,7 @@ abstract class LinkAbstract extends AbstractHelper
      */
     public function getAuthorizeService()
     {
-        return $this->getServiceLocator()->get('BjyAuthorize\Service\Authorize');
+        return $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
     }
 
     /**
@@ -386,7 +351,7 @@ abstract class LinkAbstract extends AbstractHelper
         /**
          * @var $isAllowed IsAllowed
          */
-        $isAllowed = $this->serviceLocator->get('isAllowed');
+        $isAllowed = $this->getHelperPluginManager()->get('isAllowed');
 
         return $isAllowed($resource, $privilege);
     }
@@ -433,39 +398,6 @@ abstract class LinkAbstract extends AbstractHelper
     }
 
     /**
-     * RouteInterface match returned by the router.
-     * Use a test on is_null to have the possibility to overrule the serviceLocator lookup for unit tets reasons.
-     *
-     * @return RouteMatch.
-     */
-    public function getRouteMatch()
-    {
-        if (is_null($this->routeMatch)) {
-            $this->routeMatch = $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
-        }
-
-        return $this->routeMatch;
-    }
-
-    /**
-     * @param RouteMatch $routeMatch
-     */
-    public function setRouteMatch(RouteMatch $routeMatch)
-    {
-        $this->routeMatch = $routeMatch;
-    }
-
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    public function translate($string)
-    {
-        return $this->serviceLocator->get('translate')->__invoke($string);
-    }
-
-    /**
      * @param Country $country
      * @param int     $width
      *
@@ -473,7 +405,7 @@ abstract class LinkAbstract extends AbstractHelper
      */
     public function getCountryFlag(Country $country, $width)
     {
-        return $this->serviceLocator->get('countryFlag')->__invoke($country, $width);
+        return $this->getHelperPluginManager()->get('countryFlag')->__invoke($country, $width);
     }
 
     /**

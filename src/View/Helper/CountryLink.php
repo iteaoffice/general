@@ -27,9 +27,9 @@ class CountryLink extends LinkAbstract
 
     /**
      * @param Country $country
-     * @param string $action
-     * @param string $show
-     * @param string $alternativeShow
+     * @param string  $action
+     * @param string  $show
+     * @param string  $alternativeShow
      *
      * @return string
      *
@@ -47,14 +47,13 @@ class CountryLink extends LinkAbstract
         $this->setAlternativeShow($alternativeShow);
         $this->addRouterParam('id', $this->getCountry()->getId());
         $this->addRouterParam('docRef', $this->getCountry()->getDocRef());
-        $this->setShowOptions(
-            [
+        $this->setShowOptions([
                 'name'   => $this->getCountry(),
+                'iso3'   => $this->getCountry()->getIso3(),
                 'more'   => $this->translate("txt-read-more"),
                 'custom' => $this->getAlternativeShow(),
                 'flag'   => $this->getCountryFlag($this->getCountry(), 40),
-            ]
-        );
+            ]);
 
         return $this->createLink();
     }
@@ -98,9 +97,11 @@ class CountryLink extends LinkAbstract
                 $this->setText(sprintf($this->translate('txt-edit-country-%s'), $this->getCountry()));
                 break;
             default:
-                throw new \InvalidArgumentException(
-                    sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__)
-                );
+                throw new \InvalidArgumentException(sprintf(
+                    "%s is an incorrect action for %s",
+                    $this->getAction(),
+                    __CLASS__
+                ));
         }
     }
 }

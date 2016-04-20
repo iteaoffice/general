@@ -18,15 +18,32 @@ use General\View;
 use Zend\Stdlib\ArrayUtils;
 
 $config = [
-    'controllers'     => [
-        'abstract_factories' => [
-            Controller\Factory\ControllerInvokableAbstractFactory::class,
+    'controllers'        => [
+        'factories' => [
+            Controller\ChallengeController::class   => Controller\Factory\ControllerFactory::class,
+            Controller\ContentTypeController::class => Controller\Factory\ControllerFactory::class,
+            Controller\CountryController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\GenderController::class      => Controller\Factory\ControllerFactory::class,
+            Controller\IndexController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\StyleController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\TitleController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\VatController::class         => Controller\Factory\ControllerFactory::class,
+            Controller\VatTypeController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\WebInfoController::class     => Controller\Factory\ControllerFactory::class,
         ],
     ],
-    'view_manager'    => [
+    'controller_plugins' => [
+        'aliases'   => [
+            'getGeneralFilter' => Controller\Plugin\GetFilter::class,
+        ],
+        'factories' => [
+            Controller\Plugin\GetFilter::class => Controller\Factory\PluginFactory::class,
+        ]
+    ],
+    'view_manager'       => [
         'template_map' => include __DIR__ . '/../template_map.php',
     ],
-    'view_helpers'    => [
+    'view_helpers'       => [
         'aliases'   => [
             'countryHandler'   => View\Helper\CountryHandler::class,
             'challengeHandler' => View\Helper\ChallengeHandler::class,
@@ -43,44 +60,34 @@ $config = [
             'contentTypeIcon'  => View\Helper\ContentTypeIcon::class,
         ],
         'factories' => [
-            View\Helper\CountryHandler::class   => View\Factory\LinkInvokableFactory::class,
-            View\Helper\ChallengeHandler::class => View\Factory\LinkInvokableFactory::class,
-            View\Helper\CountryMap::class       => View\Factory\LinkInvokableFactory::class,
-            View\Helper\CountryFlag::class      => View\Factory\LinkInvokableFactory::class,
-            View\Helper\CountryLink::class      => View\Factory\LinkInvokableFactory::class,
-            View\Helper\VatLink::class          => View\Factory\LinkInvokableFactory::class,
-            View\Helper\GenderLink::class       => View\Factory\LinkInvokableFactory::class,
-            View\Helper\TitleLink::class        => View\Factory\LinkInvokableFactory::class,
-            View\Helper\VatTypeLink::class      => View\Factory\LinkInvokableFactory::class,
-            View\Helper\ChallengeLink::class    => View\Factory\LinkInvokableFactory::class,
-            View\Helper\WebInfoLink::class      => View\Factory\LinkInvokableFactory::class,
-            View\Helper\ContentTypeLink::class  => View\Factory\LinkInvokableFactory::class,
-            View\Helper\ContentTypeIcon::class  => View\Factory\LinkInvokableFactory::class,
+            View\Helper\CountryHandler::class   => View\Factory\ViewHelperFactory::class,
+            View\Helper\ChallengeHandler::class => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryMap::class       => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryFlag::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\VatLink::class          => View\Factory\ViewHelperFactory::class,
+            View\Helper\GenderLink::class       => View\Factory\ViewHelperFactory::class,
+            View\Helper\TitleLink::class        => View\Factory\ViewHelperFactory::class,
+            View\Helper\VatTypeLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\ChallengeLink::class    => View\Factory\ViewHelperFactory::class,
+            View\Helper\WebInfoLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\ContentTypeLink::class  => View\Factory\ViewHelperFactory::class,
+            View\Helper\ContentTypeIcon::class  => View\Factory\ViewHelperFactory::class,
 
         ]
     ],
-    'service_manager' => [
-        'factories'          => [
-            Options\ModuleOptions::class  => Factory\ModuleOptionsFactory::class,
-            Service\GeneralService::class => Factory\GeneralServiceFactory::class,
-            Service\EmailService::class   => Factory\EmailServiceFactory::class,
-            Service\FormService::class    => Factory\FormServiceFactory::class,
-        ],
-        'abstract_factories' => [
-            Acl\Factory\AssertionInvokableAbstractFactory::class,
-        ],
-        'invokables'         => [
-            'general_web_info_form_filter'     => 'General\Form\FilterCreateObject',
-            'general_country_form_filter'      => 'General\Form\FilterCreateObject',
-            'general_challenge_form_filter'    => 'General\Form\FilterCreateObject',
-            'general_gender_form_filter'       => 'General\Form\FilterCreateObject',
-            'general_title_form_filter'        => 'General\Form\FilterCreateObject',
-            'general_vat_form_filter'          => 'General\Form\FilterCreateObject',
-            'general_vat_type_form_filter'     => 'General\Form\FilterCreateObject',
-            'general_content_type_form_filter' => 'General\Form\FilterCreateObject',
+    'service_manager'    => [
+        'factories' => [
+            Options\ModuleOptions::class     => Factory\ModuleOptionsFactory::class,
+            Service\GeneralService::class    => Factory\GeneralServiceFactory::class,
+            Service\EmailService::class      => Factory\EmailServiceFactory::class,
+            Service\FormService::class       => Factory\FormServiceFactory::class,
+            Acl\Assertion\ContentType::class => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\Country::class     => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\WebInfo::class     => Acl\Factory\AssertionFactory::class,
         ],
     ],
-    'asset_manager'   => [
+    'asset_manager'      => [
         'resolver_configs' => [
             'collections' => [
                 'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js'   => [
@@ -105,7 +112,7 @@ $config = [
             ],
         ],
     ],
-    'doctrine'        => [
+    'doctrine'           => [
         'driver'       => [
             'general_annotation_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',

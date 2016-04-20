@@ -19,13 +19,8 @@ use General\Service\GeneralService;
  *
  * @category   General
  */
-class CountryMap extends HelperAbstract
+class CountryMap extends AbstractViewHelper
 {
-    /**
-     * @var GeneralService
-     */
-    protected $generalService;
-
     /**
      * @param Country[] $countries
      * @param Country   $selectedCountry
@@ -116,15 +111,13 @@ $(function () {
         });
     });
 EOT;
-        $this->serviceLocator->get('headlink')->prependStylesheet(
-            'assets/' . DEBRANOVA_HOST . '/css/jvectormap.css',
-            'screen'
-        );
-        $this->serviceLocator->get('headscript')->appendFile(
+        $this->getHelperPluginManager()->get('headlink')->prependStylesheet('assets/' . DEBRANOVA_HOST
+            . '/css/jvectormap.css', 'screen');
+        $this->getHelperPluginManager()->get('headscript')->appendFile(
             'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js',
             'text/javascript'
         );
-        $this->serviceLocator->get('headscript')->appendScript($jQuery);
+        $this->getHelperPluginManager()->get('headscript')->appendScript($jQuery);
 
         return '<div id="country-map" style="height: ' . $height . ';"></div>';
     }
@@ -134,6 +127,6 @@ EOT;
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get(GeneralService::class);
+        return $this->getServiceManager()->get(GeneralService::class);
     }
 }

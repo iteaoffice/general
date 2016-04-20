@@ -15,7 +15,6 @@
 
 namespace General;
 
-use General\Controller\Plugin\GetFilter;
 use Zend\ModuleManager\Feature;
 
 /**
@@ -41,20 +40,5 @@ class Module implements Feature\AutoloaderProviderInterface, Feature\ConfigProvi
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
-    }
-
-
-    /**
-     * Move this to here to have config cache working.
-     *
-     * @return array
-     */
-    public function getControllerPluginConfig()
-    {
-        return [
-            'invokables' => [
-                'getGeneralFilter' => GetFilter::class,
-            ],
-        ];
     }
 }

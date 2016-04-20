@@ -23,15 +23,12 @@ use Program\Service\ProgramService;
 use Project\Service\ProjectService;
 use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\AbstractHelper;
 use Zend\View\HelperPluginManager;
-use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class CountryHandler.
  */
-class CountryHandler extends AbstractHelper
+class CountryHandler extends AbstractViewHelper
 {
     /**
      * @var HelperPluginManager
@@ -64,7 +61,7 @@ class CountryHandler extends AbstractHelper
             'country_article',
         ])) {
             if (is_null($this->getCountry())) {
-                $this->getServiceLocator()->get("response")->setStatusCode(404);
+                $this->getHelperPluginManager()->get('response')->setStatusCode(404);
 
                 return sprintf("The selected country cannot be found");
             }
@@ -72,12 +69,14 @@ class CountryHandler extends AbstractHelper
 
         switch ($content->getHandler()->getHandler()) {
             case 'country':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
-                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
-                $countryLink = $this->serviceLocator->get('countryLink');
-                $this->serviceLocator->get('headmeta')->setProperty('og:type', $this->translate("txt-country"));
-                $this->serviceLocator->get('headmeta')->setProperty('og:title', $this->getCountry()->getCountry());
-                $this->serviceLocator->get('headmeta')
+                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-country"));
+                $this->getHelperPluginManager()->get('headtitle')->append($this->getCountry()->getCountry());
+                $countryLink = $this->getHelperPluginManager()->get('countryLink');
+                $this->getHelperPluginManager()->get('headmeta')
+                    ->setProperty('og:type', $this->translate("txt-country"));
+                $this->getHelperPluginManager()->get('headmeta')
+                    ->setProperty('og:title', $this->getCountry()->getCountry());
+                $this->getHelperPluginManager()->get('headmeta')
                     ->setProperty('og:url', $countryLink->__invoke($this->getCountry(), 'view', 'social'));
 
                 return $this->parseCountry();
@@ -97,26 +96,27 @@ class CountryHandler extends AbstractHelper
 
 
             case 'country_list':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-countries-in-itea"));
+                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-countries-in-itea"));
 
                 return $this->parseCountryList();
 
             case 'country_list_itac':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-itac-countries-in-itea"));
+                $this->getHelperPluginManager()->get('headtitle')
+                    ->append($this->translate("txt-itac-countries-in-itea"));
 
                 return $this->parseCountryListItac();
 
             case 'country_organisation':
                 $page = $this->getRouteMatch()->getParam('page');
 
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
-                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
+                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-country"));
+                $this->getHelperPluginManager()->get('headtitle')->append($this->getCountry()->getCountry());
 
                 return $this->parseOrganisationList($page);
 
             case 'country_project':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-country"));
-                $this->serviceLocator->get('headtitle')->append($this->getCountry()->getCountry());
+                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-country"));
+                $this->getHelperPluginManager()->get('headtitle')->append($this->getCountry()->getCountry());
 
                 return $this->parseCountryProjectList($this->getCountry());
 
@@ -168,31 +168,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getRouteMatch()
     {
-        return $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator->getServiceLocator();
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AbstractHelper
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
+        return $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
     }
 
     /**
@@ -208,7 +184,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get(GeneralService::class);
+        return $this->getServiceManager()->get(GeneralService::class);
     }
 
     /**
@@ -235,15 +211,6 @@ class CountryHandler extends AbstractHelper
         $this->country = $country;
     }
 
-    /**
-     * @param $string
-     *
-     * @return string
-     */
-    public function translate($string)
-    {
-        return $this->serviceLocator->get('translate')->__invoke($string);
-    }
 
     /**
      * @return string
@@ -253,14 +220,6 @@ class CountryHandler extends AbstractHelper
         return $this->getRenderer()->render('general/partial/entity/country', [
             'country' => $this->getCountry(),
         ]);
-    }
-
-    /**
-     * @return TwigRenderer
-     */
-    public function getRenderer()
-    {
-        return $this->getServiceLocator()->get('ZfcTwigRenderer');
     }
 
     /**
@@ -278,7 +237,7 @@ class CountryHandler extends AbstractHelper
         /**
          * @var $countryMap CountryMap
          */
-        $countryMap = $this->serviceLocator->get('countryMap');
+        $countryMap = $this->getHelperPluginManager()->get('countryMap');
 
         return $countryMap([$this->getCountry()], null, $mapOptions);
     }
@@ -307,7 +266,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getProgramService()
     {
-        return $this->getServiceLocator()->get(ProgramService::class);
+        return $this->getServiceManager()->get(ProgramService::class);
     }
 
     /**
@@ -338,7 +297,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getProjectService()
     {
-        return $this->getServiceLocator()->get(ProjectService::class);
+        return $this->getServiceManager()->get(ProjectService::class);
     }
 
     /**
@@ -346,7 +305,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getOrganisationService()
     {
-        return $this->getServiceLocator()->get(OrganisationService::class);
+        return $this->getServiceManager()->get(OrganisationService::class);
     }
 
     /**
@@ -354,7 +313,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getContactService()
     {
-        return $this->getServiceLocator()->get(ContactService::class);
+        return $this->getServiceManager()->get(ContactService::class);
     }
 
     /**
@@ -452,7 +411,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getArticleService()
     {
-        return $this->getServiceLocator()->get(ArticleService::class);
+        return $this->getServiceManager()->get(ArticleService::class);
     }
 
     /**
@@ -460,7 +419,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getModuleOptions()
     {
-        return $this->getServiceLocator()->get(ModuleOptions::class);
+        return $this->getServiceManager()->get(ModuleOptions::class);
     }
 
     /**
@@ -468,7 +427,7 @@ class CountryHandler extends AbstractHelper
      */
     public function getProjectModuleOptions()
     {
-        return $this->getServiceLocator()->get(\Project\Options\ModuleOptions::class);
+        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
     }
 
     /**

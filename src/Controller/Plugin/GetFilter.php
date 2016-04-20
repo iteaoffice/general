@@ -15,13 +15,12 @@ use Zend\Http\Request;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Mvc\Controller\PluginManager;
 use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @category    Application
  */
-class GetFilter extends AbstractPlugin implements ServiceLocatorAwareInterface
+class GetFilter extends AbstractPlugin
 {
     /**
      * @var PluginManager
@@ -151,6 +150,6 @@ class GetFilter extends AbstractPlugin implements ServiceLocatorAwareInterface
      */
     public function getServiceLocator()
     {
-        return $this->serviceManager->getServiceLocator();
+        return $this->serviceManager;
     }
 }

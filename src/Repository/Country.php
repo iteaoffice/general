@@ -74,7 +74,6 @@ class Country extends EntityRepository
                 break;
             default:
                 $queryBuilder->addOrderBy('general_entity_country.country', $direction);
-
         }
 
         return $queryBuilder;

@@ -14,21 +14,12 @@ use Content\Entity\Content;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
-use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\AbstractHelper;
-use Zend\View\HelperPluginManager;
-use ZfcTwig\View\TwigRenderer;
 
 /**
  * Class ChallengeHandler.
  */
-class ChallengeHandler extends AbstractHelper
+class ChallengeHandler extends AbstractViewHelper
 {
-    /**
-     * @var HelperPluginManager
-     */
-    protected $serviceLocator;
     /**
      * @var Challenge
      */
@@ -44,8 +35,8 @@ class ChallengeHandler extends AbstractHelper
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
             case 'challenge':
-                $this->serviceLocator->get('headtitle')->append($this->translate("txt-challenge"));
-                $this->serviceLocator->get('headtitle')->append($this->getChallenge()->getChallenge());
+                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-challenge"));
+                $this->getHelperPluginManager()->get('headtitle')->append($this->getChallenge()->getChallenge());
 
                 return $this->parseChallenge();
             case 'challenge_list':
@@ -87,38 +78,6 @@ class ChallengeHandler extends AbstractHelper
     }
 
     /**
-     * @return RouteMatch
-     */
-    public function getRouteMatch()
-    {
-        return $this->getServiceLocator()->get('application')->getMvcEvent()->getRouteMatch();
-    }
-
-    /**
-     * Get the service locator.
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator->getServiceLocator();
-    }
-
-    /**
-     * Set the service locator.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AbstractHelper
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
-    }
-
-    /**
      * @param $docRef
      *
      * @return Challenge
@@ -133,7 +92,7 @@ class ChallengeHandler extends AbstractHelper
      */
     public function getGeneralService()
     {
-        return $this->getServiceLocator()->get(GeneralService::class);
+        return $this->getServiceManager()->get(GeneralService::class);
     }
 
     /**
@@ -144,16 +103,6 @@ class ChallengeHandler extends AbstractHelper
     public function setChallengeId($id)
     {
         $this->setChallenge($this->getGeneralService()->findChallengeById($id));
-    }
-
-    /**
-     * @param $string
-     *
-     * @return string
-     */
-    public function translate($string)
-    {
-        return $this->serviceLocator->get('translate')->__invoke($string);
     }
 
     /**
@@ -178,14 +127,6 @@ class ChallengeHandler extends AbstractHelper
     public function parseChallenge()
     {
         return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $this->getChallenge()]);
-    }
-
-    /**
-     * @return TwigRenderer
-     */
-    public function getRenderer()
-    {
-        return $this->getServiceLocator()->get('ZfcTwigRenderer');
     }
 
     /**
@@ -219,6 +160,6 @@ class ChallengeHandler extends AbstractHelper
      */
     public function getProjectService()
     {
-        return $this->getServiceLocator()->get(ProjectService::class);
+        return $this->getServiceManager()->get(ProjectService::class);
     }
 }

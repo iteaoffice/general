@@ -13,20 +13,14 @@ namespace General\View\Helper;
 
 use General\Entity\ContentType;
 use General\Service\GeneralService;
-use Zend\View\HelperPluginManager;
 
 /**
  * Create a link to an project.
  *
  * @category   General
  */
-class ContentTypeIcon extends HelperAbstract
+class ContentTypeIcon extends AbstractViewHelper
 {
-    /**
-     * @var HelperPluginManager
-     */
-    protected $serviceLocator;
-
     /**
      * @param ContentType|null $contentType
      * @param string|null      $contentTypeName
@@ -37,7 +31,7 @@ class ContentTypeIcon extends HelperAbstract
     {
         if (!is_null($contentTypeName)) {
             /** @var GeneralService $generalService */
-            $generalService = $this->serviceLocator->getServiceLocator()->get(GeneralService::class);
+            $generalService = $this->getServiceManager()->get(GeneralService::class);
 
             $contentType = $generalService->findContentTypeByContentTypeName($contentTypeName);
         }
