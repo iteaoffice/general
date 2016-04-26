@@ -11,10 +11,10 @@ return [
     'navigation' => [
         'admin' => [
             // And finally, here is where we define our page hierarchy
-            'content' => [
+            'management' => [
                 'pages' => [
                     'web-info'     => [
-                        'label' => _("txt-web-info-list"),
+                        'label' => _("txt-nav-web-info-list"),
                         'route' => 'zfcadmin/web-info/list',
                         'pages' => [
                             'web-info-view' => [
@@ -49,7 +49,7 @@ return [
                         ],
                     ],
                     'country'      => [
-                        'label' => _("txt-country-list"),
+                        'label' => _("txt-nav-country-list"),
                         'route' => 'zfcadmin/country/list',
                         'pages' => [
                             'country-view' => [
@@ -84,7 +84,7 @@ return [
                         ],
                     ],
                     'challenge'    => [
-                        'label' => _("txt-challenge-list"),
+                        'label' => _("txt-nav-challenge-list"),
                         'route' => 'zfcadmin/challenge/list',
                         'pages' => [
                             'challenge-view' => [
@@ -114,76 +114,6 @@ return [
                             'challenge-new'  => [
                                 'label'   => _("txt-new-challenge"),
                                 'route'   => 'zfcadmin/challenge/new',
-                                'visible' => false,
-                            ],
-                        ],
-                    ],
-                    'vat'          => [
-                        'label' => _("txt-vat-list"),
-                        'route' => 'zfcadmin/vat/list',
-                        'pages' => [
-                            'vat-view' => [
-                                'route'   => 'zfcadmin/vat/view',
-                                'visible' => false,
-                                'params'  => [
-                                    'entities'   => [
-                                        'id' => General\Entity\Vat::class,
-                                    ],
-                                    'invokables' => [
-                                        General\Navigation\Invokable\VatLabel::class,
-                                    ]
-                                ],
-                                'pages'   => [
-                                    'vat-edit' => [
-                                        'label'   => _("txt-nav-edit"),
-                                        'route'   => 'zfcadmin/vat/edit',
-                                        'visible' => false,
-                                        'params'  => [
-                                            'entities' => [
-                                                'id' => General\Entity\Vat::class,
-                                            ],
-                                        ],
-                                    ]
-                                ],
-                            ],
-                            'vat-new'  => [
-                                'label'   => _("txt-new-vat"),
-                                'route'   => 'zfcadmin/vat/new',
-                                'visible' => false,
-                            ],
-                        ],
-                    ],
-                    'vat-type'     => [
-                        'label' => _("txt-vat-type-list"),
-                        'route' => 'zfcadmin/vat-type/list',
-                        'pages' => [
-                            'vat-type-view' => [
-                                'route'   => 'zfcadmin/vat-type/view',
-                                'visible' => false,
-                                'params'  => [
-                                    'entities'   => [
-                                        'id' => General\Entity\VatType::class,
-                                    ],
-                                    'invokables' => [
-                                        General\Navigation\Invokable\VatTypeLabel::class,
-                                    ]
-                                ],
-                                'pages'   => [
-                                    'vat-type--edit' => [
-                                        'label'   => _("txt-nav-edit"),
-                                        'route'   => 'zfcadmin/vat-type/edit',
-                                        'visible' => false,
-                                        'params'  => [
-                                            'entities' => [
-                                                'id' => General\Entity\VatType::class,
-                                            ],
-                                        ],
-                                    ]
-                                ],
-                            ],
-                            'vat-type-new'  => [
-                                'label'   => _("txt-new-vat-type"),
-                                'route'   => 'zfcadmin/vat-type/new',
                                 'visible' => false,
                             ],
                         ],
@@ -224,7 +154,7 @@ return [
                         ],
                     ],
                     'gender'       => [
-                        'label' => _("txt-gender-list"),
+                        'label' => _("txt-nav-gender-list"),
                         'route' => 'zfcadmin/gender/list',
                         'pages' => [
                             'gender-view' => [
@@ -259,7 +189,7 @@ return [
                         ],
                     ],
                     'title'        => [
-                        'label' => _("txt-title-list"),
+                        'label' => _("txt-nav-title-list"),
                         'route' => 'zfcadmin/title/list',
                         'pages' => [
                             'title-view' => [
@@ -289,6 +219,83 @@ return [
                             'title-new'  => [
                                 'label'   => _("txt-new-title"),
                                 'route'   => 'zfcadmin/title/new',
+                                'visible' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'invoice'    => [
+                'order' => 70,
+                'pages' => [
+                    'vat'      => [
+                        'label' => _("txt-nav-vat-list"),
+                        'order' => 70,
+                        'route' => 'zfcadmin/vat/list',
+                        'pages' => [
+                            'vat-view' => [
+                                'route'   => 'zfcadmin/vat/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Vat::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\VatLabel::class,
+                                    ]
+                                ],
+                                'pages'   => [
+                                    'vat-edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/vat/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Vat::class,
+                                            ],
+                                        ],
+                                    ]
+                                ],
+                            ],
+                            'vat-new'  => [
+                                'label'   => _("txt-new-vat"),
+                                'route'   => 'zfcadmin/vat/new',
+                                'visible' => false,
+                            ],
+                        ],
+                    ],
+                    'vat-type' => [
+                        'label' => _("txt-vat-type-list"),
+                        'route' => 'zfcadmin/vat-type/list',
+                        'order' => 80,
+                        'pages' => [
+                            'vat-type-view' => [
+                                'route'   => 'zfcadmin/vat-type/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\VatType::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\VatTypeLabel::class,
+                                    ]
+                                ],
+                                'pages'   => [
+                                    'vat-type--edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/vat-type/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\VatType::class,
+                                            ],
+                                        ],
+                                    ]
+                                ],
+                            ],
+                            'vat-type-new'  => [
+                                'label'   => _("txt-new-vat-type"),
+                                'route'   => 'zfcadmin/vat-type/new',
                                 'visible' => false,
                             ],
                         ],

@@ -3,7 +3,7 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set country = form.get('country') %}
+{% set country = form.get('general_entity_country') %}
 
 {{ ztbformelement(country.get('country')) }}
 {{ ztbformelement(country.get('cd')) }}

@@ -3,7 +3,7 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set vat = form.get('vat_type') %}
+{% set vat = form.get('general_entity_vattype') %}
 
 {{ ztbformelement(vat.get('type')) }}
 {{ ztbformelement(vat.get('description')) }}

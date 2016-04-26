@@ -3,7 +3,7 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set webInfo = form.get('web_info') %}
+{% set webInfo = form.get('general_entity_webinfo') %}
 
 {{ ztbformelement(webInfo.get('info')) }}
 {{ ztbformelement(webInfo.get('subject')) }}

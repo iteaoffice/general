@@ -3,7 +3,7 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set gender = form.get('gender') %}
+{% set gender = form.get('general_entity_gender') %}
 
 {{ ztbformelement(gender.get('name')) }}
 {{ ztbformelement(gender.get('attention')) }}
