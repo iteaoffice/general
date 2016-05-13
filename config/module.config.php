@@ -12,9 +12,12 @@ namespace General;
 use General\Acl;
 use General\Controller;
 use General\Factory;
+use General\InputFilter;
+use General\Navigation;
 use General\Options;
 use General\Service;
 use General\View;
+use Zend\Stdlib;
 use Zend\Stdlib\ArrayUtils;
 
 $config = [
@@ -78,13 +81,27 @@ $config = [
     ],
     'service_manager'    => [
         'factories' => [
-            Options\ModuleOptions::class     => Factory\ModuleOptionsFactory::class,
-            Service\GeneralService::class    => Factory\GeneralServiceFactory::class,
-            Service\EmailService::class      => Factory\EmailServiceFactory::class,
-            Service\FormService::class       => Factory\FormServiceFactory::class,
-            Acl\Assertion\ContentType::class => Acl\Factory\AssertionFactory::class,
-            Acl\Assertion\Country::class     => Acl\Factory\AssertionFactory::class,
-            Acl\Assertion\WebInfo::class     => Acl\Factory\AssertionFactory::class,
+            Options\ModuleOptions::class                 => Factory\ModuleOptionsFactory::class,
+            Service\GeneralService::class                => Factory\GeneralServiceFactory::class,
+            Service\EmailService::class                  => Factory\EmailServiceFactory::class,
+            Service\FormService::class                   => Factory\FormServiceFactory::class,
+            Acl\Assertion\ContentType::class             => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\Country::class                 => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\WebInfo::class                 => Acl\Factory\AssertionFactory::class,
+            InputFilter\ChallengeFilter::class           => Factory\InputFilterFactory::class,
+            InputFilter\CommunityTypeFilter::class       => Factory\InputFilterFactory::class,
+            InputFilter\CountryFilter::class             => Factory\InputFilterFactory::class,
+            InputFilter\GenderFilter::class              => Factory\InputFilterFactory::class,
+            InputFilter\TitleFilter::class               => Factory\InputFilterFactory::class,
+            InputFilter\WebInfoFilter::class             => Factory\InputFilterFactory::class,
+            Navigation\Invokable\ChallengeLabel::class   => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\ContentTypeLabel::class => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\CountryLabel::class     => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\GenderLabel::class      => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\TitleLabel::class       => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\VatLabel::class         => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\VatTypeLabel::class     => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\WebInfoLabel::class     => Navigation\Factory\NavigationInvokableFactory::class,
         ],
     ],
     'asset_manager'      => [
@@ -135,15 +152,9 @@ $config = [
         ],
     ],
 ];
-$configFiles = [
-    __DIR__ . '/module.config.routes.php',
-    __DIR__ . '/module.config.routes.admin.php',
-    __DIR__ . '/module.config.general.php',
-    __DIR__ . '/module.config.navigation.php',
-    __DIR__ . '/module.config.authorize.php',
-];
-foreach ($configFiles as $configFile) {
-    $config = ArrayUtils::merge($config, include $configFile);
+
+foreach (Stdlib\Glob::glob(__DIR__ . '/module.config.{,*}.php', Stdlib\Glob::GLOB_BRACE) as $file) {
+    $config = Stdlib\ArrayUtils::merge($config, include $file);
 }
 
 return $config;

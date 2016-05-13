@@ -75,24 +75,24 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $contacts;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="applicantTitle")
+     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="applicantTitle")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantTitle;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="contactTitle")
+     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="contactTitle")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantContactTitle;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist"}, mappedBy="financialTitle")
+     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="financialTitle")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantFinancialTitle;
 
@@ -139,78 +139,6 @@ class Title extends EntityAbstract implements ResourceInterface
     public function __toString()
     {
         return (string)$this->name;
-    }
-
-    /**
-     * Returns the string identifier of the Resource.
-     *
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return sprintf("%s:%s", Title::class, $this->id);
-    }
-
-    /**
-     * Set input filter.
-     *
-     * @param InputFilterInterface $inputFilter
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-            $inputFilter->add($factory->createInput([
-                    'name'       => 'name',
-                    'required'   => true,
-                    'filters'    => [
-                        ['name' => 'StripTags'],
-                        ['name' => 'StringTrim'],
-                    ],
-                    'validators' => [
-                        [
-                            'name'    => 'StringLength',
-                            'options' => [
-                                'encoding' => 'UTF-8',
-                                'min'      => 1,
-                                'max'      => 100,
-                            ],
-                        ],
-                    ],
-                ]));
-            $inputFilter->add($factory->createInput([
-                    'name'       => 'salutation',
-                    'required'   => true,
-                    'filters'    => [
-                        ['name' => 'StripTags'],
-                        ['name' => 'StringTrim'],
-                    ],
-                    'validators' => [
-                        [
-                            'name'    => 'StringLength',
-                            'options' => [
-                                'encoding' => 'UTF-8',
-                                'min'      => 1,
-                                'max'      => 100,
-                            ],
-                        ],
-                    ],
-                ]));
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
     }
 
     /**
@@ -314,7 +242,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
      */
     public function getApplicantTitle()
     {
@@ -322,7 +250,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantTitle
+     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantTitle
      *
      * @return Title
      */
@@ -334,7 +262,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
      */
     public function getApplicantContactTitle()
     {
@@ -342,7 +270,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantContactTitle
+     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantContactTitle
      *
      * @return Title
      */
@@ -354,7 +282,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
      */
     public function getApplicantFinancialTitle()
     {
@@ -362,7 +290,7 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialTitle
+     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantFinancialTitle
      *
      * @return Title
      */

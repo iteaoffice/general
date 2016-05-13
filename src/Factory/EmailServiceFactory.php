@@ -39,20 +39,20 @@ class EmailServiceFactory implements FactoryInterface
         $config = $serviceLocator->get('Config');
         $emailService = new EmailService($config["email"]);
 
-            /** @var AuthenticationService $authenticationService */
-            $authenticationService = $serviceLocator->get('Application\Authentication\Service');
+        /** @var AuthenticationService $authenticationService */
+        $authenticationService = $serviceLocator->get('Application\Authentication\Service');
         $emailService->setAuthenticationService($authenticationService);
 
-            /** @var GeneralService $generalService */
-            $generalService = $serviceLocator->get(GeneralService::class);
+        /** @var GeneralService $generalService */
+        $generalService = $serviceLocator->get(GeneralService::class);
         $emailService->setGeneralService($generalService);
 
-            /** @var TwigRenderer $renderer */
-            $renderer = $serviceLocator->get('ZfcTwigRenderer');
+        /** @var TwigRenderer $renderer */
+        $renderer = $serviceLocator->get('ZfcTwigRenderer');
         $emailService->setRenderer($renderer);
 
-            /** @var ContactService $contactService */
-            $contactService = $serviceLocator->get(ContactService::class);
+        /** @var ContactService $contactService */
+        $contactService = $serviceLocator->get(ContactService::class);
         $emailService->setContactService($contactService);
 
         return $emailService;

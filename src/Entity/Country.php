@@ -14,9 +14,6 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -166,17 +163,17 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $rationale;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
+     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantOrganisationAddressCountry;
     /**
-     * @ORM\OneToMany(targetEntity="Member\Entity\Applicant", cascade={"persist","remove"}, mappedBy="financialAddressCountry")
+     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist","remove"}, mappedBy="financialAddressCountry")
      * @Annotation\Exclude()
      *
-     * @var \Member\Entity\Applicant[]|Collections\ArrayCollection
+     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
      */
     private $applicantFinancialAddressCountry;
     /**
@@ -253,7 +250,7 @@ class Country extends EntityAbstract implements ResourceInterface
         return (string)$this->country;
     }
 
-    
+
     /**
      * New function needed to make the hydrator happy.
      *
@@ -567,7 +564,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
      */
     public function getApplicantOrganisationAddressCountry()
     {
@@ -575,7 +572,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantOrganisationAddressCountry
+     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantOrganisationAddressCountry
      *
      * @return Country
      */
@@ -587,7 +584,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return Collections\ArrayCollection|\Member\Entity\Applicant[]
+     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
      */
     public function getApplicantFinancialAddressCountry()
     {
@@ -595,7 +592,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Member\Entity\Applicant[] $applicantFinancialAddressCountry
+     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantFinancialAddressCountry
      *
      * @return Country
      */

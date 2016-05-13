@@ -61,7 +61,7 @@ class CountryHandler extends AbstractViewHelper
             'country_article',
         ])) {
             if (is_null($this->getCountry())) {
-                $this->getHelperPluginManager()->get('response')->setStatusCode(404);
+                $this->getServiceManager()->get('response')->setStatusCode(404);
 
                 return sprintf("The selected country cannot be found");
             }
@@ -356,7 +356,7 @@ class CountryHandler extends AbstractViewHelper
         $organisationQuery = $this->getOrganisationService()
             ->findOrganisationByCountry($this->getCountry(), true, true);
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 15);
+        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 25);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 

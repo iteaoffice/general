@@ -1,9 +1,9 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-country-%s")|format(country)) %}
 
-<h1>{{ translate("txt-country-%s")|format(country) }}</h1>
+<h1>{{ translate("txt-country-%s")|format(country) }} {{ countryLink(country,'edit','button') }}</h1>
 
-<h2><strong>{{ translate("txt-country-information") }}</strong></h2>
+<h2>{{ translate("txt-country-information") }}</h2>
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-country-name") }}</dt>
     <dd>{{ country.country }} {{ countryFlag(country) }}</dd>
@@ -33,9 +33,4 @@
     {% else %}
         <dd>{{ translate("txt-no-vat-known") }}</dd>
     {% endfor %}
-
-
 </dl>
-
-
-{{ countryLink(country,'edit','button') }} {{ countryLink(null, 'new','button') }} {{ countryLink(null, 'list','button') }}
