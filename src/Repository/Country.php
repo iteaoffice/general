@@ -421,7 +421,7 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from(Entity\Country::class, 'general_entity_country');
         $queryBuilder->innerJoin("general_entity_country.projectLog", 'project_entity_log');
-        $queryBuilder->orderBy("project_entity_log.country", 'ASC');
+        $queryBuilder->orderBy("general_entity_country.country", 'ASC');
 
         return $queryBuilder->getQuery()->getArrayResult();
     }

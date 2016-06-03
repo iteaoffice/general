@@ -80,7 +80,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      * @Annotation\Options({
      *      "target_class":"General\Entity\Country",
      *      "find_method":{
-     *          "name":"findBy",
+     *          "name":"findForForm",
      *          "params": {
      *              "criteria":{},
      *              "orderBy":{
@@ -116,12 +116,12 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     private $deskCosts;
     /**
-     * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\OptionCosts", cascade={"persist"}, mappedBy="vat")
+     * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\OptionCost", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Event\Entity\Meeting\OptionCosts[]
+     * @var \Event\Entity\Meeting\OptionCost[]
      */
-    private $optionCosts;
+    private $optionCost;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
@@ -139,7 +139,7 @@ class Vat extends EntityAbstract implements ResourceInterface
         $this->invoiceRow = new Collections\ArrayCollection();
         $this->financialRow = new Collections\ArrayCollection();
         $this->deskCosts = new Collections\ArrayCollection();
-        $this->optionCosts = new Collections\ArrayCollection();
+        $this->optionCost = new Collections\ArrayCollection();
         $this->dimension = new Collections\ArrayCollection();
     }
 
@@ -419,19 +419,19 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Event\Entity\Meeting\OptionCosts[] $optionCosts
+     * @param \Event\Entity\Meeting\OptionCost[] $optionCost
      */
-    public function setOptionCosts($optionCosts)
+    public function setOptionCost($optionCost)
     {
-        $this->optionCosts = $optionCosts;
+        $this->optionCost = $optionCost;
     }
 
     /**
-     * @return \Event\Entity\Meeting\OptionCosts[]
+     * @return \Event\Entity\Meeting\OptionCost[]
      */
-    public function getOptionCosts()
+    public function getOptionCost()
     {
-        return $this->optionCosts;
+        return $this->optionCost;
     }
 
     /**

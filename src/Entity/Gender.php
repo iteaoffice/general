@@ -84,6 +84,14 @@ class Gender extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->attention;
+    }
+
+    /**
      * Magic Getter.
      *
      * @param $property
