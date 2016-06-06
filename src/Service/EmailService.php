@@ -162,7 +162,7 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                    if ((!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT)) {
                         $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
