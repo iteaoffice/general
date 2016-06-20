@@ -343,7 +343,6 @@ class EmailService extends ServiceAbstract
         $body = new MimeMessage();
         $body->setParts(array_merge($this->attachments, [$htmlContent]));
 
-
         foreach ($this->headers as $name => $value) {
             $this->message->getHeaders()->addHeaderLine($name, trim($value));
         }
@@ -369,7 +368,7 @@ class EmailService extends ServiceAbstract
 
         if (count($matches) > 0) {
             foreach ($matches as $key => $filename) {
-                if (($filename)) {
+                if (($filename) && file_exists($filename)) {
                     $attachment = $this->addInlineAttachment($filename);
                     $htmlView = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
                 }
@@ -503,7 +502,7 @@ class EmailService extends ServiceAbstract
     public function addInlineAttachment($fileName)
     {
         /**
-         * Create the attachment
+         * Create the attachment, only when the file exists
          */
         $attachment = new MimePart(file_get_contents($fileName));
         $attachment->id = 'cid_' . md5_file($fileName);
