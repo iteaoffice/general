@@ -252,6 +252,7 @@ class EmailService extends ServiceAbstract
                  */
                 $this->parseBody();
 
+
                 /*
                  * Send the email
                  */
@@ -347,7 +348,8 @@ class EmailService extends ServiceAbstract
             $this->message->getHeaders()->addHeaderLine($name, trim($value));
         }
 
-        $this->message->getHeaders()->addHeaderLine('content-type', Mime::MULTIPART_RELATED);
+        //Comment this line to avoid more then 1 content types
+        //$this->message->getHeaders()->addHeaderLine('content-type', Mime::MULTIPART_RELATED);
 
         $this->message->setBody($body);
 

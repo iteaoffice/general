@@ -137,7 +137,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findTitleByTitle($title)
     {
-        return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['title' => $title]);
+        return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
     }
 
     /**
