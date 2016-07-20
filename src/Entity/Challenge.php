@@ -83,23 +83,24 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\OneToMany(targetEntity="Project\Entity\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Challenge[]
+     * @var \Project\Entity\Challenge[]|Collections\ArrayCollection
      */
     private $projectChallenge;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Challenge", cascade={"persist"}, mappedBy="challenge")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Idea\Challenge[]|Collections\ArrayCollection
+     */
+    private $ideaChallenge;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Booth\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
-     * @var \Event\Entity\Booth\Challenge[]
+     * @var \Event\Entity\Booth\Challenge[]|Collections\ArrayCollection
      */
     private $boothChallenge;
-    /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"all"}, mappedBy="challenge")
-     * @Annotation\Exclude()
-     *
-     * @var \Contact\Entity\Contact[]
-     *                                private $contact;
-     */
+
     /**
      * Class constructor.
      */
@@ -107,6 +108,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     {
         $this->projectChallenge = new Collections\ArrayCollection();
         $this->boothChallenge = new Collections\ArrayCollection();
+        $this->ideaChallenge = new Collections\ArrayCollection();
     }
 
     /**
@@ -164,7 +166,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $id
-     *
      * @return Challenge
      */
     public function setId($id)
@@ -184,7 +185,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $challenge
-     *
      * @return Challenge
      */
     public function setChallenge($challenge)
@@ -204,7 +204,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $docRef
-     *
      * @return Challenge
      */
     public function setDocRef($docRef)
@@ -224,7 +223,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $description
-     *
      * @return Challenge
      */
     public function setDescription($description)
@@ -244,7 +242,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $backgroundColor
-     *
      * @return Challenge
      */
     public function setBackgroundColor($backgroundColor)
@@ -264,7 +261,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $frontColor
-     *
      * @return Challenge
      */
     public function setFrontColor($frontColor)
@@ -275,7 +271,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Project\Entity\Challenge[]
+     * @return Collections\ArrayCollection|\Project\Entity\Challenge[]
      */
     public function getProjectChallenge()
     {
@@ -283,8 +279,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Project\Entity\Challenge[] $projectChallenge
-     *
+     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
      * @return Challenge
      */
     public function setProjectChallenge($projectChallenge)
@@ -295,7 +290,26 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Event\Entity\Booth\Challenge[]
+     * @return Collections\ArrayCollection|\Project\Entity\Idea\Challenge[]
+     */
+    public function getIdeaChallenge()
+    {
+        return $this->ideaChallenge;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Idea\Challenge[] $ideaChallenge
+     * @return Challenge
+     */
+    public function setIdeaChallenge($ideaChallenge)
+    {
+        $this->ideaChallenge = $ideaChallenge;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Event\Entity\Booth\Challenge[]
      */
     public function getBoothChallenge()
     {
@@ -303,8 +317,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \Event\Entity\Booth\Challenge[] $boothChallenge
-     *
+     * @param Collections\ArrayCollection|\Event\Entity\Booth\Challenge[] $boothChallenge
      * @return Challenge
      */
     public function setBoothChallenge($boothChallenge)
