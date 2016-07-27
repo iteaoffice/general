@@ -91,7 +91,7 @@ class EmailService extends ServiceAbstract
             $transport = new SendmailTransport();
             // Relay SMTP
             if ($this->config["relay"]["active"]) {
-                $transport = new SmtpTransport();
+                $transport       = new SmtpTransport();
                 $transportConfig = [
                     'name'              => "DebraNova_General_Email",
                     'host'              => $this->config["relay"]["host"],
@@ -124,7 +124,7 @@ class EmailService extends ServiceAbstract
      */
     public function create($data = [])
     {
-        $this->email = new Email($data);
+        $this->email = new Email($data, $this->config);
 
         return $this->email;
     }
@@ -162,12 +162,12 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if ((!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT)) {
+                    if ((! defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT)) {
                         $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            ! is_null($contact->getId()) ? $contact->getDisplayName() : null
                         );
                     }
 
@@ -214,7 +214,7 @@ class EmailService extends ServiceAbstract
                      * We have a recipient which can be an instance of the contact. Produce a contactService object
                      * and fill the templateVars with extra options
                      */
-                    if (!$contact instanceof Contact) {
+                    if (! $contact instanceof Contact) {
                         $contact = new Contact();
                         $contact->setEmail($recipient);
                     }
@@ -222,12 +222,12 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (!defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                    if (! defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
                         $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            ! is_null($contact->getId()) ? $contact->getDisplayName() : null
                         );
                     }
                 }
@@ -273,7 +273,7 @@ class EmailService extends ServiceAbstract
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (empty($this->message->getSubject()) && !is_null($this->template)) {
+        if (empty($this->message->getSubject()) && ! is_null($this->template)) {
             $this->message->setSubject($this->template->getSubject());
         }
 
@@ -291,7 +291,7 @@ class EmailService extends ServiceAbstract
             /*
              * replace the content of the title with the available keys in the template vars
              */
-            if (!is_array($replace)) {
+            if (! is_array($replace)) {
                 $this->message->setSubject(str_replace(sprintf("[%s]", $key), $replace, $this->message->getSubject()));
             }
         }
@@ -337,11 +337,11 @@ class EmailService extends ServiceAbstract
         $htmlView = $this->embedImagesAsAttachment($htmlView);
 
 
-        $htmlContent = new MimePart($htmlView);
+        $htmlContent       = new MimePart($htmlView);
         $htmlContent->type = "text/html";
-        $textContent = new MimePart($textView);
+        $textContent       = new MimePart($textView);
         $textContent->type = 'text/plain';
-        $body = new MimeMessage();
+        $body              = new MimeMessage();
         $body->setParts(array_merge($this->attachments, [$htmlContent]));
 
         foreach ($this->headers as $name => $value) {
@@ -372,7 +372,7 @@ class EmailService extends ServiceAbstract
             foreach ($matches as $key => $filename) {
                 if (($filename) && file_exists($filename)) {
                     $attachment = $this->addInlineAttachment($filename);
-                    $htmlView = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
+                    $htmlView   = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
                 }
             }
         }
@@ -427,14 +427,14 @@ class EmailService extends ServiceAbstract
         $this->templateVars = array_merge($this->config["template_vars"], $this->email->toArray());
 
         //If not layout, use default
-        if (!$this->email->getHtmlLayoutName()) {
+        if (! $this->email->getHtmlLayoutName()) {
             $this->email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
         }
 
         /*
          * If not sender, use default
          */
-        if (!is_null($this->email->getFrom())) {
+        if (! is_null($this->email->getFrom())) {
             $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
@@ -448,18 +448,20 @@ class EmailService extends ServiceAbstract
      */
     public function updateTemplateVarsWithContact(Contact $contact)
     {
-        $this->templateVars['attention'] = $this->getContactService()->parseAttention($contact);
-        $this->templateVars['firstname'] = $contact->getFirstName();
-        $this->templateVars['lastname'] = trim(sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName()));
-        $this->templateVars['fullname'] = $contact->parseFullName();
-        $this->templateVars['country'] = (string)$this->getContactService()->parseCountry($contact);
+        $this->templateVars['attention']    = $this->getContactService()->parseAttention($contact);
+        $this->templateVars['firstname']    = $contact->getFirstName();
+        $this->templateVars['lastname']     = trim(
+            sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName())
+        );
+        $this->templateVars['fullname']     = $contact->parseFullName();
+        $this->templateVars['country']      = (string)$this->getContactService()->parseCountry($contact);
         $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation($contact);
-        $this->templateVars['email'] = $contact->getEmail();
-        $this->templateVars['signature'] = $this->getContactService()->parseSignature($contact);
+        $this->templateVars['email']        = $contact->getEmail();
+        $this->templateVars['signature']    = $this->getContactService()->parseSignature($contact);
 
         //Fill the unsubscribe with temp data
         $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
-        $this->templateVars['deeplink'] = 'http://deeplink.example';
+        $this->templateVars['deeplink']    = 'http://deeplink.example';
     }
 
     /**
@@ -469,11 +471,15 @@ class EmailService extends ServiceAbstract
      */
     protected function createTwigTemplate($content)
     {
-        return preg_replace([
-            '~\[(.*?)\]~',
-        ], [
+        return preg_replace(
+            [
+                '~\[(.*?)\]~',
+            ],
+            [
             "{{ $1|raw }}",
-        ], $content);
+            ],
+            $content
+        );
     }
 
     /**
@@ -486,9 +492,9 @@ class EmailService extends ServiceAbstract
         /**
          * Create the attachment
          */
-        $attachment = new MimePart($content);
-        $attachment->type = $type;
-        $attachment->filename = $fileName;
+        $attachment              = new MimePart($content);
+        $attachment->type        = $type;
+        $attachment->filename    = $fileName;
         $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
         // Setting the encoding is recommended for binary data
         $attachment->encoding = Mime::ENCODING_BASE64;
@@ -506,10 +512,10 @@ class EmailService extends ServiceAbstract
         /**
          * Create the attachment, only when the file exists
          */
-        $attachment = new MimePart(file_get_contents($fileName));
-        $attachment->id = 'cid_' . md5_file($fileName);
-        $attachment->type = $this->mimeByExtension($fileName);
-        $attachment->filename = substr(md5($attachment->id), 0, 10);
+        $attachment              = new MimePart(file_get_contents($fileName));
+        $attachment->id          = 'cid_' . md5_file($fileName);
+        $attachment->type        = $this->mimeByExtension($fileName);
+        $attachment->filename    = substr(md5($attachment->id), 0, 10);
         $attachment->disposition = Mime::DISPOSITION_INLINE;
         // Setting the encoding is recommended for binary data
         $attachment->encoding = Mime::ENCODING_BASE64;
@@ -536,9 +542,9 @@ class EmailService extends ServiceAbstract
         /*
          * Create the attachment
          */
-        $attachment = new MimePart(stream_get_contents($publication->getObject()->first()->getObject()));
-        $attachment->type = $publication->getContentType()->getContentType();
-        $attachment->filename = $publication->getOriginal();
+        $attachment              = new MimePart(stream_get_contents($publication->getObject()->first()->getObject()));
+        $attachment->type        = $publication->getContentType()->getContentType();
+        $attachment->filename    = $publication->getOriginal();
         $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
         // Setting the encoding is recommended for binary data
         $attachment->encoding = Mime::ENCODING_BASE64;
@@ -570,7 +576,7 @@ class EmailService extends ServiceAbstract
                 $this->message->addBcc($emailAddress);
             }
         }
-        if (!is_null($this->email->getReplyTo())) {
+        if (! is_null($this->email->getReplyTo())) {
             $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
         }
     }
@@ -597,6 +603,9 @@ class EmailService extends ServiceAbstract
                 $this->email->setFrom($this->mailing->getContact()->getEmail());
                 $this->email->setFromName($this->mailing->getContact()->getDisplayName());
             }
+        } else {
+            $this->email->setFrom($this->mailing->getSender()->getEmail());
+            $this->email->setFromName($this->mailing->getSender()->getSender());
         }
 
         $this->email->setSubject($this->mailing->getMailSubject());
@@ -616,19 +625,23 @@ class EmailService extends ServiceAbstract
         /*
          * Replace first the content of the mailing with the required (new) short tags
          */
-        $content = preg_replace([
-            '~\[parent::getContact\(\)::firstname\]~',
-            '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-            '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-            '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-            '~\[parent::getContact\(\)::country\]~',
-        ], [
+        $content = preg_replace(
+            [
+                '~\[parent::getContact\(\)::firstname\]~',
+                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
+                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
+                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
+                '~\[parent::getContact\(\)::country\]~',
+            ],
+            [
             "[firstname]",
             "[lastname]",
             "[fullname]",
             "[organisation]",
             "[country]",
-        ], $message);
+            ],
+            $message
+        );
 
         /*
          * Clone the twigRenderer and overrule to loader to be a string

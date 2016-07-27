@@ -114,18 +114,19 @@ class Email
      */
     protected $personal = true;
     /**
-     * @var ServiceManager
+     * @var array
      */
-    protected $serviceManager;
+    protected $config;
 
     /**
      * Email constructor.
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data, array $config)
     {
         $this->setProperties($data);
+        $this->setConfig($config);
     }
 
     /**
@@ -196,15 +197,27 @@ class Email
      */
     public function setFromContact(Contact $contact)
     {
-        /*
-         * The From contact cannot have the FROM email since we don't want to sent emails directly from other users
-         */
-        $config = $this->getServiceManager()->get('config');
+        //If the domain of the contact email is the same as the default email
+        list($name, $defaultDomain) = explode('@', $this->config['defaults']['from_email']);
 
-        $this->from = $config['email']['defaults']['from_email'];
-        $this->replyTo = $contact->getEmail();
+        list($contactName, $contactDomain) = explode('@', $contact->getEmail());
+
+        //When the domains are the same, use the sender without a trick
+        if ($defaultDomain === $contactDomain) {
+            $this->from     = $contact->getEmail();
+            $this->fromName = $contact->getDisplayName();
+        } else {
+            $this->from     = $this->config['defaults']['from_email'];
+            $this->fromName = sprintf(
+                "%s (via %s)",
+                $contact->getDisplayName(),
+                $this->config['defaults']['from_name']
+            );
+        }
+
+
+        $this->replyTo     = $contact->getEmail();
         $this->replyToName = $contact->getDisplayName();
-        $this->fromName = sprintf("%s (via %s)", $contact->getDisplayName(), $config['email']['defaults']['from_name']);
     }
 
     /**
@@ -334,21 +347,21 @@ class Email
     {
         switch (substr($method, 0, 3)) {
             case 'get':
-                $key = $this->underscore(substr($method, 3));
+                $key   = $this->underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
 
-                if (!$index && isset($this->$key)) {
+                if (! $index && isset($this->$key)) {
                     return $this->$key;
                 }
 
                 return "";
             case 'set':
-                $key = $this->underscore(substr($method, 3));
+                $key    = $this->underscore(substr($method, 3));
                 $result = isset($args[0]) ? $args[0] : null;
 
                 //Only keep the item when it can be set to a toString
-                if ((!is_array($result))
-                    && ((!is_object($result) && settype($result, 'string') !== false)
+                if ((! is_array($result))
+                    && ((! is_object($result) && settype($result, 'string') !== false)
                         || (is_object($result) && method_exists($result, '__toString')))
                 ) {
                     $this->$key = (string)$result;
@@ -406,19 +419,23 @@ class Email
     }
 
     /**
-     * @return ServiceManager
+     * @return array
      */
-    public function getServiceManager()
+    public function getConfig()
     {
-        return $this->serviceManager;
+        return $this->config;
     }
 
     /**
-     * @param ServiceManager $serviceManager
+     * @param array $config
+     *
+     * @return Email
      */
-    public function setServiceManager($serviceManager)
+    public function setConfig($config)
     {
-        $this->serviceManager = $serviceManager;
+        $this->config = $config;
+
+        return $this;
     }
 
     /**
