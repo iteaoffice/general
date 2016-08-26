@@ -68,15 +68,16 @@ abstract class ImageAbstract extends AbstractViewHelper
             $cdn = $config['cdn']['address'];
         }
 
-        $imageUrl = '<img src="%s%s" id="%s" class="%s" %s>';
+        $imageUrl = '<img src="%s%s" id="%s"%s%s%s>';
 
         $image = sprintf(
             $imageUrl,
             $cdn,
             $url($this->router, $this->routerParams),
             $this->imageId,
-            implode(' ', $this->classes),
-            is_null($this->width) ? null : ' width="' . $this->width . '"'
+            empty($this->classes) ? '' : ' class="' . implode(' ', $this->classes) . '"',
+            is_null($this->width) ? '' : ' width="' . $this->width . '"',
+            is_null($this->text) ? '' : ' title="' . $this->text . '"'
         );
 
         if (!$this->lightBox) {
@@ -198,5 +199,21 @@ abstract class ImageAbstract extends AbstractViewHelper
     public function setClasses($classes)
     {
         $this->classes = $classes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
     }
 }
