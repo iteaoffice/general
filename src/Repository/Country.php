@@ -36,7 +36,7 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from('General\Entity\Country', 'general_entity_country');
 
-        if (!is_null($filter)) {
+        if (! is_null($filter)) {
             /**
              * Get the webInfo repository
              *
@@ -52,7 +52,7 @@ class Country extends EntityRepository
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'id';
         }
 
@@ -91,20 +91,20 @@ class Country extends EntityRepository
         QueryBuilder $queryBuilder,
         array $filter
     ) {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
-        if (!empty($filter['eu'])) {
+        if (! empty($filter['eu'])) {
             $queryBuilder->innerJoin('general_entity_country.eu', 'eu');
         }
 
-        if (!empty($filter['eureka'])) {
+        if (! empty($filter['eureka'])) {
             $queryBuilder->innerJoin('general_entity_country.eureka', 'eureka');
         }
 
-        if (!empty($filter['itac'])) {
+        if (! empty($filter['itac'])) {
             $queryBuilder->innerJoin('general_entity_country.itac', 'itac');
         }
 
@@ -134,7 +134,8 @@ class Country extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('affiliation_entity_affiliation affiliation');
-        $queryBuilder->addSelect('(SELECT
+        $queryBuilder->addSelect(
+            '(SELECT
                             COUNT(DISTINCT aff.organisation)
                             FROM Affiliation\Entity\Affiliation aff
                             JOIN aff.organisation org
@@ -145,8 +146,10 @@ class Country extends EntityRepository
                             ) AND pro NOT IN (
                                  SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
                             )
-                            ) partners');
-        $queryBuilder->addSelect('(SELECT
+                            ) partners'
+        );
+        $queryBuilder->addSelect(
+            '(SELECT
                             COUNT(DISTINCT aff2.project)
                             FROM Affiliation\Entity\Affiliation aff2
                             JOIN aff2.organisation org2
@@ -157,7 +160,8 @@ class Country extends EntityRepository
                             ) AND pro2 NOT IN (
                                 SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
                             )
-                            ) projects');
+                            ) projects'
+        );
         $queryBuilder->from('Affiliation\Entity\Affiliation', 'affiliation_entity_affiliation');
         $queryBuilder->join('affiliation_entity_affiliation.organisation', 'organisation_entity_organisation');
         $queryBuilder->join('affiliation_entity_affiliation.project', 'project_entity_project');
@@ -171,7 +175,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository(Project::class);
-        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
         return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
@@ -300,7 +304,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
-        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->andWhere('e.type = ?11');
@@ -324,7 +328,8 @@ class Country extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country country');
         $queryBuilder->from('General\Entity\Country', 'general_entity_country');
-        $queryBuilder->addSelect('(SELECT
+        $queryBuilder->addSelect(
+            '(SELECT
                             COUNT(DISTINCT aff.organisation)
                             FROM Affiliation\Entity\Affiliation aff
                             JOIN aff.organisation org
@@ -335,8 +340,10 @@ class Country extends EntityRepository
                             ) AND pro NOT IN (
                                  SELECT proj2 FROM Project\Entity\Version\Version version2 JOIN version2.project proj2 JOIN version2.versionType type2 WHERE type2.id = 4
                             )
-                            ) partners');
-        $queryBuilder->addSelect('(SELECT
+                            ) partners'
+        );
+        $queryBuilder->addSelect(
+            '(SELECT
                             COUNT(DISTINCT aff2.project)
                             FROM Affiliation\Entity\Affiliation aff2
                             JOIN aff2.organisation org2
@@ -347,7 +354,8 @@ class Country extends EntityRepository
                             ) AND pro2 NOT IN (
                                 SELECT proj4 FROM Project\Entity\Version\Version version4 JOIN version4.project proj4 JOIN version4.versionType type4 WHERE type4.id = 4
                             )
-                            ) projects');
+                            ) projects'
+        );
         $queryBuilder->innerJoin('general_entity_country.itac', 'itac');
         //Remove the 0 country (unknown)
         $queryBuilder->where('general_entity_country.id <> 0');
@@ -394,22 +402,23 @@ class Country extends EntityRepository
         /** @var Entity\Country[] $countries */
         $countries = $queryBuilder->getQuery()->useQueryCache(true)->getResult();
 
-        $euCountries = [];
+        //Fake a country
+        $country = new Entity\Country();
+        $country->setCountry('--- Select a country');
+
+        $euCountries = [0 => $country];
         $restOfWorld = [];
 
         foreach ($countries as $country) {
-            if (!is_null($country->getEu())) {
+            if (! is_null($country->getEu())) {
                 $euCountries[$country->getId()] = $country;
             } else {
                 $restOfWorld[$country->getId()] = $country;
             }
         }
 
-        //Fake a country
-        $country = new Entity\Country();
-        $country->setCountry('--- Rest of the world');
 
-        return array_merge($euCountries, [0 => $country], $restOfWorld);
+        return array_merge($euCountries, $restOfWorld);
     }
 
     /**
