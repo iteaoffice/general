@@ -23,7 +23,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @ORM\Table(name="title")
  * @ORM\Entity(repositoryClass="General\Repository\Title")
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
  * @category General

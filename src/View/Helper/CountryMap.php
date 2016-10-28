@@ -111,10 +111,10 @@ $(function () {
         });
     });
 EOT;
-        $this->getHelperPluginManager()->get('headlink')->prependStylesheet('assets/' . DEBRANOVA_HOST
+        $this->getHelperPluginManager()->get('headlink')->prependStylesheet('assets/' . ITEAOFFICE_HOST
             . '/css/jvectormap.css', 'screen');
         $this->getHelperPluginManager()->get('headscript')->appendFile(
-            'assets/' . DEBRANOVA_HOST . '/js/jvectormap.js',
+            'assets/' . ITEAOFFICE_HOST . '/js/jvectormap.js',
             'text/javascript'
         );
         $this->getHelperPluginManager()->get('headscript')->appendScript($jQuery);

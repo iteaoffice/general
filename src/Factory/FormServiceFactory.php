@@ -17,30 +17,32 @@ namespace General\Factory;
 use Doctrine\ORM\EntityManager;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class FormServiceFactory
  *
  * @package General\Factory
  */
-class FormServiceFactory implements FactoryInterface
+final class FormServiceFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null|null    $options
      *
-     * @return FormService
+     * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $formService = new FormService();
-        $formService->setServiceLocator($serviceLocator);
+        $formService->setServiceLocator($container);
         /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->get(EntityManager::class);
+        $entityManager = $container->get(EntityManager::class);
         $formService->setEntityManager($entityManager);
         /** @var GeneralService $generalService */
-        $generalService = $serviceLocator->get(GeneralService::class);
+        $generalService = $container->get(GeneralService::class);
         $formService->setGeneralService($generalService);
 
         return $formService;

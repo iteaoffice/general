@@ -21,7 +21,7 @@ use Zend\InputFilter\InputFilterInterface;
  *
  * @ORM\Table(name="country_flag")
  * @ORM\Entity
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("country_flag")
  *
  * @category General
@@ -65,7 +65,7 @@ class Flag extends EntityAbstract
     public function getCacheFileName()
     {
         $cacheDir = __DIR__.'/../../../../../public'.DIRECTORY_SEPARATOR.'assets'.
-            DIRECTORY_SEPARATOR.DEBRANOVA_HOST.DIRECTORY_SEPARATOR.'country-flag';
+            DIRECTORY_SEPARATOR.ITEAOFFICE_HOST.DIRECTORY_SEPARATOR.'country-flag';
 
         return $cacheDir.DIRECTORY_SEPARATOR.strtolower($this->getCountry()->getIso3()).'.png';
     }

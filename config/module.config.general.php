@@ -30,7 +30,7 @@ return [
     'general' => [
         'style_locations' => [
             __DIR__ . '/../../../../styles/common',
-            __DIR__ . '/../../../../styles/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test')
+            __DIR__ . '/../../../../styles/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test')
         ],
         'image_not_found' => 'image_not_found.jpg',
     ],

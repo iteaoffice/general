@@ -21,6 +21,7 @@ use General\Service\GeneralService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\HelperPluginManager;
 use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 
 /**
@@ -59,6 +60,10 @@ abstract class GeneralAbstractController extends AbstractActionController
      * @var EntityManager
      */
     protected $entityManager;
+    /**
+     * @var HelperPluginManager
+     */
+    protected $viewHelperManager;
 
     /**
      * @return \General\Service\FormService
@@ -152,7 +157,7 @@ abstract class GeneralAbstractController extends AbstractActionController
         /*
          * @var Translate
          */
-        $translate = $this->getPluginManager()->getServiceLocator()->get('ViewHelperManager')->get('translate');
+        $translate = $this->getViewHelperManager()->get('translate');
 
         return $translate($string);
     }
@@ -207,11 +212,33 @@ abstract class GeneralAbstractController extends AbstractActionController
 
     /**
      * @param EntityManager $entityManager
+     *
      * @return GeneralAbstractController
      */
     public function setEntityManager($entityManager)
     {
         $this->entityManager = $entityManager;
+
+        return $this;
+    }
+
+    /**
+     * @return HelperPluginManager
+     */
+    public function getViewHelperManager(): HelperPluginManager
+    {
+        return $this->viewHelperManager;
+    }
+
+    /**
+     * @param HelperPluginManager $viewHelperManager
+     *
+     * @return GeneralAbstractController
+     */
+    public function setViewHelperManager(HelperPluginManager $viewHelperManager): GeneralAbstractController
+    {
+        $this->viewHelperManager = $viewHelperManager;
+
         return $this;
     }
 }

@@ -20,7 +20,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @ORM\Table(name="web_info")
  * @ORM\Entity(repositoryClass="General\Repository\WebInfo")
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("content_stylesheet")
  */
 class WebInfo extends EntityAbstract implements ResourceInterface

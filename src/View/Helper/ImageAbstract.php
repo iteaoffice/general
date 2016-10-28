@@ -58,29 +58,18 @@ abstract class ImageAbstract extends AbstractViewHelper
          * @var Url $url
          */
         $url = $this->getHelperPluginManager()->get('url');
-        /*
-         * @var array
-         */
-        $config = $this->getServiceManager()->get('config');
 
-        $cdn = null;
-        if (isset($config['cdn']) && $config['cdn']['enable']) {
-            $cdn = $config['cdn']['address'];
-        }
-
-        $imageUrl = '<img src="%s%s" id="%s"%s%s%s>';
+        $imageUrl = '<img src="%s" id="%s" class="%s" %s>';
 
         $image = sprintf(
             $imageUrl,
-            $cdn,
             $url($this->router, $this->routerParams),
             $this->imageId,
-            empty($this->classes) ? '' : ' class="' . implode(' ', $this->classes) . '"',
-            is_null($this->width) ? '' : ' width="' . $this->width . '"',
-            is_null($this->text) ? '' : ' title="' . $this->text . '"'
+            implode(' ', $this->classes),
+            is_null($this->width) ? null : ' width="' . $this->width . '"'
         );
 
-        if (!$this->lightBox) {
+        if ( ! $this->lightBox) {
             return $image;
         } else {
             return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
@@ -96,10 +85,10 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
-        if (!$allowNull && is_null($value)) {
+        if ( ! $allowNull && is_null($value)) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (!is_null($value)) {
+        if ( ! is_null($value)) {
             $this->routerParams[$key] = $value;
         }
     }
@@ -151,7 +140,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (!is_array($classes)) {
+        if ( ! is_array($classes)) {
             $classes = [$classes];
         }
         foreach ($classes as $class) {
@@ -199,21 +188,5 @@ abstract class ImageAbstract extends AbstractViewHelper
     public function setClasses($classes)
     {
         $this->classes = $classes;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @param string $text
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
     }
 }

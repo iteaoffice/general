@@ -17,6 +17,7 @@ use General\Entity\Country;
 use General\Entity\EntityAbstract;
 use General\Entity\Vat;
 use General\Options\ModuleOptions;
+use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -157,7 +158,7 @@ abstract class ServiceAbstract implements ServiceInterface
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $serviceLocator
      *
      * @return ServiceAbstract
      */

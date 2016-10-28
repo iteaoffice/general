@@ -18,7 +18,7 @@ use Admin\Service\AdminService;
 use General\Acl\Assertion\AssertionAbstract;
 use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

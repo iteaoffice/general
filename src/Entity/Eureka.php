@@ -21,7 +21,7 @@ use Zend\InputFilter\InputFilterInterface;
  *
  * @ORM\Table(name="country_eureka")
  * @ORM\Entity
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("country_eu")
  *
  * @category General

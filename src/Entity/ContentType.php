@@ -268,7 +268,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function getCacheFileName()
     {
         $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
-            . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
+            . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
     }

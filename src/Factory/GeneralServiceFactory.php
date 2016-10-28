@@ -17,7 +17,8 @@ namespace General\Factory;
 use Doctrine\ORM\EntityManager;
 use General\Options\ModuleOptions;
 use General\Service\GeneralService;
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -28,22 +29,36 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class GeneralServiceFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null         $options
      *
      * @return GeneralService
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $generalService = new GeneralService();
 
         /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->get(EntityManager::class);
+        $entityManager = $container->get(EntityManager::class);
         $generalService->setEntityManager($entityManager);
 
         /** @var ModuleOptions $moduleOptions */
-        $moduleOptions = $serviceLocator->get(ModuleOptions::class);
+        $moduleOptions = $container->get(ModuleOptions::class);
         $generalService->setModuleOptions($moduleOptions);
-        
+
         return $generalService;
+    }
+
+    /**
+     * @param ServiceLocatorInterface $container
+     * @param string                  $canonicalName
+     * @param string                  $requestedName
+     *
+     * @return GeneralService
+     */
+    public function createService(ServiceLocatorInterface $container, $canonicalName = null, $requestedName = null)
+    {
+        return $this($container, $requestedName);
     }
 }

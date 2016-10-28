@@ -17,7 +17,7 @@ namespace General\Navigation\Factory;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**

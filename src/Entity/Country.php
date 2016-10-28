@@ -21,7 +21,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @ORM\Table(name="country")
  * @ORM\Entity(repositoryClass="General\Repository\Country")
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
  * @category General

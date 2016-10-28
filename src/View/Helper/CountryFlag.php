@@ -42,7 +42,7 @@ class CountryFlag extends ImageAbstract
         $this->addRouterParam('iso3', strtolower($country->getIso3()));
         $this->addRouterParam('ext', 'png');
         $this->setImageId('country_flag_' . $country->getIso3());
-        $this->setText($country->getCountry());
+
         $this->setWidth($width);
 
         return $this->createImageUrl();

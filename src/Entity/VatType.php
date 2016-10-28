@@ -23,7 +23,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @ORM\Table(name="vat_type")
  * @ORM\Entity(repositoryClass="General\Repository\VatType")
- * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("vat_type")
  *
  * @category General

@@ -162,7 +162,7 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if ((! defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT)) {
+                    if (( ! defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT)) {
                         $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
@@ -214,7 +214,7 @@ class EmailService extends ServiceAbstract
                      * We have a recipient which can be an instance of the contact. Produce a contactService object
                      * and fill the templateVars with extra options
                      */
-                    if (! $contact instanceof Contact) {
+                    if ( ! $contact instanceof Contact) {
                         $contact = new Contact();
                         $contact->setEmail($recipient);
                     }
@@ -222,7 +222,7 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (! defined("DEBRANOVA_ENVIRONMENT") || 'development' === DEBRANOVA_ENVIRONMENT) {
+                    if ( ! defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
                         $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
@@ -291,7 +291,7 @@ class EmailService extends ServiceAbstract
             /*
              * replace the content of the title with the available keys in the template vars
              */
-            if (! is_array($replace)) {
+            if ( ! is_array($replace)) {
                 $this->message->setSubject(str_replace(sprintf("[%s]", $key), $replace, $this->message->getSubject()));
             }
         }
@@ -427,14 +427,14 @@ class EmailService extends ServiceAbstract
         $this->templateVars = array_merge($this->config["template_vars"], $this->email->toArray());
 
         //If not layout, use default
-        if (! $this->email->getHtmlLayoutName()) {
+        if ( ! $this->email->getHtmlLayoutName()) {
             $this->email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
         }
 
         /*
          * If not sender, use default
          */
-        if (! is_null($this->email->getFrom())) {
+        if ( ! is_null($this->email->getFrom())) {
             $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
@@ -476,7 +476,7 @@ class EmailService extends ServiceAbstract
                 '~\[(.*?)\]~',
             ],
             [
-            "{{ $1|raw }}",
+                "{{ $1|raw }}",
             ],
             $content
         );
@@ -576,7 +576,7 @@ class EmailService extends ServiceAbstract
                 $this->message->addBcc($emailAddress);
             }
         }
-        if (! is_null($this->email->getReplyTo())) {
+        if ( ! is_null($this->email->getReplyTo())) {
             $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
         }
     }
@@ -634,11 +634,11 @@ class EmailService extends ServiceAbstract
                 '~\[parent::getContact\(\)::country\]~',
             ],
             [
-            "[firstname]",
-            "[lastname]",
-            "[fullname]",
-            "[organisation]",
-            "[country]",
+                "[firstname]",
+                "[lastname]",
+                "[fullname]",
+                "[organisation]",
+                "[country]",
             ],
             $message
         );
@@ -646,8 +646,7 @@ class EmailService extends ServiceAbstract
         /*
          * Clone the twigRenderer and overrule to loader to be a string
          */
-        $twigRenderer = new \Twig_Environment();
-        $twigRenderer->setLoader(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
+        $twigRenderer = new \Twig_Environment(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
 
         return $twigRenderer->render('email', $this->templateVars);
     }
