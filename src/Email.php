@@ -8,7 +8,6 @@ namespace General;
 use Contact\Entity\Contact;
 use Contact\Entity\Selection;
 use Contact\Service\ContactService;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class Email.
@@ -146,21 +145,6 @@ class Email
     }
 
     /**
-     * Add TO recipient.
-     *
-     * @param      $var
-     * @param null $user
-     */
-    public function addTo($var, $user = null)
-    {
-        if ($var instanceof Contact) {
-            $this->to[$var->getEmail()] = $var;
-        } else {
-            $this->to[$var] = is_null($user) ? $var : $user;
-        }
-    }
-
-    /**
      * @return mixed
      */
     public function getFrom()
@@ -221,19 +205,19 @@ class Email
     }
 
     /**
-     * @param array $to
-     */
-    public function setTo(array $to)
-    {
-        $this->to = $to;
-    }
-
-    /**
      * @return array
      */
     public function getTo()
     {
         return $this->to;
+    }
+
+    /**
+     * @param array $to
+     */
+    public function setTo(array $to)
+    {
+        $this->to = $to;
     }
 
     /**
@@ -268,7 +252,6 @@ class Email
         $this->bcc = $bcc;
     }
 
-
     /**
      * @return string
      */
@@ -293,6 +276,21 @@ class Email
     {
         foreach ($contactService->findContactsInSelection($selection) as $contact) {
             $this->addTo($contact);
+        }
+    }
+
+    /**
+     * Add TO recipient.
+     *
+     * @param      $var
+     * @param null $user
+     */
+    public function addTo($var, $user = null)
+    {
+        if ($var instanceof Contact) {
+            $this->to[$var->getEmail()] = $var;
+        } else {
+            $this->to[$var] = is_null($user) ? $var : $user;
         }
     }
 
@@ -373,22 +371,6 @@ class Email
     }
 
     /**
-     * @return mixed
-     */
-    public function getSubject()
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @param mixed $subject
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-    }
-
-    /**
      * Converts field names for setters and getters.
      *
      * $this->setMyField($value) === $this->setData('my_field', $value)
@@ -403,6 +385,22 @@ class Email
         $result = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
 
         return $result;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param mixed $subject
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
     }
 
     /**

@@ -201,6 +201,43 @@ class Country extends EntityRepository
     }
 
     /**
+     * Produces a default query to get a country and the required joins.
+     *
+     * This one is not folly correct as I need to exclude the still actives as well.
+     *
+     * @param $which
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilderForCountryByWhich($which)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('general_entity_country');
+        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
+        $queryBuilder->join('general_entity_country.organisation', 'organisation_entity_organisation');
+        $queryBuilder->join('organisation_entity_organisation.affiliation', 'affiliation_entity_affiliation');
+        $queryBuilder->join('affiliation_entity_affiliation.project', 'project_entity_project');
+        //Remove the 0 country (unknown)
+        $queryBuilder->where('general_entity_country.id <> 0');
+        $queryBuilder->addGroupBy('general_entity_country.id');
+        switch ($which) {
+            case AffiliationService::WHICH_ALL:
+                break;
+            case AffiliationService::WHICH_ONLY_ACTIVE:
+                $queryBuilder->andWhere($queryBuilder->expr()->isNull('affiliation_entity_affiliation.dateEnd'));
+                break;
+            case AffiliationService::WHICH_ONLY_INACTIVE:
+                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('affiliation_entity_affiliation.dateEnd'));
+
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
      * @param Project $project
      * @param int     $which
      *
@@ -247,43 +284,6 @@ class Country extends EntityRepository
         $queryBuilder->setParameter(1, $project);
 
         return $queryBuilder->getQuery()->useResultCache(true)->getOneOrNullResult();
-    }
-
-    /**
-     * Produces a default query to get a country and the required joins.
-     *
-     * This one is not folly correct as I need to exclude the still actives as well.
-     *
-     * @param $which
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getQueryBuilderForCountryByWhich($which)
-    {
-        $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('general_entity_country');
-        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
-        $queryBuilder->join('general_entity_country.organisation', 'organisation_entity_organisation');
-        $queryBuilder->join('organisation_entity_organisation.affiliation', 'affiliation_entity_affiliation');
-        $queryBuilder->join('affiliation_entity_affiliation.project', 'project_entity_project');
-        //Remove the 0 country (unknown)
-        $queryBuilder->where('general_entity_country.id <> 0');
-        $queryBuilder->addGroupBy('general_entity_country.id');
-        switch ($which) {
-            case AffiliationService::WHICH_ALL:
-                break;
-            case AffiliationService::WHICH_ONLY_ACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNull('affiliation_entity_affiliation.dateEnd'));
-                break;
-            case AffiliationService::WHICH_ONLY_INACTIVE:
-                $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('affiliation_entity_affiliation.dateEnd'));
-
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf("Incorrect value (%s) for which", $which));
-        }
-
-        return $queryBuilder;
     }
 
     /**

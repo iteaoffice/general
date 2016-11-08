@@ -2,20 +2,20 @@
 
 <div id="organisation-list">
     {% if paginator.pageRange > 0 %}
-    <table class="table table-condensed table-striped table-hover">
-         <thead>
+        <table class="table table-condensed table-striped table-hover">
+            <thead>
             <tr>
                 <th>{{ translate("txt-organisation") }}</th>
                 <th>{{ translate("txt-type") }}</th>
             </tr>
-        </thead>
-        {% for organisation in paginator.getCurrentItems() %}
-         <tr>
-             <td>{{ organisationLink(organisation,'view','name') }}</td>
-             <td>{{ organisation.type }}</td>
-         </tr>
-        {% endfor %}
-    </table>
+            </thead>
+            {% for organisation in paginator.getCurrentItems() %}
+                <tr>
+                    <td>{{ organisationLink(organisation,'view','name') }}</td>
+                    <td>{{ organisation.type }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% else %}
         {{ ztbalert().info(translate("txt-no-organisations-found"))|raw }}
     {% endif %}

@@ -35,14 +35,16 @@ class WebInfoLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!$this->hasAccess($this->getWebInfo(), 'General\Acl\Assertion\WebInfo', $this->getAction())) {
+        if (! $this->hasAccess($this->getWebInfo(), 'General\Acl\Assertion\WebInfo', $this->getAction())) {
             return $action === 'view' ? (string)$this->getWebInfo() : null;
         }
 
-        $this->setShowOptions([
-            'name'            => $this->getWebInfo(),
-            'alternativeShow' => $this->getAlternativeShow(),
-        ]);
+        $this->setShowOptions(
+            [
+                'name'            => $this->getWebInfo(),
+                'alternativeShow' => $this->getAlternativeShow(),
+            ]
+        );
         $this->addRouterParam('id', $this->getWebInfo()->getId());
 
         return $this->createLink();

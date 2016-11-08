@@ -10,9 +10,6 @@
 
 namespace General\Version;
 
-use Zend\Http;
-use Zend\Json\Json;
-
 /**
  * Class to store and retrieve the version of General module.
  */

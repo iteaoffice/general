@@ -33,7 +33,7 @@ class VatTypeController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(VatType::class, $filterPlugin->getFilter());
 
@@ -46,13 +46,15 @@ class VatTypeController extends GeneralAbstractController
         $form = new VatFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -92,9 +94,12 @@ class VatTypeController extends GeneralAbstractController
                 $vatType = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($vatType);
-                $this->redirect()->toRoute('zfcadmin/vat-type/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/vat-type/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -128,9 +133,12 @@ class VatTypeController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/vat-type/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/vat-type/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

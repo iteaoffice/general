@@ -31,24 +31,25 @@ class CountryMap extends AbstractViewHelper
 
     public function __invoke(array $countries, Country $selectedCountry = null, array $options = [])
     {
-        $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
-        $pointer = $clickable ? 'pointer' : 'default';
-        $clickable = $clickable ? 'true' : 'false';
-        $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
-        $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
-        $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
-        $height = isset($options['height']) ? $options['height'] : '400px';
-        $tipData = isset($options['tipData']) ? $options['tipData'] : null;
-        $focusOn = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
+        $clickable    = array_key_exists('clickable', $options) ? $options['clickable'] : true;
+        $pointer      = $clickable ? 'pointer' : 'default';
+        $clickable    = $clickable ? 'true' : 'false';
+        $colorMin     = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
+        $colorMax     = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
+        $regionFill   = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
+        $height       = isset($options['height']) ? $options['height'] : '400px';
+        $tipData      = isset($options['tipData']) ? $options['tipData'] : null;
+        $focusOn      = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
+        $focusOn      = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
         $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
 
-        $js = $countryList = [];
+        $js   = $countryList = [];
         $js[] = "var data = {";
         foreach ($countries as $country) {
             $countryList[] = '"' . $country->getCd() . '": ';
-            $countryList[] = (!is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2 : 1;
+            $countryList[] = (! is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
+                : 1;
             $countryList[] = ",";
         }
         $js[] = substr(implode('', $countryList), 0, -1);
@@ -56,8 +57,8 @@ class CountryMap extends AbstractViewHelper
         if (is_array($tipData)) {
             $js[] = "            tipData = " . json_encode($tipData) . ",\n";
         }
-        $js[] = "            clickable = " . $clickable . ",\n";
-        $js[] = "            countries = [";
+        $js[]        = "            clickable = " . $clickable . ",\n";
+        $js[]        = "            countries = [";
         $countryList = [];
         foreach ($this->getGeneralService()->findAll(Country::class) as $country) {
             $countryList[] = '"' . $country->getCd() . '",';
@@ -111,8 +112,11 @@ $(function () {
         });
     });
 EOT;
-        $this->getHelperPluginManager()->get('headlink')->prependStylesheet('assets/' . ITEAOFFICE_HOST
-            . '/css/jvectormap.css', 'screen');
+        $this->getHelperPluginManager()->get('headlink')->prependStylesheet(
+            'assets/' . ITEAOFFICE_HOST
+            . '/css/jvectormap.css',
+            'screen'
+        );
         $this->getHelperPluginManager()->get('headscript')->appendFile(
             'assets/' . ITEAOFFICE_HOST . '/js/jvectormap.js',
             'text/javascript'

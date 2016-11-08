@@ -16,7 +16,6 @@
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Validator;
 use Zend\InputFilter\InputFilter;
 
 /**

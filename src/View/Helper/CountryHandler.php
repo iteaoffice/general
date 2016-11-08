@@ -52,14 +52,17 @@ class CountryHandler extends AbstractViewHelper
     {
         $this->extractContentParam($content);
 
-        if (in_array($content->getHandler()->getHandler(), [
+        if (in_array(
+            $content->getHandler()->getHandler(),
+            [
             'country',
             'country_map',
             'country_funder',
             'country_project',
             'country_metadata',
             'country_article',
-        ])) {
+            ]
+        )) {
             if (is_null($this->getCountry())) {
                 $this->getServiceManager()->get('response')->setStatusCode(404);
 
@@ -138,13 +141,13 @@ class CountryHandler extends AbstractViewHelper
     public function extractContentParam(Content $content)
     {
         //Give default the docRef to the handler, this does not harm
-        if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
+        if (! is_null($this->getRouteMatch()->getParam('docRef'))) {
             $this->setCountryByDocRef($this->getRouteMatch()->getParam('docRef'));
         }
         foreach ($content->getContentParam() as $param) {
             switch ($param->getParameter()->getParam()) {
                 case 'docRef':
-                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    if (! is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
                         $this->setCountryByDocRef($docRef);
                     }
                     break;
@@ -217,9 +220,12 @@ class CountryHandler extends AbstractViewHelper
      */
     public function parseCountry()
     {
-        return $this->getRenderer()->render('general/partial/entity/country', [
+        return $this->getRenderer()->render(
+            'general/partial/entity/country',
+            [
             'country' => $this->getCountry(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -243,6 +249,14 @@ class CountryHandler extends AbstractViewHelper
     }
 
     /**
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        return $this->getServiceManager()->get(ModuleOptions::class);
+    }
+
+    /**
      * @param Country $country
      *
      * @return string
@@ -255,10 +269,13 @@ class CountryHandler extends AbstractViewHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getRenderer()->render('program/partial/list/funder', [
+        return $this->getRenderer()->render(
+            'program/partial/list/funder',
+            [
             'funder'         => $funder,
             'contactService' => $this->getContactService(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -267,6 +284,14 @@ class CountryHandler extends AbstractViewHelper
     public function getProgramService()
     {
         return $this->getServiceManager()->get(ProgramService::class);
+    }
+
+    /**
+     * @return ContactService
+     */
+    public function getContactService()
+    {
+        return $this->getServiceManager()->get(ContactService::class);
     }
 
     /**
@@ -281,15 +306,26 @@ class CountryHandler extends AbstractViewHelper
 
         $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
 
-        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
+        $projects      = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
         $organisations = $this->getOrganisationService()
             ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
-        return $this->getRenderer()->render('general/partial/entity/country-metadata', [
+        return $this->getRenderer()->render(
+            'general/partial/entity/country-metadata',
+            [
             'country'       => $country,
             'projects'      => $projects,
             'organisations' => $organisations->getResult(),
-        ]);
+            ]
+        );
+    }
+
+    /**
+     * @return \Project\Options\ModuleOptions
+     */
+    public function getProjectModuleOptions()
+    {
+        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
     }
 
     /**
@@ -306,14 +342,6 @@ class CountryHandler extends AbstractViewHelper
     public function getOrganisationService()
     {
         return $this->getServiceManager()->get(OrganisationService::class);
-    }
-
-    /**
-     * @return ContactService
-     */
-    public function getContactService()
-    {
-        return $this->getServiceManager()->get(ContactService::class);
     }
 
     /**
@@ -355,15 +383,18 @@ class CountryHandler extends AbstractViewHelper
         }
         $organisationQuery = $this->getOrganisationService()
             ->findOrganisationByCountry($this->getCountry(), true, true);
-        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
+        $paginator         = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 25);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
 
-        return $this->getRenderer()->render('general/partial/list/organisation', [
+        return $this->getRenderer()->render(
+            'general/partial/list/organisation',
+            [
             'country'   => $this->getCountry(),
             'paginator' => $paginator,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -379,11 +410,14 @@ class CountryHandler extends AbstractViewHelper
 
         $projects = $this->getProjectService()->findProjectByCountry($country, $whichProjects);
 
-        return $this->getRenderer()->render('general/partial/list/project', [
+        return $this->getRenderer()->render(
+            'general/partial/list/project',
+            [
             'country'        => $country,
             'projectService' => $this->getProjectService(),
             'projects'       => $projects,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -399,11 +433,14 @@ class CountryHandler extends AbstractViewHelper
          * Parse the organisationService in to have the these functions available in the view
          */
 
-        return $this->getRenderer()->render('general/partial/list/article', [
+        return $this->getRenderer()->render(
+            'general/partial/list/article',
+            [
             'country'  => $country,
             'articles' => $articles,
             'limit'    => $this->getLimit(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -412,22 +449,6 @@ class CountryHandler extends AbstractViewHelper
     public function getArticleService()
     {
         return $this->getServiceManager()->get(ArticleService::class);
-    }
-
-    /**
-     * @return ModuleOptions
-     */
-    public function getModuleOptions()
-    {
-        return $this->getServiceManager()->get(ModuleOptions::class);
-    }
-
-    /**
-     * @return \Project\Options\ModuleOptions
-     */
-    public function getProjectModuleOptions()
-    {
-        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
     }
 
     /**

@@ -39,11 +39,13 @@ class VatLabel extends AbstractNavigationInvokable
             /** @var Vat $vat */
             $vat = $this->getEntities()->get(Vat::class);
 
-            $page->setParams(array_merge(
-                $page->getParams(),
-                ['id' => $vat->getId()]
-            ));
-            $label = (string) $vat;
+            $page->setParams(
+                array_merge(
+                    $page->getParams(),
+                    ['id' => $vat->getId()]
+                )
+            );
+            $label = (string)$vat;
         } else {
             $label = $this->translate('txt-nav-view');
         }

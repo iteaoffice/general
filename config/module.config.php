@@ -41,7 +41,7 @@ $config = [
         ],
         'factories' => [
             Controller\Plugin\GetFilter::class => Controller\Factory\PluginFactory::class,
-        ]
+        ],
     ],
     'view_manager'       => [
         'template_map' => include __DIR__ . '/../template_map.php',
@@ -77,7 +77,7 @@ $config = [
             View\Helper\ContentTypeLink::class  => View\Factory\ViewHelperFactory::class,
             View\Helper\ContentTypeIcon::class  => View\Factory\ViewHelperFactory::class,
 
-        ]
+        ],
     ],
     'service_manager'    => [
         'factories' => [

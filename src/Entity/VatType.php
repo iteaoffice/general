@@ -110,8 +110,8 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->invoice = new Collections\ArrayCollection();
-        $this->dimension = new Collections\ArrayCollection();
+        $this->invoice               = new Collections\ArrayCollection();
+        $this->dimension             = new Collections\ArrayCollection();
         $this->organisationFinancial = new Collections\ArrayCollection();
     }
 
@@ -145,7 +145,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->type;
+        return (string)$this->type;
     }
 
     /**
@@ -162,6 +162,7 @@ class VatType extends EntityAbstract implements ResourceInterface
      * Set input filter.
      *
      * @param  InputFilterInterface $inputFilter
+     *
      * @return void
      * @throws \Exception
      */
@@ -175,9 +176,9 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
                     [
@@ -236,6 +237,11 @@ class VatType extends EntityAbstract implements ResourceInterface
         return $this->inputFilter;
     }
 
+    public function populate()
+    {
+        return $this->getArrayCopy();
+    }
+
     /**
      * Needed for the hydration of form elements.
      *
@@ -250,9 +256,12 @@ class VatType extends EntityAbstract implements ResourceInterface
         ];
     }
 
-    public function populate()
+    /**
+     * @return string
+     */
+    public function getDescription()
     {
-        return $this->getArrayCopy();
+        return $this->description;
     }
 
     /**
@@ -264,11 +273,11 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getDescription()
+    public function getId()
     {
-        return $this->description;
+        return $this->id;
     }
 
     /**
@@ -280,11 +289,11 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return \Invoice\Entity\Invoice[]
      */
-    public function getId()
+    public function getInvoice()
     {
-        return $this->id;
+        return $this->invoice;
     }
 
     /**
@@ -296,11 +305,11 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Invoice\Entity\Invoice[]
+     * @return string
      */
-    public function getInvoice()
+    public function getType()
     {
-        return $this->invoice;
+        return $this->type;
     }
 
     /**
@@ -312,11 +321,11 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return \General\Entity\Vat
      */
-    public function getType()
+    public function getVat()
     {
-        return $this->type;
+        return $this->vat;
     }
 
     /**
@@ -325,14 +334,6 @@ class VatType extends EntityAbstract implements ResourceInterface
     public function setVat($vat)
     {
         $this->vat = $vat;
-    }
-
-    /**
-     * @return \General\Entity\Vat
-     */
-    public function getVat()
-    {
-        return $this->vat;
     }
 
     /**

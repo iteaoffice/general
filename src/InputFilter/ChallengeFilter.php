@@ -16,7 +16,6 @@
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Validator;
 use Zend\InputFilter\InputFilter;
 
 /**
@@ -37,7 +36,8 @@ class ChallengeFilter extends InputFilter
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'       => 'challenge',
                 'required'   => true,
                 'filters'    => [
@@ -54,15 +54,19 @@ class ChallengeFilter extends InputFilter
                         ],
                     ],
                 ],
-            ]);
-        $inputFilter->add([
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'     => 'description',
                 'required' => true,
                 'filters'  => [
                     ['name' => 'StringTrim'],
                 ],
-            ]);
-        $inputFilter->add([
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'       => 'backgroundColor',
                 'required'   => true,
                 'filters'    => [
@@ -79,8 +83,10 @@ class ChallengeFilter extends InputFilter
                         ],
                     ],
                 ],
-            ]);
-        $inputFilter->add([
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'       => 'frontColor',
                 'required'   => true,
                 'filters'    => [
@@ -97,7 +103,8 @@ class ChallengeFilter extends InputFilter
                         ],
                     ],
                 ],
-            ]);
+            ]
+        );
 
 
         $this->add($inputFilter, 'general_entity_challenge');

@@ -13,9 +13,6 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -102,9 +99,9 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->contacts = new Collections\ArrayCollection();
-        $this->applicantTitle = new Collections\ArrayCollection();
-        $this->applicantContactTitle = new Collections\ArrayCollection();
+        $this->contacts                = new Collections\ArrayCollection();
+        $this->applicantTitle          = new Collections\ArrayCollection();
+        $this->applicantContactTitle   = new Collections\ArrayCollection();
         $this->applicantFinancialTitle = new Collections\ArrayCollection();
     }
 

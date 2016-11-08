@@ -62,6 +62,25 @@ abstract class ServiceAbstract implements ServiceInterface
         return $this->getEntityManager()->getRepository($entity)->findAll();
     }
 
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     *
+     * @return ServiceAbstract
+     */
+    public function setEntityManager($entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+        return $this;
+    }
 
     /**
      * @param string $entity
@@ -127,26 +146,6 @@ abstract class ServiceAbstract implements ServiceInterface
         $this->getEntityManager()->flush();
 
         return true;
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     *
-     * @return ServiceAbstract
-     */
-    public function setEntityManager($entityManager)
-    {
-        $this->entityManager = $entityManager;
-
-        return $this;
     }
 
     /**

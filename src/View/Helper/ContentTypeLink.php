@@ -38,17 +38,24 @@ class ContentTypeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!$this->hasAccess($this->getContentType(), \General\Acl\Assertion\ContentType::class, $this->getAction())) {
+        if (! $this->hasAccess(
+            $this->getContentType(),
+            \General\Acl\Assertion\ContentType::class,
+            $this->getAction()
+        )
+        ) {
             return $action === 'view' ? (string)$this->getContentType() : null;
         }
 
-        $this->setShowOptions([
-            'name'            => $this->getContentType(),
-            'extension'       => $this->getContentType()->getExtension(),
-            'description'     => $this->getContentType()->getDescription(),
-            'content-type'    => $this->getContentType()->getContentType(),
-            'alternativeShow' => $this->getAlternativeShow(),
-        ]);
+        $this->setShowOptions(
+            [
+                'name'            => $this->getContentType(),
+                'extension'       => $this->getContentType()->getExtension(),
+                'description'     => $this->getContentType()->getDescription(),
+                'content-type'    => $this->getContentType()->getContentType(),
+                'alternativeShow' => $this->getAlternativeShow(),
+            ]
+        );
         $this->addRouterParam('id', $this->getContentType()->getId());
 
         return $this->createLink();
@@ -70,17 +77,21 @@ class ContentTypeLink extends LinkAbstract
                 break;
             case 'view':
                 $this->setRouter('zfcadmin/content-type/view');
-                $this->setText(sprintf(
-                    $this->translate('txt-view-content-type-%s'),
-                    $this->getContentType()->getDescription()
-                ));
+                $this->setText(
+                    sprintf(
+                        $this->translate('txt-view-content-type-%s'),
+                        $this->getContentType()->getDescription()
+                    )
+                );
                 break;
             case 'edit':
                 $this->setRouter('zfcadmin/content-type/edit');
-                $this->setText(sprintf(
-                    $this->translate('txt-edit-content-type-%s'),
-                    $this->getContentType()->getDescription()
-                ));
+                $this->setText(
+                    sprintf(
+                        $this->translate('txt-edit-content-type-%s'),
+                        $this->getContentType()->getDescription()
+                    )
+                );
                 break;
             default:
                 throw new \Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));

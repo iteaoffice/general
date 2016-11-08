@@ -128,6 +128,14 @@ class Web extends EntityAbstract
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -136,11 +144,11 @@ class Web extends EntityAbstract
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getMount()
     {
-        return $this->id;
+        return $this->mount;
     }
 
     /**
@@ -154,9 +162,9 @@ class Web extends EntityAbstract
     /**
      * @return string
      */
-    public function getMount()
+    public function getUrl()
     {
-        return $this->mount;
+        return $this->url;
     }
 
     /**
@@ -170,9 +178,9 @@ class Web extends EntityAbstract
     /**
      * @return string
      */
-    public function getUrl()
+    public function getWeb()
     {
-        return $this->url;
+        return $this->web;
     }
 
     /**
@@ -184,11 +192,11 @@ class Web extends EntityAbstract
     }
 
     /**
-     * @return string
+     * @return \Deeplink\Entity\Target[]
      */
-    public function getWeb()
+    public function getTarget()
     {
-        return $this->web;
+        return $this->target;
     }
 
     /**
@@ -200,11 +208,11 @@ class Web extends EntityAbstract
     }
 
     /**
-     * @return \Deeplink\Entity\Target[]
+     * @return \General\Entity\WebInfo[]
      */
-    public function getTarget()
+    public function getWebInfo()
     {
-        return $this->target;
+        return $this->webInfo;
     }
 
     /**
@@ -213,14 +221,6 @@ class Web extends EntityAbstract
     public function setWebInfo($webInfo)
     {
         $this->webInfo = $webInfo;
-    }
-
-    /**
-     * @return \General\Entity\WebInfo[]
-     */
-    public function getWebInfo()
-    {
-        return $this->webInfo;
     }
 
     /**

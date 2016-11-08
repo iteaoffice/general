@@ -57,7 +57,7 @@ class ChallengeHandler extends AbstractViewHelper
      */
     public function extractContentParam(Content $content)
     {
-        if (!is_null($this->getRouteMatch()->getParam('docRef'))) {
+        if (! is_null($this->getRouteMatch()->getParam('docRef'))) {
             $this->setChallengeDocRef($this->getRouteMatch()->getParam('docRef'));
         }
         foreach ($content->getContentParam() as $param) {
@@ -66,7 +66,7 @@ class ChallengeHandler extends AbstractViewHelper
              */
             switch ($param->getParameter()->getParam()) {
                 case 'docRef':
-                    if (!is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    if (! is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
                         $this->setChallengeDocRef($docRef);
                     }
                     break;
@@ -148,11 +148,14 @@ class ChallengeHandler extends AbstractViewHelper
     {
         $projects = $this->getProjectService()->findProjectByChallenge($challenge);
 
-        return $this->getRenderer()->render('general/partial/list/project-challenge', [
+        return $this->getRenderer()->render(
+            'general/partial/list/project-challenge',
+            [
             'projects'       => $projects,
             'projectService' => $this->getProjectService(),
             'challenge'      => $challenge,
-        ]);
+            ]
+        );
     }
 
     /**

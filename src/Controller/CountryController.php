@@ -27,7 +27,7 @@ class CountryController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Country::class, $filterPlugin->getFilter());
 
@@ -40,13 +40,15 @@ class CountryController extends GeneralAbstractController
         $form = new CountryFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -86,9 +88,12 @@ class CountryController extends GeneralAbstractController
                 $country = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($country);
-                $this->redirect()->toRoute('zfcadmin/country/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/country/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -121,9 +126,12 @@ class CountryController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/country/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/country/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

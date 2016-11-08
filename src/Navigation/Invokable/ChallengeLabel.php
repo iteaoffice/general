@@ -39,11 +39,13 @@ class ChallengeLabel extends AbstractNavigationInvokable
             /** @var Challenge $challenge */
             $challenge = $this->getEntities()->get(Challenge::class);
 
-            $page->setParams(array_merge(
-                $page->getParams(),
-                ['id' => $challenge->getId()]
-            ));
-            $label = (string) $challenge;
+            $page->setParams(
+                array_merge(
+                    $page->getParams(),
+                    ['id' => $challenge->getId()]
+                )
+            );
+            $label = (string)$challenge;
         } else {
             $label = $this->translate('txt-nav-view');
         }

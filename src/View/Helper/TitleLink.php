@@ -48,11 +48,13 @@ class TitleLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!is_null($title)) {
+        if (! is_null($title)) {
             $this->addRouterParam('id', $title->getId());
-            $this->setShowOptions([
-                'name' => $title->getName(),
-            ]);
+            $this->setShowOptions(
+                [
+                    'name' => $title->getName(),
+                ]
+            );
         }
 
         return $this->createLink();

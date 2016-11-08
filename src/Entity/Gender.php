@@ -13,9 +13,6 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -88,7 +85,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) $this->attention;
+        return (string)$this->attention;
     }
 
     /**

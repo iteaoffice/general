@@ -29,131 +29,131 @@ return [
                 ['route' => 'home', 'roles' => []],
                 [
                     'route' => 'zfcadmin/web-info/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/list',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/new',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/edit',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/view',
-                    'roles' => [Access::ACCESS_OFFICE]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
             ],
         ],

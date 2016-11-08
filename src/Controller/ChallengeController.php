@@ -34,7 +34,7 @@ class ChallengeController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Challenge::class, $filterPlugin->getFilter());
 
@@ -47,13 +47,15 @@ class ChallengeController extends GeneralAbstractController
         $form = new ChallengeFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -93,9 +95,12 @@ class ChallengeController extends GeneralAbstractController
                 $challenge = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($challenge);
-                $this->redirect()->toRoute('zfcadmin/challenge/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/challenge/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -128,9 +133,12 @@ class ChallengeController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/challenge/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/challenge/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

@@ -26,7 +26,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\WebInfoLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'web-info-edit' => [
@@ -38,7 +38,7 @@ return [
                                                 'id' => General\Entity\WebInfo::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'web-info-new'  => [
@@ -61,7 +61,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\CountryLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'country-edit' => [
@@ -73,7 +73,7 @@ return [
                                                 'id' => General\Entity\Country::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'country-new'  => [
@@ -96,7 +96,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\ChallengeLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'challenge-edit' => [
@@ -108,7 +108,7 @@ return [
                                                 'id' => General\Entity\Challenge::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'challenge-new'  => [
@@ -131,7 +131,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\ContentTypeLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'content-type-edit' => [
@@ -143,7 +143,7 @@ return [
                                                 'id' => General\Entity\ContentType::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'content-type-new'  => [
@@ -166,7 +166,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\GenderLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'gender-edit' => [
@@ -178,7 +178,7 @@ return [
                                                 'id' => General\Entity\Gender::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'gender-new'  => [
@@ -201,7 +201,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\TitleLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'title-edit' => [
@@ -213,7 +213,7 @@ return [
                                                 'id' => General\Entity\Title::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'title-new'  => [
@@ -242,7 +242,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\VatLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'vat-edit' => [
@@ -254,7 +254,7 @@ return [
                                                 'id' => General\Entity\Vat::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'vat-new'  => [
@@ -278,7 +278,7 @@ return [
                                     ],
                                     'invokables' => [
                                         General\Navigation\Invokable\VatTypeLabel::class,
-                                    ]
+                                    ],
                                 ],
                                 'pages'   => [
                                     'vat-type--edit' => [
@@ -290,7 +290,7 @@ return [
                                                 'id' => General\Entity\VatType::class,
                                             ],
                                         ],
-                                    ]
+                                    ],
                                 ],
                             ],
                             'vat-type-new'  => [

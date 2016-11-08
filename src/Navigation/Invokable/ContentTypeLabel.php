@@ -39,10 +39,12 @@ class ContentTypeLabel extends AbstractNavigationInvokable
             /** @var ContentType $type */
             $type = $this->getEntities()->get(ContentType::class);
 
-            $page->setParams(array_merge(
-                $page->getParams(),
-                ['id' => $type->getId()]
-            ));
+            $page->setParams(
+                array_merge(
+                    $page->getParams(),
+                    ['id' => $type->getId()]
+                )
+            );
             $label = $type->getDescription();
         } else {
             $label = $this->translate('txt-nav-view');

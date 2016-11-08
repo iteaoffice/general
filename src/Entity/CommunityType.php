@@ -12,9 +12,6 @@ namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Entity for the Community Type.
@@ -101,15 +98,7 @@ class CommunityType extends EntityAbstract
      */
     public function __toString()
     {
-        return (string) $this->type;
-    }
-
-    /**
-     * @param \Contact\Entity\Community[] $community
-     */
-    public function setCommunity($community)
-    {
-        $this->community = $community;
+        return (string)$this->type;
     }
 
     /**
@@ -121,11 +110,11 @@ class CommunityType extends EntityAbstract
     }
 
     /**
-     * @param int $id
+     * @param \Contact\Entity\Community[] $community
      */
-    public function setId($id)
+    public function setCommunity($community)
     {
-        $this->id = $id;
+        $this->community = $community;
     }
 
     /**
@@ -134,6 +123,22 @@ class CommunityType extends EntityAbstract
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
@@ -147,9 +152,9 @@ class CommunityType extends EntityAbstract
     /**
      * @return string
      */
-    public function getImage()
+    public function getLink()
     {
-        return $this->image;
+        return $this->link;
     }
 
     /**
@@ -163,9 +168,9 @@ class CommunityType extends EntityAbstract
     /**
      * @return string
      */
-    public function getLink()
+    public function getRegularExpression()
     {
-        return $this->link;
+        return $this->regularExpression;
     }
 
     /**
@@ -179,9 +184,9 @@ class CommunityType extends EntityAbstract
     /**
      * @return string
      */
-    public function getRegularExpression()
+    public function getType()
     {
-        return $this->regularExpression;
+        return $this->type;
     }
 
     /**
@@ -190,13 +195,5 @@ class CommunityType extends EntityAbstract
     public function setType($type)
     {
         $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 }

@@ -39,11 +39,13 @@ class WebInfoLabel extends AbstractNavigationInvokable
             /** @var WebInfo $webInfo */
             $webInfo = $this->getEntities()->get(WebInfo::class);
 
-            $page->setParams(array_merge(
-                $page->getParams(),
-                ['id' => $webInfo->getId()]
-            ));
-            $label = (string) $webInfo;
+            $page->setParams(
+                array_merge(
+                    $page->getParams(),
+                    ['id' => $webInfo->getId()]
+                )
+            );
+            $label = (string)$webInfo;
         } else {
             $label = $this->translate('txt-nav-view');
         }

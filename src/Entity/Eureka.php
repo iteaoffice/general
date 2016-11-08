@@ -105,7 +105,7 @@ class Eureka extends EntityAbstract
      */
     public function getResourceId()
     {
-        return __NAMESPACE__.':'.__CLASS__.':'.$this->id;
+        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
     }
 
     /**
@@ -125,7 +125,7 @@ class Eureka extends EntityAbstract
      */
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
             $inputFilter->add(
@@ -150,6 +150,11 @@ class Eureka extends EntityAbstract
         return $this->inputFilter;
     }
 
+    public function populate()
+    {
+        return $this->getArrayCopy();
+    }
+
     /**
      * Needed for the hydration of form elements.
      *
@@ -158,19 +163,6 @@ class Eureka extends EntityAbstract
     public function getArrayCopy()
     {
         return [];
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * @param \General\Entity\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
     }
 
     /**
@@ -182,11 +174,11 @@ class Eureka extends EntityAbstract
     }
 
     /**
-     * @param int $id
+     * @param \General\Entity\Country $country
      */
-    public function setId($id)
+    public function setCountry($country)
     {
-        $this->id = $id;
+        $this->country = $country;
     }
 
     /**
@@ -198,11 +190,11 @@ class Eureka extends EntityAbstract
     }
 
     /**
-     * @param string $since
+     * @param int $id
      */
-    public function setSince($since)
+    public function setId($id)
     {
-        $this->since = $since;
+        $this->id = $id;
     }
 
     /**
@@ -211,5 +203,13 @@ class Eureka extends EntityAbstract
     public function getSince()
     {
         return $this->since;
+    }
+
+    /**
+     * @param string $since
+     */
+    public function setSince($since)
+    {
+        $this->since = $since;
     }
 }

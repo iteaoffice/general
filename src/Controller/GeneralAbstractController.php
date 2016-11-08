@@ -146,23 +146,6 @@ abstract class GeneralAbstractController extends AbstractActionController
     }
 
     /**
-     * Proxy for the flash messenger helper to have the string translated earlier.
-     *
-     * @param $string
-     *
-     * @return string
-     */
-    protected function translate($string)
-    {
-        /*
-         * @var Translate
-         */
-        $translate = $this->getViewHelperManager()->get('translate');
-
-        return $translate($string);
-    }
-
-    /**
      * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
@@ -220,6 +203,23 @@ abstract class GeneralAbstractController extends AbstractActionController
         $this->entityManager = $entityManager;
 
         return $this;
+    }
+
+    /**
+     * Proxy for the flash messenger helper to have the string translated earlier.
+     *
+     * @param $string
+     *
+     * @return string
+     */
+    protected function translate($string)
+    {
+        /*
+         * @var Translate
+         */
+        $translate = $this->getViewHelperManager()->get('translate');
+
+        return $translate($string);
     }
 
     /**

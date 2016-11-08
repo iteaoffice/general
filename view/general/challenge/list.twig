@@ -41,10 +41,14 @@
                 {% for challenge in paginator.getCurrentItems() %}
                     <tr>
                         <td>{{ challenge.id }} {{ challengeLink(challenge,'edit', 'icon') }}</td>
-                        <td>{{ challengeLink(challenge,'view-admin','name') }} <div class="pull-right">{{ challengeLink(challenge,'view','icon') }}</div></td>
+                        <td>{{ challengeLink(challenge,'view-admin','name') }}
+                            <div class="pull-right">{{ challengeLink(challenge,'view','icon') }}</div>
+                        </td>
                         <td>{{ challenge.frontColor }}</td>
                         <td>{{ challenge.backgroundColor }}</td>
-                        <td><a class="btn" style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a></td>
+                        <td><a class="btn"
+                               style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a>
+                        </td>
                         <td>{{ challenge.projectChallenge.count() }}</td>
                         <td>{{ challenge.boothChallenge.count() }}</td>
                     </tr>

@@ -223,30 +223,30 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->projectLogo = new Collections\ArrayCollection();
-        $this->contentImage = new Collections\ArrayCollection();
-        $this->pressArticle = new Collections\ArrayCollection();
-        $this->programNna = new Collections\ArrayCollection();
-        $this->programDoa = new Collections\ArrayCollection();
-        $this->organisationLogo = new Collections\ArrayCollection();
-        $this->contactDnd = new Collections\ArrayCollection();
-        $this->contactPhoto = new Collections\ArrayCollection();
-        $this->publication = new Collections\ArrayCollection();
-        $this->badgeAttachment = new Collections\ArrayCollection();
-        $this->result = new Collections\ArrayCollection();
-        $this->workpackageDocument = new Collections\ArrayCollection();
-        $this->poster = new Collections\ArrayCollection();
-        $this->ideaDocument = new Collections\ArrayCollection();
-        $this->ideaImage = new Collections\ArrayCollection();
+        $this->projectLogo             = new Collections\ArrayCollection();
+        $this->contentImage            = new Collections\ArrayCollection();
+        $this->pressArticle            = new Collections\ArrayCollection();
+        $this->programNna              = new Collections\ArrayCollection();
+        $this->programDoa              = new Collections\ArrayCollection();
+        $this->organisationLogo        = new Collections\ArrayCollection();
+        $this->contactDnd              = new Collections\ArrayCollection();
+        $this->contactPhoto            = new Collections\ArrayCollection();
+        $this->publication             = new Collections\ArrayCollection();
+        $this->badgeAttachment         = new Collections\ArrayCollection();
+        $this->result                  = new Collections\ArrayCollection();
+        $this->workpackageDocument     = new Collections\ArrayCollection();
+        $this->poster                  = new Collections\ArrayCollection();
+        $this->ideaDocument            = new Collections\ArrayCollection();
+        $this->ideaImage               = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
-        $this->projectReportItem = new Collections\ArrayCollection();
-        $this->projectDocument = new Collections\ArrayCollection();
-        $this->versionDocument = new Collections\ArrayCollection();
-        $this->calendarDocument = new Collections\ArrayCollection();
-        $this->loi = new Collections\ArrayCollection();
-        $this->meetingFloorplan = new Collections\ArrayCollection();
-        $this->exhibitionFloorplan = new Collections\ArrayCollection();
-        $this->reminder = new Collections\ArrayCollection();
+        $this->projectReportItem       = new Collections\ArrayCollection();
+        $this->projectDocument         = new Collections\ArrayCollection();
+        $this->versionDocument         = new Collections\ArrayCollection();
+        $this->calendarDocument        = new Collections\ArrayCollection();
+        $this->loi                     = new Collections\ArrayCollection();
+        $this->meetingFloorplan        = new Collections\ArrayCollection();
+        $this->exhibitionFloorplan     = new Collections\ArrayCollection();
+        $this->reminder                = new Collections\ArrayCollection();
     }
 
     /**
@@ -274,6 +274,16 @@ class ContentType extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * Although an alternative does not have a clear hash, we can create one based on the id;.
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return sha1($this->id . $this->contentType . $this->extension);
+    }
+
+    /**
      * Magic Getter.
      *
      * @param $property
@@ -294,16 +304,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function __set($property, $value)
     {
         $this->$property = $value;
-    }
-
-    /**
-     * Although an alternative does not have a clear hash, we can create one based on the id;.
-     *
-     * @return string
-     */
-    public function getHash()
-    {
-        return sha1($this->id . $this->contentType . $this->extension);
     }
 
     /**

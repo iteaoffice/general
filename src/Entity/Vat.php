@@ -135,12 +135,12 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->type = new Collections\ArrayCollection();
-        $this->invoiceRow = new Collections\ArrayCollection();
+        $this->type         = new Collections\ArrayCollection();
+        $this->invoiceRow   = new Collections\ArrayCollection();
         $this->financialRow = new Collections\ArrayCollection();
-        $this->deskCosts = new Collections\ArrayCollection();
-        $this->optionCost = new Collections\ArrayCollection();
-        $this->dimension = new Collections\ArrayCollection();
+        $this->deskCosts    = new Collections\ArrayCollection();
+        $this->optionCost   = new Collections\ArrayCollection();
+        $this->dimension    = new Collections\ArrayCollection();
     }
 
     /**
@@ -173,7 +173,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __toString()
     {
-        return (string) sprintf("%s (%s %%)", $this->code, $this->percentage);
+        return (string)sprintf("%s (%s %%)", $this->code, $this->percentage);
     }
 
     /**
@@ -190,6 +190,7 @@ class Vat extends EntityAbstract implements ResourceInterface
      * Set input filter.
      *
      * @param  InputFilterInterface $inputFilter
+     *
      * @return void
      *
      * @throws \Exception
@@ -204,9 +205,9 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
+            $factory     = new InputFactory();
             $inputFilter->add(
                 $factory->createInput(
                     [
@@ -253,6 +254,11 @@ class Vat extends EntityAbstract implements ResourceInterface
         return $this->inputFilter;
     }
 
+    public function populate()
+    {
+        return $this->getArrayCopy();
+    }
+
     /**
      * Needed for the hydration of form elements.
      *
@@ -269,9 +275,12 @@ class Vat extends EntityAbstract implements ResourceInterface
         ];
     }
 
-    public function populate()
+    /**
+     * @return string
+     */
+    public function getCode()
     {
-        return $this->getArrayCopy();
+        return $this->code;
     }
 
     /**
@@ -283,11 +292,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return \General\Entity\Country
      */
-    public function getCode()
+    public function getCountry()
     {
-        return $this->code;
+        return $this->country;
     }
 
     /**
@@ -299,11 +308,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Country
+     * @return \DateTime
      */
-    public function getCountry()
+    public function getDateStart()
     {
-        return $this->country;
+        return $this->dateStart;
     }
 
     /**
@@ -315,11 +324,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \DateTime
+     * @return int
      */
-    public function getDateStart()
+    public function getId()
     {
-        return $this->dateStart;
+        return $this->id;
     }
 
     /**
@@ -331,11 +340,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getId()
+    public function getPercentage()
     {
-        return $this->id;
+        return $this->percentage;
     }
 
     /**
@@ -347,11 +356,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return float
+     * @return \General\Entity\VatType[]
      */
-    public function getPercentage()
+    public function getType()
     {
-        return $this->percentage;
+        return $this->type;
     }
 
     /**
@@ -363,11 +372,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\VatType[]
+     * @return \Invoice\Entity\Row[]
      */
-    public function getType()
+    public function getInvoiceRow()
     {
-        return $this->type;
+        return $this->invoiceRow;
     }
 
     /**
@@ -379,11 +388,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Invoice\Entity\Row[]
+     * @return \Invoice\Entity\Financial\Row[]
      */
-    public function getInvoiceRow()
+    public function getFinancialRow()
     {
-        return $this->invoiceRow;
+        return $this->financialRow;
     }
 
     /**
@@ -395,11 +404,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Invoice\Entity\Financial\Row[]
+     * @return \Event\Entity\DeskCosts[]
      */
-    public function getFinancialRow()
+    public function getDeskCosts()
     {
-        return $this->financialRow;
+        return $this->deskCosts;
     }
 
     /**
@@ -411,11 +420,11 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Event\Entity\DeskCosts[]
+     * @return \Event\Entity\Meeting\OptionCost[]
      */
-    public function getDeskCosts()
+    public function getOptionCost()
     {
-        return $this->deskCosts;
+        return $this->optionCost;
     }
 
     /**
@@ -424,14 +433,6 @@ class Vat extends EntityAbstract implements ResourceInterface
     public function setOptionCost($optionCost)
     {
         $this->optionCost = $optionCost;
-    }
-
-    /**
-     * @return \Event\Entity\Meeting\OptionCost[]
-     */
-    public function getOptionCost()
-    {
-        return $this->optionCost;
     }
 
     /**

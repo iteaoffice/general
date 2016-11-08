@@ -18,7 +18,9 @@
     <dd>{{ challenge.backgroundColor }}</dd>
 
     <dt>{{ translate("txt-sample") }}</dt>
-    <dd><a class="btn" style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a></dd>
+    <dd><a class="btn"
+           style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a>
+    </dd>
 
     <dt>{{ translate('txt-projects') }}</dt>
     {% for projectChallenge in challenge.projectChallenge %}

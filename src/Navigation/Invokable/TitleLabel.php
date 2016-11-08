@@ -39,10 +39,12 @@ class TitleLabel extends AbstractNavigationInvokable
             /** @var Title $title */
             $title = $this->getEntities()->get(Title::class);
 
-            $page->setParams(array_merge(
-                $page->getParams(),
-                ['id' => $title->getId()]
-            ));
+            $page->setParams(
+                array_merge(
+                    $page->getParams(),
+                    ['id' => $title->getId()]
+                )
+            );
             $label = $title->getName();
         } else {
             $label = $this->translate('txt-nav-view');

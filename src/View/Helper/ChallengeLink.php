@@ -42,13 +42,15 @@ class ChallengeLink extends LinkAbstract
         $this->setChallenge($challenge);
         $this->setAction($action);
         $this->setShow($show);
-        
-        if (!is_null($challenge)) {
+
+        if (! is_null($challenge)) {
             $this->addRouterParam('id', $challenge->getId());
             $this->addRouterParam('docRef', $challenge->getDocRef());
-            $this->setShowOptions([
-                'name' => $challenge,
-            ]);
+            $this->setShowOptions(
+                [
+                    'name' => $challenge,
+                ]
+            );
         }
 
         return $this->createLink();

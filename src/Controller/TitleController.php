@@ -32,7 +32,7 @@ class TitleController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Title::class, $filterPlugin->getFilter());
 
@@ -45,13 +45,15 @@ class TitleController extends GeneralAbstractController
         $form = new TitleFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -91,9 +93,12 @@ class TitleController extends GeneralAbstractController
                 $title = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($title);
-                $this->redirect()->toRoute('zfcadmin/title/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/title/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -126,9 +131,12 @@ class TitleController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/title/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/title/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

@@ -30,7 +30,7 @@ class WebInfoController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(WebInfo::class, $filterPlugin->getFilter());
 
@@ -43,13 +43,15 @@ class WebInfoController extends GeneralAbstractController
         $form = new WebInfoFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -90,9 +92,12 @@ class WebInfoController extends GeneralAbstractController
                 $webInfo->setWeb($this->getEntityManager()->getReference(Web::class, 1));
 
                 $result = $this->getGeneralService()->newEntity($webInfo);
-                $this->redirect()->toRoute('zfcadmin/web-info/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/web-info/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -125,9 +130,12 @@ class WebInfoController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/web-info/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/web-info/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

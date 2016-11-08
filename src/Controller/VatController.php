@@ -32,7 +32,7 @@ class VatController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Vat::class, $filterPlugin->getFilter());
 
@@ -45,13 +45,15 @@ class VatController extends GeneralAbstractController
         $form = new VatFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -91,9 +93,12 @@ class VatController extends GeneralAbstractController
                 $vat = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($vat);
-                $this->redirect()->toRoute('zfcadmin/vat/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/vat/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -127,11 +132,14 @@ class VatController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 /** @var Vat $vat */
-                $vat = $form->getData();
+                $vat    = $form->getData();
                 $result = $this->getGeneralService()->updateEntity($vat);
-                $this->redirect()->toRoute('zfcadmin/vat/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/vat/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

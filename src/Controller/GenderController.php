@@ -32,32 +32,44 @@ class GenderController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
             ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
 
         $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator(
-                $contactQuery,
-                false
-            )));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX
-            : 20);
+            = new Paginator(
+                new PaginatorAdapter(
+                    new ORMPaginator(
+                        $contactQuery,
+                        false
+                    )
+                )
+            );
+        $paginator->setDefaultItemCountPerPage(
+            ($page === 'all') ? PHP_INT_MAX
+                : 20
+        );
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount()
-            / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(
+            ceil(
+                $paginator->getTotalItemCount()
+                / $paginator->getDefaultItemCountPerPage()
+            )
+        );
 
         $form = new GenderFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
-        return new ViewModel([
-            'paginator'     => $paginator,
-            'form'          => $form,
-            'encodedFilter' => urlencode($filterPlugin->getHash()),
-            'order'         => $filterPlugin->getOrder(),
-            'direction'     => $filterPlugin->getDirection(),
-        ]);
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
     }
 
     /**
@@ -101,9 +113,12 @@ class GenderController extends GeneralAbstractController
                 $gender = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($gender);
-                $this->redirect()->toRoute('zfcadmin/gender/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/gender/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 
@@ -142,9 +157,12 @@ class GenderController extends GeneralAbstractController
             if ($form->isValid()) {
                 $result = $this->getGeneralService()
                     ->updateEntity($form->getData());
-                $this->redirect()->toRoute('zfcadmin/gender/view', [
+                $this->redirect()->toRoute(
+                    'zfcadmin/gender/view',
+                    [
                     'id' => $result->getId(),
-                ]);
+                    ]
+                );
             }
         }
 

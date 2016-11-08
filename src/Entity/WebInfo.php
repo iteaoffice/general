@@ -36,7 +36,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     protected static $plainTemplates
         = [
             self::PLAIN     => "txt-plain",
-            self::NOT_PLAIN => "txt-not-plain"
+            self::NOT_PLAIN => "txt-not-plain",
         ];
 
     /**
@@ -45,7 +45,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     protected static $syncTemplates
         = [
             self::SYNC    => "txt-sync",
-            self::NO_SYNC => "txt-no-sync"
+            self::NO_SYNC => "txt-no-sync",
         ];
 
     /**
@@ -113,8 +113,24 @@ class WebInfo extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->sync = 1;
+        $this->sync  = 1;
         $this->plain = 1;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPlainTemplates()
+    {
+        return self::$plainTemplates;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSyncTemplates()
+    {
+        return self::$syncTemplates;
     }
 
     /**
@@ -146,24 +162,6 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     public function __toString()
     {
         return (string)$this->info;
-    }
-
-   
-
-    /**
-     * @return array
-     */
-    public static function getPlainTemplates()
-    {
-        return self::$plainTemplates;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSyncTemplates()
-    {
-        return self::$syncTemplates;
     }
 
     /**

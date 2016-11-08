@@ -16,7 +16,6 @@
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Validator;
 use Zend\InputFilter\InputFilter;
 
 /**
@@ -37,18 +36,24 @@ class WebInfoFilter extends InputFilter
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();
-        $inputFilter->add([
-            'name'     => 'info',
-            'required' => true,
-        ]);
-        $inputFilter->add([
-            'name'     => 'subject',
-            'required' => true,
-        ]);
-        $inputFilter->add([
-            'name'     => 'content',
-            'required' => true,
-        ]);
+        $inputFilter->add(
+            [
+                'name'     => 'info',
+                'required' => true,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'subject',
+                'required' => true,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'content',
+                'required' => true,
+            ]
+        );
 
 
         $this->add($inputFilter, 'general_entity_webinfo');

@@ -203,18 +203,18 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->address = new Collections\ArrayCollection();
-        $this->organisation = new Collections\ArrayCollection();
-        $this->ictOrganisation = new Collections\ArrayCollection();
-        $this->rationale = new Collections\ArrayCollection();
-        $this->vat = new Collections\ArrayCollection();
-        $this->funder = new Collections\ArrayCollection();
-        $this->evaluation = new Collections\ArrayCollection();
-        $this->changerequestCountry = new Collections\ArrayCollection();
-        $this->projectLog = new Collections\ArrayCollection();
+        $this->address                             = new Collections\ArrayCollection();
+        $this->organisation                        = new Collections\ArrayCollection();
+        $this->ictOrganisation                     = new Collections\ArrayCollection();
+        $this->rationale                           = new Collections\ArrayCollection();
+        $this->vat                                 = new Collections\ArrayCollection();
+        $this->funder                              = new Collections\ArrayCollection();
+        $this->evaluation                          = new Collections\ArrayCollection();
+        $this->changerequestCountry                = new Collections\ArrayCollection();
+        $this->projectLog                          = new Collections\ArrayCollection();
         $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
-        $this->applicantFinancialAddressCountry = new Collections\ArrayCollection();
-        $this->callCountry = new Collections\ArrayCollection();
+        $this->applicantFinancialAddressCountry    = new Collections\ArrayCollection();
+        $this->callCountry                         = new Collections\ArrayCollection();
     }
 
     /**
@@ -276,14 +276,6 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $cd
-     */
-    public function setCd($cd)
-    {
-        $this->cd = $cd;
-    }
-
-    /**
      * @return string
      */
     public function getCd()
@@ -292,11 +284,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $country
+     * @param string $cd
      */
-    public function setCountry($country)
+    public function setCd($cd)
     {
-        $this->country = $country;
+        $this->cd = $cd;
     }
 
     /**
@@ -308,11 +300,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param \General\Entity\Eu $eu
+     * @param string $country
      */
-    public function setEu($eu)
+    public function setCountry($country)
     {
-        $this->eu = $eu;
+        $this->country = $country;
     }
 
     /**
@@ -324,11 +316,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param int $id
+     * @param \General\Entity\Eu $eu
      */
-    public function setId($id)
+    public function setEu($eu)
     {
-        $this->id = $id;
+        $this->eu = $eu;
     }
 
     /**
@@ -340,11 +332,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param string $iso3
+     * @param int $id
      */
-    public function setIso3($iso3)
+    public function setId($id)
     {
-        $this->iso3 = $iso3;
+        $this->id = $id;
     }
 
     /**
@@ -353,6 +345,22 @@ class Country extends EntityAbstract implements ResourceInterface
     public function getIso3()
     {
         return $this->iso3;
+    }
+
+    /**
+     * @param string $iso3
+     */
+    public function setIso3($iso3)
+    {
+        $this->iso3 = $iso3;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumcode()
+    {
+        return $this->numcode;
     }
 
     /**
@@ -366,9 +374,9 @@ class Country extends EntityAbstract implements ResourceInterface
     /**
      * @return int
      */
-    public function getNumcode()
+    public function getVat()
     {
-        return $this->numcode;
+        return $this->vat;
     }
 
     /**
@@ -380,11 +388,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return \Contact\Entity\Address[]|Collections\ArrayCollection
      */
-    public function getVat()
+    public function getAddress()
     {
-        return $this->vat;
+        return $this->address;
     }
 
     /**
@@ -396,11 +404,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Contact\Entity\Address[]|Collections\ArrayCollection
+     * @return \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
      */
-    public function getAddress()
+    public function getIctOrganisation()
     {
-        return $this->address;
+        return $this->ictOrganisation;
     }
 
     /**
@@ -412,11 +420,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
+     * @return \Organisation\Entity\Organisation[]|Collections\ArrayCollection
      */
-    public function getIctOrganisation()
+    public function getOrganisation()
     {
-        return $this->ictOrganisation;
+        return $this->organisation;
     }
 
     /**
@@ -428,11 +436,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Organisation\Entity\Organisation[]|Collections\ArrayCollection
+     * @return int
      */
-    public function getOrganisation()
+    public function getCountryVat()
     {
-        return $this->organisation;
+        return $this->countryVat;
     }
 
     /**
@@ -444,11 +452,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return \Program\Entity\Funder[]|Collections\ArrayCollection
      */
-    public function getCountryVat()
+    public function getFunder()
     {
-        return $this->countryVat;
+        return $this->funder;
     }
 
     /**
@@ -460,11 +468,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \Program\Entity\Funder[]|Collections\ArrayCollection
+     * @return \General\Entity\Eureka
      */
-    public function getFunder()
+    public function getEureka()
     {
-        return $this->funder;
+        return $this->eureka;
     }
 
     /**
@@ -476,11 +484,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Eureka
+     * @return \General\Entity\Flag
      */
-    public function getEureka()
+    public function getFlag()
     {
-        return $this->eureka;
+        return $this->flag;
     }
 
     /**
@@ -492,11 +500,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Flag
+     * @return \General\Entity\Eureka
      */
-    public function getFlag()
+    public function getItac()
     {
-        return $this->flag;
+        return $this->itac;
     }
 
     /**
@@ -508,11 +516,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return \General\Entity\Eureka
+     * @return string
      */
-    public function getItac()
+    public function getDocRef()
     {
-        return $this->itac;
+        return $this->docRef;
     }
 
     /**
@@ -524,11 +532,11 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
      */
-    public function getDocRef()
+    public function getEvaluation()
     {
-        return $this->docRef;
+        return $this->evaluation;
     }
 
     /**
@@ -537,14 +545,6 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setEvaluation($evaluation)
     {
         $this->evaluation = $evaluation;
-    }
-
-    /**
-     * @return \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
-     */
-    public function getEvaluation()
-    {
-        return $this->evaluation;
     }
 
     /**

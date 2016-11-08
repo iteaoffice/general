@@ -36,18 +36,21 @@ class ContentTypeFilter extends Form
 
         $filterFieldset = new Fieldset('filter');
 
-        $filterFieldset->add([
+        $filterFieldset->add(
+            [
                 'type'       => 'Zend\Form\Element\Text',
                 'name'       => 'search',
                 'attributes' => [
                     'class'       => 'form-control',
                     'placeholder' => _('txt-search'),
                 ],
-            ]);
+            ]
+        );
 
         $this->add($filterFieldset);
 
-        $this->add([
+        $this->add(
+            [
                 'type'       => 'Zend\Form\Element\Submit',
                 'name'       => 'submit',
                 'attributes' => [
@@ -55,9 +58,11 @@ class ContentTypeFilter extends Form
                     'class' => 'btn btn-primary',
                     'value' => _('txt-filter'),
                 ],
-            ]);
+            ]
+        );
 
-        $this->add([
+        $this->add(
+            [
                 'type'       => 'Zend\Form\Element\Submit',
                 'name'       => 'clear',
                 'attributes' => [
@@ -65,6 +70,7 @@ class ContentTypeFilter extends Form
                     'class' => 'btn btn-warning',
                     'value' => _('txt-cancel'),
                 ],
-            ]);
+            ]
+        );
     }
 }

@@ -24,7 +24,6 @@ use General\Service\GeneralService;
 use Interop\Container\ContainerInterface;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\HelperPluginManager;
 
 /**
@@ -76,5 +75,4 @@ final class ControllerFactory implements FactoryInterface
 
         return $controller;
     }
-
 }

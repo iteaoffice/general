@@ -40,6 +40,14 @@ class ModuleOptions extends AbstractOptions
     protected $countryColorFaded = '#005C00';
 
     /**
+     * @return array
+     */
+    public function getStyleLocations()
+    {
+        return $this->styleLocations;
+    }
+
+    /**
      * @param array $styleLocations
      *
      * @return ModuleOptions
@@ -52,11 +60,11 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getStyleLocations()
+    public function getImageLocation()
     {
-        return $this->styleLocations;
+        return $this->imageLocation;
     }
 
     /**
@@ -73,9 +81,9 @@ class ModuleOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getImageLocation()
+    public function getImageNotFound()
     {
-        return $this->imageLocation;
+        return $this->imageNotFound;
     }
 
     /**
@@ -93,9 +101,9 @@ class ModuleOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getImageNotFound()
+    public function getCountryColor()
     {
-        return $this->imageNotFound;
+        return $this->countryColor;
     }
 
     /**
@@ -111,11 +119,13 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
+     * Returns the assigned hex color of the country map.
+     *
      * @return string
      */
-    public function getCountryColor()
+    public function getCountryColorFaded()
     {
-        return $this->countryColor;
+        return $this->countryColorFaded;
     }
 
     /**
@@ -133,13 +143,11 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
-     * Returns the assigned hex color of the country map.
-     *
      * @return string
      */
-    public function getCountryColorFaded()
+    public function getGeoIpServiceURL()
     {
-        return $this->countryColorFaded;
+        return $this->geoIpServiceURL;
     }
 
     /**
@@ -152,13 +160,5 @@ class ModuleOptions extends AbstractOptions
         $this->geoIpServiceURL = $geoIpServiceURL;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGeoIpServiceURL()
-    {
-        return $this->geoIpServiceURL;
     }
 }

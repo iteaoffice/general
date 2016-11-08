@@ -48,11 +48,13 @@ class GenderLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!is_null($gender)) {
+        if (! is_null($gender)) {
             $this->addRouterParam('id', $gender->getId());
-            $this->setShowOptions([
-                'name' => $gender->getName(),
-            ]);
+            $this->setShowOptions(
+                [
+                    'name' => $gender->getName(),
+                ]
+            );
         }
 
         return $this->createLink();

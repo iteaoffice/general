@@ -64,10 +64,26 @@ class Flag extends EntityAbstract
      */
     public function getCacheFileName()
     {
-        $cacheDir = __DIR__.'/../../../../../public'.DIRECTORY_SEPARATOR.'assets'.
-            DIRECTORY_SEPARATOR.ITEAOFFICE_HOST.DIRECTORY_SEPARATOR.'country-flag';
+        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
+            DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'country-flag';
 
-        return $cacheDir.DIRECTORY_SEPARATOR.strtolower($this->getCountry()->getIso3()).'.png';
+        return $cacheDir . DIRECTORY_SEPARATOR . strtolower($this->getCountry()->getIso3()) . '.png';
+    }
+
+    /**
+     * @return \General\Entity\Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param \General\Entity\Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
     }
 
     /**
@@ -110,7 +126,7 @@ class Flag extends EntityAbstract
      */
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
             $inputFilter->add(
@@ -127,6 +143,11 @@ class Flag extends EntityAbstract
         return $this->inputFilter;
     }
 
+    public function populate()
+    {
+        return $this->getArrayCopy();
+    }
+
     /**
      * Needed for the hydration of form elements.
      *
@@ -135,35 +156,6 @@ class Flag extends EntityAbstract
     public function getArrayCopy()
     {
         return [];
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * @param \General\Entity\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return \General\Entity\Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**
@@ -175,11 +167,11 @@ class Flag extends EntityAbstract
     }
 
     /**
-     * @param resource $object
+     * @param int $id
      */
-    public function setObject($object)
+    public function setId($id)
     {
-        $this->object = $object;
+        $this->id = $id;
     }
 
     /**
@@ -188,5 +180,13 @@ class Flag extends EntityAbstract
     public function getObject()
     {
         return $this->object;
+    }
+
+    /**
+     * @param resource $object
+     */
+    public function setObject($object)
+    {
+        $this->object = $object;
     }
 }

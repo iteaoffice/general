@@ -48,7 +48,7 @@ class VatLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
         $this->addRouterParam('entity', 'Vat');
-        if (!is_null($vat)) {
+        if (! is_null($vat)) {
             $this->addRouterParam('id', $vat->getId());
             $this->setShowOptions(['code' => $vat->getCode(), ]);
         }
