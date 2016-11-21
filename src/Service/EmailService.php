@@ -191,6 +191,8 @@ class EmailService extends ServiceAbstract
                      */
                     $this->parseBody();
 
+
+
                     /**
                      * Send the email
                      */
