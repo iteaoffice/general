@@ -11,6 +11,7 @@
 namespace General\View\Helper;
 
 use Content\Entity\Content;
+use Content\Entity\Param;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
@@ -57,24 +58,44 @@ class ChallengeHandler extends AbstractViewHelper
      */
     public function extractContentParam(Content $content)
     {
-        if (! is_null($this->getRouteMatch()->getParam('docRef'))) {
-            $this->setChallengeDocRef($this->getRouteMatch()->getParam('docRef'));
-        }
-        foreach ($content->getContentParam() as $param) {
-            /*
-             * When the parameterId is 0 (so we want to get the article from the URL
-             */
-            switch ($param->getParameter()->getParam()) {
+        /**
+         * Go over the handler params and try to see if it is hardcoded or just set via the route
+         */
+        foreach ($content->getHandler()->getParam() as $parameter) {
+            switch ($parameter->getParam()) {
                 case 'docRef':
-                    if (! is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    $docRef = $this->findParamValueFromContent($content, $parameter);
+
+                    if (! is_null($docRef)) {
                         $this->setChallengeDocRef($docRef);
                     }
                     break;
-                default:
-                    $this->setChallengeId($param->getParameterId());
-                    break;
             }
         }
+    }
+
+    /**
+     * @param Content $content
+     * @param Param   $param
+     *
+     * @return null|string
+     */
+    private function findParamValueFromContent(Content $content, Param $param)
+    {
+        //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
+        foreach ($content->getContentParam() as $contentParam) {
+            if ($contentParam->getParameter() === $param && ! empty($contentParam->getParameterId())) {
+                return $contentParam->getParameterId();
+            }
+        }
+
+        //Try first to see if the param can be found from the route (rule 1)
+        if (! is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+            return $this->getRouteMatch()->getParam($param->getParam());
+        }
+
+        //If not found, take rule 3
+        return null;
     }
 
     /**
@@ -87,22 +108,50 @@ class ChallengeHandler extends AbstractViewHelper
         $this->setChallenge($this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef));
     }
 
+
     /**
-     * @return GeneralService
+     * @return string
      */
-    public function getGeneralService()
+    public function parseChallenge(): string
     {
-        return $this->getServiceManager()->get(GeneralService::class);
+        return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $this->getChallenge()]);
     }
 
     /**
-     * @param $id
-     *
-     * @return Challenge
+     * @return string
      */
-    public function setChallengeId($id)
+    public function parseChallengeList(): string
     {
-        $this->setChallenge($this->getGeneralService()->findChallengeById($id));
+        $challenge = $this->getGeneralService()->findAll(Challenge::class);
+
+        return $this->getRenderer()->render('general/partial/list/challenge', ['challenge' => $challenge]);
+    }
+
+    /**
+     * @param Challenge $challenge
+     *
+     * @return string
+     */
+    public function parseChallengeProjectList(Challenge $challenge)
+    {
+        $projects = $this->getProjectService()->findProjectByChallenge($challenge);
+
+        return $this->getRenderer()->render(
+            'general/partial/list/project-challenge',
+            [
+                'projects'       => $projects,
+                'projectService' => $this->getProjectService(),
+                'challenge'      => $challenge,
+            ]
+        );
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService(): GeneralService
+    {
+        return $this->getServiceManager()->get(GeneralService::class);
     }
 
     /**
@@ -122,46 +171,9 @@ class ChallengeHandler extends AbstractViewHelper
     }
 
     /**
-     * @return string
-     */
-    public function parseChallenge()
-    {
-        return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $this->getChallenge()]);
-    }
-
-    /**
-     * @return string
-     */
-    public function parseChallengeList()
-    {
-        $challenge = $this->getGeneralService()->findAll(Challenge::class);
-
-        return $this->getRenderer()->render('general/partial/list/challenge', ['challenge' => $challenge]);
-    }
-
-    /**
-     * @param Challenge $challenge
-     *
-     * @return string
-     */
-    public function parseChallengeProjectList(Challenge $challenge)
-    {
-        $projects = $this->getProjectService()->findProjectByChallenge($challenge);
-
-        return $this->getRenderer()->render(
-            'general/partial/list/project-challenge',
-            [
-            'projects'       => $projects,
-            'projectService' => $this->getProjectService(),
-            'challenge'      => $challenge,
-            ]
-        );
-    }
-
-    /**
      * @return ProjectService
      */
-    public function getProjectService()
+    public function getProjectService(): ProjectService
     {
         return $this->getServiceManager()->get(ProjectService::class);
     }

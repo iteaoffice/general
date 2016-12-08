@@ -40,9 +40,9 @@ class ChallengeController extends GeneralAbstractController
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
+        $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
         $form = new ChallengeFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);

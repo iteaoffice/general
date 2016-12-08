@@ -12,6 +12,7 @@ namespace General\View\Helper;
 
 use Contact\Service\ContactService;
 use Content\Entity\Content;
+use Content\Entity\Param;
 use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
@@ -61,7 +62,8 @@ class CountryHandler extends AbstractViewHelper
             'country_project',
             'country_metadata',
             'country_article',
-            ]
+            ],
+            true
         )) {
             if (is_null($this->getCountry())) {
                 $this->getServiceManager()->get('response')->setStatusCode(404);
@@ -74,21 +76,18 @@ class CountryHandler extends AbstractViewHelper
             case 'country':
                 $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-country"));
                 $this->getHelperPluginManager()->get('headtitle')->append($this->getCountry()->getCountry());
+                /** @var CountryLink $countryLink */
                 $countryLink = $this->getHelperPluginManager()->get('countryLink');
                 $this->getHelperPluginManager()->get('headmeta')
-                    ->setProperty('og:type', $this->translate("txt-country"));
+                     ->setProperty('og:type', $this->translate("txt-country"));
                 $this->getHelperPluginManager()->get('headmeta')
-                    ->setProperty('og:title', $this->getCountry()->getCountry());
+                     ->setProperty('og:title', $this->getCountry()->getCountry());
                 $this->getHelperPluginManager()->get('headmeta')
-                    ->setProperty('og:url', $countryLink->__invoke($this->getCountry(), 'view', 'social'));
+                     ->setProperty('og:url', $countryLink($this->getCountry(), 'view', 'social'));
 
                 return $this->parseCountry();
 
             case 'country_map':
-                /*
-                 * @var $countryMap CountryMap
-                 */
-
                 return $this->parseCountryMap();
 
             case 'country_funder':
@@ -105,7 +104,7 @@ class CountryHandler extends AbstractViewHelper
 
             case 'country_list_itac':
                 $this->getHelperPluginManager()->get('headtitle')
-                    ->append($this->translate("txt-itac-countries-in-itea"));
+                     ->append($this->translate("txt-itac-countries-in-itea"));
 
                 return $this->parseCountryListItac();
 
@@ -140,90 +139,59 @@ class CountryHandler extends AbstractViewHelper
      */
     public function extractContentParam(Content $content)
     {
-        //Give default the docRef to the handler, this does not harm
-        if (! is_null($this->getRouteMatch()->getParam('docRef'))) {
-            $this->setCountryByDocRef($this->getRouteMatch()->getParam('docRef'));
-        }
-        foreach ($content->getContentParam() as $param) {
-            switch ($param->getParameter()->getParam()) {
+        /**
+         * Go over the handler params and try to see if it is hardcoded or just set via the route
+         */
+        foreach ($content->getHandler()->getParam() as $parameter) {
+            switch ($parameter->getParam()) {
                 case 'docRef':
-                    if (! is_null($docRef = $this->getRouteMatch()->getParam($param->getParameter()->getParam()))) {
+                    $docRef = $this->findParamValueFromContent($content, $parameter);
+
+                    if (! is_null($docRef)) {
                         $this->setCountryByDocRef($docRef);
                     }
                     break;
                 case 'limit':
-                    if ('0' === $param->getParameterId()) {
-                        $limit = null;
-                    } else {
-                        $limit = $param->getParameterId();
-                    }
-                    $this->setLimit($limit);
-                    break;
-                default:
-                    $this->setCountryById($param->getParameterId());
+                    $this->setLimit($this->findParamValueFromContent($content, $parameter));
                     break;
             }
         }
     }
 
     /**
-     * @return RouteMatch
+     * @param Content $content
+     * @param Param   $param
+     *
+     * @return null|string
      */
-    public function getRouteMatch()
+    private function findParamValueFromContent(Content $content, Param $param)
     {
-        return $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
-    }
+        //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
+        foreach ($content->getContentParam() as $contentParam) {
+            if ($contentParam->getParameter() === $param && ! empty($contentParam->getParameterId())) {
+                return $contentParam->getParameterId();
+            }
+        }
 
-    /**
-     * @param $docRef
-     */
-    public function setCountryByDocRef($docRef)
-    {
-        $this->setCountry($this->getGeneralService()->findEntityByDocRef(Country::class, $docRef));
-    }
+        //Try first to see if the param can be found from the route (rule 1)
+        if (! is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+            return $this->getRouteMatch()->getParam($param->getParam());
+        }
 
-    /**
-     * @return GeneralService
-     */
-    public function getGeneralService()
-    {
-        return $this->getServiceManager()->get(GeneralService::class);
-    }
-
-    /**
-     * @param $id
-     */
-    public function setCountryById($id)
-    {
-        $this->setCountry($this->getGeneralService()->findEntityById(Country::class, $id));
-    }
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
+        //If not found, take rule 3
+        return null;
     }
 
 
     /**
      * @return string
      */
-    public function parseCountry()
+    public function parseCountry(): string
     {
         return $this->getRenderer()->render(
             'general/partial/entity/country',
             [
-            'country' => $this->getCountry(),
+                'country' => $this->getCountry(),
             ]
         );
     }
@@ -231,7 +199,7 @@ class CountryHandler extends AbstractViewHelper
     /**
      * @return null|string
      */
-    public function parseCountryMap()
+    public function parseCountryMap(): string
     {
         $mapOptions = [
             'clickable' => true,
@@ -272,8 +240,8 @@ class CountryHandler extends AbstractViewHelper
         return $this->getRenderer()->render(
             'program/partial/list/funder',
             [
-            'funder'         => $funder,
-            'contactService' => $this->getContactService(),
+                'funder'         => $funder,
+                'contactService' => $this->getContactService(),
             ]
         );
     }
@@ -308,48 +276,25 @@ class CountryHandler extends AbstractViewHelper
 
         $projects      = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
         $organisations = $this->getOrganisationService()
-            ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
+                              ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
         return $this->getRenderer()->render(
             'general/partial/entity/country-metadata',
             [
-            'country'       => $country,
-            'projects'      => $projects,
-            'organisations' => $organisations->getResult(),
+                'country'       => $country,
+                'projects'      => $projects,
+                'organisations' => $organisations->getResult(),
             ]
         );
     }
 
-    /**
-     * @return \Project\Options\ModuleOptions
-     */
-    public function getProjectModuleOptions()
-    {
-        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
-    }
-
-    /**
-     * @return ProjectService
-     */
-    public function getProjectService()
-    {
-        return $this->getServiceManager()->get(ProjectService::class);
-    }
-
-    /**
-     * @return OrganisationService
-     */
-    public function getOrganisationService()
-    {
-        return $this->getServiceManager()->get(OrganisationService::class);
-    }
 
     /**
      * Create a list of all countries which are active (have projects).
      *
      * @return string
      */
-    public function parseCountryList()
+    public function parseCountryList(): string
     {
         $countries = $this->getGeneralService()->findActiveCountries();
 
@@ -361,7 +306,7 @@ class CountryHandler extends AbstractViewHelper
      *
      * @return string
      */
-    public function parseCountryListItac()
+    public function parseCountryListItac(): string
     {
         $countries = $this->getGeneralService()->findItacCountries();
 
@@ -376,23 +321,23 @@ class CountryHandler extends AbstractViewHelper
      * @throws \InvalidArgumentException
      * @return string
      */
-    public function parseOrganisationList($page)
+    public function parseOrganisationList($page): string
     {
         if (is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
         $organisationQuery = $this->getOrganisationService()
-            ->findOrganisationByCountry($this->getCountry(), true, true);
+                                  ->findOrganisationByCountry($this->getCountry(), true, true);
         $paginator         = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
-        $paginator->setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 25);
+        $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 25);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator->getDefaultItemCountPerPage()));
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
         return $this->getRenderer()->render(
             'general/partial/list/organisation',
             [
-            'country'   => $this->getCountry(),
-            'paginator' => $paginator,
+                'country'   => $this->getCountry(),
+                'paginator' => $paginator,
             ]
         );
     }
@@ -402,7 +347,7 @@ class CountryHandler extends AbstractViewHelper
      *
      * @return string
      */
-    public function parseCountryProjectList(Country $country)
+    public function parseCountryProjectList(Country $country): string
     {
         $whichProjects
             = $this->getProjectModuleOptions()->getProjectHasVersions() ? ProjectService::WHICH_ONLY_ACTIVE
@@ -413,9 +358,9 @@ class CountryHandler extends AbstractViewHelper
         return $this->getRenderer()->render(
             'general/partial/list/project',
             [
-            'country'        => $country,
-            'projectService' => $this->getProjectService(),
-            'projects'       => $projects,
+                'country'        => $country,
+                'projectService' => $this->getProjectService(),
+                'projects'       => $projects,
             ]
         );
     }
@@ -425,7 +370,7 @@ class CountryHandler extends AbstractViewHelper
      *
      * @return string
      */
-    public function parseCountryArticleList(Country $country)
+    public function parseCountryArticleList(Country $country): string
     {
         $articles = $this->getArticleService()->findArticlesByCountry($country, $this->getLimit());
 
@@ -436,19 +381,11 @@ class CountryHandler extends AbstractViewHelper
         return $this->getRenderer()->render(
             'general/partial/list/article',
             [
-            'country'  => $country,
-            'articles' => $articles,
-            'limit'    => $this->getLimit(),
+                'country'  => $country,
+                'articles' => $articles,
+                'limit'    => $this->getLimit(),
             ]
         );
-    }
-
-    /**
-     * @return ArticleService
-     */
-    public function getArticleService()
-    {
-        return $this->getServiceManager()->get(ArticleService::class);
     }
 
     /**
@@ -465,5 +402,78 @@ class CountryHandler extends AbstractViewHelper
     public function setLimit($limit)
     {
         $this->limit = $limit;
+    }
+
+    /**
+     * @return RouteMatch
+     */
+    public function getRouteMatch()
+    {
+        return $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
+    }
+
+    /**
+     * @param $docRef
+     */
+    public function setCountryByDocRef($docRef)
+    {
+        $this->setCountry($this->getGeneralService()->findEntityByDocRef(Country::class, $docRef));
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService(): GeneralService
+    {
+        return $this->getServiceManager()->get(GeneralService::class);
+    }
+
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return ArticleService
+     */
+    public function getArticleService(): ArticleService
+    {
+        return $this->getServiceManager()->get(ArticleService::class);
+    }
+
+    /**
+     * @return \Project\Options\ModuleOptions
+     */
+    public function getProjectModuleOptions()
+    {
+        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
+    }
+
+    /**
+     * @return ProjectService
+     */
+    public function getProjectService(): ProjectService
+    {
+        return $this->getServiceManager()->get(ProjectService::class);
+    }
+
+    /**
+     * @return OrganisationService
+     */
+    public function getOrganisationService(): OrganisationService
+    {
+        return $this->getServiceManager()->get(OrganisationService::class);
     }
 }

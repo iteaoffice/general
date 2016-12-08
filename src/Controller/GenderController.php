@@ -46,7 +46,7 @@ class GenderController extends GeneralAbstractController
                     )
                 )
             );
-        $paginator->setDefaultItemCountPerPage(
+        $paginator::setDefaultItemCountPerPage(
             ($page === 'all') ? PHP_INT_MAX
                 : 20
         );
@@ -54,7 +54,7 @@ class GenderController extends GeneralAbstractController
         $paginator->setPageRange(
             ceil(
                 $paginator->getTotalItemCount()
-                / $paginator->getDefaultItemCountPerPage()
+                / $paginator::getDefaultItemCountPerPage()
             )
         );
 
