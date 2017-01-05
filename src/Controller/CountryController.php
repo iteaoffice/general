@@ -4,8 +4,8 @@
  *
  * @category    Admin
  *
- * @author      Johan van der Heide <info@jield.nl>
- * @copyright   Copyright (c) 2004-2015 Jield (http://jield.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Controller;
@@ -91,7 +91,7 @@ class CountryController extends GeneralAbstractController
                 $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }
@@ -129,7 +129,7 @@ class CountryController extends GeneralAbstractController
                 $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }

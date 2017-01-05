@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category   Country
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -182,6 +182,45 @@ class CountryHandler extends AbstractViewHelper
         return null;
     }
 
+    /**
+     * @return RouteMatch
+     */
+    public function getRouteMatch()
+    {
+        return $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
+    }
+
+    /**
+     * @param $docRef
+     */
+    public function setCountryByDocRef($docRef)
+    {
+        $this->setCountry($this->getGeneralService()->findEntityByDocRef(Country::class, $docRef));
+    }
+
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService(): GeneralService
+    {
+        return $this->getServiceManager()->get(GeneralService::class);
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
 
     /**
      * @return string
@@ -288,6 +327,29 @@ class CountryHandler extends AbstractViewHelper
         );
     }
 
+    /**
+     * @return \Project\Options\ModuleOptions
+     */
+    public function getProjectModuleOptions()
+    {
+        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
+    }
+
+    /**
+     * @return ProjectService
+     */
+    public function getProjectService(): ProjectService
+    {
+        return $this->getServiceManager()->get(ProjectService::class);
+    }
+
+    /**
+     * @return OrganisationService
+     */
+    public function getOrganisationService(): OrganisationService
+    {
+        return $this->getServiceManager()->get(OrganisationService::class);
+    }
 
     /**
      * Create a list of all countries which are active (have projects).
@@ -389,6 +451,14 @@ class CountryHandler extends AbstractViewHelper
     }
 
     /**
+     * @return ArticleService
+     */
+    public function getArticleService(): ArticleService
+    {
+        return $this->getServiceManager()->get(ArticleService::class);
+    }
+
+    /**
      * @return int
      */
     public function getLimit()
@@ -402,78 +472,5 @@ class CountryHandler extends AbstractViewHelper
     public function setLimit($limit)
     {
         $this->limit = $limit;
-    }
-
-    /**
-     * @return RouteMatch
-     */
-    public function getRouteMatch()
-    {
-        return $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
-    }
-
-    /**
-     * @param $docRef
-     */
-    public function setCountryByDocRef($docRef)
-    {
-        $this->setCountry($this->getGeneralService()->findEntityByDocRef(Country::class, $docRef));
-    }
-
-    /**
-     * @return GeneralService
-     */
-    public function getGeneralService(): GeneralService
-    {
-        return $this->getServiceManager()->get(GeneralService::class);
-    }
-
-
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return ArticleService
-     */
-    public function getArticleService(): ArticleService
-    {
-        return $this->getServiceManager()->get(ArticleService::class);
-    }
-
-    /**
-     * @return \Project\Options\ModuleOptions
-     */
-    public function getProjectModuleOptions()
-    {
-        return $this->getServiceManager()->get(\Project\Options\ModuleOptions::class);
-    }
-
-    /**
-     * @return ProjectService
-     */
-    public function getProjectService(): ProjectService
-    {
-        return $this->getServiceManager()->get(ProjectService::class);
-    }
-
-    /**
-     * @return OrganisationService
-     */
-    public function getOrganisationService(): OrganisationService
-    {
-        return $this->getServiceManager()->get(OrganisationService::class);
     }
 }

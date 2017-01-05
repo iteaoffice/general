@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -97,6 +97,12 @@ class ContentType extends EntityAbstract implements ResourceInterface
      * @var \Program\Entity\Doa[]|Collections\ArrayCollection
      */
     private $programDoa;
+    /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\Parent\Doa", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Organisation\Entity\Parent\Doa[]|Collections\ArrayCollection
+     */
+    private $parentDoa;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
@@ -228,6 +234,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->pressArticle            = new Collections\ArrayCollection();
         $this->programNna              = new Collections\ArrayCollection();
         $this->programDoa              = new Collections\ArrayCollection();
+        $this->parentDoa               = new Collections\ArrayCollection();
         $this->organisationLogo        = new Collections\ArrayCollection();
         $this->contactDnd              = new Collections\ArrayCollection();
         $this->contactPhoto            = new Collections\ArrayCollection();
@@ -268,7 +275,8 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function getCacheFileName()
     {
         $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
-            . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR . 'content-type-icon';
+                    . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
+                    . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
     }
@@ -304,6 +312,16 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+
+    /**
+     * @param $property
+     *
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
     }
 
     /**
@@ -902,6 +920,26 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setReminder($reminder)
     {
         $this->reminder = $reminder;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Organisation\Entity\Parent\Doa[]
+     */
+    public function getParentDoa()
+    {
+        return $this->parentDoa;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Organisation\Entity\Parent\Doa[] $parentDoa
+     *
+     * @return ContentType
+     */
+    public function setParentDoa($parentDoa)
+    {
+        $this->parentDoa = $parentDoa;
 
         return $this;
     }

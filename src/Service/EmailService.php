@@ -1,17 +1,18 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
 
 use Contact\Entity\Contact;
 use General\Email as Email;
+use General\Entity\EmailMessage;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
 use Publication\Entity\Publication;
@@ -55,6 +56,10 @@ class EmailService extends ServiceAbstract
      */
     protected $mailing;
     /**
+     * @var \Mailing\Entity\Contact
+     */
+    protected $mailingContact;
+    /**
      * @var Message
      */
     protected $message;
@@ -93,7 +98,7 @@ class EmailService extends ServiceAbstract
             if ($this->config["relay"]["active"]) {
                 $transport       = new SmtpTransport();
                 $transportConfig = [
-                    'name'              => "DebraNova_General_Email",
+                    'name'              => "ITEA_Office_General_Email",
                     'host'              => $this->config["relay"]["host"],
                     'connection_class'  => 'login',
                     'connection_config' => [
@@ -122,7 +127,7 @@ class EmailService extends ServiceAbstract
      *
      * @return Email
      */
-    public function create($data = [])
+    public function create(array $data = []): Email
     {
         $this->email = new Email($data, $this->config);
 
@@ -191,12 +196,10 @@ class EmailService extends ServiceAbstract
                      */
                     $this->parseBody();
 
-
-
                     /**
                      * Send the email
                      */
-                    $this->transport->send($this->message);
+                    $this->sendPersonalEmail($contact);
                 }
                 break;
             case false:
@@ -255,9 +258,6 @@ class EmailService extends ServiceAbstract
                 $this->parseBody();
 
 
-                /*
-                 * Send the email
-                 */
                 $this->transport->send($this->message);
 
                 break;
@@ -265,7 +265,7 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     *
+     * @return void
      */
     private function generateMessage()
     {
@@ -594,6 +594,64 @@ class EmailService extends ServiceAbstract
     }
 
     /**
+     * @param Contact $contact
+     */
+    private function sendPersonalEmail(Contact $contact)
+    {
+        $emailMessage = new EmailMessage();
+
+        if (! $contact->isEmpty()) {
+            $emailMessage->setContact($contact);
+        }
+        $emailMessage->setEmailAddress($contact->getEmail());
+        $emailMessage->setSubject($this->message->getSubject());
+        $emailMessage->setMessage($this->getHtmlView());
+        $emailMessage->setAmountOfAttachments(count($this->attachments));
+
+        //Inject the mailing contact
+        if (! is_null($this->getMailingContact())) {
+            $emailMessage->setMailingContact($this->getMailingContact());
+        }
+
+        $this->getGeneralService()->newEntity($emailMessage);
+
+        //Add the custom header id
+        $this->message->getHeaders()->addHeaderLine('X-MJ-CustomID', trim($emailMessage->getIdentifier()));
+        /**
+         * Send the email
+         */
+        $this->transport->send($this->message);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlView()
+    {
+        return $this->htmlView;
+    }
+
+    /**
+     * @return \Mailing\Entity\Contact
+     */
+    public function getMailingContact()
+    {
+        return $this->mailingContact;
+    }
+
+    /**
+     * @param \Mailing\Entity\Contact $mailingContact
+     *
+     * @return EmailService
+     */
+    public function setMailingContact(\Mailing\Entity\Contact $mailingContact): EmailService
+    {
+        $this->mailingContact = $mailingContact;
+
+        return $this;
+    }
+
+    /**
      * @param             $content
      * @param             $type
      * @param             $fileName
@@ -653,18 +711,26 @@ class EmailService extends ServiceAbstract
             throw new \RuntimeException("The email object is empty. Did you call create() first?");
         }
 
-        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self
-        if ($this->mailing->getSender()->getEmail() === '_self') {
-            if ($this->getAuthenticationService()->hasIdentity()) {
-                $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
-                $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
-            } else {
+        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self, we also add the function __owner for the owner of the mailing
+        switch ($this->mailing->getSender()->getEmail()) {
+            case '_self':
+                if ($this->getAuthenticationService()->hasIdentity()) {
+                    $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
+                    $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
+                } else {
+                    $this->email->setFrom($this->mailing->getContact()->getEmail());
+                    $this->email->setFromName($this->mailing->getContact()->getDisplayName());
+                }
+
+                break;
+            case '_owner':
                 $this->email->setFrom($this->mailing->getContact()->getEmail());
                 $this->email->setFromName($this->mailing->getContact()->getDisplayName());
-            }
-        } else {
-            $this->email->setFrom($this->mailing->getSender()->getEmail());
-            $this->email->setFromName($this->mailing->getSender()->getSender());
+                break;
+            default:
+                $this->email->setFrom($this->mailing->getSender()->getEmail());
+                $this->email->setFromName($this->mailing->getSender()->getSender());
+                break;
         }
 
         $this->email->setSubject($this->mailing->getMailSubject());
@@ -728,13 +794,5 @@ class EmailService extends ServiceAbstract
     public function getMessage()
     {
         return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHtmlView()
-    {
-        return $this->htmlView;
     }
 }

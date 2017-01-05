@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category   Challenge
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -108,6 +108,29 @@ class ChallengeHandler extends AbstractViewHelper
         $this->setChallenge($this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef));
     }
 
+    /**
+     * @return GeneralService
+     */
+    public function getGeneralService(): GeneralService
+    {
+        return $this->getServiceManager()->get(GeneralService::class);
+    }
+
+    /**
+     * @return Challenge
+     */
+    public function getChallenge()
+    {
+        return $this->challenge;
+    }
+
+    /**
+     * @param Challenge $challenge
+     */
+    public function setChallenge($challenge)
+    {
+        $this->challenge = $challenge;
+    }
 
     /**
      * @return string
@@ -144,30 +167,6 @@ class ChallengeHandler extends AbstractViewHelper
                 'challenge'      => $challenge,
             ]
         );
-    }
-
-    /**
-     * @return GeneralService
-     */
-    public function getGeneralService(): GeneralService
-    {
-        return $this->getServiceManager()->get(GeneralService::class);
-    }
-
-    /**
-     * @return Challenge
-     */
-    public function getChallenge()
-    {
-        return $this->challenge;
-    }
-
-    /**
-     * @param Challenge $challenge
-     */
-    public function setChallenge($challenge)
-    {
-        $this->challenge = $challenge;
     }
 
     /**

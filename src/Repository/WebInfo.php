@@ -4,8 +4,8 @@
  *
  * @category    General
  * @package     Repository
- * @author      Johan van der Heide <info@jield.nl>
- * @copyright   2004-2015 Jield webdev
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   @copyright Copyright (c) 2004-2017 ITEA Office (http://itea3.org)
  * @license     http://jield.net/license.txt proprietary
  * @link        http://jield.net
  */
@@ -15,20 +15,18 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Doctrine2 Repository for the WebInfo
+ * Class WebInfo
  *
- * @category    SoloDB
- * @package     Admin
- * @subpackage  Repository
+ * @package General\Repository
  */
 class WebInfo extends EntityRepository
 {
     /**
-     * @param array ()
+     * @param $filter
      *
      * @return QueryBuilder
      */
-    public function findFiltered($filter)
+    public function findFiltered(array $filter = null): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_web_info');
@@ -71,7 +69,7 @@ class WebInfo extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter)
+    public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
         if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_web_info.info', ':like'));

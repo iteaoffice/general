@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Controller;
@@ -33,7 +33,7 @@ class IndexController extends GeneralAbstractController
             return $this->notFoundAction();
         }
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
+                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
         $file = stream_get_contents($contentType->getImage());
         $response->getHeaders()->addHeaderLine('Content-Type: image/gif')->addHeaderLine(
             'Content-Length: '
@@ -67,8 +67,8 @@ class IndexController extends GeneralAbstractController
         }
 
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
-            ->addHeaderLine('Content-Type: image/png')->addHeaderLine('Content-Length: ' . (string)strlen($file));
+                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
+                 ->addHeaderLine('Content-Type: image/png')->addHeaderLine('Content-Length: ' . (string)strlen($file));
         $response->setContent($file);
 
         return $response;
@@ -92,7 +92,7 @@ class IndexController extends GeneralAbstractController
         return $this->redirect()->toRoute(
             'route-' . $country->get('underscore_entity_name'),
             [
-            'docRef' => $country->getDocRef(),
+                'docRef' => $country->getDocRef(),
             ]
         )->setStatusCode(301);
     }

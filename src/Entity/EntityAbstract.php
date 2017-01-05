@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Entity;
@@ -17,7 +17,7 @@ abstract class EntityAbstract implements EntityInterface
      */
     public function getResourceId()
     {
-        return sprintf("%s:%s", $this->get("full_entity_name"), $this->getId());
+        return sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class EntityAbstract implements EntityInterface
      */
     public function __toString()
     {
-        return (string)sprintf("%s:%s", $this->get("full_entity_name"), $this->getId());
+        return (string)sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class EntityAbstract implements EntityInterface
     {
         $getter = 'get' . ucfirst($prop);
         if (method_exists($this, $getter)) {
-            if ('s' === substr($prop, 0, -1) && is_array($this->$getter())) {
+            if (strpos($prop, 's') === 0 && is_array($this->$getter())) {
                 return true;
             } elseif ($this->$getter()) {
                 return true;

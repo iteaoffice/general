@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\View\Helper;
@@ -89,9 +89,9 @@ abstract class LinkAbstract extends AbstractViewHelper
         /**
          * @var $serverUrl ServerUrl
          */
-        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
+        $serverUrl         = $this->getHelperPluginManager()->get('serverUrl');
         $this->linkContent = [];
-        $this->classes = [];
+        $this->classes     = [];
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
@@ -314,7 +314,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     {
         $assertion = $this->getAssertion($assertion);
         if (! is_null($entity)
-            && ! $this->getAuthorizeService()->getAcl()->hasResource($entity)
+             && ! $this->getAuthorizeService()->getAcl()->hasResource($entity)
         ) {
             $this->getAuthorizeService()->getAcl()->addResource($entity);
             $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);

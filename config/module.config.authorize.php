@@ -5,7 +5,7 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 namespace News;
 
@@ -26,6 +26,7 @@ return [
                 ['route' => 'assets/style-image', 'roles' => []],
                 ['route' => 'assets/country-flag', 'roles' => []],
                 ['route' => 'assets/content-type-icon', 'roles' => []],
+                ['route' => 'email/event', 'roles' => []],
                 ['route' => 'home', 'roles' => []],
                 [
                     'route' => 'zfcadmin/web-info/list',

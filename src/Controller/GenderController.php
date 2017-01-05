@@ -1,13 +1,13 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
- * PHP Version 5
+ * PHP Version 7
  *
  * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   2004-2016 ITEA Office
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
@@ -35,7 +35,7 @@ class GenderController extends GeneralAbstractController
         $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
+                             ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(
@@ -78,7 +78,7 @@ class GenderController extends GeneralAbstractController
     public function viewAction()
     {
         $gender = $this->getGeneralService()
-            ->findEntityById(Gender::class, $this->params('id'));
+                       ->findEntityById(Gender::class, $this->params('id'));
         if (is_null($gender)) {
             return $this->notFoundAction();
         }
@@ -116,7 +116,7 @@ class GenderController extends GeneralAbstractController
                 $this->redirect()->toRoute(
                     'zfcadmin/gender/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }
@@ -133,7 +133,7 @@ class GenderController extends GeneralAbstractController
     public function editAction()
     {
         $gender = $this->getGeneralService()
-            ->findEntityById(Gender::class, $this->params('id'));
+                       ->findEntityById(Gender::class, $this->params('id'));
 
         $data = array_merge(
             $this->getRequest()->getPost()->toArray(),
@@ -141,7 +141,7 @@ class GenderController extends GeneralAbstractController
         );
 
         $form = $this->getFormService()
-            ->prepare($gender, $gender, $data);
+                     ->prepare($gender, $gender, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -156,11 +156,11 @@ class GenderController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 $result = $this->getGeneralService()
-                    ->updateEntity($form->getData());
+                               ->updateEntity($form->getData());
                 $this->redirect()->toRoute(
                     'zfcadmin/gender/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }

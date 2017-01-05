@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category   Content
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  2004-2015 ITEA Office
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license    https://itea3.org/license.txt proprietary
  *
  * @link       https://itea3.org
@@ -21,7 +21,7 @@ use Zend\View\Helper\Url;
  * @category   Content
  *
  * @author     Johan van der Heide < johan . van . der . heide@itea3 . org >
- * @copyright  2004 - 2014 ITEA Office
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license    https://itea3.org/license.txt proprietary
  *
  * @link       https://itea3.org
@@ -41,7 +41,7 @@ class PaginationLink extends LinkAbstract
         $params = array_merge(
             $this->getRouteMatch()->getParams(),
             [
-            'page' => $page,
+                'page' => $page,
             ]
         );
 

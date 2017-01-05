@@ -5,7 +5,7 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 use General\Controller;
 
@@ -104,6 +104,30 @@ return [
                     ],
                 ],
             ],
+            'email'        => [
+                'type'          => 'Literal',
+                'priority'      => 1000,
+                'options'       => [
+                    'route'    => '/email',
+                    'defaults' => [
+                        'controller' => Controller\EmailController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'event' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/event.json',
+                            'defaults' => [
+                                'action' => 'event',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
         ],
     ],
 ];

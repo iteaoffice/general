@@ -9,7 +9,7 @@ return [
             "html_layout_name" => "signature_twig",
             "text_layout_name" => "template_text",
             "from_email"       => "noreply@itea3.org",
-            "from_name"        => "DebraNova",
+            "from_name"        => "ITEA Office [dev]",
             "reply_to"         => "info@itea3.org",
             "reply_to_name"    => "Reply to",
         ],

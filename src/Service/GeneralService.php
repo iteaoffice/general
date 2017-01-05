@@ -1,11 +1,11 @@
 <?php
 /**
- * ITEA Office copyright message placeholder.
+ * ITEA Office all rights reserved
  *
  * @category  Content
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2015 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Service;
@@ -54,13 +54,24 @@ class GeneralService extends ServiceAbstract
      * @param string $entity
      * @param        $docRef
      *
-     * @return Entity\Challenge|Entity\Country
+     * @return Entity\EntityAbstract|object
      *
      * @throws \InvalidArgumentException
      */
     public function findEntityByDocRef($entity, $docRef)
     {
         return $this->getEntityManager()->getRepository($entity)->findOneBy(['docRef' => $docRef]);
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return null|object|Entity\EmailMessage
+     */
+    public function findEmailMessageByIdentifier(string $identifier)
+    {
+        return $this->getEntityManager()->getRepository(Entity\EmailMessage::class)
+                    ->findOneBy(['identifier' => $identifier]);
     }
 
     /**
@@ -110,7 +121,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param string $iso3
      *
-     * @return null|Entity\Country
+     * @return null|Entity\Country|object
      *
      * @throws \InvalidArgumentException
      */
@@ -125,7 +136,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $gender
      *
-     * @return null|Entity\Gender
+     * @return null|Entity\Gender|object
      */
     public function findGenderByGender($gender)
     {
@@ -135,7 +146,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $title
      *
-     * @return null|Entity\Title
+     * @return null|Entity\Title|object
      */
     public function findTitleByTitle($title)
     {
@@ -145,7 +156,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param string $name
      *
-     * @return null|Entity\Country
+     * @return null|Entity\Country|object
      *
      * @throws \InvalidArgumentException
      */
@@ -160,7 +171,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $cd
      *
-     * @return null|Entity\Country
+     * @return null|Entity\Country|object
      *
      * @throws \InvalidArgumentException
      */
@@ -186,12 +197,10 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
-     * Produce a list of countries active in a program call.
-     *
      * @param Call $call
      * @param int  $which
      *
-     * @return \Doctrine\ORM\Query
+     * @return Entity\Country[]
      */
     public function findCountryByCall(
         Call $call,
@@ -255,7 +264,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $info
      *
-     * @return Entity\WebInfo
+     * @return Entity\WebInfo|object
      *
      * @throws \InvalidArgumentException
      */
@@ -273,13 +282,15 @@ class GeneralService extends ServiceAbstract
      */
     public function findContentTypeByContentTypeName($contentTypeName)
     {
+        /** @var Entity\ContentType $entity */
         $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
-            ->findOneBy(['contentType' => $contentTypeName]);
+                       ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
         if (is_null($entity)) {
+            /** @var Entity\ContentType $entity */
             $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
-                ->find(Entity\ContentType::TYPE_UNKNOWN);
+                           ->find(Entity\ContentType::TYPE_UNKNOWN);
         }
 
         return $entity;
@@ -288,7 +299,7 @@ class GeneralService extends ServiceAbstract
     /**
      * Give the location of a user based on an IP address IPAddress of a person by checking an online service.
      *
-     * @return null|Entity\Country
+     * @return null|Entity\Country|object
      */
     public function findLocationByIPAddress()
     {
@@ -312,7 +323,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $id
      *
-     * @return \General\Entity\Challenge
+     * @return \General\Entity\Challenge|object
      */
     public function findChallengeById($id)
     {

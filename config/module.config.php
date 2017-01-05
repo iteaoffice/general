@@ -7,7 +7,7 @@ namespace General;
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 use General\Acl;
 use General\Controller;
@@ -18,7 +18,6 @@ use General\Options;
 use General\Service;
 use General\View;
 use Zend\Stdlib;
-use Zend\Stdlib\ArrayUtils;
 
 $config = [
     'controllers'        => [
@@ -29,6 +28,7 @@ $config = [
             Controller\GenderController::class      => Controller\Factory\ControllerFactory::class,
             Controller\IndexController::class       => Controller\Factory\ControllerFactory::class,
             Controller\StyleController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\EmailController::class       => Controller\Factory\ControllerFactory::class,
             Controller\TitleController::class       => Controller\Factory\ControllerFactory::class,
             Controller\VatController::class         => Controller\Factory\ControllerFactory::class,
             Controller\VatTypeController::class     => Controller\Factory\ControllerFactory::class,

@@ -4,8 +4,8 @@
  *
  * @category    Admin
  *
- * @author      Johan van der Heide <info@jield.nl>
- * @copyright   Copyright (c) 2004-2015 Jield (http://jield.nl)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
 namespace General\Controller;
@@ -32,7 +32,7 @@ class ContentTypeController extends GeneralAbstractController
         $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered(ContentType::class, $filterPlugin->getFilter());
+                             ->findEntitiesFiltered(ContentType::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -94,7 +94,7 @@ class ContentTypeController extends GeneralAbstractController
                 $this->redirect()->toRoute(
                     'zfcadmin/content-type/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }
@@ -132,7 +132,7 @@ class ContentTypeController extends GeneralAbstractController
                 $this->redirect()->toRoute(
                     'zfcadmin/content-type/view',
                     [
-                    'id' => $result->getId(),
+                        'id' => $result->getId(),
                     ]
                 );
             }
