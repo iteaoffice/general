@@ -17,6 +17,7 @@ namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use General\Entity;
 
 /**
  * @category    General
@@ -31,32 +32,32 @@ class Gender extends EntityRepository
     public function findFiltered(array $filter)
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('g');
-        $queryBuilder->from("General\Entity\Gender", 'g');
+        $queryBuilder->select('general_entity_gender');
+        $queryBuilder->from(Entity\Gender::class, 'general_entity_gender');
 
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('g.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_gender.id', $direction);
                 break;
             case 'name':
-                $queryBuilder->addOrderBy('g.name', $direction);
+                $queryBuilder->addOrderBy('general_entity_gender.name', $direction);
                 break;
             case 'attention':
-                $queryBuilder->addOrderBy('g.attention', $direction);
+                $queryBuilder->addOrderBy('general_entity_gender.attention', $direction);
                 break;
             case 'salutation':
-                $queryBuilder->addOrderBy('g.salutation', $direction);
+                $queryBuilder->addOrderBy('general_entity_gender.salutation', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('g.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_gender.id', $direction);
         }
 
         return $queryBuilder->getQuery();

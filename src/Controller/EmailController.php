@@ -10,9 +10,15 @@
 
 namespace General\Controller;
 
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
+use General\Form\EmailFilter;
 use Zend\Json\Json;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class EmailController
@@ -21,6 +27,50 @@ use Zend\View\Model\JsonModel;
  */
 class EmailController extends GeneralAbstractController
 {
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function listAction()
+    {
+        $page         = $this->params()->fromRoute('page', 1);
+        $filterPlugin = $this->getGeneralFilter();
+        $contactQuery = $this->getGeneralService()
+                             ->findEntitiesFiltered(EmailMessage::class, $filterPlugin->getFilter());
+
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
+
+        $form = new EmailFilter($this->getEntityManager());
+        $form->setData(['filter' => $filterPlugin->getFilter()]);
+
+        return new ViewModel(
+            [
+                'paginator'     => $paginator,
+                'form'          => $form,
+                'encodedFilter' => urlencode($filterPlugin->getHash()),
+                'order'         => $filterPlugin->getOrder(),
+                'direction'     => $filterPlugin->getDirection(),
+            ]
+        );
+    }
+
+    /**
+     * @return array|ViewModel
+     */
+    public function viewAction()
+    {
+        $emailMessage = $this->getGeneralService()
+                             ->findEntityById(EmailMessage::class, $this->params('id'));
+        if (is_null($emailMessage)) {
+            return $this->notFoundAction();
+        }
+
+        return new ViewModel(['emailMessage' => $emailMessage]);
+    }
+
+
     /**
      * @return JsonModel
      */

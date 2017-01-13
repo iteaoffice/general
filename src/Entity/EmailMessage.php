@@ -20,7 +20,7 @@ use Zend\Math\Rand;
  * Entity for the General.
  *
  * @ORM\Table(name="email_message")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="General\Repository\EmailMessage")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message")
  */
@@ -148,6 +148,14 @@ class EmailMessage extends EntityAbstract
     public function __isset($property)
     {
         return isset($this->$property);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string)$this->subject;
     }
 
     /**

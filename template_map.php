@@ -46,6 +46,8 @@ return array(
     'general/content-type/new'                => __DIR__ . '//view/general/content-type/new.twig',
     'general/content-type/view'               => __DIR__ . '//view/general/content-type/view.twig',
     'general/content-type/list'               => __DIR__ . '//view/general/content-type/list.twig',
+    'general/email/view'                      => __DIR__ . '//view/general/email/view.twig',
+    'general/email/list'                      => __DIR__ . '//view/general/email/list.twig',
     'general/challenge/edit'                  => __DIR__ . '//view/general/challenge/edit.twig',
     'general/challenge/new'                   => __DIR__ . '//view/general/challenge/new.twig',
     'general/challenge/view'                  => __DIR__ . '//view/general/challenge/view.twig',

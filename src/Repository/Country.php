@@ -30,24 +30,19 @@ class Country extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function findFiltered($filter)
+    public function findFiltered($filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country');
-        $queryBuilder->from('General\Entity\Country', 'general_entity_country');
+        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
 
         if (! is_null($filter)) {
-            /**
-             * Get the webInfo repository
-             *
-             * @var  $webInfoRepository WebInfo
-             */
             $queryBuilder = $this->applyWebInfoFilter($queryBuilder, $filter);
         }
 
         $direction = 'ASC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -90,7 +85,7 @@ class Country extends EntityRepository
     public function applyWebInfoFilter(
         QueryBuilder $queryBuilder,
         array $filter
-    ) {
+    ): QueryBuilder {
         if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));

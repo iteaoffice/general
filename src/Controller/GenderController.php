@@ -37,26 +37,10 @@ class GenderController extends GeneralAbstractController
         $contactQuery = $this->getGeneralService()
                              ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(
-                new PaginatorAdapter(
-                    new ORMPaginator(
-                        $contactQuery,
-                        false
-                    )
-                )
-            );
-        $paginator::setDefaultItemCountPerPage(
-            ($page === 'all') ? PHP_INT_MAX
-                : 20
-        );
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
-        $paginator->setPageRange(
-            ceil(
-                $paginator->getTotalItemCount()
-                / $paginator::getDefaultItemCountPerPage()
-            )
-        );
+        $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
         $form = new GenderFilter($this->getGeneralService());
         $form->setData(['filter' => $filterPlugin->getFilter()]);
@@ -73,7 +57,7 @@ class GenderController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return array|ViewModel
      */
     public function viewAction()
     {
@@ -101,8 +85,6 @@ class GenderController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(Gender::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
-
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
                 $this->redirect()->toRoute('zfcadmin/gender/list');
@@ -126,9 +108,7 @@ class GenderController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {
@@ -155,8 +135,9 @@ class GenderController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()
-                               ->updateEntity($form->getData());
+                /** @var Gender $gender */
+                $gender = $form->getData();
+                $result = $this->getGeneralService()->updateEntity($gender);
                 $this->redirect()->toRoute(
                     'zfcadmin/gender/view',
                     [

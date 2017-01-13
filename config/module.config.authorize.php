@@ -7,6 +7,7 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+
 namespace News;
 
 use Admin\Entity\Access;
@@ -27,6 +28,14 @@ return [
                 ['route' => 'assets/country-flag', 'roles' => []],
                 ['route' => 'assets/content-type-icon', 'roles' => []],
                 ['route' => 'email/event', 'roles' => []],
+                [
+                    'route' => 'zfcadmin/email/list',
+                    'roles' => [Access::ACCESS_OFFICE],
+                ],
+                [
+                    'route' => 'zfcadmin/email/view',
+                    'roles' => [Access::ACCESS_OFFICE],
+                ],
                 ['route' => 'home', 'roles' => []],
                 [
                     'route' => 'zfcadmin/web-info/list',

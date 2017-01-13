@@ -48,6 +48,24 @@ return [
                             ],
                         ],
                     ],
+                    'email'        => [
+                        'label' => _("txt-nav-email-list"),
+                        'route' => 'zfcadmin/email/list',
+                        'pages' => [
+                            'email-view' => [
+                                'route'   => 'zfcadmin/email/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\EmailMessage::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\EmailMessageLabel::class,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'country'      => [
                         'label' => _("txt-nav-country-list"),
                         'route' => 'zfcadmin/country/list',

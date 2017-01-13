@@ -16,21 +16,25 @@
 
 namespace General\Form;
 
-use General\Service\GeneralService;
+use Doctrine\ORM\EntityManager;
+use General\Entity\EmailMessage;
+use Zend\Form\Element\MultiCheckbox;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
- * Class GenderFilter
+ * Class EmailFilter
  *
  * @package General\Form
  */
-class GenderFilter extends Form
+class EmailFilter extends Form
 {
     /**
-     * @param GeneralService $mailingService
+     * EmailFilter constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    public function __construct(GeneralService $mailingService)
+    public function __construct(EntityManager $entityManager)
     {
         parent::__construct();
         $this->setAttribute('method', 'get');
@@ -45,6 +49,27 @@ class GenderFilter extends Form
                 'attributes' => [
                     'class'       => 'form-control',
                     'placeholder' => _('txt-search'),
+                ],
+            ]
+        );
+
+        $latestEvents = [];
+
+        /** @var \General\Repository\EmailMessage $repository */
+        $repository = $entityManager->getRepository(EmailMessage::class);
+
+        foreach ($repository->findPossibleLatestEvents() as $event) {
+            $latestEvents[$event['latestEvent']] = $event['latestEvent'];
+        }
+
+        $filterFieldset->add(
+            [
+                'type'    => MultiCheckbox::class,
+                'name'    => 'latestEvent',
+                'options' => [
+                    'value_options' => $latestEvents,
+                    'inline'        => true,
+                    'label'         => _("txt-latest-event"),
                 ],
             ]
         );
