@@ -29,7 +29,7 @@ use Zend\InputFilter\InputFilterInterface;
 class Eu extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="eu_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="eu_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -115,7 +115,7 @@ class Eu extends EntityAbstract
      */
     public function getInputFilter()
     {
-        if (! $this->inputFilter) {
+        if ( ! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
             $inputFilter->add(

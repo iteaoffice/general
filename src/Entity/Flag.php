@@ -26,7 +26,7 @@ use Zend\Form\Annotation;
 class Flag extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="flag_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="flag_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

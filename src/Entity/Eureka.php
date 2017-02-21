@@ -29,7 +29,7 @@ use Zend\InputFilter\InputFilterInterface;
 class Eureka extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="eureka_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="eureka_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -125,7 +125,7 @@ class Eureka extends EntityAbstract
      */
     public function getInputFilter()
     {
-        if (! $this->inputFilter) {
+        if ( ! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
             $inputFilter->add(

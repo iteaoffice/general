@@ -27,7 +27,7 @@ use Zend\Math\Rand;
 class EmailMessage extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="email_message_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="email_message_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -97,13 +97,13 @@ class EmailMessage extends EntityAbstract
      */
     private $event;
     /**
-     * @ORM\Column(name="latest_event",type="string")
+     * @ORM\Column(name="latest_event",type="string", nullable=true)
      *
      * @var string
      */
     private $latestEvent;
     /**
-     * @ORM\Column(name="date_latest_event",type="datetime")
+     * @ORM\Column(name="date_latest_event",type="datetime", nullable=true)
      *
      * @var \DateTime
      */
@@ -114,8 +114,8 @@ class EmailMessage extends EntityAbstract
      */
     public function __construct()
     {
-        $this->identifier          = sha1(Rand::getString(30));
-        $this->event               = new ArrayCollection();
+        $this->identifier = sha1(Rand::getString(30));
+        $this->event = new ArrayCollection();
         $this->amountOfAttachments = 0;
     }
 

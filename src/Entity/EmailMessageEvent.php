@@ -24,7 +24,7 @@ use Zend\Form\Annotation;
 class EmailMessageEvent extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="email_message_event_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="email_message_event_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
@@ -423,4 +423,6 @@ class EmailMessageEvent extends EntityAbstract
 
         return $this;
     }
+
+
 }

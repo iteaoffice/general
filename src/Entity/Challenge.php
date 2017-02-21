@@ -29,7 +29,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class Challenge extends EntityAbstract implements ResourceInterface
 {
     /**
-     * @ORM\Column(name="challenge_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="challenge_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -38,7 +38,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $id;
     /**
-     * @ORM\Column(name="challenge",type="string",length=20,unique=true)
+     * @ORM\Column(name="challenge",type="string",unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge","rows":30})
      * @Annotation\Attributes({"rows":30})

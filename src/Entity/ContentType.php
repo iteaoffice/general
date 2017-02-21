@@ -32,7 +32,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
     const TYPE_EXCEL_2007 = 19;
     const TYPE_EXCEL_MACRO = 143;
     /**
-     * @ORM\Column(name="contenttype_id", length=10, type="integer", nullable=false)
+     * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -55,7 +55,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $contentType;
     /**
-     * @ORM\Column(name="extension", type="string", unique=true)
+     * @ORM\Column(name="extension", type="string", unique=true, nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-extension-label","help-block":"txt-content-type-extension-help-block"})
      * @var string
@@ -229,31 +229,31 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->projectLogo             = new Collections\ArrayCollection();
-        $this->contentImage            = new Collections\ArrayCollection();
-        $this->pressArticle            = new Collections\ArrayCollection();
-        $this->programNna              = new Collections\ArrayCollection();
-        $this->programDoa              = new Collections\ArrayCollection();
-        $this->parentDoa               = new Collections\ArrayCollection();
-        $this->organisationLogo        = new Collections\ArrayCollection();
-        $this->contactDnd              = new Collections\ArrayCollection();
-        $this->contactPhoto            = new Collections\ArrayCollection();
-        $this->publication             = new Collections\ArrayCollection();
-        $this->badgeAttachment         = new Collections\ArrayCollection();
-        $this->result                  = new Collections\ArrayCollection();
-        $this->workpackageDocument     = new Collections\ArrayCollection();
-        $this->poster                  = new Collections\ArrayCollection();
-        $this->ideaDocument            = new Collections\ArrayCollection();
-        $this->ideaImage               = new Collections\ArrayCollection();
+        $this->projectLogo = new Collections\ArrayCollection();
+        $this->contentImage = new Collections\ArrayCollection();
+        $this->pressArticle = new Collections\ArrayCollection();
+        $this->programNna = new Collections\ArrayCollection();
+        $this->programDoa = new Collections\ArrayCollection();
+        $this->parentDoa = new Collections\ArrayCollection();
+        $this->organisationLogo = new Collections\ArrayCollection();
+        $this->contactDnd = new Collections\ArrayCollection();
+        $this->contactPhoto = new Collections\ArrayCollection();
+        $this->publication = new Collections\ArrayCollection();
+        $this->badgeAttachment = new Collections\ArrayCollection();
+        $this->result = new Collections\ArrayCollection();
+        $this->workpackageDocument = new Collections\ArrayCollection();
+        $this->poster = new Collections\ArrayCollection();
+        $this->ideaDocument = new Collections\ArrayCollection();
+        $this->ideaImage = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
-        $this->projectReportItem       = new Collections\ArrayCollection();
-        $this->projectDocument         = new Collections\ArrayCollection();
-        $this->versionDocument         = new Collections\ArrayCollection();
-        $this->calendarDocument        = new Collections\ArrayCollection();
-        $this->loi                     = new Collections\ArrayCollection();
-        $this->meetingFloorplan        = new Collections\ArrayCollection();
-        $this->exhibitionFloorplan     = new Collections\ArrayCollection();
-        $this->reminder                = new Collections\ArrayCollection();
+        $this->projectReportItem = new Collections\ArrayCollection();
+        $this->projectDocument = new Collections\ArrayCollection();
+        $this->versionDocument = new Collections\ArrayCollection();
+        $this->calendarDocument = new Collections\ArrayCollection();
+        $this->loi = new Collections\ArrayCollection();
+        $this->meetingFloorplan = new Collections\ArrayCollection();
+        $this->exhibitionFloorplan = new Collections\ArrayCollection();
+        $this->reminder = new Collections\ArrayCollection();
     }
 
     /**
@@ -275,8 +275,8 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function getCacheFileName()
     {
         $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
-                    . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
-                    . 'content-type-icon';
+            . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
+            . 'content-type-icon';
 
         return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
     }

@@ -41,7 +41,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $id;
     /**
-     * @ORM\Column(name="title",type="string",length=20, unique=true)
+     * @ORM\Column(name="title",type="string",length=20,nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-title"})
      *
@@ -49,7 +49,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $name;
     /**
-     * @ORM\Column(name="attention",type="string",length=20, unique=true)
+     * @ORM\Column(name="attention",type="string",length=20,nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
      *
@@ -57,7 +57,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     private $attention;
     /**
-     * @ORM\Column(name="salutation",type="string",length=20)
+     * @ORM\Column(name="salutation",type="string",length=20,nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-salutation"})
      *
@@ -71,27 +71,6 @@ class Title extends EntityAbstract implements ResourceInterface
      * @var \Contact\Entity\Contact[]
      */
     private $contacts;
-    /**
-     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="applicantTitle")
-     * @Annotation\Exclude()
-     *
-     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
-     */
-    private $applicantTitle;
-    /**
-     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="contactTitle")
-     * @Annotation\Exclude()
-     *
-     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
-     */
-    private $applicantContactTitle;
-    /**
-     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist"}, mappedBy="financialTitle")
-     * @Annotation\Exclude()
-     *
-     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
-     */
-    private $applicantFinancialTitle;
 
 
     /**
@@ -99,10 +78,7 @@ class Title extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->contacts                = new Collections\ArrayCollection();
-        $this->applicantTitle          = new Collections\ArrayCollection();
-        $this->applicantContactTitle   = new Collections\ArrayCollection();
-        $this->applicantFinancialTitle = new Collections\ArrayCollection();
+        $this->contacts = new Collections\ArrayCollection();
     }
 
     /**
@@ -129,11 +105,20 @@ class Title extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->name;
     }
@@ -234,66 +219,6 @@ class Title extends EntityAbstract implements ResourceInterface
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
-     */
-    public function getApplicantTitle()
-    {
-        return $this->applicantTitle;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantTitle
-     *
-     * @return Title
-     */
-    public function setApplicantTitle($applicantTitle)
-    {
-        $this->applicantTitle = $applicantTitle;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
-     */
-    public function getApplicantContactTitle()
-    {
-        return $this->applicantContactTitle;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantContactTitle
-     *
-     * @return Title
-     */
-    public function setApplicantContactTitle($applicantContactTitle)
-    {
-        $this->applicantContactTitle = $applicantContactTitle;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
-     */
-    public function getApplicantFinancialTitle()
-    {
-        return $this->applicantFinancialTitle;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantFinancialTitle
-     *
-     * @return Title
-     */
-    public function setApplicantFinancialTitle($applicantFinancialTitle)
-    {
-        $this->applicantFinancialTitle = $applicantFinancialTitle;
 
         return $this;
     }

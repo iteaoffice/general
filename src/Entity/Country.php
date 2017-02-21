@@ -62,7 +62,7 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $docRef;
     /**
-     * @ORM\Column(name="iso3",type="string",length=20)
+     * @ORM\Column(name="iso3",type="string",length=20, nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-iso3-label","help-block":"txt-country-iso3-help-block"})
      *
@@ -163,20 +163,6 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     private $rationale;
     /**
-     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist","remove"}, mappedBy="organisationAddressCountry")
-     * @Annotation\Exclude()
-     *
-     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
-     */
-    private $applicantOrganisationAddressCountry;
-    /**
-     * @ORM\OneToMany(targetEntity="Partner\Entity\Applicant", cascade={"persist","remove"}, mappedBy="financialAddressCountry")
-     * @Annotation\Exclude()
-     *
-     * @var \Partner\Entity\Applicant[]|Collections\ArrayCollection
-     */
-    private $applicantFinancialAddressCountry;
-    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\ChangeRequest\Country", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
@@ -203,18 +189,16 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->address                             = new Collections\ArrayCollection();
-        $this->organisation                        = new Collections\ArrayCollection();
-        $this->ictOrganisation                     = new Collections\ArrayCollection();
-        $this->rationale                           = new Collections\ArrayCollection();
-        $this->vat                                 = new Collections\ArrayCollection();
-        $this->funder                              = new Collections\ArrayCollection();
-        $this->evaluation                          = new Collections\ArrayCollection();
-        $this->changerequestCountry                = new Collections\ArrayCollection();
-        $this->projectLog                          = new Collections\ArrayCollection();
-        $this->applicantOrganisationAddressCountry = new Collections\ArrayCollection();
-        $this->applicantFinancialAddressCountry    = new Collections\ArrayCollection();
-        $this->callCountry                         = new Collections\ArrayCollection();
+        $this->address = new Collections\ArrayCollection();
+        $this->organisation = new Collections\ArrayCollection();
+        $this->ictOrganisation = new Collections\ArrayCollection();
+        $this->rationale = new Collections\ArrayCollection();
+        $this->vat = new Collections\ArrayCollection();
+        $this->funder = new Collections\ArrayCollection();
+        $this->evaluation = new Collections\ArrayCollection();
+        $this->changerequestCountry = new Collections\ArrayCollection();
+        $this->projectLog = new Collections\ArrayCollection();
+        $this->callCountry = new Collections\ArrayCollection();
     }
 
     /**
@@ -241,11 +225,20 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->country;
     }
@@ -561,46 +554,6 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setRationale($rationale)
     {
         $this->rationale = $rationale;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
-     */
-    public function getApplicantOrganisationAddressCountry()
-    {
-        return $this->applicantOrganisationAddressCountry;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantOrganisationAddressCountry
-     *
-     * @return Country
-     */
-    public function setApplicantOrganisationAddressCountry($applicantOrganisationAddressCountry)
-    {
-        $this->applicantOrganisationAddressCountry = $applicantOrganisationAddressCountry;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Partner\Entity\Applicant[]
-     */
-    public function getApplicantFinancialAddressCountry()
-    {
-        return $this->applicantFinancialAddressCountry;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Partner\Entity\Applicant[] $applicantFinancialAddressCountry
-     *
-     * @return Country
-     */
-    public function setApplicantFinancialAddressCountry($applicantFinancialAddressCountry)
-    {
-        $this->applicantFinancialAddressCountry = $applicantFinancialAddressCountry;
-
-        return $this;
     }
 
     /**

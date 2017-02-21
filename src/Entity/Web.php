@@ -26,7 +26,7 @@ use Zend\InputFilter\InputFilterInterface;
 class Web extends EntityAbstract
 {
     /**
-     * @ORM\Column(name="web_id", length=10, type="integer", nullable=false)
+     * @ORM\Column(name="web_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
@@ -46,7 +46,7 @@ class Web extends EntityAbstract
      */
     private $url;
     /**
-     * @ORM\Column(name="mount", type="string", length=40, nullable=true)
+     * @ORM\Column(name="mount", type="string", nullable=true)
      *
      * @var string
      */

@@ -32,7 +32,7 @@ class Gender extends EntityAbstract implements ResourceInterface
      */
     const GENDER_UNKNOWN = 0;
     /**
-     * @ORM\Column(name="gender_id",type="integer",length=10,nullable=false)
+     * @ORM\Column(name="gender_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
