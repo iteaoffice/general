@@ -423,6 +423,4 @@ class EmailMessageEvent extends EntityAbstract
 
         return $this;
     }
-
-
 }

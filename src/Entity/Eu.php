@@ -115,7 +115,7 @@ class Eu extends EntityAbstract
      */
     public function getInputFilter()
     {
-        if ( ! $this->inputFilter) {
+        if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory     = new InputFactory();
             $inputFilter->add(
