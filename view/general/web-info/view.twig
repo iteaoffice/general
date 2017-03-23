@@ -9,7 +9,15 @@
     <dd>{{ webInfo.info }}</dd>
     <dt>{{ translate("txt-subject") }}</dt>
     <dd>{{ webInfo.subject }}</dd>
+    <dt>{{ translate("txt-sender") }}</dt>
+    <dd>{{ senderLink(webInfo.sender,'view', 'name') }}</dd>
+    <dt>{{ translate("txt-template") }}</dt>
+    <dd>{{ mailingTemplateLink(webInfo.template,'view', 'name') }}</dd>
 </dl>
 
+<form method="post" class="form-horizontal">
+    <input type="submit" class="btn btn-primary" value="{{ translate("txt-send-test-email-to-myself") }}">
+</form>
+
 <h2>{{ translate("txt-content") }}</h2>
-<pre>{{ webInfo.content }}</pre>
+{{ webInfo.content|raw }}

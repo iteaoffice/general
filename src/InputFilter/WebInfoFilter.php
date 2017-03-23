@@ -16,15 +16,12 @@
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use General\Entity;
 use Zend\InputFilter\InputFilter;
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    Partner
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class WebInfoFilter
+ * @package General\InputFilterF
  */
 class WebInfoFilter extends InputFilter
 {
@@ -38,10 +35,30 @@ class WebInfoFilter extends InputFilter
         $inputFilter = new InputFilter();
         $inputFilter->add(
             [
-                'name'     => 'info',
-                'required' => true,
+                'name'       => 'info',
+                'required'   => true,
+                'validators' => [
+                    [
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 3,
+                            'max'      => 150,
+                        ],
+                    ],
+                    [
+                        'name'    => '\DoctrineModule\Validator\UniqueObject',
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Entity\WebInfo::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => ['info'],
+                        ],
+                    ],
+                ],
             ]
         );
+
         $inputFilter->add(
             [
                 'name'     => 'subject',

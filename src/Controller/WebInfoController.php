@@ -12,7 +12,6 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
-use General\Entity\Web;
 use General\Entity\WebInfo;
 use General\Form\WebInfoFilter;
 use Zend\Paginator\Paginator;
@@ -30,7 +29,7 @@ class WebInfoController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(WebInfo::class, $filterPlugin->getFilter());
 
@@ -55,22 +54,35 @@ class WebInfoController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return array|ViewModel
      */
     public function viewAction()
     {
+        /** @var WebInfo $webInfo */
         $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
         if (is_null($webInfo)) {
             return $this->notFoundAction();
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $this->flashMessenger()->setNamespace('info')
+                ->addMessage(
+                    sprintf(
+                        $this->translate("txt-test-mail-of-web-info-%s-has-been-send-successfully"),
+                        $webInfo->getInfo()
+                    )
+                );
+            $email = $this->getEmailService()->create();
+            $this->getEmailService()->setTemplate($webInfo->getInfo());
+            $email->addTo($this->zfcUserAuthentication()->getIdentity());
+            $this->getEmailService()->send();
         }
 
         return new ViewModel(['webInfo' => $webInfo]);
     }
 
     /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function newAction()
     {
@@ -89,10 +101,18 @@ class WebInfoController extends GeneralAbstractController
             if ($form->isValid()) {
                 /** @var $webInfo WebInfo */
                 $webInfo = $form->getData();
-                $webInfo->setWeb($this->getEntityManager()->getReference(Web::class, 1));
 
                 $result = $this->getGeneralService()->newEntity($webInfo);
-                $this->redirect()->toRoute(
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translate("txt-web-info-%s-has-been-created-successfully"),
+                            $webInfo->getInfo()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/web-info/view',
                     [
                         'id' => $result->getId(),
@@ -105,12 +125,11 @@ class WebInfoController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {
+        /** @var WebInfo $webInfo */
         $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
 
         $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
@@ -123,14 +142,33 @@ class WebInfoController extends GeneralAbstractController
             }
 
             if (isset($data['delete'])) {
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translate("txt-web-info-%s-has-been-removed-successfully"),
+                            $webInfo->getInfo()
+                        )
+                    );
+
                 $this->getGeneralService()->removeEntity($webInfo);
 
                 return $this->redirect()->toRoute('zfcadmin/web-info/list');
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute(
+                /** @var WebInfo $webInfo */
+                $webInfo = $form->getData();
+                $result = $this->getGeneralService()->updateEntity($webInfo);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translate("txt-web-info-%s-has-been-updated-successfully"),
+                            $webInfo->getInfo()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/web-info/view',
                     [
                         'id' => $result->getId(),

@@ -5,10 +5,11 @@
 
 {% set webInfo = form.get('general_entity_webinfo') %}
 
+{{ ztbformelement(webInfo.get('id')) }}
 {{ ztbformelement(webInfo.get('info')) }}
 {{ ztbformelement(webInfo.get('subject')) }}
-{{ ztbformelement(webInfo.get('sync')) }}
-{{ ztbformelement(webInfo.get('plain')) }}
+{{ ztbformelement(webInfo.get('sender')) }}
+{{ ztbformelement(webInfo.get('template')) }}
 {{ ztbformelement(webInfo.get('content')) }}
 
 
@@ -24,8 +25,10 @@
 
 {{ form().closeTag()|raw }}
 
-<style type="text/css">
-    textarea {
-        font-family: "Courier New", Courier, monospace;
-    }
-</style>
+{% do headScript().appendFile("//cdn.tinymce.com/4/tinymce.min.js",'text/javascript') %}
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea'
+    });
+</script>

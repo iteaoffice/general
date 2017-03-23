@@ -33,7 +33,7 @@ class Title extends EntityRepository
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_title');
-        $queryBuilder->from(Entity\Gender::class, 'general_entity_title');
+        $queryBuilder->from(Entity\Title::class, 'general_entity_title');
 
         $direction = 'DESC';
         if (isset($filter['direction'])

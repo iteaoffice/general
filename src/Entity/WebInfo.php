@@ -11,7 +11,7 @@
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Mailing\Entity\Sender;
 use Zend\Form\Annotation;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -27,8 +27,6 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 {
     const PLAIN = 1;
     const NOT_PLAIN = 0;
-    const SYNC = 1;
-    const NO_SYNC = 0;
 
     /**
      * @var array
@@ -40,42 +38,33 @@ class WebInfo extends EntityAbstract implements ResourceInterface
         ];
 
     /**
-     * @var array
-     */
-    protected static $syncTemplates
-        = [
-            self::SYNC    => "txt-sync",
-            self::NO_SYNC => "txt-no-sync",
-        ];
-
-    /**
      * @ORM\Column(name="info_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      * @var integer
      */
     private $id;
     /**
      * @ORM\Column(name="info", type="string", length=64, nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-web-info-key-label"})
+     * @Annotation\Attributes({"label":"txt-web-info-info-label","placeholder":"txt-web-info-info-placeholder"})
+     * @Annotation\Options({"help-block":"txt-web-info-info-help-block"})
      *
      * @var string
      */
     private $info;
     /**
      * @ORM\Column(name="plain", type="smallint", nullable=false)
-     * @Annotation\Type("Zend\Form\Element\Checkbox")
-     * @Annotation\Attributes({"array":"plainTemplates"})
-     * @Annotation\Options({"label":"txt-web-info-plain-label","help-block":"txt-web-info-plain-help-block"})
+     * @Annotation\Exclude()
      * @var int
      */
     private $plain;
     /**
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-web-info-subject-label"})
+     * @Annotation\Options({"label":"txt-web-info-subject-label","help-block":"txt-web-info-subject-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-web-info-subject-placeholder"})
      *
      * @var string
      */
@@ -83,59 +72,74 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
-     * @Annotation\Options({"label":"txt-web-info-content-label","rows":"20"})
-     * @Annotation\Attributes({"rows":"20"})
+     * @Annotation\Options({"label":"txt-web-info-content-label","help-block":"txt-web-info-content-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-web-info-content-placeholder","rows":"20"})
      *
      * @var string
      */
     private $content;
     /**
-     * @ORM\Column(name="sync", type="smallint", nullable=false)
-     * @Annotation\Type("Zend\Form\Element\Checkbox")
-     * @Annotation\Attributes({"array":"syncTemplates"})
-     * @Annotation\Options({"label":"txt-web-info-sync-label","help-block":"txt-web-info-sync-help-block"})
-     * @var integer
-     */
-    private $sync;
-    /**
-     * @ORM\ManyToOne(targetEntity="General\Entity\Web", cascade={"persist"}, inversedBy="webInfo")
+     * @ORM\ManyToOne(targetEntity="Mailing\Entity\Sender", cascade={"persist"}, inversedBy="webInfo")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="web_id", referencedColumnName="web_id", nullable=true)
+     * @ORM\JoinColumn(name="sender_id", referencedColumnName="sender_id")
      * })
-     *
-     * @Annotation\Exclude()
-     * @var \General\Entity\Web
+     * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
+     * @Annotation\Options({
+     *      "target_class":"Mailing\Entity\Sender",
+     *      "find_method":{
+     *          "name":"findBy",
+     *          "params": {
+     *              "criteria":{"personal":0},
+     *              "orderBy":{
+     *                  "sender":"ASC"}
+     *              }
+     *          }
+     *      }
+     * )
+     * @Annotation\Options({"label":"txt-web-info-sender-label", "help-block":"txt-web-info-sender-help-block"})
+     * @var \Mailing\Entity\Sender
      */
-    private $web;
+    private $sender;
+    /**
+     * @ORM\ManyToOne(targetEntity="Mailing\Entity\Template", cascade={"persist"}, inversedBy="webInfo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="mailtemplate_id", referencedColumnName="mailtemplate_id", nullable=false)
+     * })
+     * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
+     * @Annotation\Options({
+     *      "target_class":"Mailing\Entity\Template",
+     *      "find_method":{
+     *          "name":"findBy",
+     *          "params": {
+     *              "criteria":{},
+     *              "orderBy":{
+     *                  "template":"ASC"}
+     *              }
+     *          }
+     *      }
+     * )
+     * @Annotation\Options({"label":"txt-web-info-template-label", "help-block":"txt-web-info-template-help-block"})
+     * @var \Mailing\Entity\Template
+     */
+    private $template;
 
     /**
      * Class constructor.
      */
     public function __construct()
     {
-        $this->sync  = 1;
-        $this->plain = 1;
+        $this->plain = self::NOT_PLAIN;
     }
 
     /**
      * @return array
      */
-    public static function getPlainTemplates()
+    public static function getPlainTemplates(): array
     {
         return self::$plainTemplates;
     }
 
     /**
-     * @return array
-     */
-    public static function getSyncTemplates()
-    {
-        return self::$syncTemplates;
-    }
-
-    /**
-     * Magic Getter.
-     *
      * @param $property
      *
      * @return mixed
@@ -146,8 +150,6 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * Magic Setter.
-     *
      * @param $property
      * @param $value
      */
@@ -157,9 +159,18 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->info;
     }
@@ -271,47 +282,39 @@ class WebInfo extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param bool $textual
-     *
-     * @return int|string
+     * @return Sender
      */
-    public function getSync($textual = false)
+    public function getSender(): ?Sender
     {
-        if ($textual) {
-            self::$syncTemplates[$this->sync];
-        }
-
-        return $this->sync;
+        return $this->sender;
     }
 
     /**
-     * @param int $sync
-     *
+     * @param Sender $sender
      * @return WebInfo
      */
-    public function setSync($sync)
+    public function setSender(Sender $sender): WebInfo
     {
-        $this->sync = $sync;
+        $this->sender = $sender;
 
         return $this;
     }
 
     /**
-     * @return Web
+     * @return \Mailing\Entity\Template
      */
-    public function getWeb()
+    public function getTemplate(): ?\Mailing\Entity\Template
     {
-        return $this->web;
+        return $this->template;
     }
 
     /**
-     * @param Web $web
-     *
+     * @param \Mailing\Entity\Template $template
      * @return WebInfo
      */
-    public function setWeb($web)
+    public function setTemplate(\Mailing\Entity\Template $template): WebInfo
     {
-        $this->web = $web;
+        $this->template = $template;
 
         return $this;
     }

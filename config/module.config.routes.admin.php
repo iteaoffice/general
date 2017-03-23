@@ -50,7 +50,7 @@ return [
                     'web-info'     => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/web-info',
+                            'route'    => '/automated-email',
                             'defaults' => [
                                 'controller' => Controller\WebInfoController::class,
                                 'action'     => 'list',

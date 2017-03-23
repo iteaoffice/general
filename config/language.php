@@ -1,0 +1,16 @@
+<?php
+_("txt-web-info-info-label");
+_("txt-web-info-info-help-block");
+_("txt-web-info-info-placeholder");
+_("txt-web-info-subject-label");
+_("txt-web-info-subject-help-block");
+_("txt-web-info-subject-placeholder");
+_("txt-web-info-sender-label");
+_("txt-web-info-sender-help-block");
+_("txt-web-info-template-label");
+_("txt-web-info-template-help-block");
+_("txt-web-info-plain-label");
+_("txt-web-info-plain-help-block");
+_("txt-web-info-content-label");
+_("txt-web-info-content-help-block");
+_("txt-send-test-email-to-myself");

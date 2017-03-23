@@ -55,21 +55,14 @@ class Web extends EntityAbstract
      * @ORM\OneToMany(targetEntity="Deeplink\Entity\Target", cascade={"persist"}, mappedBy="web")
      * @Annotation\Exclude()
      *
-     * @var \Deeplink\Entity\Target[]
+     * @var \Deeplink\Entity\Target[]|ArrayCollection
      */
     private $target;
-    /**
-     * @ORM\OneToMany(targetEntity="General\Entity\WebInfo", cascade={"persist"}, mappedBy="web")
-     * @Annotation\Exclude()
-     *
-     * @var \General\Entity\WebInfo[]
-     */
-    private $webInfo;
     /**
      * @ORM\OneToMany(targetEntity="Admin\Entity\Session", cascade={"persist"}, mappedBy="web")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\WebInfo[]
+     * @var \Admin\Entity\Session[]|ArrayCollection
      */
     private $session;
 
@@ -78,7 +71,6 @@ class Web extends EntityAbstract
      */
     public function __construct()
     {
-        $this->webInfo = new ArrayCollection();
         $this->session = new ArrayCollection();
     }
 
@@ -106,25 +98,12 @@ class Web extends EntityAbstract
     }
 
     /**
-     * @param InputFilterInterface $inputFilter
-     *
-     * @return void|InputFilterAwareInterface
-     *
-     * @throws \Exception
+     * @param $property
+     * @return bool
      */
-    public function setInputFilter(InputFilterInterface $inputFilter)
+    public function __isset($property)
     {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * Retrieve input filter.
-     *
-     * @return InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        return new InputFilter();
+        return isset($this->$property);
     }
 
     /**
@@ -205,22 +184,6 @@ class Web extends EntityAbstract
     public function setTarget($target)
     {
         $this->target = $target;
-    }
-
-    /**
-     * @return \General\Entity\WebInfo[]
-     */
-    public function getWebInfo()
-    {
-        return $this->webInfo;
-    }
-
-    /**
-     * @param \General\Entity\WebInfo[] $webInfo
-     */
-    public function setWebInfo($webInfo)
-    {
-        $this->webInfo = $webInfo;
     }
 
     /**
