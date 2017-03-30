@@ -119,8 +119,8 @@ class Email
 
     /**
      * Email constructor.
-     *
      * @param array $data
+     * @param array $config
      */
     public function __construct(array $data, array $config)
     {
@@ -188,10 +188,10 @@ class Email
 
         //When the domains are the same, use the sender without a trick
         if ($defaultDomain === $contactDomain) {
-            $this->from     = $contact->getEmail();
+            $this->from = $contact->getEmail();
             $this->fromName = $contact->getDisplayName();
         } else {
-            $this->from     = $this->config['defaults']['from_email'];
+            $this->from = $this->config['defaults']['from_email'];
             $this->fromName = sprintf(
                 "%s (via %s)",
                 $contact->getDisplayName(),
@@ -200,7 +200,7 @@ class Email
         }
 
 
-        $this->replyTo     = $contact->getEmail();
+        $this->replyTo = $contact->getEmail();
         $this->replyToName = $contact->getDisplayName();
     }
 
@@ -269,7 +269,7 @@ class Email
     }
 
     /**
-     * @param Selection      $selection
+     * @param Selection $selection
      * @param ContactService $contactService
      */
     public function addSelection(Selection $selection, ContactService $contactService)
@@ -345,21 +345,21 @@ class Email
     {
         switch (substr($method, 0, 3)) {
             case 'get':
-                $key   = $this->underscore(substr($method, 3));
+                $key = $this->underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
 
-                if (! $index && isset($this->$key)) {
+                if (!$index && isset($this->$key)) {
                     return $this->$key;
                 }
 
                 return "";
             case 'set':
-                $key    = $this->underscore(substr($method, 3));
+                $key = $this->underscore(substr($method, 3));
                 $result = isset($args[0]) ? $args[0] : null;
 
                 //Only keep the item when it can be set to a toString
-                if ((! is_array($result))
-                    && ((! is_object($result) && settype($result, 'string') !== false)
+                if ((!is_array($result))
+                    && ((!is_object($result) && settype($result, 'string') !== false)
                         || (is_object($result) && method_exists($result, '__toString')))
                 ) {
                     $this->$key = (string)$result;
@@ -380,11 +380,9 @@ class Email
      *
      * @return string
      */
-    protected function underscore($name)
+    protected function underscore($name): string
     {
-        $result = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
-
-        return $result;
+        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
     }
 
     /**

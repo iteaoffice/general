@@ -34,12 +34,11 @@ class ChallengeController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Challenge::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -59,7 +58,7 @@ class ChallengeController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return array|ViewModel
      */
     public function viewAction()
     {
@@ -82,8 +81,6 @@ class ChallengeController extends GeneralAbstractController
 
         $form = $this->getFormService()->prepare(Challenge::class, null, $data);
         $form->remove('delete');
-
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -108,9 +105,7 @@ class ChallengeController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {

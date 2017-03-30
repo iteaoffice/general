@@ -322,7 +322,7 @@ class EmailService extends ServiceAbstract
      *
      * @var Contact
      */
-    public function updateTemplateVarsWithContact(Contact $contact)
+    public function updateTemplateVarsWithContact(Contact $contact): void
     {
         $this->templateVars['attention'] = $this->getContactService()->parseAttention($contact);
         $this->templateVars['firstname'] = $contact->getFirstName();
@@ -330,11 +330,14 @@ class EmailService extends ServiceAbstract
             sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName())
         );
         $this->templateVars['fullname'] = $contact->parseFullName();
-        $this->templateVars['country'] = (string)$this->getContactService()->parseCountry($contact)->getCountry();
-        $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation($contact);
         $this->templateVars['email'] = $contact->getEmail();
-        $this->templateVars['signature'] = $this->getContactService()->parseSignature($contact);
 
+        if ($this->getContactService()->hasOrganisation($contact)) {
+            $this->templateVars['country'] = (string)$this->getContactService()->parseCountry($contact)->getCountry();
+            $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation($contact);
+        }
+
+        $this->templateVars['signature'] = $this->getContactService()->parseSignature($contact);
         //Fill the unsubscribe with temp data
         $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
         $this->templateVars['deeplink'] = 'http://deeplink.example';

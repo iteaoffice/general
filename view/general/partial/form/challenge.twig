@@ -1,9 +1,8 @@
 {% do form.prepare() %}
-{% do form.setAttribute('class','form-horizontal') %}
 
 {{ form().openTag(form)|raw }}
 
-{% set country = form.get('challenge') %}
+{% set country = form.get('general_entity_challenge') %}
 
 {{ ztbformelement(country.get('challenge')) }}
 {{ ztbformelement(country.get('description')) }}
