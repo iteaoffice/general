@@ -15,19 +15,11 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": "^7",
+    "php": "^7.1",
     "zendframework/zendframework": "~3.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.7.x",
-    "doctrine/doctrine-orm-module": "~1.1",
-    "pdepend/pdepend": "@stable",
-    "phpmd/phpmd": "@stable",
-    "sebastian/phpcpd": "@stable",
-    "squizlabs/php_codesniffer": "@stable",
-    "friendsofphp/php-cs-fixer": "@stable",
-    "jakub-onderka/php-parallel-lint": "@stable",
-    "jakub-onderka/php-console-highlighter": "@stable"
+    "iteaoffice/testing": "dev-master"
   },
   "autoload": {
     "psr-4": {
