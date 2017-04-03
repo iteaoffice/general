@@ -2,7 +2,7 @@
   "name": "iteaoffice/general",
   "type": "library",
   "license": "proprietary",
-  "description": "Code to manage organisations",
+  "description": "Code to manage general elements",
   "keywords": [
     "general"
   ],
@@ -39,8 +39,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0-dev",
-      "dev-develop": "2.1-dev"
+      "dev-master": "3.0.x-dev",
+      "dev-develop": "3.1-dev"
     }
   }
 }
