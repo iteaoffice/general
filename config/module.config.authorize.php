@@ -5,8 +5,9 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+
 namespace News;
 
 use Admin\Entity\Access;
@@ -26,134 +27,143 @@ return [
                 ['route' => 'assets/style-image', 'roles' => []],
                 ['route' => 'assets/country-flag', 'roles' => []],
                 ['route' => 'assets/content-type-icon', 'roles' => []],
+                ['route' => 'email/event', 'roles' => []],
+                [
+                    'route' => 'zfcadmin/email/list',
+                    'roles' => [Access::ACCESS_OFFICE],
+                ],
+                [
+                    'route' => 'zfcadmin/email/view',
+                    'roles' => [Access::ACCESS_OFFICE],
+                ],
                 ['route' => 'home', 'roles' => []],
                 [
                     'route' => 'zfcadmin/web-info/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/web-info/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/content-type/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/country/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/challenge/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/vat-type/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/gender/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/list',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/new',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/edit',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
                 [
                     'route' => 'zfcadmin/title/view',
-                    'roles' => [strtolower(Access::ACCESS_OFFICE)]
+                    'roles' => [Access::ACCESS_OFFICE],
                 ],
             ],
         ],

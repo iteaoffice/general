@@ -1,17 +1,23 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-web-info-%s")|format(webInfo)) %}
 
-<h1>{{ translate("txt-web-info-%s")|format(webInfo) }}</h1>
+<h1>{{ translate("txt-web-info-%s")|format(webInfo) }} {{ webInfoLink(webInfo,'edit','button') }}</h1>
 
-<h2><strong>{{ translate("txt-web-info-information") }}</strong></h2>
+<h2>{{ translate("txt-web-info-information") }}</h2>
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-web-info-name") }}</dt>
     <dd>{{ webInfo.info }}</dd>
     <dt>{{ translate("txt-subject") }}</dt>
     <dd>{{ webInfo.subject }}</dd>
+    <dt>{{ translate("txt-sender") }}</dt>
+    <dd>{{ senderLink(webInfo.sender,'view', 'name') }}</dd>
+    <dt>{{ translate("txt-template") }}</dt>
+    <dd>{{ mailingTemplateLink(webInfo.template,'view', 'name') }}</dd>
 </dl>
 
-<h2>{{ translate("txt-content") }}</h2>
-<pre>{{ webInfo.content }}</pre>
+<form method="post" class="form-horizontal">
+    <input type="submit" class="btn btn-primary" value="{{ translate("txt-send-test-email-to-myself") }}">
+</form>
 
-{{ webInfoLink(webInfo,'edit','button') }} {{ webInfoLink(null, 'new','button') }} {{ webInfoLink(null, 'list','button') }}
+<h2>{{ translate("txt-content") }}</h2>
+{{ webInfo.content|raw }}

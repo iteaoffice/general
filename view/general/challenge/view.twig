@@ -1,9 +1,9 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-challenge-%s")|format(challenge)) %}
 
-<h1>{{ translate("txt-challenge-%s")|format(challenge) }}</h1>
+<h1>{{ translate("txt-challenge-%s")|format(challenge) }} {{ challengeLink(challenge,'edit','button') }}</h1>
 
-<h2><strong>{{ translate("txt-challenge-information") }}</strong></h2>
+<h2>{{ translate("txt-challenge-information") }}</h2>
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-challenge-name") }}</dt>
     <dd>{{ challenge.challenge }}</dd>
@@ -18,12 +18,13 @@
     <dd>{{ challenge.backgroundColor }}</dd>
 
     <dt>{{ translate("txt-sample") }}</dt>
-    <dd><a class="btn" style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a></dd>
+    <dd><a class="btn"
+           style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a>
+    </dd>
 
     <dt>{{ translate('txt-projects') }}</dt>
     {% for projectChallenge in challenge.projectChallenge %}
-        {% set projectService = projectServiceProxy(projectChallenge.project) %}
-        <dd>{{ projectLink(projectService,'view-admin','name') }}</dd>
+        <dd>{{ projectLink(project,'view-admin','name') }}</dd>
     {% else %}
         <dd>{{ translate("txt-project-for-this-challenge") }}</dd>
     {% endfor %}
@@ -37,4 +38,3 @@
 </dl>
 
 
-{{ challengeLink(challenge,'edit','button') }} {{ challengeLink(null, 'new','button') }} {{ challengeLink(null, 'list','button') }}

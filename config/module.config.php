@@ -1,4 +1,5 @@
 <?php
+
 namespace General;
 
 /**
@@ -7,105 +8,136 @@ namespace General;
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c] 2004-2015 ITEA Office (https://itea3.org]
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 use General\Acl;
 use General\Controller;
 use General\Factory;
+use General\InputFilter;
+use General\Navigation;
 use General\Options;
 use General\Service;
-use General\View\Helper;
-use Zend\Stdlib\ArrayUtils;
+use General\View;
+use Zend\Stdlib;
 
 $config = [
-    'controllers'     => [
-        'invokables'         => [
-            //Controller\IndexController::class      ,
-            //Controller\VatController::class        ,
-            //Controller\VatTypeController::class    ,
-            //Controller\GenderController::class     ,
-            //Controller\TitleController::class      ,
-            //Controller\WebInfoController::class    ,
-            //Controller\CountryController::class    ,
-            //Controller\ChallengeController::class  ,
-            //Controller\ContentTypeController::class,
-        ],
-        'abstract_factories' => [
-            Controller\Factory\ControllerInvokableAbstractFactory::class,
+    'controllers'        => [
+        'factories' => [
+            Controller\ChallengeController::class   => Controller\Factory\ControllerFactory::class,
+            Controller\ContentTypeController::class => Controller\Factory\ControllerFactory::class,
+            Controller\CountryController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\GenderController::class      => Controller\Factory\ControllerFactory::class,
+            Controller\IndexController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\StyleController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\EmailController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\TitleController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\VatController::class         => Controller\Factory\ControllerFactory::class,
+            Controller\VatTypeController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\WebInfoController::class     => Controller\Factory\ControllerFactory::class,
         ],
     ],
-    'view_manager'    => [
+    'controller_plugins' => [
+        'aliases'   => [
+            'getGeneralFilter' => Controller\Plugin\GetFilter::class,
+        ],
+        'factories' => [
+            Controller\Plugin\GetFilter::class => Controller\Factory\PluginFactory::class,
+        ],
+    ],
+    'view_manager'       => [
         'template_map' => include __DIR__ . '/../template_map.php',
     ],
-    'view_helpers'    => [
-        'invokables' => [
-            'generalServiceProxy' => Helper\GeneralServiceProxy::class,
-            'countryHandler'      => Helper\CountryHandler::class,
-            'challengeHandler'    => Helper\ChallengeHandler::class,
-            'countryMap'          => Helper\CountryMap::class,
-            'countryFlag'         => Helper\CountryFlag::class,
-            'countryLink'         => Helper\CountryLink::class,
-            'vatLink'             => Helper\VatLink::class,
-            'genderLink'          => Helper\GenderLink::class,
-            'titleLink'           => Helper\TitleLink::class,
-            'vatTypeLink'         => Helper\VatTypeLink::class,
-            'challengeLink'       => Helper\ChallengeLink::class,
-            'webInfoLink'         => Helper\WebInfoLink::class,
-            'contentTypeLink'     => Helper\ContentTypeLink::class,
-            'contentTypeIcon'     => Helper\ContentTypeIcon::class,
+    'view_helpers'       => [
+        'aliases'   => [
+            'countryHandler'   => View\Helper\CountryHandler::class,
+            'challengeHandler' => View\Helper\ChallengeHandler::class,
+            'countryMap'       => View\Helper\CountryMap::class,
+            'countryFlag'      => View\Helper\CountryFlag::class,
+            'countryLink'      => View\Helper\CountryLink::class,
+            'emailMessageLink' => View\Helper\EmailMessageLink::class,
+            'vatLink'          => View\Helper\VatLink::class,
+            'genderLink'       => View\Helper\GenderLink::class,
+            'titleLink'        => View\Helper\TitleLink::class,
+            'vatTypeLink'      => View\Helper\VatTypeLink::class,
+            'challengeLink'    => View\Helper\ChallengeLink::class,
+            'webInfoLink'      => View\Helper\WebInfoLink::class,
+            'contentTypeLink'  => View\Helper\ContentTypeLink::class,
+            'contentTypeIcon'  => View\Helper\ContentTypeIcon::class,
+        ],
+        'factories' => [
+            View\Helper\CountryHandler::class   => View\Factory\ViewHelperFactory::class,
+            View\Helper\ChallengeHandler::class => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryMap::class       => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryFlag::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\CountryLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\VatLink::class          => View\Factory\ViewHelperFactory::class,
+            View\Helper\GenderLink::class       => View\Factory\ViewHelperFactory::class,
+            View\Helper\EmailMessageLink::class => View\Factory\ViewHelperFactory::class,
+            View\Helper\TitleLink::class        => View\Factory\ViewHelperFactory::class,
+            View\Helper\VatTypeLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\ChallengeLink::class    => View\Factory\ViewHelperFactory::class,
+            View\Helper\WebInfoLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\ContentTypeLink::class  => View\Factory\ViewHelperFactory::class,
+            View\Helper\ContentTypeIcon::class  => View\Factory\ViewHelperFactory::class,
+
         ],
     ],
-    'service_manager' => [
-        'factories'          => [
-            Options\ModuleOptions::class  => Factory\ModuleOptionsFactory::class,
-            Service\GeneralService::class => Factory\GeneralServiceFactory::class,
-            Service\EmailService::class   => Factory\EmailServiceFactory::class,
-            Service\FormService::class    => Factory\FormServiceFactory::class,
-        ],
-        'abstract_factories' => [
-            Acl\Factory\AssertionInvokableAbstractFactory::class,
-        ],
-        'invokables'         => [
-            'general_web_info_form_filter'     => 'General\Form\FilterCreateObject',
-            'general_country_form_filter'      => 'General\Form\FilterCreateObject',
-            'general_challenge_form_filter'    => 'General\Form\FilterCreateObject',
-            'general_gender_form_filter'       => 'General\Form\FilterCreateObject',
-            'general_title_form_filter'        => 'General\Form\FilterCreateObject',
-            'general_vat_form_filter'          => 'General\Form\FilterCreateObject',
-            'general_vat_type_form_filter'     => 'General\Form\FilterCreateObject',
-            'general_content_type_form_filter' => 'General\Form\FilterCreateObject',
+    'service_manager'    => [
+        'factories' => [
+            Options\ModuleOptions::class                  => Factory\ModuleOptionsFactory::class,
+            Service\GeneralService::class                 => Factory\GeneralServiceFactory::class,
+            Service\EmailService::class                   => Factory\EmailServiceFactory::class,
+            Service\FormService::class                    => Factory\FormServiceFactory::class,
+            Acl\Assertion\ContentType::class              => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\Country::class                  => Acl\Factory\AssertionFactory::class,
+            Acl\Assertion\WebInfo::class                  => Acl\Factory\AssertionFactory::class,
+            InputFilter\ChallengeFilter::class            => Factory\InputFilterFactory::class,
+            InputFilter\CommunityTypeFilter::class        => Factory\InputFilterFactory::class,
+            InputFilter\CountryFilter::class              => Factory\InputFilterFactory::class,
+            InputFilter\GenderFilter::class               => Factory\InputFilterFactory::class,
+            InputFilter\TitleFilter::class                => Factory\InputFilterFactory::class,
+            InputFilter\WebInfoFilter::class              => Factory\InputFilterFactory::class,
+            Navigation\Invokable\ChallengeLabel::class    => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\ContentTypeLabel::class  => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\EmailMessageLabel::class => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\CountryLabel::class      => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\GenderLabel::class       => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\TitleLabel::class        => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\VatLabel::class          => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\VatTypeLabel::class      => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\WebInfoLabel::class      => Navigation\Factory\NavigationInvokableFactory::class,
         ],
     ],
-    'asset_manager'   => [
+    'asset_manager'      => [
         'resolver_configs' => [
             'collections' => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js'   => [
+                'assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/js/jvectormap.js'   => [
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/css/jvectormap.css' => [
                     'css/jquery-jvectormap-2.0.2.css',
                 ],
             ],
             'paths'       => [__DIR__ . '/../public',],
             'caching'     => [
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/js/jvectormap.js?'  => [
+                'assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/js/jvectormap.js?'  => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
-                'assets/' . (defined("DEBRANOVA_HOST") ? DEBRANOVA_HOST : 'test') . '/css/jvectormap.css' => [
+                'assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/css/jvectormap.css' => [
                     'cache'   => 'FilePath', //Filesystem for development
                     'options' => ['dir' => __DIR__ . '/../../../public',],
                 ],
             ],
         ],
     ],
-    'doctrine'        => [
+    'doctrine'           => [
         'driver'       => [
             'general_annotation_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'paths' => [__DIR__ . '/../src/General/Entity/'],
+                'paths' => [__DIR__ . '/../src/Entity/'],
             ],
             'orm_default'               => [
                 'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
@@ -124,15 +156,9 @@ $config = [
         ],
     ],
 ];
-$configFiles = [
-    __DIR__ . '/module.config.routes.php',
-    __DIR__ . '/module.config.routes.admin.php',
-    __DIR__ . '/module.config.general.php',
-    __DIR__ . '/module.config.navigation.php',
-    __DIR__ . '/module.config.authorize.php',
-];
-foreach ($configFiles as $configFile) {
-    $config = ArrayUtils::merge($config, include $configFile);
+
+foreach (Stdlib\Glob::glob(__DIR__ . '/module.config.{,*}.php', Stdlib\Glob::GLOB_BRACE) as $file) {
+    $config = Stdlib\ArrayUtils::merge($config, include $file);
 }
 
 return $config;

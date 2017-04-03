@@ -3,7 +3,7 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set contentType = form.get('content_type') %}
+{% set contentType = form.get('general_entity_contenttype') %}
 
 {{ ztbformelement(contentType.get('description')) }}
 {{ ztbformelement(contentType.get('contentType')) }}
