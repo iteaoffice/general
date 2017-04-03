@@ -1,12 +1,18 @@
 {
   "name": "iteaoffice/general",
   "type": "library",
-  "description": "General shared code for ITEA",
+  "license": "proprietary",
+  "description": "Code to manage organisations",
   "keywords": [
     "general"
   ],
-  "license": "proprietary",
   "homepage": "https://itea3.org",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.itea3.eu"
+    }
+  ],
   "authors": [
     {
       "name": "Johan van der Heide",
@@ -28,7 +34,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "GeneralTest\\": "tests"
+      "GeneralTest\\": "tests/"
     }
   },
   "extra": {
