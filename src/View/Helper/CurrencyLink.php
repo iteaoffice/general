@@ -38,7 +38,6 @@ class CurrencyLink extends LinkAbstract
         $show = 'name',
         $alternativeShow = null
     ): string {
-
         $this->setCurrency($currency);
         $this->setAction($action);
         $this->setShow($show);
