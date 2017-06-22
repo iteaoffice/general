@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -32,7 +34,7 @@ class VatController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Vat::class, $filterPlugin->getFilter());
 
@@ -132,7 +134,7 @@ class VatController extends GeneralAbstractController
 
             if ($form->isValid()) {
                 /** @var Vat $vat */
-                $vat    = $form->getData();
+                $vat = $form->getData();
                 $result = $this->getGeneralService()->updateEntity($vat);
                 $this->redirect()->toRoute(
                     'zfcadmin/vat/view',

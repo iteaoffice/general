@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\View\Factory;
 
 use General\View\Helper\AbstractViewHelper;
@@ -31,12 +33,12 @@ final class ViewHelperFactory implements FactoryInterface
      * Create an instance of the requested class name.
      *
      * @param ContainerInterface|HelperPluginManager $container
-     * @param string                                 $requestedName
-     * @param null|array                             $options
+     * @param string $requestedName
+     * @param null|array $options
      *
      * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractViewHelper
     {
         /** @var AbstractViewHelper $viewHelper */
         $viewHelper = new $requestedName($options);

@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\Challenge;
@@ -27,8 +29,8 @@ class ChallengeLink extends LinkAbstract
 
     /**
      * @param Challenge $challenge
-     * @param string    $action
-     * @param string    $show
+     * @param string $action
+     * @param string $show
      *
      * @return string
      *
@@ -43,7 +45,7 @@ class ChallengeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! is_null($challenge)) {
+        if (!is_null($challenge)) {
             $this->addRouterParam('id', $challenge->getId());
             $this->addRouterParam('docRef', $challenge->getDocRef());
             $this->setShowOptions(

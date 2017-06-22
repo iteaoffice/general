@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Service;
 
 use Contact\Service\ContactService;
@@ -91,7 +93,7 @@ abstract class ServiceAbstract implements ServiceInterface
     public function findEntitiesFiltered($entity, $filter)
     {
         $equipmentList = $this->getEntityManager()->getRepository($entity)
-                              ->findFiltered($filter, AbstractQuery::HYDRATE_SIMPLEOBJECT);
+            ->findFiltered($filter, AbstractQuery::HYDRATE_SIMPLEOBJECT);
 
         return $equipmentList;
     }
@@ -99,7 +101,7 @@ abstract class ServiceAbstract implements ServiceInterface
     /**
      * Find 1 entity based on the id.
      *
-     * @param string  $entity
+     * @param string $entity
      * @param integer $id
      *
      * @return null|\General\Entity\Country|\General\Entity\Gender|Vat|\General\Entity\Title

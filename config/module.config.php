@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace General;
 
 /**
@@ -26,6 +28,7 @@ $config = [
             Controller\ChallengeController::class   => Controller\Factory\ControllerFactory::class,
             Controller\ContentTypeController::class => Controller\Factory\ControllerFactory::class,
             Controller\CountryController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\CurrencyController::class    => Controller\Factory\ControllerFactory::class,
             Controller\GenderController::class      => Controller\Factory\ControllerFactory::class,
             Controller\IndexController::class       => Controller\Factory\ControllerFactory::class,
             Controller\StyleController::class       => Controller\Factory\ControllerFactory::class,
@@ -54,6 +57,7 @@ $config = [
             'countryMap'       => View\Helper\CountryMap::class,
             'countryFlag'      => View\Helper\CountryFlag::class,
             'countryLink'      => View\Helper\CountryLink::class,
+            'currencyLink'     => View\Helper\CurrencyLink::class,
             'emailMessageLink' => View\Helper\EmailMessageLink::class,
             'vatLink'          => View\Helper\VatLink::class,
             'genderLink'       => View\Helper\GenderLink::class,
@@ -70,6 +74,7 @@ $config = [
             View\Helper\CountryMap::class       => View\Factory\ViewHelperFactory::class,
             View\Helper\CountryFlag::class      => View\Factory\ViewHelperFactory::class,
             View\Helper\CountryLink::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\CurrencyLink::class     => View\Factory\ViewHelperFactory::class,
             View\Helper\VatLink::class          => View\Factory\ViewHelperFactory::class,
             View\Helper\GenderLink::class       => View\Factory\ViewHelperFactory::class,
             View\Helper\EmailMessageLink::class => View\Factory\ViewHelperFactory::class,
@@ -101,6 +106,7 @@ $config = [
             Navigation\Invokable\ContentTypeLabel::class  => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\EmailMessageLabel::class => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\CountryLabel::class      => Navigation\Factory\NavigationInvokableFactory::class,
+            Navigation\Invokable\CurrencyLabel::class     => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\GenderLabel::class       => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\TitleLabel::class        => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\VatLabel::class          => Navigation\Factory\NavigationInvokableFactory::class,

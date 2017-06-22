@@ -1,0 +1,21 @@
+{% do form.prepare() %}
+
+
+{{ form().openTag(form)|raw }}
+
+{% set currency = form.get('general_entity_currency') %}
+
+{{ ztbformelement(currency.get('name')) }}
+{{ ztbformelement(currency.get('iso4217')) }}
+{{ ztbformelement(currency.get('symbol')) }}
+
+{{ formelement(form.get('csrf')) }}
+
+<div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+        {{ ztbformelement(form.get('submit')) }}
+        {{ ztbformelement(form.get('cancel')) }}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}

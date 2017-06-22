@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace General\Options;
 
 use Zend\Stdlib\AbstractOptions;

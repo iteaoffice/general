@@ -101,6 +101,41 @@ return [
                             ],
                         ],
                     ],
+                    'currency'      => [
+                        'label' => _("txt-nav-currency-list"),
+                        'route' => 'zfcadmin/currency/list',
+                        'pages' => [
+                            'currency-view' => [
+                                'route'   => 'zfcadmin/currency/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Currency::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\CurrencyLabel::class,
+                                    ],
+                                ],
+                                'pages'   => [
+                                    'currency-edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/currency/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Currency::class,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'currency-new'  => [
+                                'label'   => _("txt-new-currency"),
+                                'route'   => 'zfcadmin/currency/new',
+                                'visible' => false,
+                            ],
+                        ],
+                    ],
                     'challenge'    => [
                         'label' => _("txt-nav-challenge-list"),
                         'route' => 'zfcadmin/challenge/list',

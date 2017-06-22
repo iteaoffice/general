@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\Country;
@@ -20,16 +22,12 @@ use General\Entity\Country;
  */
 class CountryLink extends LinkAbstract
 {
-    /**
-     * @var Country
-     */
-    protected $country;
 
     /**
      * @param Country $country
-     * @param string  $action
-     * @param string  $show
-     * @param string  $alternativeShow
+     * @param string $action
+     * @param string $show
+     * @param string $alternativeShow
      *
      * @return string
      *
@@ -40,7 +38,7 @@ class CountryLink extends LinkAbstract
         $action = 'view',
         $show = 'name',
         $alternativeShow = null
-    ) {
+    ): string {
         $this->setCountry($country);
         $this->setAction($action);
         $this->setShow($show);
@@ -63,7 +61,7 @@ class CountryLink extends LinkAbstract
     /**
      * @return string|void
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'view':

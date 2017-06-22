@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Service;
 
 use Contact\Entity\Contact;
@@ -395,9 +397,9 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
-    public function parseBody()
+    public function parseBody(): bool
     {
         try {
             $htmlView = $this->getRenderer()->render(
@@ -437,7 +439,7 @@ class EmailService extends ServiceAbstract
     /**
      * @return TwigRenderer
      */
-    public function getRenderer()
+    public function getRenderer(): TwigRenderer
     {
         return $this->renderer;
     }
@@ -447,7 +449,7 @@ class EmailService extends ServiceAbstract
      *
      * @return EmailService
      */
-    public function setRenderer($renderer)
+    public function setRenderer($renderer): EmailService
     {
         $this->renderer = $renderer;
 
@@ -588,7 +590,7 @@ class EmailService extends ServiceAbstract
     /**
      * @param Contact $contact
      */
-    private function sendPersonalEmail(Contact $contact)
+    private function sendPersonalEmail(Contact $contact): void
     {
         $emailMessage = new EmailMessage();
 
@@ -596,6 +598,20 @@ class EmailService extends ServiceAbstract
             $emailMessage->setContact($contact);
         }
         $emailMessage->setEmailAddress($contact->getEmail());
+        $ccList = '';
+        foreach ($this->message->getCc() as $cc) {
+            $ccList .= sprintf('%s <%s> ', $cc->getName(), $cc->getEmail());
+        }
+        if (!empty($ccList)) {
+            $emailMessage->setCc($ccList);
+        }
+        $bccList = '';
+        foreach ($this->message->getBcc() as $bcc) {
+            $bccList .= sprintf('%s <%s> ', $bcc->getName(), $bcc->getEmail());
+        }
+        if (!empty($bccList)) {
+            $emailMessage->setBcc($bccList);
+        }
         $emailMessage->setSubject($this->message->getSubject());
         $emailMessage->setMessage($this->getHtmlView());
         $emailMessage->setAmountOfAttachments(count($this->attachments));
@@ -615,13 +631,55 @@ class EmailService extends ServiceAbstract
         $this->transport->send($this->message);
     }
 
+    /**
+     * @return string
+     */
+    public function getHtmlView(): string
+    {
+        return $this->htmlView;
+    }
 
     /**
-     * @param             $content
-     * @param             $type
-     * @param             $fileName
+     * @return \Mailing\Entity\Contact
      */
-    public function addAttachment($content, $type, $fileName)
+    public function getMailingContact(): ?\Mailing\Entity\Contact
+    {
+        return $this->mailingContact;
+    }
+
+    /**
+     * @param \Mailing\Entity\Contact $mailingContact
+     *
+     * @return EmailService
+     */
+    public function setMailingContact(\Mailing\Entity\Contact $mailingContact): EmailService
+    {
+        $this->mailingContact = $mailingContact;
+
+        return $this;
+    }
+
+    /**
+     * @param $attachment
+     * @param string|null $type
+     * @param string|null $fileName
+     */
+    public function addAttachment($attachment, string $type = null, string $fileName = null): void
+    {
+        if (!$attachment instanceof MimePart) {
+            $attachment = $this->createAttachment($attachment, $type, $fileName);
+        }
+
+        $this->attachments[] = $attachment;
+    }
+
+    /**
+     * @param string $content
+     * @param string $type
+     * @param string $fileName
+     * @return MimePart
+     */
+    public function createAttachment(string $content, string $type, string $fileName): MimePart
     {
         /**
          * Create the attachment
@@ -633,7 +691,7 @@ class EmailService extends ServiceAbstract
         // Setting the encoding is recommended for binary data
         $attachment->encoding = Mime::ENCODING_BASE64;
 
-        $this->attachments[] = $attachment;
+        return $attachment;
     }
 
     /**
@@ -775,33 +833,5 @@ class EmailService extends ServiceAbstract
     public function getMessage(): Message
     {
         return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHtmlView(): string
-    {
-        return $this->htmlView;
-    }
-
-    /**
-     * @return \Mailing\Entity\Contact
-     */
-    public function getMailingContact(): ?\Mailing\Entity\Contact
-    {
-        return $this->mailingContact;
-    }
-
-    /**
-     * @param \Mailing\Entity\Contact $mailingContact
-     *
-     * @return EmailService
-     */
-    public function setMailingContact(\Mailing\Entity\Contact $mailingContact): EmailService
-    {
-        $this->mailingContact = $mailingContact;
-
-        return $this;
     }
 }

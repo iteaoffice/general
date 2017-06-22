@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -80,6 +82,18 @@ class EmailMessage extends EntityAbstract
      * @var string
      */
     private $subject;
+    /**
+     * @ORM\Column(name="cc",type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $cc;
+    /**
+     * @ORM\Column(name="bcc",type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $bcc;
     /**
      * @ORM\Column(name="message",type="text")
      *
@@ -394,6 +408,44 @@ class EmailMessage extends EntityAbstract
     public function setDateLatestEvent(\DateTime $dateLatestEvent): EmailMessage
     {
         $this->dateLatestEvent = $dateLatestEvent;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCc(): ?string
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param string $cc
+     * @return EmailMessage
+     */
+    public function setCc(string $cc = null): EmailMessage
+    {
+        $this->cc = $cc;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBcc(): ?string
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param string $bcc
+     * @return EmailMessage
+     */
+    public function setBcc(string $bcc = null): EmailMessage
+    {
+        $this->bcc = $bcc;
 
         return $this;
     }

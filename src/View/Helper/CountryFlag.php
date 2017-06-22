@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\Country;
@@ -22,11 +24,11 @@ class CountryFlag extends ImageAbstract
 {
     /**
      * @param Country $country
-     * @param int     $width
+     * @param int $width
      *
      * @return string
      */
-    public function __invoke(Country $country, $width = 20)
+    public function __invoke(Country $country, $width = 20): string
     {
         $flag = $country->getFlag();
         if (is_null($flag)) {
@@ -39,7 +41,7 @@ class CountryFlag extends ImageAbstract
         $this->setClasses([]);
 
         $this->setRouter('assets/country-flag');
-        $this->addRouterParam('iso3', strtolower($country->getIso3()));
+        $this->addRouterParam('iso3', strtolower((string) $country->getIso3()));
         $this->addRouterParam('ext', 'png');
         $this->setImageId('country_flag_' . $country->getIso3());
 

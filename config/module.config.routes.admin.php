@@ -7,6 +7,7 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+
 use General\Controller;
 
 return [
@@ -194,6 +195,55 @@ return [
                                 'type'     => 'Literal',
                                 'priority' => 1000,
                                 'options'  => [
+                                    'route'    => '/new.html',
+                                    'defaults' => [
+                                        'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'currency'     => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/currency',
+                            'defaults' => [
+                                'controller' => Controller\CurrencyController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                            'edit' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/edit/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'new'  => [
+                                'type'    => 'Literal',
+                                'options' => [
                                     'route'    => '/new.html',
                                     'defaults' => [
                                         'action' => 'new',

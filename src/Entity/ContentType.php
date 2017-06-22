@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -194,6 +196,18 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $versionDocument;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract\Document", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Contract\Document[]|Collections\ArrayCollection
+     */
+    private $contractDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract\VersionDocument", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Contract\VersionDocument[]|Collections\ArrayCollection
+     */
+    private $contractVersionDocument;
+    /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      * @var \Calendar\Entity\Document[]|Collections\ArrayCollection
@@ -249,6 +263,8 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->projectReportItem = new Collections\ArrayCollection();
         $this->projectDocument = new Collections\ArrayCollection();
         $this->versionDocument = new Collections\ArrayCollection();
+        $this->contractDocument = new Collections\ArrayCollection();
+        $this->contractVersionDocument = new Collections\ArrayCollection();
         $this->calendarDocument = new Collections\ArrayCollection();
         $this->loi = new Collections\ArrayCollection();
         $this->meetingFloorplan = new Collections\ArrayCollection();
@@ -261,7 +277,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->contentType;
     }
@@ -272,7 +288,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function getCacheFileName()
+    public function getCacheFileName(): string
     {
         $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
             . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
@@ -286,7 +302,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return sha1($this->id . $this->contentType . $this->extension);
     }
@@ -940,6 +956,44 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setParentDoa($parentDoa)
     {
         $this->parentDoa = $parentDoa;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract\Document[]
+     */
+    public function getContractDocument()
+    {
+        return $this->contractDocument;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract\Document[] $contractDocument
+     * @return ContentType
+     */
+    public function setContractDocument($contractDocument): ContentType
+    {
+        $this->contractDocument = $contractDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[]
+     */
+    public function getContractVersionDocument()
+    {
+        return $this->contractVersionDocument;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[] $contractVersionDocument
+     * @return ContentType
+     */
+    public function setContractVersionDocument($contractVersionDocument): ContentType
+    {
+        $this->contractVersionDocument = $contractVersionDocument;
 
         return $this;
     }

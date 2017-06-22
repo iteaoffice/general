@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Form;
 
 use Doctrine\ORM\EntityManager;
@@ -32,7 +34,7 @@ class CreateObject extends Form
     /**
      * CreateObject constructor.
      *
-     * @param EntityManager  $entityManager
+     * @param EntityManager $entityManager
      * @param EntityAbstract $object
      */
     public function __construct(EntityManager $entityManager, EntityAbstract $object)
@@ -80,6 +82,12 @@ class CreateObject extends Form
                     'class' => "btn btn-warning",
                     'value' => _("txt-cancel"),
                 ],
+            ]
+        );
+        $this->add(
+            [
+                'type' => 'Zend\Form\Element\Csrf',
+                'name' => 'csrf',
             ]
         );
         $this->add(

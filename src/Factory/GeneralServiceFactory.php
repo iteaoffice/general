@@ -12,6 +12,8 @@
  *
  * @link        http://github.com/iteaoffice/main for the canonical source repository
  */
+declare(strict_types=1);
+
 namespace General\Factory;
 
 use Doctrine\ORM\EntityManager;
@@ -25,18 +27,19 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  *
  * @package General\Factory
  */
-class GeneralServiceFactory implements FactoryInterface
+final class GeneralServiceFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return GeneralService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GeneralService
     {
-        $generalService = new GeneralService();
+        /** @var GeneralService $generalService */
+        $generalService = new $requestedName($options);
 
         /** @var EntityManager $entityManager */
         $entityManager = $container->get(EntityManager::class);

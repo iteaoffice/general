@@ -14,6 +14,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\Gender;
@@ -48,7 +50,7 @@ class GenderLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! is_null($gender)) {
+        if (!is_null($gender)) {
             $this->addRouterParam('id', $gender->getId());
             $this->setShowOptions(
                 [

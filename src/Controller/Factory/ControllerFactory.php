@@ -12,6 +12,8 @@
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
+declare(strict_types=1);
+
 namespace General\Controller\Factory;
 
 use Contact\Service\ContactService;
@@ -36,12 +38,15 @@ final class ControllerFactory implements FactoryInterface
     /**
      * @param ContainerInterface|ControllerManager $container
      * @param                                      $requestedName
-     * @param array|null                           $options
+     * @param array|null $options
      *
      * @return GeneralAbstractController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
+    ): GeneralAbstractController {
         /** @var GeneralAbstractController $controller */
         $controller = new $requestedName($options);
 

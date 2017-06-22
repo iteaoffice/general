@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use General\Entity\ContentType;
@@ -33,7 +35,7 @@ class IndexController extends GeneralAbstractController
             return $this->notFoundAction();
         }
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
+            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
         $file = stream_get_contents($contentType->getImage());
         $response->getHeaders()->addHeaderLine('Content-Type: image/gif')->addHeaderLine(
             'Content-Length: '
@@ -49,7 +51,7 @@ class IndexController extends GeneralAbstractController
      */
     public function countryFlagAction()
     {
-        $country  = $this->getGeneralService()->findCountryByIso3(strtolower($this->params('iso3')));
+        $country = $this->getGeneralService()->findCountryByIso3(strtolower($this->params('iso3')));
         $response = $this->getResponse();
         /*
          * Return the response when no iso3 can be found
@@ -61,14 +63,14 @@ class IndexController extends GeneralAbstractController
         /*
          * Create a cache-version of the file
          */
-        if (! file_exists($country->getFlag()->getCacheFileName())) {
+        if (!file_exists($country->getFlag()->getCacheFileName())) {
             //Save a copy of the file in the caching-folder
             file_put_contents($country->getFlag()->getCacheFileName(), $file);
         }
 
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
-                 ->addHeaderLine('Content-Type: image/png')->addHeaderLine('Content-Length: ' . (string)strlen($file));
+            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Content-Type: image/png')->addHeaderLine('Content-Length: ' . (string)strlen($file));
         $response->setContent($file);
 
         return $response;

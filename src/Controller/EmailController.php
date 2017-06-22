@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -32,10 +34,10 @@ class EmailController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-                             ->findEntitiesFiltered(EmailMessage::class, $filterPlugin->getFilter());
+            ->findEntitiesFiltered(EmailMessage::class, $filterPlugin->getFilter());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
@@ -62,7 +64,7 @@ class EmailController extends GeneralAbstractController
     public function viewAction()
     {
         $emailMessage = $this->getGeneralService()
-                             ->findEntityById(EmailMessage::class, $this->params('id'));
+            ->findEntityById(EmailMessage::class, $this->params('id'));
         if (is_null($emailMessage)) {
             return $this->notFoundAction();
         }
@@ -77,6 +79,10 @@ class EmailController extends GeneralAbstractController
     public function eventAction()
     {
         $data = Json::decode($this->getRequest()->getContent());
+
+        if (!isset($data->CustomID)) {
+            return new JsonModel();
+        }
 
         /**
          * Try to find the email message, if this cannot be found, short circuit it

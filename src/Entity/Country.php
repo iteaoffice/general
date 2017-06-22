@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -183,6 +185,13 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Program\Entity\Call\Country[]|Collections\ArrayCollection
      */
     private $callCountry;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Contract[]|Collections\ArrayCollection
+     */
+    private $contract;
 
     /**
      * Class constructor.
@@ -199,6 +208,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->changerequestCountry = new Collections\ArrayCollection();
         $this->projectLog = new Collections\ArrayCollection();
         $this->callCountry = new Collections\ArrayCollection();
+        $this->contract = new Collections\ArrayCollection();
     }
 
     /**
@@ -365,7 +375,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return Collections\ArrayCollection|Vat[]
      */
     public function getVat()
     {
@@ -373,7 +383,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param int $vat
+     * @param $vat
      */
     public function setVat($vat)
     {
@@ -612,6 +622,25 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setCallCountry($callCountry)
     {
         $this->callCountry = $callCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract[]
+     */
+    public function getContract()
+    {
+        return $this->contract;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract[] $contract
+     * @return Country
+     */
+    public function setContract($contract)
+    {
+        $this->contract = $contract;
 
         return $this;
     }

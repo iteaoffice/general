@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -20,7 +22,8 @@ use Doctrine\ORM\Query;
 use General\Entity;
 
 /**
- * @category    General
+ * Class Title
+ * @package General\Repository
  */
 class Title extends EntityRepository
 {
@@ -29,7 +32,7 @@ class Title extends EntityRepository
      *
      * @return Query
      */
-    public function findFiltered(array $filter)
+    public function findFiltered(array $filter): Query
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_title');

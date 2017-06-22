@@ -8,6 +8,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use Contact\Service\ContactService;
@@ -22,8 +24,8 @@ use General\Service\GeneralService;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Service\ProjectService;
-use Zend\Router\Http\RouteMatch;
 use Zend\Paginator\Paginator;
+use Zend\Router\Http\RouteMatch;
 use Zend\View\HelperPluginManager;
 
 /**
@@ -56,12 +58,12 @@ class CountryHandler extends AbstractViewHelper
         if (in_array(
             $content->getHandler()->getHandler(),
             [
-            'country',
-            'country_map',
-            'country_funder',
-            'country_project',
-            'country_metadata',
-            'country_article',
+                'country',
+                'country_map',
+                'country_funder',
+                'country_project',
+                'country_metadata',
+                'country_article',
             ],
             true
         )) {
@@ -79,11 +81,11 @@ class CountryHandler extends AbstractViewHelper
                 /** @var CountryLink $countryLink */
                 $countryLink = $this->getHelperPluginManager()->get('countryLink');
                 $this->getHelperPluginManager()->get('headmeta')
-                     ->setProperty('og:type', $this->translate("txt-country"));
+                    ->setProperty('og:type', $this->translate("txt-country"));
                 $this->getHelperPluginManager()->get('headmeta')
-                     ->setProperty('og:title', $this->getCountry()->getCountry());
+                    ->setProperty('og:title', $this->getCountry()->getCountry());
                 $this->getHelperPluginManager()->get('headmeta')
-                     ->setProperty('og:url', $countryLink($this->getCountry(), 'view', 'social'));
+                    ->setProperty('og:url', $countryLink($this->getCountry(), 'view', 'social'));
 
                 return $this->parseCountry();
 
@@ -104,7 +106,7 @@ class CountryHandler extends AbstractViewHelper
 
             case 'country_list_itac':
                 $this->getHelperPluginManager()->get('headtitle')
-                     ->append($this->translate("txt-itac-countries-in-itea"));
+                    ->append($this->translate("txt-itac-countries-in-itea"));
 
                 return $this->parseCountryListItac();
 
@@ -147,7 +149,7 @@ class CountryHandler extends AbstractViewHelper
                 case 'docRef':
                     $docRef = $this->findParamValueFromContent($content, $parameter);
 
-                    if (! is_null($docRef)) {
+                    if (!is_null($docRef)) {
                         $this->setCountryByDocRef($docRef);
                     }
                     break;
@@ -160,7 +162,7 @@ class CountryHandler extends AbstractViewHelper
 
     /**
      * @param Content $content
-     * @param Param   $param
+     * @param Param $param
      *
      * @return null|string
      */
@@ -168,13 +170,13 @@ class CountryHandler extends AbstractViewHelper
     {
         //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
         foreach ($content->getContentParam() as $contentParam) {
-            if ($contentParam->getParameter() === $param && ! empty($contentParam->getParameterId())) {
+            if ($contentParam->getParameter() === $param && !empty($contentParam->getParameterId())) {
                 return $contentParam->getParameterId();
             }
         }
 
         //Try first to see if the param can be found from the route (rule 1)
-        if (! is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+        if (!is_null($this->getRouteMatch()->getParam($param->getParam()))) {
             return $this->getRouteMatch()->getParam($param->getParam());
         }
 
@@ -313,9 +315,9 @@ class CountryHandler extends AbstractViewHelper
 
         $onlyActivePartners = $this->getProjectModuleOptions()->getProjectHasVersions() ? true : false;
 
-        $projects      = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
+        $projects = $this->getProjectService()->findProjectByCountry($this->getCountry(), $whichProjects);
         $organisations = $this->getOrganisationService()
-                              ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
+            ->findOrganisationByCountry($this->getCountry(), $onlyActivePartners);
 
         return $this->getRenderer()->render(
             'general/partial/entity/country-metadata',
@@ -389,8 +391,8 @@ class CountryHandler extends AbstractViewHelper
             throw new \InvalidArgumentException("The country cannot be null");
         }
         $organisationQuery = $this->getOrganisationService()
-                                  ->findOrganisationByCountry($this->getCountry(), true, true);
-        $paginator         = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
+            ->findOrganisationByCountry($this->getCountry(), true, true);
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($organisationQuery)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 25);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));

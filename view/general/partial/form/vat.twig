@@ -1,5 +1,5 @@
 {% do form.prepare() %}
-{% do form.setAttribute('class','form-horizontal') %}
+
 
 {{ form().openTag(form)|raw }}
 
@@ -10,6 +10,7 @@
 {{ ztbformelement(vat.get('dateStart')) }}
 {{ ztbformelement(vat.get('country')) }}
 
+{{ formelement(form.get('csrf')) }}
 
 <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">

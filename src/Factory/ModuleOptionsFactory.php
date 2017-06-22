@@ -12,6 +12,8 @@
  *
  * @link        http://github.com/iteaoffice/main for the canonical source repository
  */
+declare(strict_types=1);
+
 namespace General\Factory;
 
 use General\Options\ModuleOptions;
@@ -23,16 +25,16 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  *
  * @package General\Factory
  */
-class ModuleOptionsFactory implements FactoryInterface
+final class ModuleOptionsFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return ModuleOptions
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ModuleOptions
     {
         $config = $container->get('Config');
 

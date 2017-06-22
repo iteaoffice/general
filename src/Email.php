@@ -3,6 +3,8 @@
  *
  */
 
+declare(strict_types=1);
+
 namespace General;
 
 use Contact\Entity\Contact;

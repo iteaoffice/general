@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -94,9 +96,18 @@ class CommunityType extends EntityAbstract
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->type;
     }

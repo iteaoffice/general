@@ -8,6 +8,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use Content\Entity\Content;
@@ -66,7 +68,7 @@ class ChallengeHandler extends AbstractViewHelper
                 case 'docRef':
                     $docRef = $this->findParamValueFromContent($content, $parameter);
 
-                    if (! is_null($docRef)) {
+                    if (!is_null($docRef)) {
                         $this->setChallengeDocRef($docRef);
                     }
                     break;
@@ -76,7 +78,7 @@ class ChallengeHandler extends AbstractViewHelper
 
     /**
      * @param Content $content
-     * @param Param   $param
+     * @param Param $param
      *
      * @return null|string
      */
@@ -84,13 +86,13 @@ class ChallengeHandler extends AbstractViewHelper
     {
         //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
         foreach ($content->getContentParam() as $contentParam) {
-            if ($contentParam->getParameter() === $param && ! empty($contentParam->getParameterId())) {
+            if ($contentParam->getParameter() === $param && !empty($contentParam->getParameterId())) {
                 return $contentParam->getParameterId();
             }
         }
 
         //Try first to see if the param can be found from the route (rule 1)
-        if (! is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+        if (!is_null($this->getRouteMatch()->getParam($param->getParam()))) {
             return $this->getRouteMatch()->getParam($param->getParam());
         }
 

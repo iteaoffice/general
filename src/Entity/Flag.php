@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -59,28 +61,12 @@ class Flag extends EntityAbstract
      *
      * @return string
      */
-    public function getCacheFileName()
+    public function getCacheFileName(): string
     {
         $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-                    DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'country-flag';
+            DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'country-flag';
 
         return $cacheDir . DIRECTORY_SEPARATOR . strtolower($this->getCountry()->getIso3()) . '.png';
-    }
-
-    /**
-     * @return \General\Entity\Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param \General\Entity\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
     }
 
     /**
@@ -126,10 +112,32 @@ class Flag extends EntityAbstract
 
     /**
      * @param int $id
+     * @return Flag
      */
-    public function setId($id)
+    public function setId($id): Flag
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     * @return Flag
+     */
+    public function setCountry($country): Flag
+    {
+        $this->country = $country;
+
+        return $this;
     }
 
     /**
@@ -142,9 +150,12 @@ class Flag extends EntityAbstract
 
     /**
      * @param resource $object
+     * @return Flag
      */
-    public function setObject($object)
+    public function setObject($object): Flag
     {
         $this->object = $object;
+
+        return $this;
     }
 }

@@ -14,6 +14,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\EmailMessage;
@@ -32,8 +34,8 @@ class EmailMessageLink extends LinkAbstract
 
     /**
      * @param EmailMessage $emailMessage
-     * @param string       $action
-     * @param string       $show
+     * @param string $action
+     * @param string $show
      *
      * @return string
      *
@@ -59,6 +61,26 @@ class EmailMessageLink extends LinkAbstract
     }
 
     /**
+     * @return EmailMessage
+     */
+    public function getEmailMessage(): EmailMessage
+    {
+        if (is_null($this->emailMessage)) {
+            $this->emailMessage = new EmailMessage();
+        }
+
+        return $this->emailMessage;
+    }
+
+    /**
+     * @param EmailMessage $emailMessage
+     */
+    public function setEmailMessage($emailMessage)
+    {
+        $this->emailMessage = $emailMessage;
+    }
+
+    /**
      * Parse the action.
      *
      * @throws \Exception
@@ -77,25 +99,5 @@ class EmailMessageLink extends LinkAbstract
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
-
-    /**
-     * @return EmailMessage
-     */
-    public function getEmailMessage(): EmailMessage
-    {
-        if (is_null($this->emailMessage)) {
-            $this->emailMessage = new EmailMessage();
-        }
-
-        return $this->emailMessage;
-    }
-
-    /**
-     * @param EmailMessage $emailMessage
-     */
-    public function setEmailMessage($emailMessage)
-    {
-        $this->emailMessage = $emailMessage;
     }
 }

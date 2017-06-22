@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -27,7 +29,7 @@ class CountryController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Country::class, $filterPlugin->getFilter());
 

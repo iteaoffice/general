@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
@@ -32,10 +34,10 @@ class GenderController extends GeneralAbstractController
      */
     public function listAction()
     {
-        $page         = $this->params()->fromRoute('page', 1);
+        $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
         $contactQuery = $this->getGeneralService()
-                             ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
+            ->findEntitiesFiltered(Gender::class, $filterPlugin->getFilter());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
@@ -62,7 +64,7 @@ class GenderController extends GeneralAbstractController
     public function viewAction()
     {
         $gender = $this->getGeneralService()
-                       ->findEntityById(Gender::class, $this->params('id'));
+            ->findEntityById(Gender::class, $this->params('id'));
         if (is_null($gender)) {
             return $this->notFoundAction();
         }
@@ -113,7 +115,7 @@ class GenderController extends GeneralAbstractController
     public function editAction()
     {
         $gender = $this->getGeneralService()
-                       ->findEntityById(Gender::class, $this->params('id'));
+            ->findEntityById(Gender::class, $this->params('id'));
 
         $data = array_merge(
             $this->getRequest()->getPost()->toArray(),
@@ -121,7 +123,7 @@ class GenderController extends GeneralAbstractController
         );
 
         $form = $this->getFormService()
-                     ->prepare($gender, $gender, $data);
+            ->prepare($gender, $gender, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {

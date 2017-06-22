@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\ContentType;
@@ -23,13 +25,13 @@ class ContentTypeIcon extends AbstractViewHelper
 {
     /**
      * @param ContentType|null $contentType
-     * @param string|null      $contentTypeName
+     * @param string|null $contentTypeName
      *
      * @return string
      */
     public function __invoke(ContentType $contentType = null, $contentTypeName = null)
     {
-        if (! is_null($contentTypeName)) {
+        if (!is_null($contentTypeName)) {
             /** @var GeneralService $generalService */
             $generalService = $this->getServiceManager()->get(GeneralService::class);
 

@@ -13,13 +13,17 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use General\Entity;
 
 /**
- * @category    General
+ * Class Vat
+ * @package General\Repository
  */
 class Vat extends EntityRepository
 {
@@ -31,36 +35,36 @@ class Vat extends EntityRepository
     public function findFiltered(array $filter)
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('v');
-        $queryBuilder->from("General\Entity\Vat", 'v');
-        $queryBuilder->join("v.country", 'c');
+        $queryBuilder->select('general_entity_vat');
+        $queryBuilder->from(Entity\Vat::class, 'general_entity_vat');
+        $queryBuilder->join("general_entity_vat.country", 'c');
 
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('v.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.id', $direction);
                 break;
             case 'code':
-                $queryBuilder->addOrderBy('v.code', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.code', $direction);
                 break;
             case 'percentage':
-                $queryBuilder->addOrderBy('v.percentage', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.percentage', $direction);
                 break;
             case 'date-start':
-                $queryBuilder->addOrderBy('v.dateStart', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.dateStart', $direction);
                 break;
             case 'country':
-                $queryBuilder->addOrderBy('v.country', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.country', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('v.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.id', $direction);
         }
 
         return $queryBuilder->getQuery();

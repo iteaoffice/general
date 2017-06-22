@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use Zend\View\Helper\Url;
@@ -69,7 +71,7 @@ abstract class ImageAbstract extends AbstractViewHelper
             is_null($this->width) ? null : ' width="' . $this->width . '"'
         );
 
-        if (! $this->lightBox) {
+        if (!$this->lightBox) {
             return $image;
         } else {
             return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
@@ -81,14 +83,14 @@ abstract class ImageAbstract extends AbstractViewHelper
      *
      * @param string $key
      * @param        $value
-     * @param bool   $allowNull
+     * @param bool $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
-        if (! $allowNull && is_null($value)) {
+        if (!$allowNull && is_null($value)) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (! is_null($value)) {
+        if (!is_null($value)) {
             $this->routerParams[$key] = $value;
         }
     }
@@ -140,7 +142,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (! is_array($classes)) {
+        if (!is_array($classes)) {
             $classes = [$classes];
         }
         foreach ($classes as $class) {

@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\WebInfo;
@@ -35,7 +37,7 @@ class WebInfoLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! $this->hasAccess($this->getWebInfo(), 'General\Acl\Assertion\WebInfo', $this->getAction())) {
+        if (!$this->hasAccess($this->getWebInfo(), 'General\Acl\Assertion\WebInfo', $this->getAction())) {
             return $action === 'view' ? (string)$this->getWebInfo() : null;
         }
 

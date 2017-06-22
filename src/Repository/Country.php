@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Affiliation\Service\AffiliationService;
@@ -36,8 +38,8 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from(Entity\Country::class, 'general_entity_country');
 
-        if (! is_null($filter)) {
-            $queryBuilder = $this->applyWebInfoFilter($queryBuilder, $filter);
+        if (!is_null($filter)) {
+            $queryBuilder = $this->applyFilter($queryBuilder, $filter);
         }
 
         $direction = 'ASC';
@@ -47,7 +49,7 @@ class Country extends EntityRepository
             $direction = strtoupper($filter['direction']);
         }
 
-        if (! array_key_exists('order', $filter)) {
+        if (!array_key_exists('order', $filter)) {
             $filter['order'] = 'id';
         }
 
@@ -75,31 +77,29 @@ class Country extends EntityRepository
     }
 
     /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
      * @param QueryBuilder $queryBuilder
-     * @param array        $filter
+     * @param array $filter
      *
      * @return QueryBuilder
      */
-    public function applyWebInfoFilter(
+    public function applyFilter(
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
-        if (! empty($filter['search'])) {
+        if (!empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
-        if (! empty($filter['eu'])) {
+        if (!empty($filter['eu'])) {
             $queryBuilder->innerJoin('general_entity_country.eu', 'eu');
         }
 
-        if (! empty($filter['eureka'])) {
+        if (!empty($filter['eureka'])) {
             $queryBuilder->innerJoin('general_entity_country.eureka', 'eureka');
         }
 
-        if (! empty($filter['itac'])) {
+        if (!empty($filter['itac'])) {
             $queryBuilder->innerJoin('general_entity_country.itac', 'itac');
         }
 
@@ -125,7 +125,7 @@ class Country extends EntityRepository
      *
      * @return array
      */
-    public function findActive()
+    public function findActive(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('affiliation_entity_affiliation affiliation');
@@ -170,7 +170,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository(Project::class);
-        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
 
         //only the active countries
         return $queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getResult();
@@ -178,13 +178,13 @@ class Country extends EntityRepository
 
     /**
      * @param Call $call
-     * @param int  $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
-     * @return Entity\Country[]
+     * @return Entity\Country[]|array
      */
-    public function findCountryByCall(Call $call, $which)
+    public function findCountryByCall(Call $call, $which): array
     {
         $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
 
@@ -204,7 +204,7 @@ class Country extends EntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getQueryBuilderForCountryByWhich($which)
+    public function getQueryBuilderForCountryByWhich($which): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country');
@@ -234,13 +234,13 @@ class Country extends EntityRepository
 
     /**
      * @param Project $project
-     * @param int     $which
+     * @param int $which
      *
      * @throws \InvalidArgumentException
      *
-     * @return Entity\Country[]
+     * @return Entity\Country[]|array
      */
-    public function findCountryByProject(Project $project, $which)
+    public function findCountryByProject(Project $project, $which): array
     {
         $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
         $queryBuilder->andWhere('affiliation_entity_affiliation.project = ?1');
@@ -258,9 +258,9 @@ class Country extends EntityRepository
      *
      * @throws \InvalidArgumentException
      *
-     * @return null|Entity\Country[]
+     * @return null|Entity\Country
      */
-    public function findCountryOfProjectContact(Project $project)
+    public function findCountryOfProjectContact(Project $project): ?Entity\Country
     {
         $findQueryBuilder = $this->_em->createQueryBuilder();
         $findQueryBuilder->select('general_entity_country');
@@ -282,7 +282,7 @@ class Country extends EntityRepository
     }
 
     /**
-     * @param Call            $call
+     * @param Call $call
      * @param Evaluation\Type $type
      *
      * @return Entity\Country[]
@@ -290,7 +290,7 @@ class Country extends EntityRepository
     public function findCountryByEvaluationTypeAndCall(
         Evaluation\Type $type,
         Call $call = null
-    ) {
+    ): array {
         $queryBuilder
             = $this->getQueryBuilderForCountryByWhich(AffiliationService::WHICH_ALL);
         $queryBuilder->join('p.evaluation', 'e');
@@ -299,7 +299,7 @@ class Country extends EntityRepository
          * @var $projectRepository \Project\Repository\Project
          */
         $projectRepository = $this->getEntityManager()->getRepository('Project\Entity\Project');
-        $queryBuilder      = $projectRepository->onlyActiveProject($queryBuilder);
+        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
         $queryBuilder->andWhere('p.call = ?10');
         $queryBuilder->setParameter(10, $call);
         $queryBuilder->andWhere('e.type = ?11');
@@ -318,7 +318,7 @@ class Country extends EntityRepository
      *
      * @return array
      */
-    public function findItac()
+    public function findItac(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country country');
@@ -363,7 +363,7 @@ class Country extends EntityRepository
      *
      * @return array
      */
-    public function findCountriesByMeeting(Meeting $meeting)
+    public function findCountriesByMeeting(Meeting $meeting): array
     {
         $query = $this->_em->createQueryBuilder();
         $query->distinct('general_entity_country.id');
@@ -388,7 +388,7 @@ class Country extends EntityRepository
     /**
      * @return array
      */
-    public function findForForm()
+    public function findForForm(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country');
@@ -405,7 +405,7 @@ class Country extends EntityRepository
         $restOfWorld = [];
 
         foreach ($countries as $country) {
-            if (! is_null($country->getEu())) {
+            if (!is_null($country->getEu())) {
                 $euCountries[$country->getId()] = $country;
             } else {
                 $restOfWorld[$country->getId()] = $country;
@@ -419,7 +419,34 @@ class Country extends EntityRepository
     /**
      * @return array
      */
-    public function findCountryInProjectLog()
+    public function findForFormNoEmptyOption(): array
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('general_entity_country');
+        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
+        $queryBuilder->addOrderBy('general_entity_country.country');
+        /** @var Entity\Country[] $countries */
+        $countries = $queryBuilder->getQuery()->useQueryCache(true)->getResult();
+
+        $euCountries = [];
+        $restOfWorld = [];
+
+        foreach ($countries as $country) {
+            if (!is_null($country->getEu())) {
+                $euCountries[$country->getId()] = $country;
+            } else {
+                $restOfWorld[$country->getId()] = $country;
+            }
+        }
+
+
+        return array_merge($euCountries, $restOfWorld);
+    }
+
+    /**
+     * @return array
+     */
+    public function findCountryInProjectLog(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country');

@@ -9,6 +9,8 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use BjyAuthorize\Controller\Plugin\IsAllowed;
@@ -16,6 +18,7 @@ use BjyAuthorize\Service\Authorize;
 use General\Acl\Assertion\AssertionAbstract;
 use General\Entity\ContentType;
 use General\Entity\Country;
+use General\Entity\Currency;
 use General\Entity\EntityAbstract;
 use General\Entity\WebInfo;
 use Zend\View\Helper\ServerUrl;
@@ -55,6 +58,11 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     protected $country;
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @var string
      */
     protected $alternativeShow;
@@ -80,7 +88,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return string
      */
-    public function createLink()
+    public function createLink(): string
     {
         /**
          * @var $url Url
@@ -89,9 +97,9 @@ abstract class LinkAbstract extends AbstractViewHelper
         /**
          * @var $serverUrl ServerUrl
          */
-        $serverUrl         = $this->getHelperPluginManager()->get('serverUrl');
+        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
         $this->linkContent = [];
-        $this->classes     = [];
+        $this->classes = [];
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
@@ -174,7 +182,7 @@ abstract class LinkAbstract extends AbstractViewHelper
 
                 return;
             default:
-                if (! array_key_exists($this->getShow(), $this->showOptions)) {
+                if (!array_key_exists($this->getShow(), $this->showOptions)) {
                     throw new \InvalidArgumentException(
                         sprintf(
                             "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
@@ -227,7 +235,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addLinkContent($linkContent)
     {
-        if (! is_array($linkContent)) {
+        if (!is_array($linkContent)) {
             $linkContent = [$linkContent];
         }
 
@@ -261,7 +269,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (! is_array($classes)) {
+        if (!is_array($classes)) {
             $classes = [$classes];
         }
         foreach ($classes as $class) {
@@ -305,21 +313,21 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param EntityAbstract $entity
-     * @param string         $assertion
-     * @param string         $action
+     * @param string $assertion
+     * @param string $action
      *
      * @return bool
      */
     public function hasAccess(EntityAbstract $entity, $assertion, $action)
     {
         $assertion = $this->getAssertion($assertion);
-        if (! is_null($entity)
-             && ! $this->getAuthorizeService()->getAcl()->hasResource($entity)
+        if (!is_null($entity)
+            && !$this->getAuthorizeService()->getAcl()->hasResource($entity)
         ) {
             $this->getAuthorizeService()->getAcl()->addResource($entity);
             $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
         }
-        if (! $this->isAllowed($entity, $action)) {
+        if (!$this->isAllowed($entity, $action)) {
             return false;
         }
 
@@ -346,7 +354,7 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param null|EntityAbstract $resource
-     * @param string              $privilege
+     * @param string $privilege
      *
      * @return bool
      */
@@ -365,14 +373,14 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @param string $key
      * @param        $value
-     * @param bool   $allowNull
+     * @param bool $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
-        if (! $allowNull && is_null($value)) {
+        if (!$allowNull && is_null($value)) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (! is_null($value)) {
+        if (!is_null($value)) {
             $this->routerParams[$key] = $value;
         }
     }
@@ -396,18 +404,18 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return array
      */
-    public function getRouterParams()
+    public function getRouterParams(): array
     {
         return $this->routerParams;
     }
 
     /**
      * @param Country $country
-     * @param int     $width
+     * @param int $width
      *
      * @return string
      */
-    public function getCountryFlag(Country $country, $width)
+    public function getCountryFlag(Country $country, $width): string
     {
         return $this->getHelperPluginManager()->get('countryFlag')->__invoke($country, $width);
     }
@@ -429,7 +437,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setWebInfo($webInfo)
+    public function setWebInfo($webInfo): LinkAbstract
     {
         $this->webInfo = $webInfo;
 
@@ -439,7 +447,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return Country
      */
-    public function getCountry()
+    public function getCountry(): Country
     {
         if (is_null($this->country)) {
             $this->country = new Country();
@@ -453,7 +461,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setCountry($country)
+    public function setCountry($country): LinkAbstract
     {
         $this->country = $country;
 
@@ -480,6 +488,30 @@ abstract class LinkAbstract extends AbstractViewHelper
     public function setContentType($contentType)
     {
         $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * @return Currency
+     */
+    public function getCurrency(): Currency
+    {
+        if (is_null($this->currency)) {
+            $this->currency = new Currency();
+        }
+
+        return $this->currency;
+    }
+
+    /**
+     * @param Currency $currency
+     *
+     * @return LinkAbstract
+     */
+    public function setCurrency($currency): LinkAbstract
+    {
+        $this->currency = $currency;
 
         return $this;
     }

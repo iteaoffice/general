@@ -14,6 +14,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\Vat;
@@ -31,7 +33,7 @@ class VatLink extends LinkAbstract
     protected $vat;
 
     /**
-     * @param Vat    $vat
+     * @param Vat $vat
      * @param string $action
      * @param string $show
      *
@@ -48,7 +50,7 @@ class VatLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
         $this->addRouterParam('entity', 'Vat');
-        if (! is_null($vat)) {
+        if (!is_null($vat)) {
             $this->addRouterParam('id', $vat->getId());
             $this->setShowOptions(['code' => $vat->getCode(),]);
         }

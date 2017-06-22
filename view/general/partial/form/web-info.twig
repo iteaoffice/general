@@ -1,5 +1,5 @@
 {% do form.prepare() %}
-{% do form.setAttribute('class','form-horizontal') %}
+
 
 {{ form().openTag(form)|raw }}
 
@@ -11,6 +11,8 @@
 {{ ztbformelement(webInfo.get('sender')) }}
 {{ ztbformelement(webInfo.get('template')) }}
 {{ ztbformelement(webInfo.get('content')) }}
+
+{{ formelement(form.get('csrf')) }}
 
 
 <div class="form-group">
@@ -29,6 +31,7 @@
 
 <script type="text/javascript">
     tinymce.init({
-        selector: 'textarea'
+        selector: 'textarea',
+        plugins: "code"
     });
 </script>

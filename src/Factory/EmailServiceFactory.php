@@ -12,6 +12,8 @@
  *
  * @link        http://github.com/iteaoffice/main for the canonical source repository
  */
+declare(strict_types=1);
+
 namespace General\Factory;
 
 use Contact\Service\ContactService;
@@ -27,12 +29,12 @@ use ZfcTwig\View\TwigRenderer;
  *
  * @package General\Factory
  */
-class EmailServiceFactory implements FactoryInterface
+final class EmailServiceFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return EmailService
      */

@@ -10,6 +10,8 @@
  * @link        http://jield.net
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;

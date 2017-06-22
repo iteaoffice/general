@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 /**
@@ -23,26 +25,26 @@ class StyleController extends GeneralAbstractController
     public function displayAction()
     {
         $requestedFile = '';
-        $response      = $this->getResponse();
+        $response = $this->getResponse();
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-                 ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
+            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public");
 
 
         $requestedFileFound = false;
         foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
             $requestedFile = $location . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageLocation()
-                             . DIRECTORY_SEPARATOR . $this->params('source');
-            if (! $requestedFileFound && file_exists($requestedFile)) {
+                . DIRECTORY_SEPARATOR . $this->params('source');
+            if (!$requestedFileFound && file_exists($requestedFile)) {
                 $requestedFileFound = true;
                 break;
             }
         }
-        if (! $requestedFileFound
-             || is_null($this->params('source'))
+        if (!$requestedFileFound
+            || is_null($this->params('source'))
         ) {
             foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
                 $requestedFile = $location . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageLocation()
-                                 . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageNotFound();
+                    . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageNotFound();
                 if (file_exists($requestedFile)) {
                     break;
                 }
@@ -53,7 +55,7 @@ class StyleController extends GeneralAbstractController
          */
         $cacheDir = __DIR__ . '/../../../../../public/assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST
                 : 'test') . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'image';
-        if (! file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->params('source'))) {
+        if (!file_exists($cacheDir . DIRECTORY_SEPARATOR . $this->params('source'))) {
             //Save a copy of the file in the caching-folder
             file_put_contents(
                 $cacheDir . DIRECTORY_SEPARATOR . $this->params('source'),

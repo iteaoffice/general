@@ -13,10 +13,13 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use General\Entity;
 
 /**
  * @category    General
@@ -28,36 +31,36 @@ class VatType extends EntityRepository
      *
      * @return Query
      */
-    public function findFiltered(array $filter)
+    public function findFiltered(array $filter): Query
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('vt');
-        $queryBuilder->from("General\Entity\VatType", 'vt');
-        $queryBuilder->join("vt.vat", 'v');
+        $queryBuilder->select('general_entity_vattype');
+        $queryBuilder->from(Entity\VatType::class, 'general_entity_vattype');
+        $queryBuilder->join("general_entity_vattype.vat", 'general_entity_vat');
 
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('vt.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_vattype.id', $direction);
                 break;
             case 'type':
-                $queryBuilder->addOrderBy('vt.type', $direction);
+                $queryBuilder->addOrderBy('general_entity_vattype.type', $direction);
                 break;
             case 'description':
-                $queryBuilder->addOrderBy('vt.description', $direction);
+                $queryBuilder->addOrderBy('general_entity_vattype.description', $direction);
                 break;
             case 'vat':
-                $queryBuilder->addOrderBy('v.vat', $direction);
+                $queryBuilder->addOrderBy('general_entity_vat.code', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('vt.type', $direction);
+                $queryBuilder->addOrderBy('general_entity_vattype.type', $direction);
         }
 
         return $queryBuilder->getQuery();

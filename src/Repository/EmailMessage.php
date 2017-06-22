@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -29,14 +31,14 @@ class EmailMessage extends EntityRepository
      *
      * @return Query
      */
-    public function findFiltered(array $filter)
+    public function findFiltered(array $filter): Query
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_email_message');
         $queryBuilder->from(Entity\EmailMessage::class, 'general_entity_email_message');
         $queryBuilder->leftJoin('general_entity_email_message.contact', 'contact_entity_contact');
 
-        if (! empty($filter['search'])) {
+        if (!empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('contact_entity_contact.firstName', ':like'),
@@ -48,10 +50,10 @@ class EmailMessage extends EntityRepository
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
-        if (! empty($filter['latestEvent'])) {
+        if (!empty($filter['latestEvent'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()
-                             ->in('general_entity_email_message.latestEvent', $filter['latestEvent'])
+                    ->in('general_entity_email_message.latestEvent', $filter['latestEvent'])
             );
         }
 
@@ -83,7 +85,7 @@ class EmailMessage extends EntityRepository
     /**
      * @return array
      */
-    public function findPossibleLatestEvents()
+    public function findPossibleLatestEvents(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_email_message.latestEvent');

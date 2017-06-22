@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Service;
 
 use Affiliation\Service\AffiliationService;
@@ -71,7 +73,7 @@ class GeneralService extends ServiceAbstract
     public function findEmailMessageByIdentifier(string $identifier)
     {
         return $this->getEntityManager()->getRepository(Entity\EmailMessage::class)
-                    ->findOneBy(['identifier' => $identifier]);
+            ->findOneBy(['identifier' => $identifier]);
     }
 
     /**
@@ -198,7 +200,7 @@ class GeneralService extends ServiceAbstract
 
     /**
      * @param Call $call
-     * @param int  $which
+     * @param int $which
      *
      * @return Entity\Country[]
      */
@@ -214,7 +216,7 @@ class GeneralService extends ServiceAbstract
 
     /**
      * @param Project $project
-     * @param int     $which
+     * @param int $which
      *
      * @return Entity\Country[]|ArrayCollection;
      */
@@ -247,7 +249,7 @@ class GeneralService extends ServiceAbstract
      * Produce a list of countries active in a call and evaluation type.
      *
      * @param Evaluation\Type $type
-     * @param Call|null       $call
+     * @param Call|null $call
      *
      * @return Entity\Country[]
      */
@@ -263,37 +265,31 @@ class GeneralService extends ServiceAbstract
 
     /**
      * @param $info
-     *
-     * @return Entity\WebInfo|object
-     *
-     * @throws \InvalidArgumentException
+     * @return Entity\WebInfo|null|object
      */
-    public function findWebInfoByInfo($info)
+    public function findWebInfoByInfo($info): ?Entity\WebInfo
     {
         return $this->getEntityManager()->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
     }
 
     /**
      * @param $contentTypeName
-     *
-     * @return null|Entity\ContentType
-     *
-     * @throws \InvalidArgumentException
+     * @return Entity\ContentType
      */
-    public function findContentTypeByContentTypeName($contentTypeName)
+    public function findContentTypeByContentTypeName($contentTypeName): Entity\ContentType
     {
         /** @var Entity\ContentType $entity */
-        $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
-                       ->findOneBy(['contentType' => $contentTypeName]);
+        $contentType = $this->getEntityManager()->getRepository(Entity\ContentType::class)
+            ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
-        if (is_null($entity)) {
-            /** @var Entity\ContentType $entity */
-            $entity = $this->getEntityManager()->getRepository(Entity\ContentType::class)
-                           ->find(Entity\ContentType::TYPE_UNKNOWN);
+        if (is_null($contentType)) {
+            /** @var Entity\ContentType $contentType */
+            $contentType = $this->getEntityManager()->getRepository(Entity\ContentType::class)
+                ->find(Entity\ContentType::TYPE_UNKNOWN);
         }
 
-        return $entity;
+        return $contentType;
     }
 
     /**

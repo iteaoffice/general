@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -107,8 +109,8 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->projectChallenge = new Collections\ArrayCollection();
-        $this->boothChallenge   = new Collections\ArrayCollection();
-        $this->ideaChallenge    = new Collections\ArrayCollection();
+        $this->boothChallenge = new Collections\ArrayCollection();
+        $this->ideaChallenge = new Collections\ArrayCollection();
     }
 
     /**
@@ -139,7 +141,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->challenge;
     }
@@ -149,7 +151,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function parseAbstract()
+    public function parseAbstract(): string
     {
         $arrWords = explode(' ', strip_tags($this->description));
 

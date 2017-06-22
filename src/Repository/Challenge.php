@@ -13,10 +13,13 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use General\Entity;
 
 /**
  * @category    General
@@ -31,26 +34,26 @@ class Challenge extends EntityRepository
     public function findFiltered(array $filter)
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('c');
-        $queryBuilder->from("General\Entity\Challenge", 'c');
+        $queryBuilder->select('general_entity_challenge');
+        $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
 
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('c.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_challenge.id', $direction);
                 break;
             case 'challenge':
-                $queryBuilder->addOrderBy('c.challenge', $direction);
+                $queryBuilder->addOrderBy('general_entity_challenge.challenge', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('c.id', $direction);
+                $queryBuilder->addOrderBy('general_entity_challenge.challenge', 'ASC');
         }
 
         return $queryBuilder->getQuery();

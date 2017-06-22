@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Navigation\Factory;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
@@ -28,14 +30,17 @@ final class NavigationInvokableFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return AbstractNavigationInvokable
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {
-        /** @var $invokable AbstractNavigationInvokable */
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
+    ): AbstractNavigationInvokable {
+        /** @var AbstractNavigationInvokable $invokable */
         return new $requestedName($container, $options);
     }
 }
