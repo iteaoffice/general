@@ -33,8 +33,12 @@ class Country extends AssertionAbstract
      *
      * @return bool
      */
-    public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
-    {
+    public function assert(
+        Acl $acl,
+        RoleInterface $role = null,
+        ResourceInterface $resource = null,
+        $privilege = null
+    ): bool {
         return $this->rolesHaveAccess(Access::ACCESS_OFFICE);
     }
 }

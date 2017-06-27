@@ -19,20 +19,13 @@ use Admin\Service\AdminService;
 use Contact\Entity\Contact;
 use Interop\Container\ContainerInterface;
 use Zend\Http\Request;
-use Zend\Router\Http\RouteMatch;
 use Zend\Permissions\Acl\Assertion\AssertionInterface;
+use Zend\Router\Http\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Create a link to an document.
- *
- * @category   Project
- *
- * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
- * @license    https://itea3.org/license.txt proprietary
- *
- * @link       https://itea3.org
+ * Class AssertionAbstract
+ * @package General\Acl\Assertion
  */
 abstract class AssertionAbstract implements AssertionInterface
 {
@@ -70,7 +63,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return AssertionAbstract
      */
-    public function setPrivilege($privilege)
+    public function setPrivilege($privilege): AssertionAbstract
     {
         /**
          * When the privilege is_null (not given by the isAllowed helper), get it from the routeMatch
@@ -88,7 +81,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return bool
      */
-    public function hasRouteMatch()
+    public function hasRouteMatch(): bool
     {
         return !is_null($this->getRouteMatch());
     }
@@ -96,7 +89,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return RouteMatch
      */
-    public function getRouteMatch()
+    public function getRouteMatch(): ?RouteMatch
     {
         return $this->getServiceLocator()->get("Application")->getMvcEvent()->getRouteMatch();
     }
@@ -104,7 +97,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return ServiceLocatorInterface
      */
-    public function getServiceLocator()
+    public function getServiceLocator(): ContainerInterface
     {
         return $this->serviceLocator;
     }
@@ -114,7 +107,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return AssertionAbstract
      */
-    public function setServiceLocator($serviceLocator)
+    public function setServiceLocator($serviceLocator): AssertionAbstract
     {
         $this->serviceLocator = $serviceLocator;
 
@@ -124,7 +117,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         if (!is_null($id = $this->getRequest()->getPost('id'))) {
             return (int)$id;
@@ -144,7 +137,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return Request
      */
-    public function getRequest()
+    public function getRequest(): ?Request
     {
         return $this->getServiceLocator()->get('application')->getMvcEvent()->getRequest();
     }
@@ -156,7 +149,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return boolean
      */
-    protected function rolesHaveAccess($roles)
+    protected function rolesHaveAccess($roles): bool
     {
         if (!is_array($roles)) {
             $roles = [$roles];
@@ -165,7 +158,7 @@ abstract class AssertionAbstract implements AssertionInterface
         $roles = array_map('strtolower', $roles);
 
         foreach ($this->getAccessRoles() as $access) {
-            if (in_array(strtolower($access), $roles)) {
+            if (in_array(strtolower($access), $roles, true)) {
                 return true;
             }
         }
@@ -176,7 +169,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return array
      */
-    public function getAccessRoles()
+    public function getAccessRoles(): array
     {
         if (empty($this->accessRoles) && $this->hasContact()) {
             $this->accessRoles = $this->getAdminService()->findAccessRolesByContactAsArray($this->getContact());
@@ -188,7 +181,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return bool
      */
-    public function hasContact()
+    public function hasContact(): bool
     {
         return !$this->getContact()->isEmpty();
     }
@@ -196,7 +189,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return Contact
      */
-    public function getContact()
+    public function getContact(): Contact
     {
         if (is_null($this->contact)) {
             $this->contact = new Contact();
@@ -210,7 +203,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return AssertionAbstract
      */
-    public function setContact($contact)
+    public function setContact($contact): AssertionAbstract
     {
         $this->contact = $contact;
 
@@ -220,7 +213,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return AdminService
      */
-    public function getAdminService()
+    public function getAdminService(): AdminService
     {
         return $this->adminService;
     }
@@ -230,7 +223,7 @@ abstract class AssertionAbstract implements AssertionInterface
      *
      * @return AssertionAbstract
      */
-    public function setAdminService($adminService)
+    public function setAdminService($adminService): AssertionAbstract
     {
         $this->adminService = $adminService;
 
