@@ -137,6 +137,15 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
@@ -159,9 +168,9 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -171,7 +180,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setId($id)
+    public function setId(int $id): Challenge
     {
         $this->id = $id;
 
@@ -191,7 +200,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setChallenge($challenge)
+    public function setChallenge(string $challenge): Challenge
     {
         $this->challenge = $challenge;
 
@@ -211,7 +220,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setDocRef($docRef)
+    public function setDocRef(string $docRef): Challenge
     {
         $this->docRef = $docRef;
 
@@ -231,7 +240,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setDescription($description)
+    public function setDescription(string $description): Challenge
     {
         $this->description = $description;
 
@@ -251,7 +260,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setBackgroundColor($backgroundColor)
+    public function setBackgroundColor(string $backgroundColor): Challenge
     {
         $this->backgroundColor = $backgroundColor;
 
@@ -271,7 +280,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @return Challenge
      */
-    public function setFrontColor($frontColor)
+    public function setFrontColor(string $frontColor): Challenge
     {
         $this->frontColor = $frontColor;
 
