@@ -210,7 +210,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
