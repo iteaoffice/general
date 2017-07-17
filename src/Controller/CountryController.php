@@ -20,7 +20,8 @@ use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
- *
+ * Class CountryController
+ * @package General\Controller
  */
 class CountryController extends GeneralAbstractController
 {
@@ -39,7 +40,7 @@ class CountryController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new CountryFilter($this->getGeneralService());
+        $form = new CountryFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -78,7 +79,6 @@ class CountryController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(Country::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -125,11 +125,14 @@ class CountryController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
+                /** @var Country $country */
+                $country = $form->getData();
+
+                $country = $this->getGeneralService()->updateEntity($country);
                 $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $country->getId(),
                     ]
                 );
             }

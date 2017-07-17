@@ -18,6 +18,8 @@ declare(strict_types=1);
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use DoctrineModule\Validator\UniqueObject;
+use General\Entity\Gender;
 use Zend\InputFilter\InputFilter;
 
 /**
@@ -50,6 +52,15 @@ class GenderFilter extends InputFilter
                             'encoding' => 'UTF-8',
                             'min'      => 1,
                             'max'      => 100,
+                        ],
+                    ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Gender::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'name',
                         ],
                     ],
                 ],

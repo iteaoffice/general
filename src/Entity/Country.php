@@ -34,7 +34,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="country_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */

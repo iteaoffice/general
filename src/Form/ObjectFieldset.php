@@ -28,12 +28,8 @@ use Zend\Form\Element\Radio;
 use Zend\Form\Fieldset;
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    Affiliation
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class ObjectFieldset
+ * @package General\Form
  */
 class ObjectFieldset extends Fieldset
 {

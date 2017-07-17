@@ -1,0 +1,151 @@
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+
+<div class="row">
+
+    <div class="col-md-9">
+        <h1>{{ translate("txt-impact-stream") }}</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group">
+                    {{ formelement(form.get('query')) }}
+                    <span class="input-group-btn">
+                {{ formelement(form.get('search')) }}
+                        {{ formelement(form.get('reset')) }}
+            </span>
+                </div>
+            </div>
+        </div>
+
+        <img class="img-responsive center-block" src="assets/img/hr.png">
+
+
+        {% if paginator.pageRange > 0 %}
+            <div class="row">
+            {% for resultField in paginator.getCurrentItems() %}
+
+                <div class="col-md-12">
+
+
+                    {% set result = projectService.findEntityById("Project\\Entity\\Result\\Result", resultField['result_id']) %}
+
+                    <h2>{{ resultLink(result,'view-public','name') }}</h2>
+
+                    <div class="result-list-detailed-body">
+
+
+
+                        {#{{ result.abstract|raw }}#}
+
+                        {% set highlightDoc = highlighting.getResult(resultField['id']) %}
+                        {% if highlightDoc and highlightDoc is not empty %}
+                            <dl class="dl-horizontal">
+                            {% for field, highlight in highlightDoc %}
+                                <dt>{{ highlightingFields[field] }}: </dt>
+                                <dd>...{{ highlight|join(' (...) ')|striptags('<mark>')|raw }}...</dd>
+                            {% endfor %}
+                            </dl>
+                        {% else %}
+
+                            {% if result.image %}
+                                <div class="pull-right result-list-detailed-image">{{ image(result.image, 150) }}</div>
+                            {% endif %}
+
+                            <p>{{ result.abstract }}</p>
+
+                            <p class="clearfix"><br>{{ resultLink(result,'view-public','readMore') }}
+                        {% endif %}
+
+
+
+
+                    </div>
+
+
+                    <div class="well well-sm">
+            <span class="text-muted">
+                <input type="checkbox" class="result" value="{{ result.id }}">
+                {#{% for project in projectService.findProjectsByResult(result) %}{{ projectLink(project, 'view','name-without-number') }}{% if not loop.last %} &middot; {% endif %}{% endfor %}#}
+                {#{% for organisation in organisationService.findOrganisationByResult(result) %} &middot; {{ organisationLink(organisation, 'view','name') }}{% endfor %}#}
+                <a href="{{ url('impact-stream/download-single',{'docRef': result.docRef} ) }}"><i
+                                class="fa fa-file-pdf-o"></i></a>
+            </span>
+                    </div>
+
+
+                </div>
+
+
+                {% if loop.index is divisible by(1) %}
+
+                    </div>
+                    <img class="img-responsive center-block" src="assets/img/hr.png">
+                    <div class="row">
+                {% endif %}
+
+            {% endfor %}
+
+            </div>
+            <br class="clearfix">
+            {% include 'general/partial/pagination-control' %}
+            <a class="btn btn-primary"
+               href="{{ url('impact-stream/download') }}?{{ arguments }}">{{ translate("txt-generate-pdf-for-all-results") }}</a>
+            <a class="btn btn-primary hidden" id="download_generated"
+               href="">{{ translate("txt-generate-pdf-for-selected-results") }}</a>
+
+
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-impact-stream-could-be-found"))|raw }}
+        {% endif %}
+
+
+    </div>
+    <div class="col-md-3">
+        <div class="well well-sm">
+            {% set facets = form.get('facet') %}
+            {% for facet in facets %}
+                {{ ztbformelement(facet) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}
+
+
+<script type="text/javascript">
+    $(function () {
+        $('input[type="checkbox"]').not('.result').on('click', function () {
+            $('#search').submit();
+        });
+        $('#searchButton').on('click', function () {
+            $('#search').submit();
+        });
+        $('#resetButton').on('click', function () {
+            $('input[type="checkbox"]').each(function () {
+                this.removeAttribute('checked');
+            });
+            $('input[name="query"]').val('');
+            $('#search').submit();
+        });
+
+
+        $('.result').on('change', function (e) {
+
+            var string = '{{ url('impact-stream/download-selected') }}?result=';
+            var toggled = false;
+            $('.result').each(function () {
+                if ($(this).prop('checked')) {
+                    toggled = true;
+                    string += $(this).val();
+                    string += ',';
+                }
+            });
+
+            $('#download_generated').attr('href', string.replace(/(^,)|(,$)/g, "")).toggleClass('hidden', !toggled);
+
+        });
+
+    });
+</script>

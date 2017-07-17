@@ -35,7 +35,7 @@ class TitleLabel extends AbstractNavigationInvokable
      *
      * @return void
      */
-    public function __invoke(Mvc $page)
+    public function __invoke(Mvc $page): void
     {
         if ($this->getEntities()->containsKey(Title::class)) {
             /** @var Title $title */

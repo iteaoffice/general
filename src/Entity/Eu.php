@@ -103,7 +103,7 @@ class Eu extends EntityAbstract
      */
     public function __toString(): string
     {
-        return (string)$this->name;
+        return (string)$this->country;
     }
 
     /**

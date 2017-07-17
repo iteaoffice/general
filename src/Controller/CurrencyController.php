@@ -39,7 +39,7 @@ class CurrencyController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new CurrencyFilter($this->getGeneralService());
+        $form = new CurrencyFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -78,7 +78,6 @@ class CurrencyController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(Currency::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -125,11 +124,14 @@ class CurrencyController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
+                /** @var Currency $currency */
+                $currency = $form->getData();
+
+                $currency = $this->getGeneralService()->updateEntity($currency);
                 $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $currency->getId(),
                     ]
                 );
             }

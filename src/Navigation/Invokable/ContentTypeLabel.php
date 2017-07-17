@@ -35,7 +35,7 @@ class ContentTypeLabel extends AbstractNavigationInvokable
      *
      * @return void
      */
-    public function __invoke(Mvc $page)
+    public function __invoke(Mvc $page): void
     {
         if ($this->getEntities()->containsKey(ContentType::class)) {
             /** @var ContentType $type */

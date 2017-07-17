@@ -252,12 +252,12 @@ return [
                             ],
                         ],
                     ],
-                    'challenge'    => [
+                    'password'     => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/challenge',
+                            'route'    => '/password',
                             'defaults' => [
-                                'controller' => Controller\ChallengeController::class,
+                                'controller' => Controller\PasswordController::class,
                                 'action'     => 'list',
                             ],
                         ],
@@ -296,6 +296,64 @@ return [
                                     'route'    => '/new.html',
                                     'defaults' => [
                                         'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'challenge'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/challenge',
+                            'defaults' => [
+                                'controller' => Controller\ChallengeController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                            'edit'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/edit/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'new'          => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/new.html',
+                                    'defaults' => [
+                                        'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                            'download-pdf' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/download/[:id].pdf',
+                                    'defaults' => [
+                                        'action' => 'download-pdf',
                                     ],
                                 ],
                             ],

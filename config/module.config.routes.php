@@ -13,7 +13,7 @@ use General\Controller;
 return [
     'router' => [
         'routes' => [
-            'assets'       => [
+            'assets'        => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
@@ -57,9 +57,29 @@ return [
                             ],
                         ],
                     ],
+                    'challenge-icon'    => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => "/challenge/icon-[:id]-[:width].[:ext]",
+                            'defaults' => [
+                                'controller' => Controller\ChallengeController::class,
+                                'action'     => 'icon',
+                            ],
+                        ],
+                    ],
+                    'challenge-image'   => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => "/challenge/image-[:id]-[:width].[:ext]",
+                            'defaults' => [
+                                'controller' => Controller\ChallengeController::class,
+                                'action'     => 'image',
+                            ],
+                        ],
+                    ],
                 ],
             ],
-            'country'      => [
+            'country'       => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
@@ -82,7 +102,48 @@ return [
                     ],
                 ],
             ],
-            'content-type' => [
+            'impact-stream' => [
+                'type'          => 'Literal',
+                'priority'      => 1000,
+                'options'       => [
+                    'route'    => '/impact-stream',
+                    'defaults' => [
+                        'controller' => Controller\ImpactStreamController::class,
+                        'action'     => 'impact-stream',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'download'          => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download.html',
+                            'defaults' => [
+                                'action' => 'download',
+                            ],
+                        ],
+                    ],
+                    'download-selected' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download/selected.html',
+                            'defaults' => [
+                                'action' => 'download-selected',
+                            ],
+                        ],
+                    ],
+                    'download-single'   => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download/[:docRef].pdf',
+                            'defaults' => [
+                                'action' => 'download-single',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'content-type'  => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
@@ -105,7 +166,7 @@ return [
                     ],
                 ],
             ],
-            'email'        => [
+            'email'         => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [

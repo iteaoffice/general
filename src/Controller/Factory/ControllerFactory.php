@@ -24,6 +24,7 @@ use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
 use Interop\Container\ContainerInterface;
+use Project\Service\ProjectService;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\View\HelperPluginManager;
@@ -61,6 +62,10 @@ final class ControllerFactory implements FactoryInterface
         /** @var GeneralService $generalService */
         $generalService = $container->get(GeneralService::class);
         $controller->setGeneralService($generalService);
+
+        /** @var ProjectService $projectService */
+        $projectService = $container->get(ProjectService::class);
+        $controller->setProjectService($projectService);
 
         /** @var EmailService $emailService */
         $emailService = $container->get(EmailService::class);

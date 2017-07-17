@@ -135,6 +135,40 @@ return [
                                 'visible' => false,
                             ],
                         ],
+                    ],'password'      => [
+                        'label' => _("txt-nav-password-list"),
+                        'route' => 'zfcadmin/password/list',
+                        'pages' => [
+                            'password-view' => [
+                                'route'   => 'zfcadmin/password/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Password::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\PasswordLabel::class,
+                                    ],
+                                ],
+                                'pages'   => [
+                                    'password-edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/password/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Password::class,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'password-new'  => [
+                                'label'   => _("txt-new-password"),
+                                'route'   => 'zfcadmin/password/new',
+                                'visible' => false,
+                            ],
+                        ],
                     ],
                     'challenge'    => [
                         'label' => _("txt-nav-challenge-list"),

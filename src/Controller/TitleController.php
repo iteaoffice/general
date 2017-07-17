@@ -44,7 +44,7 @@ class TitleController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new TitleFilter($this->getGeneralService());
+        $form = new TitleFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -83,7 +83,6 @@ class TitleController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(Title::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -108,9 +107,7 @@ class TitleController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {
@@ -132,11 +129,14 @@ class TitleController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
+                /** @var Title $title */
+                $title = $form->getData();
+
+                $title = $this->getGeneralService()->updateEntity($title);
                 $this->redirect()->toRoute(
                     'zfcadmin/title/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $title->getId(),
                     ]
                 );
             }

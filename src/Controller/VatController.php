@@ -44,7 +44,7 @@ class VatController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new VatFilter($this->getGeneralService());
+        $form = new VatFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -83,7 +83,6 @@ class VatController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(Vat::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -108,9 +107,7 @@ class VatController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {
@@ -135,11 +132,12 @@ class VatController extends GeneralAbstractController
             if ($form->isValid()) {
                 /** @var Vat $vat */
                 $vat = $form->getData();
-                $result = $this->getGeneralService()->updateEntity($vat);
+
+                $vat = $this->getGeneralService()->updateEntity($vat);
                 $this->redirect()->toRoute(
                     'zfcadmin/vat/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $vat->getId(),
                     ]
                 );
             }

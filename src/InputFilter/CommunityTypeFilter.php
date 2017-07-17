@@ -17,25 +17,18 @@ declare(strict_types=1);
 
 namespace General\InputFilter;
 
-use Doctrine\ORM\EntityManager;
 use Zend\InputFilter\InputFilter;
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    Partner
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class CommunityTypeFilter
+ * @package General\InputFilter
  */
 class CommunityTypeFilter extends InputFilter
 {
     /**
-     * PartnerFilter constructor.
-     *
-     * @param EntityManager $entityManager
+     * CommunityTypeFilter constructor.
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct()
     {
         $inputFilter = new InputFilter();
         $inputFilter->add(

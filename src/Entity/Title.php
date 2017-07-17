@@ -37,7 +37,7 @@ class Title extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="title_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */

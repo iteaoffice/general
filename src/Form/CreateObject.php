@@ -22,12 +22,8 @@ use General\Entity\EntityAbstract;
 use Zend\Form\Form;
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    General
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class CreateObject
+ * @package General\Form
  */
 class CreateObject extends Form
 {
@@ -84,12 +80,10 @@ class CreateObject extends Form
                 ],
             ]
         );
-        $this->add(
-            [
-                'type' => 'Zend\Form\Element\Csrf',
-                'name' => 'csrf',
-            ]
-        );
+        $this->add([
+            'type' => 'Zend\Form\Element\Csrf',
+            'name' => 'csrf',
+        ]);
         $this->add(
             [
                 'type'       => 'Zend\Form\Element\Submit',

@@ -208,6 +208,18 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $contractVersionDocument;
     /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Image", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Challenge\Image[]|Collections\ArrayCollection
+     */
+    private $challengeImage;
+    /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Icon", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Challenge\Icon[]|Collections\ArrayCollection
+     */
+    private $challengeIcon;
+    /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      * @var \Calendar\Entity\Document[]|Collections\ArrayCollection
@@ -265,6 +277,8 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->versionDocument = new Collections\ArrayCollection();
         $this->contractDocument = new Collections\ArrayCollection();
         $this->contractVersionDocument = new Collections\ArrayCollection();
+        $this->challengeIcon = new Collections\ArrayCollection();
+        $this->challengeImage = new Collections\ArrayCollection();
         $this->calendarDocument = new Collections\ArrayCollection();
         $this->loi = new Collections\ArrayCollection();
         $this->meetingFloorplan = new Collections\ArrayCollection();
@@ -994,6 +1008,44 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setContractVersionDocument($contractVersionDocument): ContentType
     {
         $this->contractVersionDocument = $contractVersionDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|Challenge\Image[]
+     */
+    public function getChallengeImage()
+    {
+        return $this->challengeImage;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Image[] $challengeImage
+     * @return ContentType
+     */
+    public function setChallengeImage($challengeImage): ContentType
+    {
+        $this->challengeImage = $challengeImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|Challenge\Icon[]
+     */
+    public function getChallengeIcon()
+    {
+        return $this->challengeIcon;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Icon[] $challengeIcon
+     * @return ContentType
+     */
+    public function setChallengeIcon($challengeIcon): ContentType
+    {
+        $this->challengeIcon = $challengeIcon;
 
         return $this;
     }

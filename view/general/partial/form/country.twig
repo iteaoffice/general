@@ -5,6 +5,7 @@
 
 {% set country = form.get('general_entity_country') %}
 
+{{ ztbformelement(country.get('id')) }}
 {{ ztbformelement(country.get('country')) }}
 {{ ztbformelement(country.get('cd')) }}
 {{ ztbformelement(country.get('iso3')) }}

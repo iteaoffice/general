@@ -35,7 +35,7 @@ class CountryLabel extends AbstractNavigationInvokable
      *
      * @return void
      */
-    public function __invoke(Mvc $page)
+    public function __invoke(Mvc $page): void
     {
         if ($this->getEntities()->containsKey(Country::class)) {
             /** @var Country $country */

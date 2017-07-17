@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace General\Form;
 
-use General\Service\GeneralService;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
@@ -30,9 +29,9 @@ use Zend\Form\Form;
 class GenderFilter extends Form
 {
     /**
-     * @param GeneralService $mailingService
+     * GenderFilter constructor.
      */
-    public function __construct(GeneralService $mailingService)
+    public function __construct()
     {
         parent::__construct();
         $this->setAttribute('method', 'get');

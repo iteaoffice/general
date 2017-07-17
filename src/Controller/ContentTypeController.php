@@ -42,7 +42,7 @@ class ContentTypeController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new ContentTypeFilter($this->getGeneralService());
+        $form = new ContentTypeFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -81,7 +81,6 @@ class ContentTypeController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(ContentType::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -106,9 +105,7 @@ class ContentTypeController extends GeneralAbstractController
     }
 
     /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function editAction()
     {
@@ -130,11 +127,14 @@ class ContentTypeController extends GeneralAbstractController
             }
 
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
+                /** @var ContentType $contentType */
+                $contentType = $form->getData();
+
+                $contentType = $this->getGeneralService()->updateEntity($contentType);
                 $this->redirect()->toRoute(
                     'zfcadmin/content-type/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $contentType->getId(),
                     ]
                 );
             }

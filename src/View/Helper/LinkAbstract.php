@@ -16,10 +16,12 @@ namespace General\View\Helper;
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
 use General\Acl\Assertion\AssertionAbstract;
+use General\Entity\Challenge;
 use General\Entity\ContentType;
 use General\Entity\Country;
 use General\Entity\Currency;
 use General\Entity\EntityAbstract;
+use General\Entity\Password;
 use General\Entity\WebInfo;
 use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
@@ -61,7 +63,14 @@ abstract class LinkAbstract extends AbstractViewHelper
      * @var Currency
      */
     protected $currency;
-
+    /**
+     * @var Challenge
+     */
+    protected $challenge;
+    /**
+     * @var Password
+     */
+    protected $password;
     /**
      * @var string
      */
@@ -120,9 +129,9 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      *
      */
-    public function parseAction()
+    public function parseAction(): void
     {
-        return $this->action = null;
+        $this->action = null;
     }
 
     /**
@@ -149,6 +158,9 @@ abstract class LinkAbstract extends AbstractViewHelper
                         break;
                     case 'view':
                         $this->addLinkContent('<i class="fa fa-external-link"></i>');
+                        break;
+                    case 'download-pdf':
+                        $this->addLinkContent('<i class="fa fa-file-pdf-o"></i>');
                         break;
                     default:
                         $this->addLinkContent('<i class="fa fa-file-o"></i>');
@@ -269,10 +281,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (!is_array($classes)) {
-            $classes = [$classes];
-        }
-        foreach ($classes as $class) {
+        foreach ((array)$classes as $class) {
             $this->classes[] = $class;
         }
 
@@ -471,7 +480,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return ContentType
      */
-    public function getContentType()
+    public function getContentType(): ContentType
     {
         if (is_null($this->contentType)) {
             $this->contentType = new ContentType();
@@ -485,7 +494,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setContentType($contentType)
+    public function setContentType($contentType): LinkAbstract
     {
         $this->contentType = $contentType;
 
@@ -512,6 +521,53 @@ abstract class LinkAbstract extends AbstractViewHelper
     public function setCurrency($currency): LinkAbstract
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return Challenge
+     */
+    public function getChallenge(): Challenge
+    {
+        if (is_null($this->challenge)) {
+            $this->challenge = new Challenge();
+        }
+
+        return $this->challenge;
+    }
+
+    /**
+     * @param Challenge $challenge
+     *
+     * @return LinkAbstract
+     */
+    public function setChallenge(Challenge $challenge = null): LinkAbstract
+    {
+        $this->challenge = $challenge;
+
+        return $this;
+    }
+
+    /**
+     * @return Password
+     */
+    public function getPassword(): Password
+    {
+        if (is_null($this->password)) {
+            $this->password = new Password();
+        }
+
+        return $this->password;
+    }
+
+    /**
+     * @param Password $password
+     * @return LinkAbstract
+     */
+    public function setPassword(Password $password = null): LinkAbstract
+    {
+        $this->password = $password;
 
         return $this;
     }

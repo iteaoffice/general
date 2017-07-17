@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use DoctrineModule\Validator\UniqueObject;
 use General\Entity;
 use Zend\InputFilter\InputFilter;
 
@@ -49,7 +50,7 @@ class WebInfoFilter extends InputFilter
                         ],
                     ],
                     [
-                        'name'    => '\DoctrineModule\Validator\UniqueObject',
+                        'name'    => UniqueObject::class,
                         'options' => [
                             'object_repository' => $entityManager->getRepository(Entity\WebInfo::class),
                             'object_manager'    => $entityManager,

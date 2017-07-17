@@ -21,6 +21,7 @@ use General\Repository;
 use Program\Entity\Call\Call;
 use Project\Entity\Evaluation;
 use Project\Entity\Project;
+use Project\Entity\Result\Result;
 use Zend\Http\Client;
 use Zend\Http\Response;
 use Zend\Json\Json;
@@ -79,7 +80,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @return Entity\ContentType[]
      */
-    public function findContentTypeByImage()
+    public function findContentTypeByImage(): array
     {
         /** @var Repository\ContentType $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\ContentType::class);
@@ -90,7 +91,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @return Entity\Country[]
      */
-    public function findActiveCountries()
+    public function findActiveCountries(): array
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -101,7 +102,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @return Entity\Country[]
      */
-    public function findCountryInProjectLog()
+    public function findCountryInProjectLog(): array
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -112,7 +113,7 @@ class GeneralService extends ServiceAbstract
     /**
      * @return Entity\Country[]
      */
-    public function findItacCountries()
+    public function findItacCountries(): array
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -127,7 +128,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByIso3($iso3)
+    public function findCountryByIso3($iso3):?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -140,7 +141,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|Entity\Gender|object
      */
-    public function findGenderByGender($gender)
+    public function findGenderByGender($gender):?Entity\Gender
     {
         return $this->getEntityManager()->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
     }
@@ -150,7 +151,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|Entity\Title|object
      */
-    public function findTitleByTitle($title)
+    public function findTitleByTitle($title):?Entity\Title
     {
         return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
     }
@@ -162,7 +163,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByName($name)
+    public function findCountryByName($name):?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -177,7 +178,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByCD($cd)
+    public function findCountryByCD($cd):?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -190,7 +191,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return array
      */
-    public function findCountriesByMeeting(Meeting $meeting)
+    public function findCountriesByMeeting(Meeting $meeting): array
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -207,7 +208,7 @@ class GeneralService extends ServiceAbstract
     public function findCountryByCall(
         Call $call,
         $which = AffiliationService::WHICH_ONLY_ACTIVE
-    ) {
+    ): array {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
 
@@ -223,7 +224,7 @@ class GeneralService extends ServiceAbstract
     public function findCountryByProject(
         Project $project,
         $which = AffiliationService::WHICH_ONLY_ACTIVE
-    ) {
+    ): ArrayCollection {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
 
@@ -235,9 +236,9 @@ class GeneralService extends ServiceAbstract
      *
      * @param Project $project
      *
-     * @return null|Entity\Country[]
+     * @return null|Entity\Country
      */
-    public function findCountryOfProjectContact(Project $project)
+    public function findCountryOfProjectContact(Project $project):?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -256,7 +257,7 @@ class GeneralService extends ServiceAbstract
     public function findCountryByEvaluationTypeAndCall(
         Evaluation\Type $type,
         Call $call = null
-    ) {
+    ): array {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
 
@@ -321,8 +322,30 @@ class GeneralService extends ServiceAbstract
      *
      * @return \General\Entity\Challenge|object
      */
-    public function findChallengeById($id)
+    public function findChallengeById($id): Entity\Challenge
     {
         return $this->getEntityManager()->getRepository(Entity\Challenge::class)->find($id);
+    }
+
+    /**
+     * @param Result $result
+     * @return array|Entity\Challenge[]
+     */
+    public function parseChallengesByResult(Result $result): array
+    {
+        $challenges = [];
+        //Add the challenge fromm the project
+        foreach ($result->getProject()->getProjectChallenge() as $projectChallenge) {
+            $challenge = $projectChallenge->getChallenge();
+
+            $challenges[$challenge->getId()] = $challenge;
+        }
+
+        //add the challenge from the result
+        foreach ($result->getChallenge() as $challenge) {
+            $challenges[$challenge->getId()] = $challenge;
+        }
+
+        return $challenges;
     }
 }

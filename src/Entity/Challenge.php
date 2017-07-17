@@ -34,7 +34,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @ORM\Column(name="challenge_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */
@@ -42,8 +42,8 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="challenge",type="string",unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-challenge","rows":30})
-     * @Annotation\Attributes({"rows":30})
+     * @Annotation\Options({"label":"txt-challenge-challenge-label","help-block":"txt-challenge-challenge-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-challenge-placeholder"})
      *
      * @var string
      */
@@ -59,23 +59,33 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="description",type="string")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
-     * @Annotation\Options({"label":"txt-description"})
+     * @Annotation\Options({"label":"txt-challenge-description-label","help-block":"txt-challenge-description-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-description-placeholder"})
      * @Annotation\Attributes({"rows":30})
      *
      * @var string
      */
     private $description;
     /**
-     * @ORM\Column(name="backcolor",type="string",length=20,unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
-     * @Annotation\Options({"label":"txt-background-color"})
+     * @ORM\Column(name="sources",type="text", nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Options({"label":"txt-challenge-sources-label","help-block":"txt-challenge-sources-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-sources-placeholder"})
+     *
+     * @var string
+     */
+    private $sources;
+    /**
+     * @ORM\Column(name="backcolor",type="string",length=20,unique=false)
+     * @Annotation\Type("\Zend\Form\Element\Color")
+     * @Annotation\Options({"label":"txt-challenge-background-color-label","help-block":"txt-challenge-background-color-help-block"})
      *
      * @var string
      */
     private $backgroundColor;
     /**
-     * @ORM\Column(name="frontcolor",type="string",length=20,unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @ORM\Column(name="frontcolor",type="string",length=20,unique=false)
+     * @Annotation\Type("\Zend\Form\Element\Color")
      * @Annotation\Options({"label":"txt-front-color"})
      *
      * @var string
@@ -88,6 +98,13 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @var \Project\Entity\Challenge[]|Collections\ArrayCollection
      */
     private $projectChallenge;
+    /**
+     * @ORM\ManyToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="challenge")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Result\Result[]|Collections\ArrayCollection
+     */
+    private $result;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
@@ -102,12 +119,37 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @var \Event\Entity\Booth\Challenge[]|Collections\ArrayCollection
      */
     private $boothChallenge;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Image", cascade={"persist","remove"}, mappedBy="challenge")
+     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Options({"label":"txt-challenge-image-label","help-block":"txt-challenge-image-help-block"})
+     *
+     * @var \General\Entity\Challenge\Image
+     */
+    private $image;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Icon", cascade={"persist","remove"}, mappedBy="challenge")
+     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Options({"label":"txt-challenge-icon-label","help-block":"txt-challenge-icon-help-block"})
+     *
+     * @var \General\Entity\Challenge\Icon
+     */
+    private $icon;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Pdf", cascade={"persist","remove"}, mappedBy="challenge")
+     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Options({"label":"txt-challenge-pdf-label","help-block":"txt-challenge-pdf-help-block"})
+     *
+     * @var \General\Entity\Challenge\Pdf
+     */
+    private $pdf;
 
     /**
      * Class constructor.
      */
     public function __construct()
     {
+        $this->result = new Collections\ArrayCollection();
         $this->projectChallenge = new Collections\ArrayCollection();
         $this->boothChallenge = new Collections\ArrayCollection();
         $this->ideaChallenge = new Collections\ArrayCollection();
@@ -137,6 +179,15 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
@@ -161,17 +212,16 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * @param int $id
-     *
      * @return Challenge
      */
-    public function setId($id)
+    public function setId(int $id): Challenge
     {
         $this->id = $id;
 
@@ -181,17 +231,16 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getChallenge()
+    public function getChallenge(): ?string
     {
         return $this->challenge;
     }
 
     /**
      * @param string $challenge
-     *
      * @return Challenge
      */
-    public function setChallenge($challenge)
+    public function setChallenge(string $challenge): Challenge
     {
         $this->challenge = $challenge;
 
@@ -201,17 +250,16 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getDocRef()
+    public function getDocRef(): ?string
     {
         return $this->docRef;
     }
 
     /**
      * @param string $docRef
-     *
      * @return Challenge
      */
-    public function setDocRef($docRef)
+    public function setDocRef(string $docRef): Challenge
     {
         $this->docRef = $docRef;
 
@@ -221,17 +269,16 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
      * @param string $description
-     *
      * @return Challenge
      */
-    public function setDescription($description)
+    public function setDescription(string $description): Challenge
     {
         $this->description = $description;
 
@@ -241,17 +288,35 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getBackgroundColor()
+    public function getSources(): ?string
+    {
+        return $this->sources;
+    }
+
+    /**
+     * @param string $sources
+     * @return Challenge
+     */
+    public function setSources(string $sources): Challenge
+    {
+        $this->sources = $sources;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackgroundColor(): ?string
     {
         return $this->backgroundColor;
     }
 
     /**
      * @param string $backgroundColor
-     *
      * @return Challenge
      */
-    public function setBackgroundColor($backgroundColor)
+    public function setBackgroundColor(string $backgroundColor): Challenge
     {
         $this->backgroundColor = $backgroundColor;
 
@@ -261,17 +326,16 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function getFrontColor()
+    public function getFrontColor(): ?string
     {
         return $this->frontColor;
     }
 
     /**
      * @param string $frontColor
-     *
      * @return Challenge
      */
-    public function setFrontColor($frontColor)
+    public function setFrontColor(string $frontColor): Challenge
     {
         $this->frontColor = $frontColor;
 
@@ -287,11 +351,29 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
-     *
+     * @return Collections\ArrayCollection|\Project\Entity\Result\Result[]|iterable
+     */
+    public function getResult(): iterable
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Result\Result[] $result
      * @return Challenge
      */
-    public function setProjectChallenge($projectChallenge)
+    public function setResult($result): Challenge
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
+     * @return Challenge
+     */
+    public function setProjectChallenge($projectChallenge): Challenge
     {
         $this->projectChallenge = $projectChallenge;
 
@@ -308,10 +390,9 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Idea\Challenge[] $ideaChallenge
-     *
      * @return Challenge
      */
-    public function setIdeaChallenge($ideaChallenge)
+    public function setIdeaChallenge($ideaChallenge): Challenge
     {
         $this->ideaChallenge = $ideaChallenge;
 
@@ -328,12 +409,68 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Event\Entity\Booth\Challenge[] $boothChallenge
-     *
      * @return Challenge
      */
-    public function setBoothChallenge($boothChallenge)
+    public function setBoothChallenge($boothChallenge): Challenge
     {
         $this->boothChallenge = $boothChallenge;
+
+        return $this;
+    }
+
+    /**
+     * @return Challenge\Image
+     */
+    public function getImage(): ?Challenge\Image
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Image $image
+     * @return Challenge
+     */
+    public function setImage($image): Challenge
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Challenge\Icon
+     */
+    public function getIcon(): ?Challenge\Icon
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Icon $icon
+     * @return Challenge
+     */
+    public function setIcon($icon): Challenge
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * @return Challenge\Pdf
+     */
+    public function getPdf(): ?Challenge\Pdf
+    {
+        return $this->pdf;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Pdf $pdf
+     * @return Challenge
+     */
+    public function setPdf($pdf): Challenge
+    {
+        $this->pdf = $pdf;
 
         return $this;
     }

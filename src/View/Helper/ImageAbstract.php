@@ -54,7 +54,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      *
      * @return string
      */
-    public function createImageUrl()
+    public function createImageUrl(): string
     {
         /**
          * @var Url $url
@@ -73,9 +73,9 @@ abstract class ImageAbstract extends AbstractViewHelper
 
         if (!$this->lightBox) {
             return $image;
-        } else {
-            return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
         }
+
+        return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      * @param        $value
      * @param bool $allowNull
      */
-    public function addRouterParam($key, $value, $allowNull = true)
+    public function addRouterParam($key, $value, $allowNull = true): void
     {
         if (!$allowNull && is_null($value)) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
@@ -142,10 +142,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (!is_array($classes)) {
-            $classes = [$classes];
-        }
-        foreach ($classes as $class) {
+        foreach ((array)$classes as $class) {
             $this->classes[] = $class;
         }
 

@@ -1,0 +1,58 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-password-list")) %}
+
+{% do form.prepare() %}
+{{ form().openTag(form)|raw }}
+{% set filter = form.get('filter') %}
+
+<input type="hidden" name="filter[order]" value="{{ order }}">
+<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
+<div class="row">
+
+    <div class="col-md-12">
+        <h1>{{ translate("txt-password-list") }} {{ passwordLink(null, 'new','button') }}</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="lead">{{ translate("txt-password-list-explanation") }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+            </div>
+        </div>
+
+        {% if paginator.pageRange > 0 %}
+            <table class="table table-hover table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'name', 'text': translate('txt-description')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'website', 'text': translate('txt-website')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'account', 'text': translate('txt-account')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'username', 'text': translate('txt-username')} %}</th>
+                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'password', 'text': translate('txt-password')} %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for password in paginator.getCurrentItems() %}
+                    <tr>
+                        <td>{{ passwordLink(password,'view','description') }} {{ passwordLink(password,'edit', 'icon') }}</td>
+                        <td>{{ password.website }}</td>
+                        <td>{{ password.account }}</td>
+                        <td>{{ password.username }}</td>
+                        <td>{{ password.password }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'general/partial/pagination-control' %}
+        {% else %}
+            {{ ztbalert().info(translate("txt-no-countries-could-be-found"))|raw }}
+        {% endif %}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}
+

@@ -33,6 +33,7 @@
                     <th>{{ translate("txt-example") }}</th>
                     <th>{{ translate("txt-amount-of-projects") }}</th>
                     <th>{{ translate("txt-amount-of-booths") }}</th>
+                    <th>{{ translate("txt-pdf") }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,11 +43,12 @@
                         <td>{{ challengeLink(challenge,'view-admin','name') }}
                             <div class="pull-right">{{ challengeLink(challenge,'view','icon') }}</div>
                         </td>
-                        <td><a class="btn btn-sm"
-                               style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a>
+                        <td><a class="btn btn-xs"
+                               style="color:{{ challenge.frontColor }}; background-color:{{ challenge.backgroundColor }}">{{ challenge }}</a>
                         </td>
                         <td>{{ challenge.projectChallenge.count() }}</td>
                         <td>{{ challenge.boothChallenge.count() }}</td>
+                        <td>{% if challenge.pdf %}{{ challengeLink(challenge,'download-pdf','icon') }}{% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

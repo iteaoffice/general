@@ -33,7 +33,7 @@ class ChallengeHandler extends AbstractViewHelper
      *
      * @return string
      */
-    public function __invoke(Content $content)
+    public function __invoke(Content $content): string
     {
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
@@ -41,7 +41,7 @@ class ChallengeHandler extends AbstractViewHelper
                 $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-challenge"));
                 $this->getHelperPluginManager()->get('headtitle')->append($this->getChallenge()->getChallenge());
 
-                return $this->parseChallenge();
+                return $this->parseChallenge($this->getChallenge());
             case 'challenge_list':
                 return $this->parseChallengeList();
             case 'challenge_project':
@@ -58,7 +58,7 @@ class ChallengeHandler extends AbstractViewHelper
     /**
      * @param Content $content
      */
-    public function extractContentParam(Content $content)
+    public function extractContentParam(Content $content): void
     {
         /**
          * Go over the handler params and try to see if it is hardcoded or just set via the route
@@ -82,7 +82,7 @@ class ChallengeHandler extends AbstractViewHelper
      *
      * @return null|string
      */
-    private function findParamValueFromContent(Content $content, Param $param)
+    private function findParamValueFromContent(Content $content, Param $param): ?string
     {
         //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
         foreach ($content->getContentParam() as $contentParam) {
@@ -102,12 +102,13 @@ class ChallengeHandler extends AbstractViewHelper
 
     /**
      * @param $docRef
-     *
-     * @return Challenge
      */
-    public function setChallengeDocRef($docRef)
+    public function setChallengeDocRef($docRef): void
     {
-        $this->setChallenge($this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef));
+        /** @var Challenge $challenge */
+        $challenge = $this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef);
+
+        $this->setChallenge($challenge);
     }
 
     /**
@@ -121,25 +122,28 @@ class ChallengeHandler extends AbstractViewHelper
     /**
      * @return Challenge
      */
-    public function getChallenge()
+    public function getChallenge(): Challenge
     {
         return $this->challenge;
     }
 
     /**
      * @param Challenge $challenge
+     * @return ChallengeHandler
      */
-    public function setChallenge($challenge)
+    public function setChallenge(Challenge $challenge): ChallengeHandler
     {
         $this->challenge = $challenge;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function parseChallenge(): string
+    public function parseChallenge(Challenge $challenge): string
     {
-        return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $this->getChallenge()]);
+        return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $challenge]);
     }
 
     /**
@@ -157,7 +161,7 @@ class ChallengeHandler extends AbstractViewHelper
      *
      * @return string
      */
-    public function parseChallengeProjectList(Challenge $challenge)
+    public function parseChallengeProjectList(Challenge $challenge): string
     {
         $projects = $this->getProjectService()->findProjectByChallenge($challenge);
 

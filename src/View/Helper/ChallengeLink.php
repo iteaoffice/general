@@ -23,11 +23,6 @@ use General\Entity\Challenge;
 class ChallengeLink extends LinkAbstract
 {
     /**
-     * @var Challenge
-     */
-    protected $challenge;
-
-    /**
      * @param Challenge $challenge
      * @param string $action
      * @param string $show
@@ -40,20 +35,18 @@ class ChallengeLink extends LinkAbstract
         Challenge $challenge = null,
         $action = 'view',
         $show = 'name'
-    ) {
+    ): string {
         $this->setChallenge($challenge);
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!is_null($challenge)) {
-            $this->addRouterParam('id', $challenge->getId());
-            $this->addRouterParam('docRef', $challenge->getDocRef());
-            $this->setShowOptions(
-                [
-                    'name' => $challenge,
-                ]
-            );
-        }
+        $this->addRouterParam('id', $this->getChallenge()->getId());
+        $this->addRouterParam('docRef', $this->getChallenge()->getDocRef());
+        $this->setShowOptions(
+            [
+                'name' => $this->getChallenge(),
+            ]
+        );
 
         return $this->createLink();
     }
@@ -63,7 +56,7 @@ class ChallengeLink extends LinkAbstract
      *
      * @throws \Exception
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'list':
@@ -73,6 +66,10 @@ class ChallengeLink extends LinkAbstract
             case 'new':
                 $this->setRouter('zfcadmin/challenge/new');
                 $this->setText($this->translate("txt-new-challenge"));
+                break;
+            case 'download-pdf':
+                $this->setRouter('zfcadmin/challenge/download-pdf');
+                $this->setText($this->translate("txt-download-pdf"));
                 break;
             case 'edit':
                 $this->setRouter('zfcadmin/challenge/edit');
@@ -89,21 +86,5 @@ class ChallengeLink extends LinkAbstract
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
-
-    /**
-     * @return Challenge
-     */
-    public function getChallenge()
-    {
-        return $this->challenge;
-    }
-
-    /**
-     * @param Challenge $challenge
-     */
-    public function setChallenge($challenge)
-    {
-        $this->challenge = $challenge;
     }
 }

@@ -20,6 +20,8 @@ use General\Options\ModuleOptions;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
+use Project\Service\ProjectService;
+use Zend\I18n\View\Helper\Translate;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -47,6 +49,10 @@ abstract class GeneralAbstractController extends AbstractActionController
      */
     protected $generalService;
     /**
+     * @var ProjectService
+     */
+    protected $projectService;
+    /**
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
@@ -68,9 +74,9 @@ abstract class GeneralAbstractController extends AbstractActionController
     protected $viewHelperManager;
 
     /**
-     * @return \General\Service\FormService
+     * @return FormService
      */
-    public function getFormService()
+    public function getFormService(): FormService
     {
         return $this->formService;
     }
@@ -80,7 +86,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setFormService($formService)
+    public function setFormService($formService): GeneralAbstractController
     {
         $this->formService = $formService;
 
@@ -90,7 +96,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return ContactService
      */
-    public function getContactService()
+    public function getContactService(): ContactService
     {
         return $this->contactService;
     }
@@ -100,7 +106,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setContactService(ContactService $contactService)
+    public function setContactService(ContactService $contactService): GeneralAbstractController
     {
         $this->contactService = $contactService;
 
@@ -110,7 +116,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return GeneralService
      */
-    public function getGeneralService()
+    public function getGeneralService(): GeneralService
     {
         return $this->generalService;
     }
@@ -120,7 +126,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setGeneralService(GeneralService $generalService)
+    public function setGeneralService(GeneralService $generalService): GeneralAbstractController
     {
         $this->generalService = $generalService;
 
@@ -130,7 +136,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return EmailService
      */
-    public function getEmailService()
+    public function getEmailService(): EmailService
     {
         return $this->emailService;
     }
@@ -140,7 +146,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setEmailService(EmailService $emailService)
+    public function setEmailService(EmailService $emailService): GeneralAbstractController
     {
         $this->emailService = $emailService;
 
@@ -150,7 +156,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return ServiceLocatorInterface
      */
-    public function getServiceLocator()
+    public function getServiceLocator(): ServiceLocatorInterface
     {
         return $this->serviceLocator;
     }
@@ -160,7 +166,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator): GeneralAbstractController
     {
         $this->serviceLocator = $serviceLocator;
 
@@ -170,7 +176,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return ModuleOptions
      */
-    public function getModuleOptions()
+    public function getModuleOptions(): ModuleOptions
     {
         return $this->moduleOptions;
     }
@@ -180,7 +186,7 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setModuleOptions($moduleOptions)
+    public function setModuleOptions($moduleOptions): GeneralAbstractController
     {
         $this->moduleOptions = $moduleOptions;
 
@@ -190,7 +196,7 @@ abstract class GeneralAbstractController extends AbstractActionController
     /**
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
         return $this->entityManager;
     }
@@ -200,9 +206,28 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return GeneralAbstractController
      */
-    public function setEntityManager($entityManager)
+    public function setEntityManager($entityManager): GeneralAbstractController
     {
         $this->entityManager = $entityManager;
+
+        return $this;
+    }
+
+    /**
+     * @return ProjectService
+     */
+    public function getProjectService(): ProjectService
+    {
+        return $this->projectService;
+    }
+
+    /**
+     * @param ProjectService $projectService
+     * @return GeneralAbstractController
+     */
+    public function setProjectService(ProjectService $projectService): GeneralAbstractController
+    {
+        $this->projectService = $projectService;
 
         return $this;
     }
@@ -214,11 +239,9 @@ abstract class GeneralAbstractController extends AbstractActionController
      *
      * @return string
      */
-    protected function translate($string)
+    protected function translate($string): string
     {
-        /*
-         * @var Translate
-         */
+        /** @var Translate $translate */
         $translate = $this->getViewHelperManager()->get('translate');
 
         return $translate($string);

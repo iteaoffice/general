@@ -41,7 +41,7 @@ class WebInfoController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new WebInfoFilter($this->getGeneralService());
+        $form = new WebInfoFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -93,7 +93,6 @@ class WebInfoController extends GeneralAbstractController
         $form = $this->getFormService()->prepare(WebInfo::class, null, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
