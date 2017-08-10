@@ -169,7 +169,7 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (false && (!defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT)) {
+                    if ((!defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT)) {
                         $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
@@ -229,7 +229,7 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (false && !defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
+                    if (!defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
                         $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
@@ -296,7 +296,7 @@ class EmailService extends ServiceAbstract
      *
      * @return Message
      */
-    public function setShadowRecipients()
+    public function setShadowRecipients(): void
     {
         //Cc recipients
         foreach ($this->email->getCc() as $emailAddress => $contact) {

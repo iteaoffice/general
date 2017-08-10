@@ -82,10 +82,8 @@ class Country extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function applyFilter(
-        QueryBuilder $queryBuilder,
-        array $filter
-    ): QueryBuilder {
+    public function applyFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
+    {
         if (!empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));

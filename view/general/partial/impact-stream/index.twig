@@ -4,7 +4,11 @@
 <div class="row">
 
     <div class="col-md-9">
-        <h1>{{ translate("txt-impact-stream") }}</h1>
+        <h1>{{ translate("txt-impact-stream") }} <a class="btn btn-primary"
+                                                    href="{{ url('impact-stream/download') }}?{{ arguments }}">{{ translate("txt-download-impact-stream") }}</a>
+        </h1>
+
+        <p>{{ translate("txt-impact-stream-explanation") }}</p>
 
         <div class="row">
             <div class="col-md-12">
@@ -30,46 +34,76 @@
 
                     {% set result = projectService.findEntityById("Project\\Entity\\Result\\Result", resultField['result_id']) %}
 
-                    <h2>{{ resultLink(result,'view-public','name') }}</h2>
 
                     <div class="result-list-detailed-body">
-
 
 
                         {#{{ result.abstract|raw }}#}
 
                         {% set highlightDoc = highlighting.getResult(resultField['id']) %}
                         {% if highlightDoc and highlightDoc is not empty %}
+                            <span style="font-size: 1.5em">{{ resultLink(result,'view-public','name') }}</span>
                             <dl class="dl-horizontal">
-                            {% for field, highlight in highlightDoc %}
-                                <dt>{{ highlightingFields[field] }}: </dt>
-                                <dd>...{{ highlight|join(' (...) ')|striptags('<mark>')|raw }}...</dd>
-                            {% endfor %}
+                                {% for field, highlight in highlightDoc %}
+                                    <dt>{{ highlightingFields[field] }}:</dt>
+                                    <dd>...{{ highlight|join(' (...) ')|striptags('<mark>')|raw }}...</dd>
+                                {% endfor %}
                             </dl>
                         {% else %}
 
-                            {% if result.image %}
-                                <div class="pull-right result-list-detailed-image">{{ image(result.image, 150) }}</div>
-                            {% endif %}
+                            <div class="row">
 
-                            <p>{{ result.abstract }}</p>
+                                <div class="col-md-9">
+                                    <h2>{{ resultLink(result,'view-public','name') }}</h2>
 
-                            <p class="clearfix"><br>{{ resultLink(result,'view-public','readMore') }}
+                                    {% set challenges = [] %}
+                                    {% for project in projectService.findProjectsByResult(result) %}
+                                        {% for projectChallenge in project.projectChallenge if projectChallenge.challenge.id not in challenges %}
+
+                                            {{ challengeIcon(projectChallenge.challenge, 25) }}
+                                            {{ challengeLink(projectChallenge.challenge, 'view','name') }}
+
+                                            {% set challenges = challenges|merge([projectChallenge.challenge.id]) %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                    <br><br>
+
+
+                                    <p>{{ result.abstract }}</p>
+
+
+                                </div>
+
+                                <div class="col-md-3">
+                                    {% if result.image %}
+                                        <div class="result-list-detailed-image">{{ image(result.image, 150) }}</div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+
+
+
+
+
+
+
+                            {#<p class="clearfix"><br>#}
+                            {##}
+                            {#<p class="clearfix"><br>#}
                         {% endif %}
-
-
-
-
                     </div>
 
 
                     <div class="well well-sm">
             <span class="text-muted">
-                <input type="checkbox" class="result" value="{{ result.id }}">
-                {#{% for project in projectService.findProjectsByResult(result) %}{{ projectLink(project, 'view','name-without-number') }}{% if not loop.last %} &middot; {% endif %}{% endfor %}#}
-                {#{% for organisation in organisationService.findOrganisationByResult(result) %} &middot; {{ organisationLink(organisation, 'view','name') }}{% endfor %}#}
-                <a href="{{ url('impact-stream/download-single',{'docRef': result.docRef} ) }}"><i
-                                class="fa fa-file-pdf-o"></i></a>
+<label style="font-weight: normal">
+                      <input type="checkbox" class="result"
+                             value="{{ result.id }}"> {{ translate("txt-check-for-download") }}
+    </label>
+                <div class="pull-right"><a href="{{ url('impact-stream/download-single',{'docRef': result.docRef} ) }}"><i
+                                class="fa fa-file-pdf-o"></i> {{ translate("txt-download") }}</a></div>
             </span>
                     </div>
 
