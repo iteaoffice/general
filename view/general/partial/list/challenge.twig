@@ -4,8 +4,7 @@
     {% for challenge in challenge %}
         <div class="col-md-6 col-sm-6">
             <div class="well challenge-box">
-                <h3><img width="50px"
-                         src="assets/{{ constant("ITEAOFFICE_HOST") }}/style/image/{{ challenge.docRef|lower }}.png">
+                <h3>{{ challengeIcon(challenge, 50) }}
                     {{ challengeLink(challenge,'view','name') }}
                 </h3>
 
