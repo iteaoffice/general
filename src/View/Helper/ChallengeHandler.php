@@ -38,6 +38,13 @@ class ChallengeHandler extends AbstractViewHelper
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
             case 'challenge':
+
+                if (is_null($this->getChallenge())) {
+                    $this->getServiceManager()->get('response')->setStatusCode(404);
+
+                    return 'The selected challenge cannot be found';
+                }
+
                 $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-challenge"));
                 $this->getHelperPluginManager()->get('headtitle')->append($this->getChallenge()->getChallenge());
 
@@ -45,6 +52,13 @@ class ChallengeHandler extends AbstractViewHelper
             case 'challenge_list':
                 return $this->parseChallengeList();
             case 'challenge_project':
+
+                if (is_null($this->getChallenge())) {
+                    $this->getServiceManager()->get('response')->setStatusCode(404);
+
+                    return 'The selected challenge cannot be found';
+                }
+                
                 return $this->parseChallengeProjectList($this->getChallenge());
             default:
                 return sprintf(
@@ -124,7 +138,7 @@ class ChallengeHandler extends AbstractViewHelper
     /**
      * @return Challenge
      */
-    public function getChallenge(): Challenge
+    public function getChallenge(): ?Challenge
     {
         return $this->challenge;
     }
