@@ -108,7 +108,9 @@ class ChallengeHandler extends AbstractViewHelper
         /** @var Challenge $challenge */
         $challenge = $this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef);
 
-        $this->setChallenge($challenge);
+        if (!is_null($challenge)) {
+            $this->setChallenge($challenge);
+        }
     }
 
     /**
@@ -139,6 +141,7 @@ class ChallengeHandler extends AbstractViewHelper
     }
 
     /**
+     * @param Challenge $challenge
      * @return string
      */
     public function parseChallenge(Challenge $challenge): string
