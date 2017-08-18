@@ -10,8 +10,46 @@
 return [
     'navigation' => [
         'admin' => [
-            // And finally, here is where we define our page hierarchy
             'management' => [
+                'pages' => [
+                    'password' => [
+                        'label' => _("txt-nav-password-list"),
+                        'route' => 'zfcadmin/password/list',
+                        'pages' => [
+                            'password-view' => [
+                                'route'   => 'zfcadmin/password/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Password::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\PasswordLabel::class,
+                                    ],
+                                ],
+                                'pages'   => [
+                                    'password-edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/password/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Password::class,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'password-new'  => [
+                                'label'   => _("txt-new-password"),
+                                'route'   => 'zfcadmin/password/new',
+                                'visible' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'config'     => [
                 'pages' => [
                     'web-info'     => [
                         'label' => _("txt-nav-web-info-list"),
@@ -45,24 +83,6 @@ return [
                                 'label'   => _("txt-new-web-info"),
                                 'route'   => 'zfcadmin/web-info/new',
                                 'visible' => false,
-                            ],
-                        ],
-                    ],
-                    'email'        => [
-                        'label' => _("txt-nav-email-list"),
-                        'route' => 'zfcadmin/email/list',
-                        'pages' => [
-                            'email-view' => [
-                                'route'   => 'zfcadmin/email/view',
-                                'visible' => false,
-                                'params'  => [
-                                    'entities'   => [
-                                        'id' => General\Entity\EmailMessage::class,
-                                    ],
-                                    'invokables' => [
-                                        General\Navigation\Invokable\EmailMessageLabel::class,
-                                    ],
-                                ],
                             ],
                         ],
                     ],
@@ -101,7 +121,7 @@ return [
                             ],
                         ],
                     ],
-                    'currency'      => [
+                    'currency'     => [
                         'label' => _("txt-nav-currency-list"),
                         'route' => 'zfcadmin/currency/list',
                         'pages' => [
@@ -132,40 +152,6 @@ return [
                             'currency-new'  => [
                                 'label'   => _("txt-new-currency"),
                                 'route'   => 'zfcadmin/currency/new',
-                                'visible' => false,
-                            ],
-                        ],
-                    ],'password'      => [
-                        'label' => _("txt-nav-password-list"),
-                        'route' => 'zfcadmin/password/list',
-                        'pages' => [
-                            'password-view' => [
-                                'route'   => 'zfcadmin/password/view',
-                                'visible' => false,
-                                'params'  => [
-                                    'entities'   => [
-                                        'id' => General\Entity\Password::class,
-                                    ],
-                                    'invokables' => [
-                                        General\Navigation\Invokable\PasswordLabel::class,
-                                    ],
-                                ],
-                                'pages'   => [
-                                    'password-edit' => [
-                                        'label'   => _("txt-nav-edit"),
-                                        'route'   => 'zfcadmin/password/edit',
-                                        'visible' => false,
-                                        'params'  => [
-                                            'entities' => [
-                                                'id' => General\Entity\Password::class,
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'password-new'  => [
-                                'label'   => _("txt-new-password"),
-                                'route'   => 'zfcadmin/password/new',
                                 'visible' => false,
                             ],
                         ],
@@ -307,6 +293,28 @@ return [
                                 'label'   => _("txt-new-title"),
                                 'route'   => 'zfcadmin/title/new',
                                 'visible' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'tools'      => [
+                'pages' => [
+                    'email' => [
+                        'label' => _("txt-nav-email-list"),
+                        'route' => 'zfcadmin/email/list',
+                        'pages' => [
+                            'email-view' => [
+                                'route'   => 'zfcadmin/email/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\EmailMessage::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\EmailMessageLabel::class,
+                                    ],
+                                ],
                             ],
                         ],
                     ],
