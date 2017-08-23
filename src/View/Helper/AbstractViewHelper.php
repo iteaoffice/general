@@ -92,7 +92,7 @@ abstract class AbstractViewHelper extends AbstractHelper
      *
      * @return string
      */
-    public function translate($string)
+    public function translate($string): string
     {
         return $this->getHelperPluginManager()->get('translate')->__invoke($string);
     }

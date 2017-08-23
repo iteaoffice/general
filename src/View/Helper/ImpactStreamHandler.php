@@ -70,8 +70,19 @@ class ImpactStreamHandler extends AbstractViewHelper
             $this->getRequest()->getQuery()->toArray()
         );
 
+        $searchFields = [
+            'result_search',
+            'result_abstract',
+            'project_search',
+            'organisation_search',
+            'organisation_type_search',
+            'challenge_search',
+            'country_search',
+            'html'
+        ];
+
         if ($this->getRequest()->isGet()) {
-            $searchService->setSearch($data['query'], $data['order'], $data['direction']);
+            $searchService->setSearch($data['query'], $searchFields, $data['order'], $data['direction']);
             if (isset($data['facet'])) {
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
