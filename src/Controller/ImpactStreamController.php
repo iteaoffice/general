@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
-use FPDI;
 use Project\Entity\Result\Result;
 use Project\Search\Service\ImpactStreamSearchService;
 use Search\Paginator\Adapter\SolariumPaginator;
+use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
 use Zend\Paginator\Paginator;
 
@@ -40,7 +40,7 @@ class ImpactStreamController extends GeneralAbstractController
     public function downloadSingleAction()
     {
         /** @var Result $result */
-        $result = $this->getProjectService()->findEntityByDocRef(Result::class, $this->params('docRef'));
+        $result = $this->getProjectService()->findEntityByDocRef(Result::class, (string)$this->params('docRef'));
 
         if (is_null($result) || count($result->getObject()) === 0) {
             return $this->notFoundAction();
@@ -60,12 +60,12 @@ class ImpactStreamController extends GeneralAbstractController
     public function parsePDFsByResult(Result $result): void
     {
         foreach ($this->getGeneralService()->parseChallengesByResult($result) as $challenge) {
-            if (!is_null($challenge->getPdf())) {
+            if (!array_key_exists('challenge_' . $challenge->getSequence(), $this->pdf) && !is_null($challenge->getPdf())) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
 
-                $this->pdf['challenge_' . $challenge->getChallenge()] = $fileName;
+                $this->pdf['challenge_' . $challenge->getSequence()] = $fileName;
             }
         }
 
@@ -85,14 +85,23 @@ class ImpactStreamController extends GeneralAbstractController
     }
 
     /**
-     * @return FPDI
+     * @return TcpdfFpdi
      */
-    protected function generatePdf(): FPDI
+    protected function generatePdf(): TcpdfFpdi
     {
-        $pdf = new FPDI();
+        $pdf = new TcpdfFpdi();
 
         //Sort the PDF array first
         sort($this->pdf);
+
+        $counter = 1;
+
+        //Add the frontpage
+        $pdf->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-frontpage.pdf');
+        $frontPage = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($frontPage);
+        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+        $pdf->useTemplate($frontPage);
 
         // iterate through the files
         foreach ($this->pdf as $file) {
@@ -105,19 +114,18 @@ class ImpactStreamController extends GeneralAbstractController
                 // get the size of the imported page
                 $size = $pdf->getTemplateSize($templateId);
 
-                // create a page (landscape or portrait depending on the imported page size)
-                if ($size['w'] > $size['h']) {
-                    $pdf->AddPage('L', [$size['w'], $size['h']]);
-                } else {
-                    $pdf->AddPage('P', [$size['w'], $size['h']]);
-                }
+                $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
 
                 // use the imported page
                 $pdf->useTemplate($templateId);
 
-                $pdf->SetFont('Helvetica');
-                $pdf->SetXY(5, 5);
-                $pdf->Write(8, $pageNo);
+                //
+                //
+//                $pdf->SetFont('Helvetica');
+//                $pdf->SetXY(5, 5);
+//                $pdf->Write(8, $counter);
+
+                $counter++;
             }
         }
 
@@ -126,10 +134,15 @@ class ImpactStreamController extends GeneralAbstractController
             unlink($file);
         }
 
+        //Add the lastpage
+        $pdf->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-lastpage.pdf');
+        $frontPage = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($frontPage);
+        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+        $pdf->useTemplate($frontPage);
+
         return $pdf;
     }
-
-    //protected function generateDocumentsByResult(Resu)
 
     /**
      * @return \Zend\View\Model\ViewModel|string
@@ -139,7 +152,20 @@ class ImpactStreamController extends GeneralAbstractController
         $searchService = $this->getImpactStreamSearchService();
 
         $data = $this->getRequest()->getQuery()->toArray();
-        $searchService->setSearch($data['query'], 'result', 'desc');
+
+        $searchFields = [
+            'result_search',
+            'result_abstract',
+            'project_search',
+            'organisation_search',
+            'organisation_type_search',
+            'challenge_search',
+            'country_search',
+            'html'
+        ];
+
+
+        $searchService->setSearch($data['query'], $searchFields, 'result', 'desc');
 
         if (isset($data['facet'])) {
             foreach ($data['facet'] as $facetField => $values) {
@@ -161,6 +187,7 @@ class ImpactStreamController extends GeneralAbstractController
         $paginator->setCurrentPageNumber(1);
 
         foreach ($paginator->getCurrentItems() as $result) {
+            /** @var Result $result */
             $result = $this->getProjectService()->findEntityById(Result::class, $result['result_id']);
 
             $this->parsePDFsByResult($result);
@@ -192,6 +219,7 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         foreach ($resultIds as $resultId) {
+            /** @var Result $result */
             $result = $this->getProjectService()->findEntityById(Result::class, $resultId);
 
             $this->parsePDFsByResult($result);

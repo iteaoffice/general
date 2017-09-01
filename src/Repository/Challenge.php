@@ -53,7 +53,7 @@ class Challenge extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_challenge.challenge', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('general_entity_challenge.challenge', 'ASC');
+                $queryBuilder->addOrderBy('general_entity_challenge.sequence', 'ASC');
         }
 
         return $queryBuilder->getQuery();

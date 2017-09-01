@@ -57,6 +57,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $docRef;
     /**
+     * @ORM\Column(name="sequence", type="integer", nullable=false)
+     * @Annotation\Type("\Zend\Form\Element\Number")
+     * @Annotation\Options({"label":"txt-challenge-sequence-label","help-block":"txt-challenge-sequence-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-sequence-placeholder"})
+     * @var int
+     */
+    private $sequence;
+    /**
      * @ORM\Column(name="description",type="string")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-description-label","help-block":"txt-challenge-description-help-block"})
@@ -153,6 +161,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
         $this->projectChallenge = new Collections\ArrayCollection();
         $this->boothChallenge = new Collections\ArrayCollection();
         $this->ideaChallenge = new Collections\ArrayCollection();
+        $this->sequence = 1;
     }
 
     /**
@@ -300,6 +309,25 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function setSources(string $sources): Challenge
     {
         $this->sources = $sources;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
+    }
+
+    /**
+     * @param int $sequence
+     * @return Challenge
+     */
+    public function setSequence($sequence): Challenge
+    {
+        $this->sequence = $sequence;
 
         return $this;
     }
