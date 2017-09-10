@@ -67,6 +67,15 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @return Entity\Challenge[]
+     */
+    public function findAllChallenges(): array
+    {
+        return $this->getEntityManager()->getRepository(Entity\Challenge::class)
+            ->findBy([], ['challenge' => 'ASC']);
+    }
+
+    /**
      * @param string $identifier
      *
      * @return null|object|Entity\EmailMessage

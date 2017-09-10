@@ -4,11 +4,16 @@
 <div class="row">
 
     <div class="col-md-9">
-        <h1>{{ translate("txt-impact-stream") }} <a class="btn btn-primary"
-                                                    href="{{ url('impact-stream/download') }}?{{ arguments }}">{{ translate("txt-download-impact-stream") }}</a>
+        <h1>{{ translate("txt-impact-stream") }}  <a class="btn btn-primary"
+                                                    href="/publication/download/itea-impact-stream.pdf">{{ translate("txt-download-full-impact-stream") }}</a>
+            <a id="toggle-help" class="cursor-help"><i class="fa fa-question-circle" id="#toggle-help"></i></a>
         </h1>
 
-        <p>{{ translate("txt-impact-stream-explanation") }}</p>
+        {{ translate("txt-impact-stream-explanation") }}
+
+        <div class="well" id="impact-stream-help" style="display: none">
+            <p>{{ translate("txt-impact-stream-help") }}</p>
+        </div>
 
         <div class="row">
             <div class="col-md-12">
@@ -37,9 +42,6 @@
 
                     <div class="result-list-detailed-body">
 
-
-                        {#{{ result.abstract|raw }}#}
-
                         {% set highlightDoc = highlighting.getResult(resultField['id']) %}
                         {% if highlightDoc and highlightDoc is not empty %}
                             <span style="font-size: 1.5em">{{ resultLink(result,'view-public','name') }}</span>
@@ -51,27 +53,24 @@
                             </dl>
                         {% else %}
 
+
+                            <h2>{{ resultLink(result,'view-public','name') }}</h2>
+
+                            {% set challenges = [] %}
+                            {% for project in projectService.findProjectsByResult(result) %}
+                                {% for projectChallenge in project.projectChallenge if projectChallenge.challenge.id not in challenges %}
+
+                                    {{ challengeIcon(projectChallenge.challenge, 25) }}
+                                    {{ challengeLink(projectChallenge.challenge, 'view','name') }}
+
+                                    {% set challenges = challenges|merge([projectChallenge.challenge.id]) %}
+                                {% endfor %}
+                            {% endfor %}
+                            <br><br>
+
                             <div class="row">
-
                                 <div class="col-md-9">
-                                    <h2>{{ resultLink(result,'view-public','name') }}</h2>
-
-                                    {% set challenges = [] %}
-                                    {% for project in projectService.findProjectsByResult(result) %}
-                                        {% for projectChallenge in project.projectChallenge if projectChallenge.challenge.id not in challenges %}
-
-                                            {{ challengeIcon(projectChallenge.challenge, 25) }}
-                                            {{ challengeLink(projectChallenge.challenge, 'view','name') }}
-
-                                            {% set challenges = challenges|merge([projectChallenge.challenge.id]) %}
-                                        {% endfor %}
-                                    {% endfor %}
-                                    <br><br>
-
-
                                     <p>{{ result.abstract }}</p>
-
-
                                 </div>
 
                                 <div class="col-md-3">
@@ -79,19 +78,7 @@
                                         <div class="result-list-detailed-image">{{ image(result.image, 150) }}</div>
                                     {% endif %}
                                 </div>
-
                             </div>
-
-
-
-
-
-
-
-
-                            {#<p class="clearfix"><br>#}
-                            {##}
-                            {#<p class="clearfix"><br>#}
                         {% endif %}
                     </div>
 
@@ -102,8 +89,8 @@
                       <input type="checkbox" class="result"
                              value="{{ result.id }}"> {{ translate("txt-check-for-download") }}
     </label>
-                <div class="pull-right"><a href="{{ url('impact-stream/download-single',{'docRef': result.docRef} ) }}"><i
-                                class="fa fa-file-pdf-o"></i> {{ translate("txt-download") }}</a></div>
+                <div class="pull-right"><a href="{{ resultLink(result, 'download', 'social') }}"><i
+                                class="fa fa-file-pdf-o"></i> {{ translate("txt-single-story-download") }}</a></div>
             </span>
                     </div>
 
@@ -136,6 +123,20 @@
 
     </div>
     <div class="col-md-3">
+
+        <h3>{{ translate("txt-challenges") }}</h3>
+        <table class="table table-striped table-hover table-condensed">
+
+            {% for challenge in allChallenges %}
+                <tr>
+                    <td class="col-md-2">
+                        {{ challengeIcon(challenge, 30) }}
+                    </td>
+                    <td>{{ challengeLink(challenge, 'view') }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
         <div class="well well-sm">
             {% set facets = form.get('facet') %}
             {% for facet in facets %}
@@ -150,6 +151,10 @@
 
 <script type="text/javascript">
     $(function () {
+        $('#toggle-help').click(function() {
+            $('#impact-stream-help').toggle('fade').fade();
+        });
+
         $('input[type="checkbox"]').not('.result').on('click', function () {
             $('#search').submit();
         });

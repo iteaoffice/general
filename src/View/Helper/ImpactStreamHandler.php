@@ -14,6 +14,7 @@ namespace General\View\Helper;
 
 use Content\Entity\Content;
 use Content\Entity\Param;
+use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
@@ -118,7 +119,6 @@ class ImpactStreamHandler extends AbstractViewHelper
             ARRAY_FILTER_USE_KEY
         );
 
-
         return $this->getRenderer()->render(
             'general/partial/impact-stream/index',
             [
@@ -128,6 +128,7 @@ class ImpactStreamHandler extends AbstractViewHelper
                 'query'              => $data['query'],
                 'arguments'          => http_build_query($filteredData),
                 'paginator'          => $paginator,
+                'allChallenges'         => $this->getGeneralService()->findAllChallenges(),
                 'projectService'     => $this->getProjectService(),
                 'highlighting'       => $paginator->getCurrentItems()->getHighlighting(),
                 'highlightingFields' => [
