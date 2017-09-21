@@ -9,11 +9,15 @@
             <a id="toggle-help" class="cursor-help"><i class="fa fa-question-circle" id="#toggle-help"></i></a>
         </h1>
 
-        {{ translate("txt-impact-stream-explanation") }}
-
         <div class="well" id="impact-stream-help" style="display: none">
             <p>{{ translate("txt-impact-stream-help") }}</p>
         </div>
+
+
+        {{ translate("txt-impact-stream-explanation") }}
+
+
+        <br>
 
         <div class="row">
             <div class="col-md-12">
@@ -137,6 +141,7 @@
             {% endfor %}
         </table>
 
+        <h3>{{ translate("txt-filter") }}</h3>
         <div class="well well-sm">
             {% set facets = form.get('facet') %}
             {% for facet in facets %}
