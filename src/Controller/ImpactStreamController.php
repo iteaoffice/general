@@ -32,7 +32,11 @@ class ImpactStreamController extends GeneralAbstractController
     /**
      * @var array
      */
-    protected $pdf = [];
+    protected $challenge = [];
+    /**
+     * @var array
+     */
+    protected $result = [];
 
     /**
      * @return \Zend\View\Model\ViewModel|string
@@ -49,9 +53,9 @@ class ImpactStreamController extends GeneralAbstractController
         $this->parsePDFsByResult($result);
 
         //Create the PDF
-        $pdf = $this->generatePdf();
+        $result = $this->generatePdf();
 
-        return $pdf->Output();
+        return $result->Output();
     }
 
     /**
@@ -62,19 +66,19 @@ class ImpactStreamController extends GeneralAbstractController
         foreach ($this->getGeneralService()->parseChallengesByResult($result) as $challenge) {
             if (!array_key_exists(
                 'challenge_' . $challenge->getSequence(),
-                $this->pdf
+                $this->challenge
             ) && !is_null($challenge->getPdf())) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
 
-                $this->pdf['challenge_' . $challenge->getSequence()] = $fileName;
+                $this->challenge['challenge_' . $challenge->getSequence()] = $fileName;
             }
         }
 
         $fileName = self::parseTempFile('result', $result->getId());
         file_put_contents($fileName, stream_get_contents($result->getObject()->first()->getObject()));
-        $this->pdf['result' . $result->getResult()] = $fileName;
+        $this->result['result' . $result->getResult()] = $fileName;
     }
 
     /**
@@ -92,68 +96,97 @@ class ImpactStreamController extends GeneralAbstractController
      */
     protected function generatePdf(): TcpdfFpdi
     {
-        $pdf = new TcpdfFpdi();
+        $result = new TcpdfFpdi();
 
         //Jan Slabon mentioned this great quote:
         //Why ever the author of TCPDF thought it might be a good decision to enable a standard header and footer by default.
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+        $result->setPrintHeader(false);
+        $result->setPrintFooter(false);
 
-        //Sort the PDF array first
-        sort($this->pdf);
+        //Sort the PDF arrays first
+        sort($this->challenge);
+        sort($this->result);
 
         //Add the frontpage
         //Add the references
-        $pageCount = $pdf->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-frontpage.pdf');
+        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-frontpage.pdf');
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            $frontPage = $pdf->importPage($pageNo);
-            $size = $pdf->getTemplateSize($frontPage);
-            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-            $pdf->useTemplate($frontPage);
+            $frontPage = $result->importPage($pageNo);
+            $size = $result->getTemplateSize($frontPage);
+            $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $result->useTemplate($frontPage);
         }
 
         // iterate through the files
-        foreach ($this->pdf as $file) {
+        foreach ($this->challenge as $file) {
             // get the page count
-            $pageCount = $pdf->setSourceFile($file);
+            $pageCount = $result->setSourceFile($file);
             // iterate through all pages
             for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                 // import a page
-                $templateId = $pdf->importPage($pageNo);
+                $templateId = $result->importPage($pageNo);
                 // get the size of the imported page
-                $size = $pdf->getTemplateSize($templateId);
+                $size = $result->getTemplateSize($templateId);
 
-                $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
 
                 // use the imported page
-                $pdf->useTemplate($templateId);
+                $result->useTemplate($templateId);
             }
         }
 
+
         //Cleanup the tmp folder
-        foreach ($this->pdf as $file) {
+        foreach ($this->challenge as $file) {
             unlink($file);
         }
 
         //Add the references
-        $pageCount = $pdf->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-references.pdf');
+        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-title-page-stories.pdf');
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            $frontPage = $pdf->importPage($pageNo);
-            $size = $pdf->getTemplateSize($frontPage);
-            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-            $pdf->useTemplate($frontPage);
+            $frontPage = $result->importPage($pageNo);
+            $size = $result->getTemplateSize($frontPage);
+            $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $result->useTemplate($frontPage);
+        }
+
+        // iterate through the files
+        foreach ($this->result as $file) {
+            // get the page count
+            $pageCount = $result->setSourceFile($file);
+            // iterate through all pages
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $templateId = $result->importPage($pageNo);
+                $size = $result->getTemplateSize($templateId);
+                $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                $result->useTemplate($templateId);
+            }
+        }
+
+        //Cleanup the tmp folder
+        foreach ($this->result as $file) {
+            unlink($file);
         }
 
         //Add the references
-        $pageCount = $pdf->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-lastpage.pdf');
+        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-references.pdf');
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            $frontPage = $pdf->importPage($pageNo);
-            $size = $pdf->getTemplateSize($frontPage);
-            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-            $pdf->useTemplate($frontPage);
+            $frontPage = $result->importPage($pageNo);
+            $size = $result->getTemplateSize($frontPage);
+            $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $result->useTemplate($frontPage);
         }
 
-        return $pdf;
+        //Add the references
+        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-lastpage.pdf');
+        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+            $frontPage = $result->importPage($pageNo);
+            $size = $result->getTemplateSize($frontPage);
+            $result->AddPage($size['orientation'], [$size['width'], $size['height']]);
+            $result->useTemplate($frontPage);
+        }
+
+        return $result;
     }
 
     /**
@@ -206,9 +239,9 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         //Create the PDF
-        $pdf = $this->generatePdf();
+        $result = $this->generatePdf();
 
-        return $pdf->Output();
+        return $result->Output();
     }
 
     /**
@@ -238,8 +271,8 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         //Create the PDF
-        $pdf = $this->generatePdf();
+        $result = $this->generatePdf();
 
-        return $pdf->Output();
+        return $result->Output();
     }
 }
