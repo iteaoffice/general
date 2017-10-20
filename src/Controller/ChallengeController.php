@@ -132,11 +132,6 @@ class ChallengeController extends GeneralAbstractController
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['image']);
                     $image->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
-
-                    //Remove the file if it exist
-                    if (file_exists($image->getCacheFileName())) {
-                        unlink($image->getCacheFileName());
-                    }
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
@@ -232,11 +227,6 @@ class ChallengeController extends GeneralAbstractController
                     $fileTypeValidator->isValid($fileData['icon']);
                     $icon->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
 
-                    //Remove the file if it exist
-                    if (file_exists($icon->getCacheFileName())) {
-                        unlink($icon->getCacheFileName());
-                    }
-
                     $challenge->setIcon($icon);
                 }
 
@@ -259,11 +249,6 @@ class ChallengeController extends GeneralAbstractController
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['image']);
                     $image->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
-
-                    //Remove the file if it exist
-                    if (file_exists($image->getCacheFileName())) {
-                        unlink($image->getCacheFileName());
-                    }
 
                     $challenge->setImage($image);
                 }
@@ -314,101 +299,7 @@ class ChallengeController extends GeneralAbstractController
         return new ViewModel(['form' => $form, 'challenge' => $challenge]);
     }
 
-    /**
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
-     */
-    public function iconAction()
-    {
-        /**
-         * @var $icon Challenge\Icon
-         */
-        $icon = $this->getGeneralService()->findEntityById(Challenge\Icon::class, $this->params('id'));
 
-        /*
-         * Check if a project is found
-         */
-        if (is_null($icon)) {
-            return $this->notFoundAction();
-        }
-
-        $file = stream_get_contents($icon->getIcon());
-        $width = $this->params('width', null);
-
-
-        /*
-         * Check if the file is cached and if not, create it
-         */
-        if (!file_exists($icon->getCacheFileName($width))) {
-            /*
-             * The file exists, but is it not updated?
-             */
-            file_put_contents($icon->getCacheFileName($width), $file);
-
-            //Start the resize-action based on the width
-            if (!is_null($width)) {
-                $thumb = new GD($icon->getCacheFileName($width));
-                $thumb->resize($width);
-                $thumb->save($icon->getCacheFileName($width));
-            }
-        }
-
-        $response = $this->getResponse();
-        $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
-            ->addHeaderLine('Content-Type: ' . $icon->getContentType()->getContentType())
-            ->addHeaderLine('Content-Length: ' . (string)strlen(file_get_contents($icon->getCacheFileName($width))));
-        $response->setContent(file_get_contents($icon->getCacheFileName($width)));
-
-        return $response;
-    }
-
-    /**
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
-     */
-    public function imageAction()
-    {
-        /**
-         * @var $image Challenge\Image
-         */
-        $image = $this->getGeneralService()->findEntityById(Challenge\Image::class, $this->params('id'));
-
-        /*
-         * Check if a project is found
-         */
-        if (is_null($image)) {
-            return $this->notFoundAction();
-        }
-
-        $file = stream_get_contents($image->getImage());
-        $width = $this->params('width', 100);
-
-
-        /*
-         * Check if the file is cached and if not, create it
-         */
-        if (!file_exists($image->getCacheFileName($width))) {
-            /*
-             * The file exists, but is it not updated?
-             */
-            file_put_contents($image->getCacheFileName($width), $file);
-
-            //Start the resize-action based on the width
-            if (!is_null($width)) {
-                $thumb = new GD($image->getCacheFileName($width));
-                $thumb->resize($width);
-                $thumb->save($image->getCacheFileName($width));
-            }
-        }
-
-        $response = $this->getResponse();
-        $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
-            ->addHeaderLine('Content-Type: ' . $image->getContentType()->getContentType())
-            ->addHeaderLine('Content-Length: ' . (string)strlen(file_get_contents($image->getCacheFileName($width))));
-        $response->setContent(file_get_contents($image->getCacheFileName($width)));
-
-        return $response;
-    }
 
     /**
      * @return \Zend\Stdlib\ResponseInterface|ViewModel

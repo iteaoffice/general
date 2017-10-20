@@ -56,20 +56,6 @@ class Flag extends EntityAbstract
     private $object;
 
     /**
-     * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
-     *
-     * @return string
-     */
-    public function getCacheFileName(): string
-    {
-        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'country-flag';
-
-        return $cacheDir . DIRECTORY_SEPARATOR . strtolower($this->getCountry()->getIso3()) . '.png';
-    }
-
-    /**
      * Magic Getter.
      *
      * @param $property

@@ -23,17 +23,18 @@ return [
              * access to all routes unless they are specified here.
              */
             'BjyAuthorize\Guard\Route' => [
-                ['route' => 'content-type/icon', 'roles' => []],
-                ['route' => 'country/flag', 'roles' => []],
+                ['route' => 'image/country-flag', 'roles' => []],
+                ['route' => 'image/challenge-icon', 'roles' => []],
+                ['route' => 'image/challenge-image', 'roles' => []],
+                ['route' => 'image/asset', 'roles' => []],
+
+                ['route' => 'assets/style-image', 'roles' => []],
+
                 ['route' => 'country/code', 'roles' => []],
                 ['route' => 'impact-stream/download', 'roles' => []],
                 ['route' => 'impact-stream/download-selected', 'roles' => []],
                 ['route' => 'impact-stream/download-single', 'roles' => []],
-                ['route' => 'assets/style-image', 'roles' => []],
-                ['route' => 'assets/country-flag', 'roles' => []],
-                ['route' => 'assets/content-type-icon', 'roles' => []],
-                ['route' => 'assets/challenge-icon', 'roles' => []],
-                ['route' => 'assets/challenge-image', 'roles' => []],
+
                 ['route' => 'email/event', 'roles' => []],
                 ['route' => 'zfcadmin/email/list', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/email/view', 'roles' => [Access::ACCESS_OFFICE],],
@@ -54,6 +55,8 @@ return [
                 ['route' => 'zfcadmin/currency/new', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/currency/edit', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/currency/view', 'roles' => [Access::ACCESS_OFFICE],],
+                ['route' => 'zfcadmin/currency/exchange-rate/new', 'roles' => [Access::ACCESS_OFFICE],],
+                ['route' => 'zfcadmin/currency/exchange-rate/edit', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/password/list', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/password/new', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/password/edit', 'roles' => [Access::ACCESS_OFFICE],],

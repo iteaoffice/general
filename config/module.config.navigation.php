@@ -154,6 +154,16 @@ return [
                                 'route'   => 'zfcadmin/currency/new',
                                 'visible' => false,
                             ],
+                            'exchange-rate-new'  => [
+                                'label'   => _("txt-new-exchange-rate"),
+                                'route'   => 'zfcadmin/currency/exchange-rate/new',
+                                'visible' => false,
+                            ],
+                            'exchange-rate-edit'  => [
+                                'label'   => _("txt-edit-exchange-rate"),
+                                'route'   => 'zfcadmin/currency/exchange-rate/edit',
+                                'visible' => false,
+                            ],
                         ],
                     ],
                     'challenge'    => [

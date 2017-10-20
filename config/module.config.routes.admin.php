@@ -250,6 +250,37 @@ return [
                                     ],
                                 ],
                             ],
+                            'exchange-rate'     => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'    => '/exchange-rate',
+                                    'defaults' => [
+                                        'controller' => Controller\ExchangeRateController::class,
+                                        'action'     => 'list',
+                                    ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes'  => [
+                                    'edit' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/edit/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'edit',
+                                            ],
+                                        ],
+                                    ],
+                                    'new'  => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/new/currency-[:currencyId].html',
+                                            'defaults' => [
+                                                'action' => 'new',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'password'     => [

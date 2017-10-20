@@ -296,30 +296,6 @@ class ContentType extends EntityAbstract implements ResourceInterface
         return (string)$this->contentType;
     }
 
-    /**
-     * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
-     *
-     * @return string
-     */
-    public function getCacheFileName(): string
-    {
-        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
-            . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
-            . 'content-type-icon';
-
-        return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
-    }
-
-    /**
-     * Although an alternative does not have a clear hash, we can create one based on the id;.
-     *
-     * @return string
-     */
-    public function getHash(): string
-    {
-        return sha1($this->id . $this->contentType . $this->extension);
-    }
 
     /**
      * Magic Getter.

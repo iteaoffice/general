@@ -30,6 +30,8 @@ class ChallengeIcon extends ImageAbstract
      * @param bool $responsive
      * @param array $classes
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         Challenge $challenge,
@@ -39,29 +41,17 @@ class ChallengeIcon extends ImageAbstract
     ): string {
         $icon = $challenge->getIcon();
 
-        if (is_null($icon) || is_null($icon->getContentType())) {
+        if (is_null($icon)) {
             return '';
         }
-        if (null !== $classes && !is_array($classes)) {
-            $classes = [$classes];
-        } elseif (null === $classes) {
-            $classes = [];
-        }
 
-        if ($responsive) {
-            $classes[] = 'img-responsive';
-        }
-
-        $this->setRouter('assets/challenge-icon');
-
-        $this->addRouterParam('ext', $icon->getContentType()->getExtension());
+        $this->setRouter('image/challenge-icon');
         $this->addRouterParam('id', $icon->getId());
+        $this->addRouterParam('ext', $icon->getContentType()->getExtension());
+        $this->addRouterParam('last-update', $icon->getDateUpdated()->getTimestamp());
+        $this->setImageId('challenge_icon_' . $icon->getId());
 
-        $this->setImageId('challenge_icon_' . $challenge->getId());
-
-        if (!is_null($width)) {
-            $this->addRouterParam('width', $width);
-        }
+        $this->setWidth($width);
 
         return $this->createImageUrl();
     }

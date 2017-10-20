@@ -3,16 +3,23 @@
 /**
  * ITEA Office all rights reserved
  *
- * @category   Organisation
+ * PHP Version 7
  *
- * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @category    Project
+ *
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
+ *
+ * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
 declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Thumbor\Url\Builder;
+use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
 
 /**
@@ -20,10 +27,6 @@ use Zend\View\Helper\Url;
  */
 abstract class ImageAbstract extends AbstractViewHelper
 {
-    /**
-     * @var string Text to be placed as title or as part of the linkContent
-     */
-    protected $text;
     /**
      * @var string
      */
@@ -41,41 +44,68 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     protected $classes = [];
     /**
-     * @var int width
-     */
-    protected $width = null;
-    /**
      * @var bool
      */
     protected $lightBox = false;
+    /**
+     * @var int
+     */
+    protected $width;
 
     /**
-     * This function produces the link in the end.
-     *
+     * @param bool $onlyUrl
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function createImageUrl(): string
+    public function createImageUrl(bool $onlyUrl = false): string
     {
         /**
-         * @var Url $url
+         * @var $url Url
          */
         $url = $this->getHelperPluginManager()->get('url');
+        /**
+         * @var $serverUrl ServerUrl
+         */
+        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
+        /**
+         * Get the thumber config
+         */
+        $config = $this->getServiceManager()->get('content_module_config');
 
-        $imageUrl = '<img src="%s" id="%s" class="%s" %s>';
+        $thumberLink = Builder::construct(
+            $config['image']['server'],
+            $config['image']['secret'],
+            $serverUrl() . $url($this->router, $this->routerParams)
+        )
+            ->fitIn($this->width, null)
+            ->smartCrop(true);
+
+        $imageUrl = '<img src="%s" id="%s" class="%s">';
 
         $image = sprintf(
             $imageUrl,
-            $url($this->router, $this->routerParams),
+            $thumberLink,
             $this->imageId,
-            implode(' ', $this->classes),
-            is_null($this->width) ? null : ' width="' . $this->width . '"'
+            implode(' ', $this->classes)
         );
 
         if (!$this->lightBox) {
             return $image;
         }
 
-        return '<a href="' . $url($this->router, $this->routerParams) . '" data-lightbox="itea">' . $image . '</a>';
+        if ($onlyUrl) {
+            return (string)$thumberLink;
+        }
+
+        $thumberLinkFull = Builder::construct(
+            $config['image']['server'],
+            $config['image']['secret'],
+            $serverUrl() . $url($this->router, $this->routerParams)
+        );
+
+
+        return '<a href="' . $thumberLinkFull . '" class="thumbnail fancybox-thumbs" data-fancybox-group="album-6">' . $image . '</a>';
     }
 
     /**
@@ -106,7 +136,7 @@ abstract class ImageAbstract extends AbstractViewHelper
     /**
      * @param string $router
      */
-    public function setRouter($router)
+    public function setRouter($router): void
     {
         $this->router = $router;
     }
@@ -130,7 +160,7 @@ abstract class ImageAbstract extends AbstractViewHelper
     /**
      * @param string $imageId
      */
-    public function setImageId($imageId)
+    public function setImageId($imageId): void
     {
         $this->imageId = $imageId;
     }
@@ -140,7 +170,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      *
      * @return $this
      */
-    public function addClasses($classes)
+    public function addClasses($classes): ImageAbstract
     {
         foreach ((array)$classes as $class) {
             $this->classes[] = $class;
@@ -152,31 +182,15 @@ abstract class ImageAbstract extends AbstractViewHelper
     /**
      * @param boolean $lightBox
      */
-    public function setLightBox($lightBox)
+    public function setLightBox($lightBox): void
     {
         $this->lightBox = $lightBox;
     }
 
     /**
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param int $width
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-    }
-
-    /**
      * @return array
      */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
@@ -184,8 +198,27 @@ abstract class ImageAbstract extends AbstractViewHelper
     /**
      * @param array $classes
      */
-    public function setClasses($classes)
+    public function setClasses($classes): void
     {
         $this->classes = $classes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth(): int
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int $width
+     * @return ImageAbstract
+     */
+    public function setWidth($width): ImageAbstract
+    {
+        $this->width = $width;
+
+        return $this;
     }
 }

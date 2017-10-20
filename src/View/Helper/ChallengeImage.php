@@ -30,6 +30,8 @@ class ChallengeImage extends ImageAbstract
      * @param bool $responsive
      * @param array $classes
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         Challenge $challenge,
@@ -39,29 +41,17 @@ class ChallengeImage extends ImageAbstract
     ): string {
         $image = $challenge->getImage();
 
-        if (is_null($image) || is_null($image->getContentType())) {
+        if (is_null($image)) {
             return '';
         }
-        if (null !== $classes && !is_array($classes)) {
-            $classes = [$classes];
-        } elseif (null === $classes) {
-            $classes = [];
-        }
 
-        if ($responsive) {
-            $classes[] = 'img-responsive';
-        }
-
-        $this->setRouter('assets/challenge-image');
-
-        $this->addRouterParam('ext', $image->getContentType()->getExtension());
+        $this->setRouter('image/challenge-image');
         $this->addRouterParam('id', $image->getId());
+        $this->addRouterParam('ext', $image->getContentType()->getExtension());
+        $this->addRouterParam('last-update', $image->getDateUpdated()->getTimestamp());
+        $this->setImageId('challenge_image_' . $image->getId());
 
-        $this->setImageId('challenge_image_' . $challenge->getId());
-
-        if (!is_null($width)) {
-            $this->addRouterParam('width', $width);
-        }
+        $this->setWidth($width);
 
         return $this->createImageUrl();
     }

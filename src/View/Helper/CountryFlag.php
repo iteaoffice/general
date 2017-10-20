@@ -25,8 +25,9 @@ class CountryFlag extends ImageAbstract
     /**
      * @param Country $country
      * @param int $width
-     *
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(Country $country, $width = 20): string
     {
@@ -35,13 +36,8 @@ class CountryFlag extends ImageAbstract
             return '';
         }
 
-        /*
-         * Reset the classes
-         */
-        $this->setClasses([]);
-
-        $this->setRouter('assets/country-flag');
-        $this->addRouterParam('iso3', strtolower((string) $country->getIso3()));
+        $this->setRouter('image/country-flag');
+        $this->addRouterParam('id', $country->getId());
         $this->addRouterParam('ext', 'png');
         $this->setImageId('country_flag_' . $country->getIso3());
 

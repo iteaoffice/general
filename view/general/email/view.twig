@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-email-message-%s")|format(emailMessage)) %}
 
-<h1>{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
+<h1 class="display-4">{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
 
 <h2>{{ translate("txt-email-message-information") }}</h2>
 <dl class="dl-horizontal">
@@ -53,7 +53,7 @@
 {% if emailMessage.event.count() > 0 %}
     <h2>{{ translate("txt-email-tracking") }}</h2>
 
-    <table class="table table-hover table-striped table-condensed">
+    <table class="table table-hover table-striped table-condensed table-sm">
         <thead>
         <tr>
             <th>{{ translate("txt-id") }}</th>

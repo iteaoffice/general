@@ -19,6 +19,7 @@ namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Project\Entity\EntityAbstract;
+use Zend\Form\Annotation;
 
 /**
  * CostsVersion.
@@ -32,18 +33,24 @@ class ExchangeRate extends EntityAbstract
      * @ORM\Column(name="exchange_rate_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Annotation\Exclude()
      *
      * @var integer
      */
     private $id;
     /**
      * @ORM\Column(name="rate", type="decimal", nullable=false)
+     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"txt-exchange-rate-rate-label","help-block":"txt-exchange-rate-rate-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-exchange-rate-rate-placeholder"})
      *
      * @var float
      */
-    private $costs;
+    private $rate;
     /**
      * @ORM\Column(name="date", type="date", nullable=false)
+     * @Annotation\Type("\Zend\Form\Element\Date")
+     * @Annotation\Options({"label":"txt-exchagen-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
      *
      * @var \DateTime
      */
@@ -51,6 +58,7 @@ class ExchangeRate extends EntityAbstract
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Currency", cascade={"persist"}, inversedBy="exchangeRate")
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="currency_id")
+     * @Annotation\Exclude()
      *
      * @var \General\Entity\Currency
      */
@@ -110,18 +118,18 @@ class ExchangeRate extends EntityAbstract
     /**
      * @return float
      */
-    public function getCosts(): float
+    public function getRate(): float
     {
-        return $this->costs;
+        return $this->rate;
     }
 
     /**
-     * @param float $costs
+     * @param float $rate
      * @return ExchangeRate
      */
-    public function setCosts(float $costs): ExchangeRate
+    public function setRate(float $rate): ExchangeRate
     {
-        $this->costs = $costs;
+        $this->rate = $rate;
 
         return $this;
     }

@@ -27,9 +27,8 @@ use Zend\Http\Response;
 use Zend\Json\Json;
 
 /**
- * GeneralService.
- *
- * This is a general service which contains methods which are generally available in this module
+ * Class GeneralService
+ * @package General\Service
  */
 class GeneralService extends ServiceAbstract
 {
@@ -324,6 +323,15 @@ class GeneralService extends ServiceAbstract
         }
 
         return $this->findEntityById(Entity\Country::class, 0); //Unknown
+    }
+
+    /**
+     * @param Entity\Currency $currency
+     * @return bool
+     */
+    public function canDeleteCurrency(Entity\Currency $currency): bool
+    {
+        return $currency->getContract()->isEmpty();
     }
 
     /**

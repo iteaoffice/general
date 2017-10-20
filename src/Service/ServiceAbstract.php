@@ -99,24 +99,22 @@ abstract class ServiceAbstract implements ServiceInterface
     }
 
     /**
-     * Find 1 entity based on the id.
-     *
-     * @param string $entity
-     * @param integer $id
-     *
-     * @return null|\General\Entity\Country|\General\Entity\Gender|Vat|\General\Entity\Title
+     * @param $entity
+     * @param $id
+     * @return null|object|EntityAbstract
      */
-    public function findEntityById($entity, $id)
+    public function findEntityById($entity, $id): ?EntityAbstract
     {
         return $this->getEntityManager()->getRepository($entity)->find($id);
     }
 
     /**
-     * @param \General\Entity\EntityAbstract $entity
-     *
-     * @return \General\Entity\EntityAbstract
+     * @param EntityAbstract $entity
+     * @return EntityAbstract
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function newEntity(EntityAbstract $entity)
+    public function newEntity(EntityAbstract $entity): EntityAbstract
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
@@ -125,11 +123,12 @@ abstract class ServiceAbstract implements ServiceInterface
     }
 
     /**
-     * @param \General\Entity\EntityAbstract $entity
-     *
-     * @return \General\Entity\EntityAbstract
+     * @param EntityAbstract $entity
+     * @return EntityAbstract
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateEntity(EntityAbstract $entity)
+    public function updateEntity(EntityAbstract $entity): EntityAbstract
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
@@ -138,11 +137,12 @@ abstract class ServiceAbstract implements ServiceInterface
     }
 
     /**
-     * @param \General\Entity\EntityAbstract $entity
-     *
+     * @param EntityAbstract $entity
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function removeEntity(EntityAbstract $entity)
+    public function removeEntity(EntityAbstract $entity): bool
     {
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush();
@@ -173,7 +173,7 @@ abstract class ServiceAbstract implements ServiceInterface
     /**
      * @return GeneralService
      */
-    public function getGeneralService()
+    public function getGeneralService(): GeneralService
     {
         return $this->generalService;
     }
@@ -183,7 +183,7 @@ abstract class ServiceAbstract implements ServiceInterface
      *
      * @return ServiceAbstract
      */
-    public function setGeneralService($generalService)
+    public function setGeneralService($generalService): ServiceAbstract
     {
         $this->generalService = $generalService;
 
@@ -193,7 +193,7 @@ abstract class ServiceAbstract implements ServiceInterface
     /**
      * @return ModuleOptions
      */
-    public function getModuleOptions()
+    public function getModuleOptions(): ModuleOptions
     {
         return $this->moduleOptions;
     }
@@ -203,7 +203,7 @@ abstract class ServiceAbstract implements ServiceInterface
      *
      * @return ServiceAbstract
      */
-    public function setModuleOptions($moduleOptions)
+    public function setModuleOptions($moduleOptions): ServiceAbstract
     {
         $this->moduleOptions = $moduleOptions;
 
@@ -213,7 +213,7 @@ abstract class ServiceAbstract implements ServiceInterface
     /**
      * @return ContactService
      */
-    public function getContactService()
+    public function getContactService(): ContactService
     {
         return $this->contactService;
     }
@@ -223,7 +223,7 @@ abstract class ServiceAbstract implements ServiceInterface
      *
      * @return ServiceAbstract
      */
-    public function setContactService($contactService)
+    public function setContactService($contactService): ServiceAbstract
     {
         $this->contactService = $contactService;
 
@@ -233,7 +233,7 @@ abstract class ServiceAbstract implements ServiceInterface
     /**
      * @return AuthenticationService
      */
-    public function getAuthenticationService()
+    public function getAuthenticationService(): AuthenticationService
     {
         return $this->authenticationService;
     }
@@ -243,7 +243,7 @@ abstract class ServiceAbstract implements ServiceInterface
      *
      * @return ServiceAbstract
      */
-    public function setAuthenticationService($authenticationService)
+    public function setAuthenticationService($authenticationService): ServiceAbstract
     {
         $this->authenticationService = $authenticationService;
 

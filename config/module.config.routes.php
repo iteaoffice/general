@@ -13,6 +13,54 @@ use General\Controller;
 return [
     'router' => [
         'routes' => [
+            'image'         => [
+                'child_routes' => [
+                    'asset'    => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/a/[:name]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'asset',
+                            ],
+                        ],
+                    ],
+                    'country-flag'    => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/f/[:id].[:ext]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'flag',
+                            ],
+                        ],
+                    ],
+                    'challenge-icon'  => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ci/[:id]-[:last-update].[:ext]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'challenge-icon',
+                            ],
+                        ],
+                    ],
+                    'challenge-image' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/cim/[:id]-[:last-update].[:ext]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'challenge-image',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'assets'        => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
@@ -24,29 +72,7 @@ return [
                 ],
                 'may_terminate' => false,
                 'child_routes'  => [
-                    'country-flag'      => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => "/country-flag/[:iso3].[:ext]",
-                            'defaults' => [
-                                //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\IndexController::class,
-                                'action'     => 'country-flag',
-                            ],
-                        ],
-                    ],
-                    'content-type-icon' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => "/content-type-icon/[:hash].gif",
-                            'defaults' => [
-                                //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\IndexController::class,
-                                'action'     => 'content-type-icon',
-                            ],
-                        ],
-                    ],
-                    'style-image'       => [
+                    'style-image' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => "/style/image/[:source]",
@@ -57,26 +83,7 @@ return [
                             ],
                         ],
                     ],
-                    'challenge-icon'    => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => "/challenge/icon-[:id]-[:width].[:ext]",
-                            'defaults' => [
-                                'controller' => Controller\ChallengeController::class,
-                                'action'     => 'icon',
-                            ],
-                        ],
-                    ],
-                    'challenge-image'   => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => "/challenge/image-[:id]-[:width].[:ext]",
-                            'defaults' => [
-                                'controller' => Controller\ChallengeController::class,
-                                'action'     => 'image',
-                            ],
-                        ],
-                    ],
+
                 ],
             ],
             'country'       => [

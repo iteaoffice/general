@@ -29,6 +29,7 @@ $config = [
             Controller\ContentTypeController::class  => Controller\Factory\ControllerFactory::class,
             Controller\CountryController::class      => Controller\Factory\ControllerFactory::class,
             Controller\CurrencyController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\ImageController::class        => Controller\Factory\ControllerFactory::class,
             Controller\PasswordController::class     => Controller\Factory\ControllerFactory::class,
             Controller\GenderController::class       => Controller\Factory\ControllerFactory::class,
             Controller\ImpactStreamController::class => Controller\Factory\ControllerFactory::class,

@@ -105,23 +105,6 @@ class Icon extends EntityAbstract
     }
 
     /**
-     * @param null $width
-     * @return string
-     */
-    public function getCacheFileName($width = null): string
-    {
-        $cacheDir = __DIR__ . '/../../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-            DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'challenge';
-
-        return $cacheDir . DIRECTORY_SEPARATOR . sprintf(
-            'icon-%s-%s.%s',
-            $this->getId(),
-            $width,
-            $this->getContentType()->getExtension()
-        );
-    }
-
-    /**
      * @return int
      */
     public function getId(): ?int

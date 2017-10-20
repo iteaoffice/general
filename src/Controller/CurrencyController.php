@@ -20,14 +20,15 @@ use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
- *
+ * Class CurrencyController
+ * @package General\Controller
  */
 class CurrencyController extends GeneralAbstractController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function listAction()
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getGeneralFilter();
@@ -54,9 +55,9 @@ class CurrencyController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
         $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
         if (is_null($currency)) {
@@ -67,13 +68,11 @@ class CurrencyController extends GeneralAbstractController
     }
 
     /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
         $form = $this->getFormService()->prepare(Currency::class, null, $data);
         $form->remove('delete');
@@ -89,7 +88,7 @@ class CurrencyController extends GeneralAbstractController
                 $currency = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($currency);
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
                         'id' => $result->getId(),
@@ -106,11 +105,15 @@ class CurrencyController extends GeneralAbstractController
      */
     public function editAction()
     {
+        /** @var Currency $currency */
         $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
-
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
         $form = $this->getFormService()->prepare($currency, $currency, $data);
+
+        if ($this->getGeneralService()->canDeleteCurrency($currency)) {
+            $form->remove('delete');
+        }
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -120,7 +123,12 @@ class CurrencyController extends GeneralAbstractController
             if (isset($data['delete'])) {
                 $this->getGeneralService()->removeEntity($currency);
 
-                return $this->redirect()->toRoute('zfcadmin/currency/list');
+                return $this->redirect()->toRoute(
+                    'zfcadmin/currency/view',
+                    [
+                        'id' => $currency->getId(),
+                    ]
+                );
             }
 
             if ($form->isValid()) {
@@ -128,7 +136,7 @@ class CurrencyController extends GeneralAbstractController
                 $currency = $form->getData();
 
                 $currency = $this->getGeneralService()->updateEntity($currency);
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
                         'id' => $currency->getId(),
