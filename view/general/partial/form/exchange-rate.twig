@@ -3,13 +3,20 @@
 
 {{ form().openTag(form)|raw }}
 
-{% set currency = form.get('general_entity_password') %}
 
-{{ ztbformelement(currency.get('description')) }}
-{{ ztbformelement(currency.get('website')) }}
-{{ ztbformelement(currency.get('account')) }}
-{{ ztbformelement(currency.get('username')) }}
-{{ ztbformelement(currency.get('password')) }}
+
+<div class="form-group row">
+    <label class="col-md-3 form-control-label control-label">{{ translate("txt-currency") }}</label>
+
+    <div class="col-sm-9">
+        <p class="form-control-static">{{ currencyLink(currency,'view','name') }}</p>
+    </div>
+</div>
+
+{% set currency = form.get('general_entity_exchangerate') %}
+
+{{ ztbformelement(currency.get('rate')) }}
+{{ ztbformelement(currency.get('date')) }}
 
 {{ formelement(form.get('csrf')) }}
 

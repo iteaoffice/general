@@ -32,6 +32,7 @@
                     <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
                     <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'iso4217', 'text': translate('txt-iso4217')} %}</th>
                     <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'symbol', 'text': translate('txt-symbol')} %}</th>
+                    <th>{{ translate("txt-exchange-rate") }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,7 @@
                         <td>{{ currencyLink(currency,'view','name') }}</td>
                         <td>{{ currency.iso4217 }}</td>
                         <td>{{ currency.symbol }}</td>
+                        <td>{{ generalService.findActiveExchangeRate(currency).rate }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -53,7 +55,7 @@
     <div class="col-md-2">
         <div class="well well-sm">
             <fieldset>
-                <div class="form-group">
+                <div class="form-group row">
                     {{ ztbformelement(form.get('submit')) }}
                     {{ ztbformelement(form.get('clear')) }}
                 </div>

@@ -66,6 +66,7 @@ class Currency extends EntityAbstract
     private $symbol;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\ExchangeRate", cascade={"persist"}, mappedBy="currency")
+     * @ORM\OrderBy({"date" = "DESC"})
      * @Annotation\Exclude()
      *
      * @var \General\Entity\ExchangeRate[]|ArrayCollection

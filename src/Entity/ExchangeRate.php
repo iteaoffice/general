@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Project\Entity\EntityAbstract;
 use Zend\Form\Annotation;
 
 /**
@@ -99,7 +98,7 @@ class ExchangeRate extends EntityAbstract
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -118,7 +117,7 @@ class ExchangeRate extends EntityAbstract
     /**
      * @return float
      */
-    public function getRate(): float
+    public function getRate()
     {
         return $this->rate;
     }
@@ -137,7 +136,7 @@ class ExchangeRate extends EntityAbstract
     /**
      * @return \DateTime
      */
-    public function getDate(): \DateTime
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
@@ -156,7 +155,7 @@ class ExchangeRate extends EntityAbstract
     /**
      * @return Currency
      */
-    public function getCurrency(): Currency
+    public function getCurrency(): ?Currency
     {
         return $this->currency;
     }

@@ -12,3 +12,72 @@
     <dt>{{ translate("txt-currency-symbol") }}</dt>
     <dd>{{ currency.symbol }}</dd>
 </dl>
+
+<h2>{{ translate("txt-exchange-rate") }}</h2>
+<p>{{ translate("txt-exchange-rate-is-defined-as-the-amount-of-the-currency-agains-1-euro") }}</p>
+
+{% set row = [] %}
+
+{% if not currency.exchangeRate.isEmpty() %}
+
+    {% set currentExchangeRate = generalService.findActiveExchangeRate(currency) %}
+
+    <table class="table table-hover table-striped table-condensed table-sm">
+        <thead>
+        <tr>
+            <th>{{ translate("txt-date") }}</th>
+            <th>{{ translate("txt-rate") }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for exchangeRate in currency.exchangeRate %}
+            <tr {% if currentExchangeRate.id == exchangeRate.id %}class="success"{% endif %}>
+                <td>{{ exchangeRate.date|date('d-m-Y') }} {{ exchangeRateLink(exchangeRate,'edit','icon') }}</td>
+                <td>{{ currency.symbol }} {{ exchangeRate.rate }} {% if currentExchangeRate.id == exchangeRate.id %}
+                        <div class="label label-success">{{ translate("txt-active") }}</div>{% endif %}</td>
+
+                {% set newRow = "[new Date(%s, %s, %s), %s]"|format(exchangeRate.date|date('Y'),exchangeRate.date|date('m')-1,exchangeRate.date|date('j'), exchangeRate.rate ) %}
+            </tr>
+
+            {% set row = row|merge([newRow]) %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    {{ ztbalert().warning(translate("txt-no-exchange-rate-could-be-found-for-%s")|format(currency))|raw }}
+{% endif %}
+
+{{ exchangeRateLink(null, 'new', 'button', currency) }}
+
+{% if not currency.exchangeRate.isEmpty() %}
+    {% do headScript().appendFile('//www.gstatic.com/charts/loader.js') %}
+    <h2>{{ translate("txt-exchange-rate-graph") }}</h2>
+    <div id="chart_div"></div>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Exchange rate');
+
+            data.addRows([{{ row|join(', ')|raw }}]);
+
+            var options = {
+                title: '{{ translate("txt-historical-exchange-rate-of-%s")|format(currency) }}',
+
+                height: 550,
+                series: {
+                    0: {pointSize: 10},
+                },
+                legend: {position: 'bottom'}
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+    </script>
+{% endif %}
+

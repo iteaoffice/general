@@ -21,6 +21,7 @@ use General\Entity\ContentType;
 use General\Entity\Country;
 use General\Entity\Currency;
 use General\Entity\EntityAbstract;
+use General\Entity\ExchangeRate;
 use General\Entity\Password;
 use General\Entity\WebInfo;
 use Zend\View\Helper\ServerUrl;
@@ -63,6 +64,10 @@ abstract class LinkAbstract extends AbstractViewHelper
      * @var Currency
      */
     protected $currency;
+    /**
+     * @var ExchangeRate
+     */
+    protected $exchangeRate;
     /**
      * @var Challenge
      */
@@ -112,7 +117,7 @@ abstract class LinkAbstract extends AbstractViewHelper
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
-            return $serverUrl->__invoke() . $url($this->router, $this->routerParams);
+            return $serverUrl() . $url($this->router, $this->routerParams);
         }
         $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
@@ -137,7 +142,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @throws \Exception
      */
-    public function parseShow()
+    public function parseShow(): void
     {
         switch ($this->getShow()) {
             case 'button':
@@ -322,12 +327,11 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param EntityAbstract $entity
-     * @param string $assertion
-     * @param string $action
-     *
+     * @param $assertion
+     * @param $action
      * @return bool
      */
-    public function hasAccess(EntityAbstract $entity, $assertion, $action)
+    public function hasAccess(EntityAbstract $entity, $assertion, $action): bool
     {
         $assertion = $this->getAssertion($assertion);
         if (!is_null($entity)
@@ -345,18 +349,21 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param $assertion
-     *
      * @return AssertionAbstract
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function getAssertion($assertion)
+    public function getAssertion($assertion): AssertionAbstract
     {
         return $this->getServiceManager()->get($assertion);
     }
 
     /**
      * @return Authorize
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function getAuthorizeService()
+    public function getAuthorizeService(): Authorize
     {
         return $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
     }
@@ -367,7 +374,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return bool
      */
-    public function isAllowed($resource, $privilege = null)
+    public function isAllowed($resource, $privilege = null): bool
     {
         /**
          * @var $isAllowed IsAllowed
@@ -426,13 +433,13 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getCountryFlag(Country $country, $width): string
     {
-        return $this->getHelperPluginManager()->get('countryFlag')->__invoke($country, $width);
+        return $this->getHelperPluginManager()->get('countryFlag')($country, $width);
     }
 
     /**
      * @return WebInfo
      */
-    public function getWebInfo()
+    public function getWebInfo(): WebInfo
     {
         if (is_null($this->webInfo)) {
             $this->webInfo = new WebInfo();
@@ -521,6 +528,31 @@ abstract class LinkAbstract extends AbstractViewHelper
     public function setCurrency($currency): LinkAbstract
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+
+    /**
+     * @return ExchangeRate
+     */
+    public function getExchangeRate(): ExchangeRate
+    {
+        if (is_null($this->exchangeRate)) {
+            $this->exchangeRate = new ExchangeRate();
+        }
+
+        return $this->exchangeRate;
+    }
+
+    /**
+     * @param ExchangeRate $exchangeRate
+     *
+     * @return LinkAbstract
+     */
+    public function setExchangeRate($exchangeRate): LinkAbstract
+    {
+        $this->exchangeRate = $exchangeRate;
 
         return $this;
     }

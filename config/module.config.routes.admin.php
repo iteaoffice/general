@@ -271,7 +271,7 @@ return [
                                         ],
                                     ],
                                     'new'  => [
-                                        'type'    => 'Literal',
+                                        'type'    => 'Segment',
                                         'options' => [
                                             'route'    => '/new/currency-[:currencyId].html',
                                             'defaults' => [

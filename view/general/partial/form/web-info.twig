@@ -15,8 +15,8 @@
 {{ formelement(form.get('csrf')) }}
 
 
-<div class="form-group">
-    <div class="col-sm-offset-3 col-sm-9">
+<div class="form-group row">
+    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {% if form.has('delete') %}
             {{ ztbformelement(form.get('delete')) }}
@@ -32,6 +32,18 @@
 <script type="text/javascript">
     tinymce.init({
         selector: 'textarea',
-        plugins: "code"
+        plugins: [
+            "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+            "save table contextmenu directionality emoticons template paste textcolor"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
+        forced_root_block: false,
+        force_br_newlines: true,
+        relative_urls: false,
+        remove_script_host: false,
+        document_base_url: "{{ serverUrl() }}",
+        entity_encoding: "raw",
+        height: 700
     });
 </script>

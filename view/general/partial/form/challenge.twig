@@ -12,8 +12,8 @@
 {{ ztbformelement(country.get('backgroundColor')) }}
 {{ ztbformelement(country.get('frontColor')) }}
 
-<div class="form-group">
-    <label class="col-sm-3 control-label">{{ translate("txt-current-icon") }}</label>
+<div class="form-group row">
+    <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-icon") }}</label>
 
     <div class="col-sm-9">
         <p class="form-control-static">{{ challengeIcon(challenge, 100) }}</p>
@@ -22,8 +22,8 @@
 
 {{ ztbformelement(country.get('icon')) }}
 
-<div class="form-group">
-    <label class="col-sm-3 control-label">{{ translate("txt-current-image") }}</label>
+<div class="form-group row">
+    <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-image") }}</label>
 
     <div class="col-sm-9">
         <p class="form-control-static">{{ challengeImage(challenge, 200) }}</p>
@@ -34,8 +34,8 @@
 {{ ztbformelement(country.get('image')) }}
 
 {% if challenge.pdf %}
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{ translate("txt-current-pdf") }}</label>
+    <div class="form-group row">
+        <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
             <p class="form-control-static">{{ challengeLink(challenge,'download-pdf','text') }}</p>
@@ -47,8 +47,8 @@
 
 {{ formelement(form.get('csrf')) }}
 
-<div class="form-group">
-    <div class="col-sm-offset-3 col-sm-9">
+<div class="form-group row">
+    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}
     </div>

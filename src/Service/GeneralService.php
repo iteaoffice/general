@@ -75,6 +75,29 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @param Entity\Currency $currency
+     * @param \DateTime|null $dateTime
+     * @return Entity\ExchangeRate|null
+     */
+    public function findActiveExchangeRate(Entity\Currency $currency, \DateTime $dateTime = null): ?Entity\ExchangeRate
+    {
+        if (is_null($dateTime)) {
+            $dateTime = new \DateTime();
+        }
+
+        /**
+         * Iterate over the exchange rate and return the one as soon as the date is lower than today
+         */
+        foreach ($currency->getExchangeRate() as $exchangeRate) {
+            if ($exchangeRate->getDate() < $dateTime) {
+                return $exchangeRate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $identifier
      *
      * @return null|object|Entity\EmailMessage
@@ -136,7 +159,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByIso3($iso3):?Entity\Country
+    public function findCountryByIso3($iso3): ?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -149,7 +172,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|Entity\Gender|object
      */
-    public function findGenderByGender($gender):?Entity\Gender
+    public function findGenderByGender($gender): ?Entity\Gender
     {
         return $this->getEntityManager()->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
     }
@@ -159,7 +182,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|Entity\Title|object
      */
-    public function findTitleByTitle($title):?Entity\Title
+    public function findTitleByTitle($title): ?Entity\Title
     {
         return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
     }
@@ -171,7 +194,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByName($name):?Entity\Country
+    public function findCountryByName($name): ?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -186,7 +209,7 @@ class GeneralService extends ServiceAbstract
      *
      * @throws \InvalidArgumentException
      */
-    public function findCountryByCD($cd):?Entity\Country
+    public function findCountryByCD($cd): ?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
@@ -246,7 +269,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|Entity\Country
      */
-    public function findCountryOfProjectContact(Project $project):?Entity\Country
+    public function findCountryOfProjectContact(Project $project): ?Entity\Country
     {
         /** @var Repository\Country $repository */
         $repository = $this->getEntityManager()->getRepository(Entity\Country::class);

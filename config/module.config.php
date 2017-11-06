@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace General;
-
 /**
  * ITEA Office copyright message placeholder
  *
@@ -12,6 +7,10 @@ namespace General;
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+declare(strict_types=1);
+
+namespace General;
+
 use General\Acl;
 use General\Controller;
 use General\Factory;
@@ -29,6 +28,7 @@ $config = [
             Controller\ContentTypeController::class  => Controller\Factory\ControllerFactory::class,
             Controller\CountryController::class      => Controller\Factory\ControllerFactory::class,
             Controller\CurrencyController::class     => Controller\Factory\ControllerFactory::class,
+            Controller\ExchangeRateController::class => Controller\Factory\ControllerFactory::class,
             Controller\ImageController::class        => Controller\Factory\ControllerFactory::class,
             Controller\PasswordController::class     => Controller\Factory\ControllerFactory::class,
             Controller\GenderController::class       => Controller\Factory\ControllerFactory::class,
@@ -64,6 +64,7 @@ $config = [
             'countryFlag'         => View\Helper\CountryFlag::class,
             'countryLink'         => View\Helper\CountryLink::class,
             'currencyLink'        => View\Helper\CurrencyLink::class,
+            'exchangeRateLink'    => View\Helper\ExchangeRateLink::class,
             'passwordLink'        => View\Helper\PasswordLink::class,
             'emailMessageLink'    => View\Helper\EmailMessageLink::class,
             'vatLink'             => View\Helper\VatLink::class,
@@ -85,6 +86,7 @@ $config = [
             View\Helper\CountryFlag::class         => View\Factory\ViewHelperFactory::class,
             View\Helper\CountryLink::class         => View\Factory\ViewHelperFactory::class,
             View\Helper\CurrencyLink::class        => View\Factory\ViewHelperFactory::class,
+            View\Helper\ExchangeRateLink::class    => View\Factory\ViewHelperFactory::class,
             View\Helper\PasswordLink::class        => View\Factory\ViewHelperFactory::class,
             View\Helper\VatLink::class             => View\Factory\ViewHelperFactory::class,
             View\Helper\GenderLink::class          => View\Factory\ViewHelperFactory::class,

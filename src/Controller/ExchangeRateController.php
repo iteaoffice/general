@@ -12,12 +12,8 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Currency;
 use General\Entity\ExchangeRate;
-use General\Form\CurrencyFilter;
-use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -28,10 +24,16 @@ class ExchangeRateController extends GeneralAbstractController
 {
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function newAction()
     {
         $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('currencyId'));
+
+        if (is_null($currency)) {
+            return $this->notFoundAction();
+        }
 
         $data = $this->getRequest()->getPost()->toArray();
 
@@ -55,6 +57,7 @@ class ExchangeRateController extends GeneralAbstractController
                 $exchangeRate->setCurrency($currency);
 
                 $result = $this->getGeneralService()->newEntity($exchangeRate);
+
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
@@ -64,36 +67,54 @@ class ExchangeRateController extends GeneralAbstractController
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        return new ViewModel([
+            'form'     => $form,
+            'currency' => $currency
+        ]);
     }
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function editAction()
     {
-        $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
+        /** @var ExchangeRate $exchangeRate */
+        $exchangeRate = $this->getGeneralService()->findEntityById(ExchangeRate::class, $this->params('id'));
+        $currency = $exchangeRate->getCurrency();
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($currency, $currency, $data);
+        $form = $this->getFormService()->prepare($exchangeRate, $exchangeRate, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                return $this->redirect()->toRoute('zfcadmin/currency/list');
+                return $this->redirect()->toRoute(
+                    'zfcadmin/currency/view',
+                    [
+                        'id' => $currency->getId(),
+                    ]
+                );
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($currency);
+                $this->getGeneralService()->removeEntity($exchangeRate);
 
-                return $this->redirect()->toRoute('zfcadmin/currency/list');
+                return $this->redirect()->toRoute(
+                    'zfcadmin/currency/view',
+                    [
+                        'id' => $currency->getId(),
+                    ]
+                );
             }
 
             if ($form->isValid()) {
-                /** @var Currency $currency */
-                $currency = $form->getData();
+                /** @var Currency $exchangeRate */
+                $exchangeRate = $form->getData();
 
-                $currency = $this->getGeneralService()->updateEntity($currency);
+                $this->getGeneralService()->updateEntity($exchangeRate);
+
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [

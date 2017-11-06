@@ -45,11 +45,12 @@ class CurrencyController extends GeneralAbstractController
 
         return new ViewModel(
             [
-                'paginator'     => $paginator,
-                'form'          => $form,
-                'encodedFilter' => urlencode($filterPlugin->getHash()),
-                'order'         => $filterPlugin->getOrder(),
-                'direction'     => $filterPlugin->getDirection(),
+                'paginator'      => $paginator,
+                'form'           => $form,
+                'generalService' => $this->getGeneralService(),
+                'encodedFilter'  => urlencode($filterPlugin->getHash()),
+                'order'          => $filterPlugin->getOrder(),
+                'direction'      => $filterPlugin->getDirection(),
             ]
         );
     }
@@ -64,7 +65,10 @@ class CurrencyController extends GeneralAbstractController
             return $this->notFoundAction();
         }
 
-        return new ViewModel(['currency' => $currency]);
+        return new ViewModel([
+            'generalService' => $this->getGeneralService(),
+            'currency'       => $currency
+        ]);
     }
 
     /**
@@ -88,6 +92,7 @@ class CurrencyController extends GeneralAbstractController
                 $currency = $form->getData();
 
                 $result = $this->getGeneralService()->newEntity($currency);
+
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
@@ -136,6 +141,7 @@ class CurrencyController extends GeneralAbstractController
                 $currency = $form->getData();
 
                 $currency = $this->getGeneralService()->updateEntity($currency);
+
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
                     [
