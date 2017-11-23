@@ -4,8 +4,8 @@
 <div class="row">
 
     <div class="col-md-9">
-        <h1 class="display-4">{{ translate("txt-impact-stream") }}  <a class="btn btn-primary"
-                                                    href="/publication/download/itea-impact-stream.pdf">{{ translate("txt-download-full-impact-stream") }}</a>
+        <h1 class="display-4">{{ translate("txt-impact-stream") }} <a class="btn btn-primary"
+                                                                      href="/publication/download/itea-impact-stream.pdf">{{ translate("txt-download-full-impact-stream") }}</a>
             <a id="toggle-help" class="cursor-help"><i class="fa fa-question-circle" id="#toggle-help"></i></a>
         </h1>
 
@@ -70,9 +70,8 @@
                                     {% set challenges = challenges|merge([projectChallenge.challenge.id]) %}
                                 {% endfor %}
                             {% endfor %}
-                            <br><br>
 
-                            <div class="row">
+                            <div class="row" style="padding-top: 10px;">
                                 <div class="col-md-9">
                                     <p>{{ result.abstract }}</p>
                                 </div>
@@ -84,10 +83,12 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        <span class="text-muted">{{ translate("txt-date-updated: %s")|format(result.dateReleased|date('d-m-Y')) }}</span>
+
                     </div>
 
-
-                    <div class="well well-sm">
+                    <div class="well well-sm" style="margin-top: 10px;">
             <span class="text-muted">
 <label style="font-weight: normal">
                       <input type="checkbox" class="result"
@@ -141,6 +142,9 @@
 
         <h3>{{ translate("txt-filter") }}</h3>
         <div class="well well-sm">
+
+            {{ ztbformelement(form.get('dateInterval')) }}
+
             {% set facets = form.get('facet') %}
             {% for facet in facets %}
                 {{ ztbformelement(facet) }}
@@ -154,11 +158,14 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#toggle-help').click(function() {
+        $('#toggle-help').click(function () {
             $('#impact-stream-help').toggle('fade').fade();
         });
 
         $('input[type="checkbox"]').not('.result').on('click', function () {
+            $('#search').submit();
+        });
+        $('input[type="radio"]').on('change', function () {
             $('#search').submit();
         });
         $('#searchButton').on('click', function () {

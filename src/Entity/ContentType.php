@@ -27,12 +27,12 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class ContentType extends EntityAbstract implements ResourceInterface
 {
-    const TYPE_UNKNOWN = 0;
-    const TYPE_PDF = 1;
-    const TYPE_OFFICE_2007 = 16;
-    const TYPE_EXCEL = 13;
-    const TYPE_EXCEL_2007 = 19;
-    const TYPE_EXCEL_MACRO = 143;
+    public const TYPE_UNKNOWN = 0;
+    public const TYPE_PDF = 1;
+    public const TYPE_OFFICE_2007 = 16;
+    public const TYPE_EXCEL = 13;
+    public const TYPE_EXCEL_2007 = 19;
+    public const TYPE_EXCEL_MACRO = 143;
     /**
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
@@ -178,6 +178,12 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $projectDescriptionImage;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Pca[]|Collections\ArrayCollection
+     */
+    private $pca;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      * @var \Project\Entity\Report\Item[]|Collections\ArrayCollection
@@ -269,6 +275,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->result = new Collections\ArrayCollection();
         $this->workpackageDocument = new Collections\ArrayCollection();
         $this->poster = new Collections\ArrayCollection();
+        $this->pca = new Collections\ArrayCollection();
         $this->ideaDocument = new Collections\ArrayCollection();
         $this->ideaImage = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
@@ -1022,6 +1029,25 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setChallengeIcon($challengeIcon): ContentType
     {
         $this->challengeIcon = $challengeIcon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Pca[]
+     */
+    public function getPca()
+    {
+        return $this->pca;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Pca[] $pca
+     * @return ContentType
+     */
+    public function setPca($pca)
+    {
+        $this->pca = $pca;
 
         return $this;
     }

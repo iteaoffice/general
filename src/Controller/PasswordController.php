@@ -59,7 +59,7 @@ class PasswordController extends GeneralAbstractController
     public function viewAction(): ViewModel
     {
         $password = $this->getGeneralService()->findEntityById(Password::class, $this->params('id'));
-        if (is_null($password)) {
+        if (\is_null($password)) {
             return $this->notFoundAction();
         }
 

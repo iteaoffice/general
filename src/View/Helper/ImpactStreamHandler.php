@@ -14,7 +14,6 @@ namespace General\View\Helper;
 
 use Content\Entity\Content;
 use Content\Entity\Param;
-use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
@@ -58,12 +57,26 @@ class ImpactStreamHandler extends AbstractViewHelper
      */
     public function parseIndex(): string
     {
+        //Set the default date on now
+        $today = new \DateTime();
+
+        $lastYear = new \DateTime();
+        $lastYear->sub(new \DateInterval("P12M"));
+
         $searchService = $this->getImpactStreamSearchService();
         $page = $this->getRequest()->getQuery('page', 1);
         $form = new SearchResult();
         $data = array_merge(
             [
                 'order'     => '',
+                'toDate' => [
+                    'year' => $today->format('Y'),
+                    'month' => $today->format('m'),
+                ],
+                'fromDate' => [
+                    'year' => $lastYear->format('Y'),
+                    'month' => $lastYear->format('m'),
+                ],
                 'direction' => '',
                 'query'     => '',
                 'facet'     => [],
@@ -83,7 +96,16 @@ class ImpactStreamHandler extends AbstractViewHelper
         ];
 
         if ($this->getRequest()->isGet()) {
-            $searchService->setSearch($data['query'], $searchFields, $data['order'], $data['direction']);
+            $dateInterval = $this->getImpactStreamSearchService()->parseDateInterval($data);
+
+            $searchService->setSearch(
+                $data['query'],
+                $searchFields,
+                $data['order'],
+                $data['direction'],
+                $dateInterval->fromDate,
+                $dateInterval->toDate
+            );
             if (isset($data['facet'])) {
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
@@ -114,7 +136,7 @@ class ImpactStreamHandler extends AbstractViewHelper
         $filteredData = array_filter(
             $data,
             function ($key) {
-                return !in_array($key, ['order', 'direction'], true);
+                return !\in_array($key, ['order', 'direction'], true);
             },
             ARRAY_FILTER_USE_KEY
         );
@@ -128,7 +150,7 @@ class ImpactStreamHandler extends AbstractViewHelper
                 'query'              => $data['query'],
                 'arguments'          => http_build_query($filteredData),
                 'paginator'          => $paginator,
-                'allChallenges'         => $this->getGeneralService()->findAllChallenges(),
+                'allChallenges'      => $this->getGeneralService()->findAllChallenges(),
                 'projectService'     => $this->getProjectService(),
                 'highlighting'       => $paginator->getCurrentItems()->getHighlighting(),
                 'highlightingFields' => [
@@ -181,7 +203,7 @@ class ImpactStreamHandler extends AbstractViewHelper
         }
 
         //Try first to see if the param can be found from the route (rule 1)
-        if (!is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+        if (!\is_null($this->getRouteMatch()->getParam($param->getParam()))) {
             return $this->getRouteMatch()->getParam($param->getParam());
         }
 
@@ -207,6 +229,8 @@ class ImpactStreamHandler extends AbstractViewHelper
 
     /**
      * @return ImpactStreamSearchService
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function getImpactStreamSearchService(): ImpactStreamSearchService
     {

@@ -31,14 +31,14 @@ class ContentTypeIcon extends AbstractViewHelper
      */
     public function __invoke(ContentType $contentType = null, $contentTypeName = null)
     {
-        if (!is_null($contentTypeName)) {
+        if (!\is_null($contentTypeName)) {
             /** @var GeneralService $generalService */
             $generalService = $this->getServiceManager()->get(GeneralService::class);
 
             $contentType = $generalService->findContentTypeByContentTypeName($contentTypeName);
         }
 
-        if (is_null($contentType)) {
+        if (\is_null($contentType)) {
             return null;
         }
 

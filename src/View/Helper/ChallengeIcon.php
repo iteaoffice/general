@@ -41,7 +41,7 @@ class ChallengeIcon extends ImageAbstract
     ): string {
         $icon = $challenge->getIcon();
 
-        if (is_null($icon)) {
+        if (\is_null($icon)) {
             return '';
         }
 

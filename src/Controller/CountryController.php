@@ -60,7 +60,7 @@ class CountryController extends GeneralAbstractController
     public function viewAction()
     {
         $country = $this->getGeneralService()->findEntityById(Country::class, $this->params('id'));
-        if (is_null($country)) {
+        if (\is_null($country)) {
             return $this->notFoundAction();
         }
 

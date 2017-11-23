@@ -40,7 +40,7 @@ class StyleController extends GeneralAbstractController
             }
         }
         if (!$requestedFileFound
-            || is_null($this->params('source'))
+            || \is_null($this->params('source'))
         ) {
             foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
                 $requestedFile = $location . DIRECTORY_SEPARATOR . $this->getModuleOptions()->getImageLocation()

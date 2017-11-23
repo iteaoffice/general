@@ -46,7 +46,7 @@ class ImpactStreamController extends GeneralAbstractController
         /** @var Result $result */
         $result = $this->getProjectService()->findEntityByDocRef(Result::class, (string)$this->params('docRef'));
 
-        if (is_null($result) || count($result->getObject()) === 0) {
+        if (\is_null($result) || count($result->getObject()) === 0) {
             return $this->notFoundAction();
         }
 
@@ -67,7 +67,7 @@ class ImpactStreamController extends GeneralAbstractController
             if (!array_key_exists(
                 'challenge_' . $challenge->getSequence(),
                 $this->challenge
-            ) && !is_null($challenge->getPdf())) {
+            ) && !\is_null($challenge->getPdf())) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
@@ -259,7 +259,7 @@ class ImpactStreamController extends GeneralAbstractController
     {
         $resultIds = explode(',', $this->getRequest()->getQuery('result'));
 
-        if (count($resultIds) === 0) {
+        if (\count($resultIds) === 0) {
             return $this->notFoundAction();
         }
 

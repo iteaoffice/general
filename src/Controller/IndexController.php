@@ -28,13 +28,13 @@ class IndexController extends GeneralAbstractController
      */
     public function codeAction()
     {
-        if (is_null($this->params('cd'))) {
+        if (\is_null($this->params('cd'))) {
             return $this->notFoundAction();
         }
 
         $country = $this->getGeneralService()->findCountryByCD($this->params('cd'));
 
-        if (is_null($country)) {
+        if (\is_null($country)) {
             return $this->notFoundAction();
         }
 

@@ -61,7 +61,7 @@ class CurrencyController extends GeneralAbstractController
     public function viewAction(): ViewModel
     {
         $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
-        if (is_null($currency)) {
+        if (\is_null($currency)) {
             return $this->notFoundAction();
         }
 

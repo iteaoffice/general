@@ -65,7 +65,7 @@ class EmailController extends GeneralAbstractController
     {
         $emailMessage = $this->getGeneralService()
             ->findEntityById(EmailMessage::class, $this->params('id'));
-        if (is_null($emailMessage)) {
+        if (\is_null($emailMessage)) {
             return $this->notFoundAction();
         }
 
@@ -88,7 +88,7 @@ class EmailController extends GeneralAbstractController
          * Try to find the email message, if this cannot be found, short circuit it
          */
         $emailMessage = $this->getGeneralService()->findEmailMessageByIdentifier($data->CustomID);
-        if (is_null($emailMessage)) {
+        if (\is_null($emailMessage)) {
             return new JsonModel();
         }
 

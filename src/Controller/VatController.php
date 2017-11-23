@@ -64,7 +64,7 @@ class VatController extends GeneralAbstractController
     public function viewAction()
     {
         $vat = $this->getGeneralService()->findEntityById(Vat::class, $this->params('id'));
-        if (is_null($vat)) {
+        if (\is_null($vat)) {
             return $this->notFoundAction();
         }
 

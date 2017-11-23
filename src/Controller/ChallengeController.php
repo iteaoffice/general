@@ -66,7 +66,7 @@ class ChallengeController extends GeneralAbstractController
     public function viewAction(): ViewModel
     {
         $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
-        if (is_null($challenge)) {
+        if (\is_null($challenge)) {
             return $this->notFoundAction();
         }
 
@@ -217,7 +217,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['icon']['tmp_name'])) {
-                    if (is_null($icon)) {
+                    if (\is_null($icon)) {
                         $icon = new Challenge\Icon();
                     }
                     $icon->setChallenge($challenge);
@@ -231,7 +231,7 @@ class ChallengeController extends GeneralAbstractController
                 }
 
                 //Remove the icon when the tmp is empty and there is not icon at all
-                if (empty($fileData['icon']['tmp_name']) && !is_null($challenge->getIcon()) && is_null($challenge->getIcon()->getId())) {
+                if (empty($fileData['icon']['tmp_name']) && !\is_null($challenge->getIcon()) && \is_null($challenge->getIcon()->getId())) {
                     $challenge->setIcon(null);
                 }
 
@@ -240,7 +240,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['image']['tmp_name'])) {
-                    if (is_null($image)) {
+                    if (\is_null($image)) {
                         $image = new Challenge\Image();
                     }
                     $image->setChallenge($challenge);
@@ -254,7 +254,7 @@ class ChallengeController extends GeneralAbstractController
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
-                if (empty($fileData['image']['tmp_name']) && !is_null($challenge->getImage()) && is_null($challenge->getImage()->getId())) {
+                if (empty($fileData['image']['tmp_name']) && !\is_null($challenge->getImage()) && \is_null($challenge->getImage()->getId())) {
                     $challenge->setImage(null);
                 }
 
@@ -262,7 +262,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['pdf']['tmp_name'])) {
-                    if (is_null($pdf)) {
+                    if (\is_null($pdf)) {
                         $pdf = new Challenge\Pdf();
                     }
                     $pdf->setChallenge($challenge);
@@ -272,7 +272,7 @@ class ChallengeController extends GeneralAbstractController
                 }
 
                 //Remove the pdf when the tmp is empty and there is not pdf at all
-                if (empty($fileData['pdf']['tmp_name']) && !is_null($challenge->getPdf()) && is_null($challenge->getPdf()->getId())) {
+                if (empty($fileData['pdf']['tmp_name']) && !\is_null($challenge->getPdf()) && \is_null($challenge->getPdf()->getId())) {
                     $challenge->setPdf(null);
                 }
 
@@ -314,7 +314,7 @@ class ChallengeController extends GeneralAbstractController
         /*
          * Check if a project is found
          */
-        if (is_null($challenge) || is_null($challenge->getPdf())) {
+        if (\is_null($challenge) || \is_null($challenge->getPdf())) {
             return $this->notFoundAction();
         }
 

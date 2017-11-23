@@ -32,7 +32,7 @@ class Title extends EntityAbstract implements ResourceInterface
     /**
      * Constant for the default title.
      */
-    const TITLE_UNKNOWN = 0;
+    public const TITLE_UNKNOWN = 0;
     /**
      * @ORM\Column(name="title_id",type="integer",nullable=false)
      * @ORM\Id

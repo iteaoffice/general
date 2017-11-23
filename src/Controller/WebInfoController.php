@@ -62,7 +62,7 @@ class WebInfoController extends GeneralAbstractController
     {
         /** @var WebInfo $webInfo */
         $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
-        if (is_null($webInfo)) {
+        if (\is_null($webInfo)) {
             return $this->notFoundAction();
         }
 

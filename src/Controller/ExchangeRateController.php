@@ -31,7 +31,7 @@ class ExchangeRateController extends GeneralAbstractController
     {
         $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('currencyId'));
 
-        if (is_null($currency)) {
+        if (\is_null($currency)) {
             return $this->notFoundAction();
         }
 

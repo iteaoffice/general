@@ -32,7 +32,7 @@ class CountryFlag extends ImageAbstract
     public function __invoke(Country $country, $width = 20): string
     {
         $flag = $country->getFlag();
-        if (is_null($flag)) {
+        if (\is_null($flag)) {
             return '';
         }
 

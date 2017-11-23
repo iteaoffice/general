@@ -32,13 +32,13 @@ class Currency extends EntityRepository
         $queryBuilder->select('general_entity_currency');
         $queryBuilder->from(Entity\Currency::class, 'general_entity_currency');
 
-        if (!is_null($filter)) {
+        if (!\is_null($filter)) {
             $queryBuilder = $this->applyFilter($queryBuilder, $filter);
         }
 
         $direction = 'ASC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }

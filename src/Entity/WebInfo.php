@@ -27,8 +27,8 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class WebInfo extends EntityAbstract implements ResourceInterface
 {
-    const PLAIN = 1;
-    const NOT_PLAIN = 0;
+    public const PLAIN = 1;
+    public const NOT_PLAIN = 0;
 
     /**
      * @var array

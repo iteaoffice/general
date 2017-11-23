@@ -65,7 +65,7 @@ class GenderController extends GeneralAbstractController
     {
         $gender = $this->getGeneralService()
             ->findEntityById(Gender::class, $this->params('id'));
-        if (is_null($gender)) {
+        if (\is_null($gender)) {
             return $this->notFoundAction();
         }
 

@@ -65,7 +65,7 @@ class EmailMessageLink extends LinkAbstract
      */
     public function getEmailMessage(): EmailMessage
     {
-        if (is_null($this->emailMessage)) {
+        if (\is_null($this->emailMessage)) {
             $this->emailMessage = new EmailMessage();
         }
 

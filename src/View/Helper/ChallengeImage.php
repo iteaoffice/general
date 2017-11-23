@@ -41,7 +41,7 @@ class ChallengeImage extends ImageAbstract
     ): string {
         $image = $challenge->getImage();
 
-        if (is_null($image)) {
+        if (\is_null($image)) {
             return '';
         }
 

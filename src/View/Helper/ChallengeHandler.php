@@ -38,7 +38,7 @@ class ChallengeHandler extends AbstractViewHelper
         $this->extractContentParam($content);
         switch ($content->getHandler()->getHandler()) {
             case 'challenge':
-                if (is_null($this->getChallenge())) {
+                if (\is_null($this->getChallenge())) {
                     $this->getServiceManager()->get('response')->setStatusCode(404);
 
                     return 'The selected challenge cannot be found';
@@ -51,7 +51,7 @@ class ChallengeHandler extends AbstractViewHelper
             case 'challenge_list':
                 return $this->parseChallengeList();
             case 'challenge_project':
-                if (is_null($this->getChallenge())) {
+                if (\is_null($this->getChallenge())) {
                     $this->getServiceManager()->get('response')->setStatusCode(404);
 
                     return 'The selected challenge cannot be found';
@@ -80,7 +80,7 @@ class ChallengeHandler extends AbstractViewHelper
                 case 'docRef':
                     $docRef = $this->findParamValueFromContent($content, $parameter);
 
-                    if (!is_null($docRef)) {
+                    if (!\is_null($docRef)) {
                         $this->setChallengeDocRef($docRef);
                     }
                     break;
@@ -104,7 +104,7 @@ class ChallengeHandler extends AbstractViewHelper
         }
 
         //Try first to see if the param can be found from the route (rule 1)
-        if (!is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+        if (!\is_null($this->getRouteMatch()->getParam($param->getParam()))) {
             return $this->getRouteMatch()->getParam($param->getParam());
         }
 
@@ -120,7 +120,7 @@ class ChallengeHandler extends AbstractViewHelper
         /** @var Challenge $challenge */
         $challenge = $this->getGeneralService()->findEntityByDocRef(Challenge::class, $docRef);
 
-        if (!is_null($challenge)) {
+        if (!\is_null($challenge)) {
             $this->setChallenge($challenge);
         }
     }

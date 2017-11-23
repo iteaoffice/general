@@ -117,10 +117,10 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     public function addRouterParam($key, $value, $allowNull = true): void
     {
-        if (!$allowNull && is_null($value)) {
+        if (!$allowNull && \is_null($value)) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (!is_null($value)) {
+        if (!\is_null($value)) {
             $this->routerParams[$key] = $value;
         }
     }

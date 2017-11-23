@@ -38,13 +38,13 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from(Entity\Country::class, 'general_entity_country');
 
-        if (!is_null($filter)) {
+        if (!\is_null($filter)) {
             $queryBuilder = $this->applyFilter($queryBuilder, $filter);
         }
 
         $direction = 'ASC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -403,7 +403,7 @@ class Country extends EntityRepository
         $restOfWorld = [];
 
         foreach ($countries as $country) {
-            if (!is_null($country->getEu())) {
+            if (!\is_null($country->getEu())) {
                 $euCountries[$country->getId()] = $country;
             } else {
                 $restOfWorld[$country->getId()] = $country;
@@ -430,7 +430,7 @@ class Country extends EntityRepository
         $restOfWorld = [];
 
         foreach ($countries as $country) {
-            if (!is_null($country->getEu())) {
+            if (!\is_null($country->getEu())) {
                 $euCountries[$country->getId()] = $country;
             } else {
                 $restOfWorld[$country->getId()] = $country;

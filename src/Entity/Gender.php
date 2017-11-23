@@ -32,7 +32,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     /**
      * Constant for the default gender.
      */
-    const GENDER_UNKNOWN = 0;
+    public const GENDER_UNKNOWN = 0;
     /**
      * @ORM\Column(name="gender_id",type="integer",nullable=false)
      * @ORM\Id

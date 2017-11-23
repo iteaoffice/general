@@ -55,7 +55,7 @@ class CountryHandler extends AbstractViewHelper
     {
         $this->extractContentParam($content);
 
-        if (in_array(
+        if (\in_array(
             $content->getHandler()->getHandler(),
             [
                 'country',
@@ -67,7 +67,7 @@ class CountryHandler extends AbstractViewHelper
             ],
             true
         )) {
-            if (is_null($this->getCountry())) {
+            if (\is_null($this->getCountry())) {
                 $this->getServiceManager()->get('response')->setStatusCode(404);
 
                 return sprintf("The selected country cannot be found");
@@ -149,7 +149,7 @@ class CountryHandler extends AbstractViewHelper
                 case 'docRef':
                     $docRef = $this->findParamValueFromContent($content, $parameter);
 
-                    if (!is_null($docRef)) {
+                    if (!\is_null($docRef)) {
                         $this->setCountryByDocRef($docRef);
                     }
                     break;
@@ -176,7 +176,7 @@ class CountryHandler extends AbstractViewHelper
         }
 
         //Try first to see if the param can be found from the route (rule 1)
-        if (!is_null($this->getRouteMatch()->getParam($param->getParam()))) {
+        if (!\is_null($this->getRouteMatch()->getParam($param->getParam()))) {
             return $this->getRouteMatch()->getParam($param->getParam());
         }
 
@@ -387,7 +387,7 @@ class CountryHandler extends AbstractViewHelper
      */
     public function parseOrganisationList($page): string
     {
-        if (is_null($this->getCountry())) {
+        if (\is_null($this->getCountry())) {
             throw new \InvalidArgumentException("The country cannot be null");
         }
         $organisationQuery = $this->getOrganisationService()

@@ -29,7 +29,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class Vat extends EntityAbstract implements ResourceInterface
 {
-    const VAT_VH = 7;
+    public const VAT_VH = 7;
     /**
      * @ORM\Column(name="vat_id",type="integer",nullable=false)
      * @ORM\Id

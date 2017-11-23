@@ -51,7 +51,7 @@ class VatTypeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!is_null($vatType)) {
+        if (!\is_null($vatType)) {
             $this->addRouterParam('id', $vatType->getId());
             $this->setShowOptions(['type' => $vatType->getType()]);
         }

@@ -62,7 +62,7 @@ class ContentTypeController extends GeneralAbstractController
     public function viewAction()
     {
         $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
-        if (is_null($contentType)) {
+        if (\is_null($contentType)) {
             return $this->notFoundAction();
         }
 

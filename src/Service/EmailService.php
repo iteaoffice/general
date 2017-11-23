@@ -174,7 +174,7 @@ class EmailService extends ServiceAbstract
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            !\is_null($contact->getId()) ? $contact->getDisplayName() : null
                         );
                     }
 
@@ -234,7 +234,7 @@ class EmailService extends ServiceAbstract
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            !\is_null($contact->getId()) ? $contact->getDisplayName() : null
                         );
                     }
                 }
@@ -284,7 +284,7 @@ class EmailService extends ServiceAbstract
         /*
          * If not sender, use default
          */
-        if (!is_null($this->email->getFrom())) {
+        if (!\is_null($this->email->getFrom())) {
             $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
@@ -314,7 +314,7 @@ class EmailService extends ServiceAbstract
                 $this->message->addBcc($emailAddress);
             }
         }
-        if (!is_null($this->email->getReplyTo())) {
+        if (!\is_null($this->email->getReplyTo())) {
             $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
         }
     }
@@ -356,7 +356,7 @@ class EmailService extends ServiceAbstract
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (empty($this->message->getSubject()) && !is_null($this->template)) {
+        if (empty($this->message->getSubject()) && !\is_null($this->template)) {
             $this->message->setSubject($this->template->getSubject());
         }
 
@@ -524,7 +524,7 @@ class EmailService extends ServiceAbstract
 
         $matches = array_unique($matches[1]);
 
-        if (count($matches) > 0) {
+        if (\count($matches) > 0) {
             foreach ($matches as $key => $filename) {
                 if (($filename) && file_exists($filename)) {
                     $attachment = $this->addInlineAttachment($filename);
@@ -614,10 +614,10 @@ class EmailService extends ServiceAbstract
         }
         $emailMessage->setSubject($this->message->getSubject());
         $emailMessage->setMessage($this->getHtmlView());
-        $emailMessage->setAmountOfAttachments(count($this->attachments));
+        $emailMessage->setAmountOfAttachments(\count($this->attachments));
 
         //Inject the mailing contact
-        if (!is_null($this->getMailingContact())) {
+        if (!\is_null($this->getMailingContact())) {
             $emailMessage->setMailingContact($this->getMailingContact());
         }
 
@@ -730,7 +730,7 @@ class EmailService extends ServiceAbstract
     {
         $this->mailing = $mailing;
 
-        if (is_null($this->email)) {
+        if (\is_null($this->email)) {
             throw new \RuntimeException('The email object is empty. Did you call create() first?');
         }
 
@@ -770,7 +770,7 @@ class EmailService extends ServiceAbstract
     {
         $this->updateTemplateVarsWithContact($this->getAuthenticationService()->getIdentity());
 
-        if (is_null($this->mailing)) {
+        if (\is_null($this->mailing)) {
             throw new \RuntimeException("The mailing object is empty. Did set the template");
         }
 
@@ -797,11 +797,11 @@ class EmailService extends ServiceAbstract
     {
         $this->template = $this->getGeneralService()->findWebInfoByInfo($templateName);
 
-        if (is_null($this->template)) {
+        if (\is_null($this->template)) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
 
-        if (is_null($this->email)) {
+        if (\is_null($this->email)) {
             throw new \RuntimeException('The email object is empty. Did you call create() first?');
         }
 

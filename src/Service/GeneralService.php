@@ -81,7 +81,7 @@ class GeneralService extends ServiceAbstract
      */
     public function findActiveExchangeRate(Entity\Currency $currency, \DateTime $dateTime = null): ?Entity\ExchangeRate
     {
-        if (is_null($dateTime)) {
+        if (\is_null($dateTime)) {
             $dateTime = new \DateTime();
         }
 
@@ -315,7 +315,7 @@ class GeneralService extends ServiceAbstract
             ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
-        if (is_null($contentType)) {
+        if (\is_null($contentType)) {
             /** @var Entity\ContentType $contentType */
             $contentType = $this->getEntityManager()->getRepository(Entity\ContentType::class)
                 ->find(Entity\ContentType::TYPE_UNKNOWN);

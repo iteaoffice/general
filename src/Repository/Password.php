@@ -36,7 +36,7 @@ class Password extends EntityRepository
         $queryBuilder->select('general_entity_password');
         $queryBuilder->from(Entity\Password::class, 'general_entity_password');
 
-        if (!is_null($filter)) {
+        if (!\is_null($filter)) {
             /**
              * Get the webInfo repository
              *
@@ -46,7 +46,7 @@ class Password extends EntityRepository
         }
 
         $direction = 'ASC';
-        if (isset($filter['direction']) && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)) {
+        if (isset($filter['direction']) && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)) {
             $direction = strtoupper($filter['direction']);
         }
 

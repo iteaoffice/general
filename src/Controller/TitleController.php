@@ -64,7 +64,7 @@ class TitleController extends GeneralAbstractController
     public function viewAction()
     {
         $title = $this->getGeneralService()->findEntityById(Title::class, $this->params('id'));
-        if (is_null($title)) {
+        if (\is_null($title)) {
             return $this->notFoundAction();
         }
 

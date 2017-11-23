@@ -50,7 +50,7 @@ class CountryMap extends AbstractViewHelper
         $js[] = "var data = {";
         foreach ($countries as $country) {
             $countryList[] = '"' . $country->getCd() . '": ';
-            $countryList[] = (!is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
+            $countryList[] = (!\is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
                 : 1;
             $countryList[] = ",";
         }

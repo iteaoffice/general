@@ -68,13 +68,13 @@ class ImageController extends GeneralAbstractController
         $response = $this->getResponse();
 
         $id = $this->params('id');
-        if (is_null($id)) {
+        if (\is_null($id)) {
             return $response;
         }
         /** @var Country $country */
         $country = $this->getGeneralService()->findEntityById(Country::class, $id);
 
-        if (is_null($country)) {
+        if (\is_null($country)) {
             return $response;
         }
 
@@ -98,13 +98,13 @@ class ImageController extends GeneralAbstractController
         $response = $this->getResponse();
 
         $id = $this->params('id');
-        if (is_null($id)) {
+        if (\is_null($id)) {
             return $response;
         }
         /** @var Icon $icon */
         $icon = $this->getGeneralService()->findEntityById(Icon::class, $id);
 
-        if (is_null($icon)) {
+        if (\is_null($icon)) {
             return $response;
         }
 
@@ -128,13 +128,13 @@ class ImageController extends GeneralAbstractController
         $response = $this->getResponse();
 
         $id = $this->params('id');
-        if (is_null($id)) {
+        if (\is_null($id)) {
             return $response;
         }
         /** @var Image $image */
         $image = $this->getGeneralService()->findEntityById(Image::class, $id);
 
-        if (is_null($image)) {
+        if (\is_null($image)) {
             return $response;
         }
 
