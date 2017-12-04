@@ -65,9 +65,9 @@ class ImpactStreamController extends GeneralAbstractController
     {
         foreach ($this->getGeneralService()->parseChallengesByResult($result) as $challenge) {
             if (!array_key_exists(
-                'challenge_' . $challenge->getSequence(),
-                $this->challenge
-            ) && !\is_null($challenge->getPdf())) {
+                    'challenge_' . $challenge->getSequence(),
+                    $this->challenge
+                ) && !\is_null($challenge->getPdf())) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
@@ -78,7 +78,12 @@ class ImpactStreamController extends GeneralAbstractController
 
         $fileName = self::parseTempFile('result', $result->getId());
         file_put_contents($fileName, stream_get_contents($result->getObject()->first()->getObject()));
-        $this->result['result' . $result->getResult()] = $fileName;
+
+        $ordering = sprintf('result_%s_%s',
+            !$result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()->first()->getChallenge()->getSequence() : 1000,
+            $result->getResult());
+
+        $this->result[$ordering] = $fileName;
     }
 
     /**
@@ -93,6 +98,7 @@ class ImpactStreamController extends GeneralAbstractController
 
     /**
      * @return TcpdfFpdi
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     protected function generatePdf(): TcpdfFpdi
     {
@@ -104,8 +110,8 @@ class ImpactStreamController extends GeneralAbstractController
         $result->setPrintFooter(false);
 
         //Sort the PDF arrays first
-        sort($this->challenge);
-        sort($this->result);
+        ksort($this->challenge);
+        ksort($this->result);
 
         //Add the frontpage
         //Add the references
@@ -190,7 +196,8 @@ class ImpactStreamController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel|string
+     * @return string
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function downloadAction()
     {
