@@ -75,6 +75,26 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $description;
     /**
+     * @ORM\Column(name="html", type="text", nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Options({"label":"txt-challenge-html-label","help-block": "txt-challenge-html-explanation"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-html-placeholder"})
+     * @Annotation\Attributes({"rows":"25"})
+     *
+     * @var string
+     */
+    private $html;
+    /**
+     * @ORM\Column(name="css", type="text", nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Options({"label":"txt-challenge-css-label","help-block": "txt-challenge-css-explanation"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-css-placeholder"})
+     * @Annotation\Attributes({"rows":"25"})
+     *
+     * @var string
+     */
+    private $css;
+    /**
      * @ORM\Column(name="sources",type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-sources-label","help-block":"txt-challenge-sources-help-block"})
@@ -83,6 +103,15 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @var string
      */
     private $sources;
+    /**
+     * @ORM\Column(name="abstract", type="text", nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Options({"label":"txt-challenge-abstract-label","help-block": "txt-challenge-abstract-explanation"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-abstract-placeholder"})
+     *
+     * @var string
+     */
+    private $abstract;
     /**
      * @ORM\Column(name="backcolor",type="string",length=20,unique=false)
      * @Annotation\Type("\Zend\Form\Element\Color")
@@ -94,7 +123,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @ORM\Column(name="frontcolor",type="string",length=20,unique=false)
      * @Annotation\Type("\Zend\Form\Element\Color")
-     * @Annotation\Options({"label":"txt-front-color"})
+     * @Annotation\Options({"label":"txt-challenge-front-color-label","help-block":"txt-challenge-front-color-help-block"})
      *
      * @var string
      */
@@ -204,18 +233,6 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function __toString(): string
     {
         return $this->challenge;
-    }
-
-    /**
-     * Auto-generate an abstract of a article-item.
-     *
-     * @return string
-     */
-    public function parseAbstract(): string
-    {
-        $arrWords = explode(' ', strip_tags($this->description));
-
-        return implode(' ', array_slice($arrWords, 0, 40)) . '...';
     }
 
     /**
@@ -499,6 +516,63 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function setPdf($pdf): Challenge
     {
         $this->pdf = $pdf;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbstract(): ?string
+    {
+        return $this->abstract;
+    }
+
+    /**
+     * @param string $abstract
+     * @return Challenge
+     */
+    public function setAbstract(string $abstract): Challenge
+    {
+        $this->abstract = $abstract;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtml(): ?string
+    {
+        return $this->html;
+    }
+
+    /**
+     * @param string $html
+     * @return Challenge
+     */
+    public function setHtml(string $html): Challenge
+    {
+        $this->html = $html;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCss(): ?string
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param string $css
+     * @return Challenge
+     */
+    public function setCss(string $css): Challenge
+    {
+        $this->css = $css;
 
         return $this;
     }

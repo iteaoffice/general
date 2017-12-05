@@ -65,9 +65,9 @@ class ImpactStreamController extends GeneralAbstractController
     {
         foreach ($this->getGeneralService()->parseChallengesByResult($result) as $challenge) {
             if (!array_key_exists(
-                    'challenge_' . $challenge->getSequence(),
-                    $this->challenge
-                ) && !\is_null($challenge->getPdf())) {
+                'challenge_' . $challenge->getSequence(),
+                $this->challenge
+            ) && !\is_null($challenge->getPdf())) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
@@ -79,9 +79,11 @@ class ImpactStreamController extends GeneralAbstractController
         $fileName = self::parseTempFile('result', $result->getId());
         file_put_contents($fileName, stream_get_contents($result->getObject()->first()->getObject()));
 
-        $ordering = sprintf('result_%s_%s',
+        $ordering = sprintf(
+            'result_%s_%s',
             !$result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()->first()->getChallenge()->getSequence() : 1000,
-            $result->getResult());
+            $result->getResult()
+        );
 
         $this->result[$ordering] = $fileName;
     }

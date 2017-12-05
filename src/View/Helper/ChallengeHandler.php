@@ -30,8 +30,9 @@ class ChallengeHandler extends AbstractViewHelper
 
     /**
      * @param Content $content
-     *
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(Content $content): string
     {
@@ -158,6 +159,10 @@ class ChallengeHandler extends AbstractViewHelper
      */
     public function parseChallenge(Challenge $challenge): string
     {
+        if (!empty($challenge->getCss())) {
+            $this->getHelperPluginManager()->get('headstyle')->appendStyle($challenge->getCss());
+        }
+
         return $this->getRenderer()->render('general/partial/entity/challenge', ['challenge' => $challenge]);
     }
 

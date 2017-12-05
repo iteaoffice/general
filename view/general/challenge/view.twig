@@ -15,6 +15,15 @@
             <dt>{{ translate("txt-challenge-sources") }}</dt>
             <dd>{{ challenge.sources }}</dd>
 
+            <dt>{{ translate("txt-abstract") }}</dt>
+            <dd>{{ challenge.abstract|default(translate("txt-no-abstract")) }}</dd>.
+
+            <dt>{{ translate("txt-html") }}</dt>
+            <dd><code>{{ challenge.html|default(translate("txt-no-html"))|nl2br }}</code></dd>
+
+            <dt>{{ translate("txt-css") }}</dt>
+            <dd><code>{{ challenge.css|default(translate("txt-no-css"))|nl2br }}</code></dd>
+
             <dt>{{ translate("txt-front-color") }}</dt>
             <dd>{{ challenge.frontColor }}</dd>
 
