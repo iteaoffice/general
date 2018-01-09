@@ -67,6 +67,12 @@ class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
+                'name'     => 'type',
+                'required' => false,
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'     => 'description',
                 'required' => true,
                 'filters'  => [
@@ -128,6 +134,12 @@ class ChallengeFilter extends InputFilter
             [
                 'name'     => 'icon',
                 'required' => true,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'call',
+                'required' => false,
             ]
         );
         $inputFilter->add(

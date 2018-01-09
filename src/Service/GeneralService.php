@@ -33,32 +33,19 @@ use Zend\Json\Json;
 class GeneralService extends ServiceAbstract
 {
     /**
-     * @param        $entity
-     * @param  array $filter
-     *
+     * @param $entity
+     * @param array $filter
      * @return Query
      */
-    public function findFiltered($entity, array $filter)
+    public function findFiltered(string $entity, array $filter): Query
     {
-        if (is_object($entity)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'No object can be given here for findFiltered: %s',
-                    get_class($entity)
-                )
-            );
-        }
-
         return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);
     }
 
     /**
-     * @param string $entity
-     * @param        $docRef
-     *
-     * @return Entity\EntityAbstract|object
-     *
-     * @throws \InvalidArgumentException
+     * @param $entity
+     * @param $docRef
+     * @return null|object
      */
     public function findEntityByDocRef($entity, $docRef)
     {
@@ -102,7 +89,7 @@ class GeneralService extends ServiceAbstract
      *
      * @return null|object|Entity\EmailMessage
      */
-    public function findEmailMessageByIdentifier(string $identifier)
+    public function findEmailMessageByIdentifier(string $identifier): ?Entity\EmailMessage
     {
         return $this->getEntityManager()->getRepository(Entity\EmailMessage::class)
             ->findOneBy(['identifier' => $identifier]);
@@ -365,6 +352,31 @@ class GeneralService extends ServiceAbstract
     public function findChallengeById($id): Entity\Challenge
     {
         return $this->getEntityManager()->getRepository(Entity\Challenge::class)->find($id);
+    }
+
+    /**
+     * @param Call $call
+     * @return array
+     */
+    public function findChallengesByCall(Call $call): array
+    {
+        $challenges = [];
+
+        /** @var Entity\Challenge $challenge */
+        foreach ($this->findAll(Entity\Challenge::class) as $challenge) {
+            if ($challenge->getCall()->isEmpty()) {
+                $challenges[$challenge->getId()] = $challenge;
+            }
+
+            //Add the challenges which have the same call
+            foreach ($challenge->getCall() as $challengeCall) {
+                if ($challengeCall->getId() === $call->getId()) {
+                    $challenges[$challenge->getId()] = $challenge;
+                }
+            }
+        }
+
+        return $challenges;
     }
 
     /**

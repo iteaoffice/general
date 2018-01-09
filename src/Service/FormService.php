@@ -59,6 +59,7 @@ class FormService extends ServiceAbstract
         $formName = 'General\\Form\\' . $entity->get('entity_name') . 'Form';
         $filterName = 'General\\InputFilter\\' . $entity->get('entity_name') . 'Filter';
 
+
         /*
          * The filter and the form can dynamically be created by pulling the form from the serviceManager
          * if the form or filter is not give in the serviceManager we will create it by default

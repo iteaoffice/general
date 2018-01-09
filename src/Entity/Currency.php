@@ -56,7 +56,7 @@ class Currency extends EntityAbstract
      */
     private $iso4217;
     /**
-     * @ORM\Column(name="symbol",type="string",unique=true)
+     * @ORM\Column(name="symbol",type="string")
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-symbol-label","help-block":"txt-currency-symbol-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-symbol-placeholder"})

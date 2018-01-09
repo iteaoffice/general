@@ -222,7 +222,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
      *
      * @return int|string
      */
-    public function getPlain($textual = false)
+    public function getPlain(bool $textual = false)
     {
         if ($textual) {
             return self::$plainTemplates[$this->plain];

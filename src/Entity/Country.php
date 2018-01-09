@@ -170,7 +170,7 @@ class Country extends EntityAbstract implements ResourceInterface
      *
      * @var \Project\Entity\ChangeRequest\Country[]|Collections\ArrayCollection
      */
-    private $changerequestCountry;
+    private $changeRequestCountry;
     /**
      * @ORM\ManyToMany(targetEntity="Project\Entity\Log", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
@@ -205,7 +205,7 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->vat = new Collections\ArrayCollection();
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
-        $this->changerequestCountry = new Collections\ArrayCollection();
+        $this->changeRequestCountry = new Collections\ArrayCollection();
         $this->projectLog = new Collections\ArrayCollection();
         $this->callCountry = new Collections\ArrayCollection();
         $this->contract = new Collections\ArrayCollection();
@@ -571,17 +571,17 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function getChangeRequestCountry()
     {
-        return $this->changerequestCountry;
+        return $this->changeRequestCountry;
     }
 
     /**
-     * @param Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[] $changerequestCountry
+     * @param Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[] $changeRequestCountry
      *
      * @return Country
      */
-    public function setChangeRequestCountry($changerequestCountry)
+    public function setChangeRequestCountry($changeRequestCountry): Country
     {
-        $this->changerequestCountry = $changerequestCountry;
+        $this->changeRequestCountry = $changeRequestCountry;
 
         return $this;
     }

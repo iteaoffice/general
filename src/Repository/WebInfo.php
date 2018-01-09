@@ -37,7 +37,7 @@ class WebInfo extends EntityRepository
         $queryBuilder->from(Entity\WebInfo::class, 'general_entity_web_info');
         $queryBuilder->join('general_entity_web_info.sender', 'mailing_entity_sender');
 
-        if (!\is_null($filter)) {
+        if (null !== $filter) {
             /**
              * Get the webInfo repository
              *

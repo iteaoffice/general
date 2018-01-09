@@ -21,7 +21,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Challenge;
 use General\Form\ChallengeFilter;
-use PHPThumb\GD;
 use Zend\Paginator\Paginator;
 use Zend\Validator\File\MimeType;
 use Zend\View\Model\ViewModel;
@@ -46,7 +45,7 @@ class ChallengeController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new ChallengeFilter();
+        $form = new ChallengeFilter($this->entityManager);
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -240,7 +239,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['image']['tmp_name'])) {
-                    if (\is_null($image)) {
+                    if (null === $image) {
                         $image = new Challenge\Image();
                     }
                     $image->setChallenge($challenge);
@@ -262,7 +261,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['pdf']['tmp_name'])) {
-                    if (\is_null($pdf)) {
+                    if (null === $pdf) {
                         $pdf = new Challenge\Pdf();
                     }
                     $pdf->setChallenge($challenge);
@@ -278,6 +277,10 @@ class ChallengeController extends GeneralAbstractController
 
                 //Manually feed the rest of the form elements to the $challage as we cannot use the $form->getData here is it
                 //Does not contain all the images
+
+                if (empty($data['general_entity_challenge']['call'])) {
+                    $challenge->setCall([]);
+                }
 
                 $challenge = $this->getGeneralService()->updateEntity($challenge);
 
@@ -298,7 +301,6 @@ class ChallengeController extends GeneralAbstractController
 
         return new ViewModel(['form' => $form, 'challenge' => $challenge]);
     }
-
 
 
     /**

@@ -177,7 +177,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                     if ($this->getAction() === 'delete') {
                         $this->addClasses("btn btn-danger");
                     } else {
-                        $this->addClasses("btn btn-primary");
+                        $this->addClasses('btn btn-primary');
                     }
                 }
                 break;
@@ -185,7 +185,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                 $this->addLinkContent($this->getText());
                 break;
             case 'paginator':
-                if (\is_null($this->getAlternativeShow())) {
+                if (null === $this->getAlternativeShow()) {
                     throw new \InvalidArgumentException(
                         sprintf("this->alternativeShow cannot be null for a paginator link")
                     );
@@ -393,10 +393,10 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
-        if (!$allowNull && \is_null($value)) {
+        if (!$allowNull && null === $value) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (!\is_null($value)) {
+        if (null !== $value) {
             $this->routerParams[$key] = $value;
         }
     }

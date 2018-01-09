@@ -38,7 +38,7 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from(Entity\Country::class, 'general_entity_country');
 
-        if (!\is_null($filter)) {
+        if (null !== $filter) {
             $queryBuilder = $this->applyFilter($queryBuilder, $filter);
         }
 

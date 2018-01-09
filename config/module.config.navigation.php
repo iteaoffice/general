@@ -201,6 +201,40 @@ return [
                             ],
                         ],
                     ],
+                    'challenge-type'          => [
+                        'label' => _("txt-nav-challenge-types"),
+                        'route' => 'zfcadmin/challenge/type/list',
+                        'pages' => [
+                            'view' => [
+                                'route'   => 'zfcadmin/challenge/type/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Challenge\Type::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\ChallengeTypeLabel::class,
+                                    ],
+                                ],
+                                'pages'   => [
+                                    'edit' => [
+                                        'label'   => _('txt-nav-edit'),
+                                        'route'   => 'zfcadmin/challenge/type/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Challenge\Type::class,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'new'  => [
+                                'label' => _('txt-nav-new-challenge-type'),
+                                'route' => 'zfcadmin/challenge/type/new',
+                            ],
+                        ],
+                    ],
                     'content-type' => [
                         'label' => _("txt-content-type-list"),
                         'route' => 'zfcadmin/content-type/list',

@@ -12,11 +12,14 @@
             <dt>{{ translate("txt-challenge-sequence") }}</dt>
             <dd>{{ challenge.sequence }}</dd>
 
+            <dt>{{ translate("txt-challenge-type") }}</dt>
+            <dd>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</dd>
+
             <dt>{{ translate("txt-challenge-sources") }}</dt>
             <dd>{{ challenge.sources }}</dd>
 
             <dt>{{ translate("txt-abstract") }}</dt>
-            <dd>{{ challenge.abstract|default(translate("txt-no-abstract")) }}</dd>.
+            <dd>{{ challenge.abstract|default(translate("txt-no-abstract")) }}</dd>
 
             <dt>{{ translate("txt-html") }}</dt>
             <dd><code>{{ challenge.html|default(translate("txt-no-html"))|nl2br }}</code></dd>
@@ -34,6 +37,13 @@
             <dd><a class="btn"
                    style="color:{{ challenge.frontColor }}; background-color:{{ challenge.backgroundColor }}">{{ challenge }}</a>
             </dd>
+
+            <dt>{{ translate("txt-program-calls") }}</dt>
+            {% for call in challenge.call %}
+                <dd>{{ callLink(call,'view-admin','name') }}</dd>
+            {% else %}
+                <dd>{{ translate("txt-challenge-is-active-in-every-call") }}</dd>
+            {% endfor %}
 
             <dt>{{ translate('txt-ideas') }}</dt>
             {% for ideaChallenge in challenge.ideaChallenge %}

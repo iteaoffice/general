@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace General\Form;
 
+use Doctrine\ORM\EntityManager;
+use DoctrineORMModule\Form\Element\EntityMultiCheckbox;
+use General\Entity;
+use Program\Entity\Call\Call;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
@@ -29,8 +33,9 @@ class ChallengeFilter extends Form
 {
     /**
      * ChallengeFilter constructor.
+     * @param EntityManager $entityManager
      */
-    public function __construct()
+    public function __construct(EntityManager $entityManager)
     {
         parent::__construct();
         $this->setAttribute('method', 'get');
@@ -45,6 +50,48 @@ class ChallengeFilter extends Form
                 'attributes' => [
                     'class'       => 'form-control',
                     'placeholder' => _('txt-search'),
+                ],
+            ]
+        );
+
+        $filterFieldset->add(
+            [
+                'type'    => EntityMultiCheckbox::class,
+                'name'    => 'type',
+                'options' => [
+                    'target_class'   => Entity\Challenge\Type::class,
+                    'inline'         => true,
+                    'object_manager' => $entityManager,
+                    'label'          => _("txt-challenge-type"),
+                    'allow_empty'    => true,
+                    'find_method'    => [
+                        'name'   => 'findAll',
+                        'params' => [
+                            'criteria' => [],
+                            'orderBy'  => ['type' => 'ASC'],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $filterFieldset->add(
+            [
+                'type'    => EntityMultiCheckbox::class,
+                'name'    => 'call',
+                'options' => [
+                    'target_class'   => Call::class,
+                    'inline'         => true,
+                    'object_manager' => $entityManager,
+                    'label'          => _("txt-program-call"),
+                    'allow_empty'    => true,
+                    'find_method'    => [
+                        'name'   => 'findAll',
+                        'params' => [
+                            'criteria' => [],
+                            'orderBy'  => ['country' => 'ASC'],
+                        ],
+                    ],
                 ],
             ]
         );

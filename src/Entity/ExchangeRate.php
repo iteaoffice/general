@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
@@ -62,6 +63,21 @@ class ExchangeRate extends EntityAbstract
      * @var \General\Entity\Currency
      */
     private $currency;
+    /**
+     * @ORM\OneToMany(targetEntity="Affiliation\Entity\Invoice", cascade={"persist","remove"}, mappedBy="exchangeRate")
+     * @Annotation\Exclude()
+     *
+     * @var \Affiliation\Entity\Invoice[]|ArrayCollection
+     */
+    private $affiliationInvoice;
+
+    /**
+     * ExchangeRate constructor.
+     */
+    public function __construct()
+    {
+        $this->affiliationInvoice = new ArrayCollection();
+    }
 
     /**
      * Magic Getter.
@@ -167,6 +183,25 @@ class ExchangeRate extends EntityAbstract
     public function setCurrency(Currency $currency): ExchangeRate
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return \Affiliation\Entity\Invoice[]|ArrayCollection
+     */
+    public function getAffiliationInvoice()
+    {
+        return $this->affiliationInvoice;
+    }
+
+    /**
+     * @param \Affiliation\Entity\Invoice[]|ArrayCollection $affiliationInvoice
+     * @return ExchangeRate
+     */
+    public function setAffiliationInvoice($affiliationInvoice): ExchangeRate
+    {
+        $this->affiliationInvoice = $affiliationInvoice;
 
         return $this;
     }

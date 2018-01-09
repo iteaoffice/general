@@ -65,6 +65,32 @@ class Challenge extends EntityAbstract implements ResourceInterface
      */
     private $sequence;
     /**
+     * @ORM\ManyToOne(targetEntity="General\Entity\Challenge\Type", inversedBy="challenge", cascade={"persist"})
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="type_id", nullable=true)
+     * })
+     * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
+     * @Annotation\Options({
+     *      "target_class":"General\Entity\Challenge\Type",
+     *      "allow_empty":"true",
+     *      "empty_option":"Select a type",
+     *      "find_method":{
+     *          "name":"findBy",
+     *          "params": {
+     *              "criteria":{},
+     *              "orderBy":{
+     *                  "type":"ASC"}
+     *              }
+     *          }
+     *      }
+     * )
+     * @Annotation\Attributes({"label":"txt-type"})
+     * @Annotation\Options({"help-block":"txt-challenge-type-help-block"})
+     *
+     * @var \General\Entity\Challenge\Type
+     */
+    private $type;
+    /**
      * @ORM\Column(name="description",type="string")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-description-label","help-block":"txt-challenge-description-help-block"})
@@ -180,6 +206,32 @@ class Challenge extends EntityAbstract implements ResourceInterface
      * @var \General\Entity\Challenge\Pdf
      */
     private $pdf;
+    /**
+     * @ORM\ManyToMany(targetEntity="Program\Entity\Call\Call", inversedBy="challenge", orphanRemoval=true)
+     * @ORM\OrderBy({"call"="ASC"})
+     * @ORM\JoinTable(name="challenge_call",
+     *            joinColumns={@ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id")},
+     *            inverseJoinColumns={@ORM\JoinColumn(name="programcall_id", referencedColumnName="programcall_id")}
+     * )
+     * @Annotation\Type("DoctrineORMModule\Form\Element\EntityMultiCheckbox")
+     * @Annotation\Options({
+     *      "help-block":"txt-challenge-program-call-help-block",
+     *      "target_class":"Program\Entity\Call\Call",
+     *      "find_method":{
+     *          "name":"findBy",
+     *          "params": {
+     *              "criteria":{},
+     *              "orderBy":{
+     *                  "call":"DESC"}
+     *              }
+     *          }
+     *      }
+     * )
+     * @Annotation\Attributes({"label":"txt-challenge-program-call-label"})
+     *
+     * @var \Program\Entity\Call\Call[]|Collections\ArrayCollection
+     */
+    private $call;
 
     /**
      * Class constructor.
@@ -187,6 +239,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function __construct()
     {
         $this->result = new Collections\ArrayCollection();
+        $this->call = new Collections\ArrayCollection();
         $this->projectChallenge = new Collections\ArrayCollection();
         $this->boothChallenge = new Collections\ArrayCollection();
         $this->ideaChallenge = new Collections\ArrayCollection();
@@ -233,6 +286,30 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function __toString(): string
     {
         return $this->challenge;
+    }
+
+    /**
+     * New function needed to make the hydrator happy.
+     *
+     * @param Collections\Collection $callCollection
+     */
+    public function addCall(Collections\Collection $callCollection)
+    {
+        foreach ($callCollection as $call) {
+            $this->call->add($call);
+        }
+    }
+
+    /**
+     * New function needed to make the hydrator happy.
+     *
+     * @param Collections\Collection $callCollection
+     */
+    public function removeCall(Collections\Collection $callCollection)
+    {
+        foreach ($callCollection as $call) {
+            $this->call->removeElement($call);
+        }
     }
 
     /**
@@ -336,6 +413,44 @@ class Challenge extends EntityAbstract implements ResourceInterface
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * @return Challenge\Type|null
+     */
+    public function getType(): ?Challenge\Type
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param Challenge\Type $type
+     * @return Challenge
+     */
+    public function setType(Challenge\Type $type): Challenge
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Program\Entity\Call\Call[]
+     */
+    public function getCall()
+    {
+        return $this->call;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Program\Entity\Call\Call[] $call
+     * @return Challenge
+     */
+    public function setCall($call): Challenge
+    {
+        $this->call = $call;
+
+        return $this;
     }
 
     /**
