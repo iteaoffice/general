@@ -1,0 +1,29 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-log-%s")|format(log)) %}
+
+<h1 class="display-4">{{ translate("txt-log-%s")|format(log) }}</h1>
+
+<h2>{{ translate("txt-log-information") }}</h2>
+<dl class="dl-horizontal">
+    <dt>{{ translate("txt-log-event") }}</dt>
+    <dd>{{ log.event }}</dd>
+
+    <dt>{{ translate("txt-log-url") }}</dt>
+    <dd><a href="{{ log.url }}">{{ log.url }}</a></dd>
+
+    <dt>{{ translate("txt-log-file") }}</dt>
+    <dd><code>{{ log.file }}:{{ log.line }}</code></dd>
+    <dt>{{ translate("txt-log-error-type") }}</dt>
+    <dd>{{ log.errorType }}</dd>
+
+    <dt>{{ translate("txt-trace") }}</dt>
+    <dd>
+        <pre style="height: 450px">{{ log.trace }}</pre>
+    </dd>
+
+    <dt>{{ translate("txt-request-data") }}</dt>
+    <dd>
+        <pre style="height: 450px">{{ log.requestData }}</pre>
+    </dd>
+
+</dl>

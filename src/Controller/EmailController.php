@@ -59,13 +59,13 @@ class EmailController extends GeneralAbstractController
     }
 
     /**
-     * @return array|ViewModel
+     * @return ViewModel
      */
     public function viewAction()
     {
         $emailMessage = $this->getGeneralService()
             ->findEntityById(EmailMessage::class, $this->params('id'));
-        if (\is_null($emailMessage)) {
+        if (null === $emailMessage) {
             return $this->notFoundAction();
         }
 
@@ -75,6 +75,8 @@ class EmailController extends GeneralAbstractController
 
     /**
      * @return JsonModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function eventAction()
     {
@@ -88,7 +90,7 @@ class EmailController extends GeneralAbstractController
          * Try to find the email message, if this cannot be found, short circuit it
          */
         $emailMessage = $this->getGeneralService()->findEmailMessageByIdentifier($data->CustomID);
-        if (\is_null($emailMessage)) {
+        if (null === $emailMessage) {
             return new JsonModel();
         }
 

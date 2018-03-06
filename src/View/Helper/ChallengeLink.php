@@ -24,8 +24,8 @@ class ChallengeLink extends LinkAbstract
 {
     /**
      * @param Challenge $challenge
-     * @param string $action
-     * @param string $show
+     * @param string    $action
+     * @param string    $show
      *
      * @return string
      *
@@ -45,6 +45,7 @@ class ChallengeLink extends LinkAbstract
         $this->setShowOptions(
             [
                 'name' => $this->getChallenge(),
+                'read-more' => $this->translate("txt-read-more"),
             ]
         );
 

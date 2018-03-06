@@ -38,6 +38,8 @@ return [
                 ['route' => 'email/event', 'roles' => []],
                 ['route' => 'zfcadmin/email/list', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/email/view', 'roles' => [Access::ACCESS_OFFICE],],
+                ['route' => 'zfcadmin/log/list', 'roles' => [Access::ACCESS_OFFICE],],
+                ['route' => 'zfcadmin/log/view', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'home', 'roles' => []],
                 ['route' => 'zfcadmin/web-info/list', 'roles' => [Access::ACCESS_OFFICE],],
                 ['route' => 'zfcadmin/web-info/new', 'roles' => [Access::ACCESS_OFFICE],],

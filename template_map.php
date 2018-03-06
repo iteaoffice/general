@@ -53,6 +53,8 @@ return array(
     'general/title/new'                       => __DIR__ . '//view/general/title/new.twig',
     'general/title/view'                      => __DIR__ . '//view/general/title/view.twig',
     'general/title/list'                      => __DIR__ . '//view/general/title/list.twig',
+    'general/log/view'                        => __DIR__ . '//view/general/log/view.twig',
+    'general/log/list'                        => __DIR__ . '//view/general/log/list.twig',
     'general/web-info/edit'                   => __DIR__ . '//view/general/web-info/edit.twig',
     'general/web-info/new'                    => __DIR__ . '//view/general/web-info/new.twig',
     'general/web-info/view'                   => __DIR__ . '//view/general/web-info/view.twig',

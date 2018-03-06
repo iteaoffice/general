@@ -362,6 +362,24 @@ return [
                             ],
                         ],
                     ],
+                    'log' => [
+                        'label' => _("txt-nav-log-list"),
+                        'route' => 'zfcadmin/log/list',
+                        'pages' => [
+                            'log-view' => [
+                                'route'   => 'zfcadmin/log/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Log::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\LogLabel::class,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'invoice'    => [

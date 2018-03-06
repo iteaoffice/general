@@ -48,6 +48,39 @@ return [
                             ],
                         ],
                     ],
+                    'log'        => [
+                        'type'          => 'Literal',
+                        'options'       => [
+                            'route'    => '/log',
+                            'defaults' => [
+                                'controller' => Controller\LogController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'web-info'     => [
                         'type'          => 'Segment',
                         'options'       => [

@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace General\Navigation\Invokable;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
-use General\Entity\EmailMessage;
+use General\Entity\Log;
 use Zend\Navigation\Page\Mvc;
 
 /**
@@ -26,7 +26,7 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class EmailMessageLabel extends AbstractNavigationInvokable
+class LogLabel extends AbstractNavigationInvokable
 {
     /**
      * Set the EmailMessage navigation label
@@ -39,17 +39,17 @@ class EmailMessageLabel extends AbstractNavigationInvokable
     {
         $label = $this->translate('txt-nav-view');
 
-        if ($this->getEntities()->containsKey(EmailMessage::class)) {
-            /** @var EmailMessage $emailMessage */
-            $emailMessage = $this->getEntities()->get(EmailMessage::class);
+        if ($this->getEntities()->containsKey(Log::class)) {
+            /** @var Log $log */
+            $log = $this->getEntities()->get(Log::class);
 
             $page->setParams(
                 array_merge(
                     $page->getParams(),
-                    ['id' => $emailMessage->getId()]
+                    ['id' => $log->getId()]
                 )
             );
-            $label = (string)$emailMessage->getSubject();
+            $label = (string) \substr($log->getEvent(), 0, 25);
         }
         $page->set('label', $label);
     }

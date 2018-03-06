@@ -53,6 +53,18 @@ class GeneralService extends ServiceAbstract
     }
 
     /**
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function truncateLog(): void
+    {
+        /** @var Repository\Log $repository */
+        $repository =  $this->getEntityManager()->getRepository(Entity\Log::class);
+
+        $repository->truncateLog();
+    }
+
+    /**
      * @return Entity\Challenge[]
      */
     public function findAllChallenges(): array
