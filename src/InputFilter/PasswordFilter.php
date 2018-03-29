@@ -21,6 +21,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  * Class ChallengeFilter
+ *
  * @package General\InputFilter
  */
 class PasswordFilter extends InputFilter

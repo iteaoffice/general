@@ -3,7 +3,7 @@
  * You do not need to edit below this line
  */
 return [
-    'email'   => [
+    'email' => [
         "active"              => true,
         "defaults"            => [
             "html_layout_name" => "signature_twig",
@@ -25,11 +25,6 @@ return [
         ],
         "template_path_stack" => [
             __DIR__ . "/../view/email/",
-        ],
-    ],
-    'general' => [
-        'style_locations' => [
-            __DIR__ . '/../../../../styles/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test'),
         ],
     ],
 ];

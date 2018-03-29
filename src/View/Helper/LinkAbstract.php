@@ -16,6 +16,7 @@ namespace General\View\Helper;
 use BjyAuthorize\Controller\Plugin\IsAllowed;
 use BjyAuthorize\Service\Authorize;
 use General\Acl\Assertion\AssertionAbstract;
+use General\Entity\AbstractEntity;
 use General\Entity\Challenge;
 use General\Entity\ContentType;
 use General\Entity\Country;
@@ -124,7 +125,7 @@ abstract class LinkAbstract extends AbstractViewHelper
         return sprintf(
             $uri,
             $serverUrl() . $url($this->router, $this->routerParams),
-            htmlentities((string) $this->text),
+            htmlentities((string)$this->text),
             implode(' ', $this->classes),
             \in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
                 : htmlentities(implode('', $this->linkContent))
@@ -326,20 +327,20 @@ abstract class LinkAbstract extends AbstractViewHelper
     }
 
     /**
-     * @param EntityAbstract $entity
-     * @param $assertion
-     * @param $action
+     * @param AbstractEntity $entity
+     * @param string         $assertionName
+     * @param string         $action
+     *
      * @return bool
      */
-    public function hasAccess(EntityAbstract $entity, $assertion, $action): bool
+    public function hasAccess(AbstractEntity $entity, string $assertionName, string $action): bool
     {
-        $assertion = $this->getAssertion($assertion);
-        if (!\is_null($entity)
-            && !$this->getAuthorizeService()->getAcl()->hasResource($entity)
-        ) {
+        $assertion = $this->getAssertion($assertionName);
+        if (null !== $entity && !$this->getAuthorizeService()->getAcl()->hasResource($entity)) {
             $this->getAuthorizeService()->getAcl()->addResource($entity);
             $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
         }
+
         if (!$this->isAllowed($entity, $action)) {
             return false;
         }
@@ -349,11 +350,12 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param $assertion
+     *
      * @return AssertionAbstract
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function getAssertion($assertion): AssertionAbstract
+    public function getAssertion(string $assertion): AssertionAbstract
     {
         return $this->getServiceManager()->get($assertion);
     }
@@ -369,8 +371,8 @@ abstract class LinkAbstract extends AbstractViewHelper
     }
 
     /**
-     * @param null|EntityAbstract $resource
-     * @param string $privilege
+     * @param null|AbstractEntity $resource
+     * @param string              $privilege
      *
      * @return bool
      */
@@ -389,7 +391,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @param string $key
      * @param        $value
-     * @param bool $allowNull
+     * @param bool   $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
@@ -427,7 +429,7 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param Country $country
-     * @param int $width
+     * @param int     $width
      *
      * @return string
      */
@@ -595,6 +597,7 @@ abstract class LinkAbstract extends AbstractViewHelper
 
     /**
      * @param Password $password
+     *
      * @return LinkAbstract
      */
     public function setPassword(Password $password = null): LinkAbstract

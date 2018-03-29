@@ -19,27 +19,67 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Vat;
 use General\Form\VatFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class VatController
  *
+ * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class VatController extends GeneralAbstractController
+class VatController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * VatController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+
+    /**
+     * ViewModel
+     */
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Vat::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $vatQuery = $this->generalService->findFiltered(Vat::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($vatQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -59,12 +99,12 @@ class VatController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $vat = $this->getGeneralService()->findEntityById(Vat::class, $this->params('id'));
-        if (\is_null($vat)) {
+        $vat = $this->generalService->find(Vat::class, (int)$this->params('id'));
+        if (null === $vat) {
             return $this->notFoundAction();
         }
 
@@ -74,13 +114,13 @@ class VatController extends GeneralAbstractController
     /**
      * Create a new template.
      *
-     * @return \Zend\View\Model\ViewModel
+     * ViewModel
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Vat::class, null, $data);
+        $form = $this->formService->prepare(Vat::class, $data);
         $form->remove('delete');
 
 
@@ -93,11 +133,20 @@ class VatController extends GeneralAbstractController
                 /* @var $vat Vat */
                 $vat = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($vat);
-                $this->redirect()->toRoute(
+                $this->generalService->save($vat);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-vat-%s-has-been-created-successfully"),
+                            $vat->getCode()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/vat/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $vat->getId(),
                     ]
                 );
             }
@@ -108,24 +157,21 @@ class VatController extends GeneralAbstractController
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function editAction()
     {
         /** @var Vat $vat */
-        $vat = $this->getGeneralService()->findEntityById(Vat::class, $this->params('id'));
+        $vat = $this->generalService->find(Vat::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($vat, $vat, $data);
+        $form = $this->formService->prepare($vat, $data);
+        $form->remove('delete');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                return $this->redirect()->toRoute('zfcadmin/vat/list');
-            }
-
-            if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($vat);
-
                 return $this->redirect()->toRoute('zfcadmin/vat/list');
             }
 
@@ -133,8 +179,16 @@ class VatController extends GeneralAbstractController
                 /** @var Vat $vat */
                 $vat = $form->getData();
 
-                $vat = $this->getGeneralService()->updateEntity($vat);
-                $this->redirect()->toRoute(
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-vat-%s-has-been-updated-successfully"),
+                            $vat->getCode()
+                        )
+                    );
+
+                $this->generalService->save($vat);
+                return $this->redirect()->toRoute(
                     'zfcadmin/vat/view',
                     [
                         'id' => $vat->getId(),

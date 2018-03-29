@@ -14,27 +14,66 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Password;
 use General\Form\PasswordFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class PasswordController
  *
+ * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class PasswordController extends GeneralAbstractController
+class PasswordController extends AbstractActionController
 {
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * PasswordController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
     /**
      * @return ViewModel
      */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Password::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(Password::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -58,8 +97,8 @@ class PasswordController extends GeneralAbstractController
      */
     public function viewAction(): ViewModel
     {
-        $password = $this->getGeneralService()->findEntityById(Password::class, $this->params('id'));
-        if (\is_null($password)) {
+        $password = $this->generalService->find(Password::class, (int)$this->params('id'));
+        if (null === $password) {
             return $this->notFoundAction();
         }
 
@@ -71,9 +110,9 @@ class PasswordController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Password::class, null, $data);
+        $form = $this->formService->prepare(Password::class, $data);
         $form->remove('delete');
 
 
@@ -89,17 +128,17 @@ class PasswordController extends GeneralAbstractController
                 $this->flashMessenger()->setNamespace('success')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-password-for-%s-has-been-created-successfully"),
+                            $this->translator->translate("txt-password-for-%s-has-been-created-successfully"),
                             $password->getDescription()
                         )
                     );
 
-                $result = $this->getGeneralService()->newEntity($password);
+                $this->generalService->save($password);
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/password/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $password->getId(),
                     ]
                 );
             }
@@ -114,11 +153,11 @@ class PasswordController extends GeneralAbstractController
     public function editAction()
     {
         /** @var Password $password */
-        $password = $this->getGeneralService()->findEntityById(Password::class, $this->params('id'));
+        $password = $this->generalService->find(Password::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($password, $password, $data);
+        $form = $this->formService->prepare($password, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -126,12 +165,12 @@ class PasswordController extends GeneralAbstractController
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($password);
+                $this->generalService->delete($password);
 
                 $this->flashMessenger()->setNamespace('success')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-password-for-%s-has-been-deleted-successfully"),
+                            $this->translator->translate("txt-password-for-%s-has-been-deleted-successfully"),
                             $password->getDescription()
                         )
                     );
@@ -147,13 +186,13 @@ class PasswordController extends GeneralAbstractController
                 $this->flashMessenger()->setNamespace('success')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-password-for-%s-has-been-updated-successfully"),
+                            $this->translator->translate("txt-password-for-%s-has-been-updated-successfully"),
                             $password->getDescription()
                         )
                     );
 
 
-                $password = $this->getGeneralService()->updateEntity($password);
+                $password = $this->generalService->save($password);
                 $this->redirect()->toRoute(
                     'zfcadmin/password/view',
                     [

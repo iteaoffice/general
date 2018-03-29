@@ -15,17 +15,6 @@ return [
         'routes' => [
             'image'         => [
                 'child_routes' => [
-                    'asset'    => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/a/[:name]',
-                            'defaults' => [
-                                //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\ImageController::class,
-                                'action'     => 'asset',
-                            ],
-                        ],
-                    ],
                     'country-flag'    => [
                         'type'    => 'Segment',
                         'options' => [
@@ -61,38 +50,13 @@ return [
                     ],
                 ],
             ],
-            'assets'        => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test'),
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                    ],
-                ],
-                'may_terminate' => false,
-                'child_routes'  => [
-                    'style-image' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => "/style/image/[:source]",
-                            'defaults' => [
-                                //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\StyleController::class,
-                                'action'     => 'display',
-                            ],
-                        ],
-                    ],
-
-                ],
-            ],
             'country'       => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
                     'route'    => '/country',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\CountryController::class,
                         'action'     => 'country',
                     ],
                 ],
@@ -145,29 +109,6 @@ return [
                             'route'    => '/download/[:docRef].pdf',
                             'defaults' => [
                                 'action' => 'download-single',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'content-type'  => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/content-type',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'icon' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/icon/[:id].gif',
-                            'defaults' => [
-                                'action' => 'content-type-icon',
                             ],
                         ],
                     ],

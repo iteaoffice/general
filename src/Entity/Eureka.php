@@ -25,7 +25,7 @@ use Zend\Form\Annotation;
  *
  * @category General
  */
-class Eureka extends EntityAbstract
+class Eureka extends AbstractEntity
 {
     /**
      * @ORM\Column(name="eureka_id",type="integer",nullable=false)
@@ -89,6 +89,7 @@ class Eureka extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -116,6 +117,7 @@ class Eureka extends EntityAbstract
 
     /**
      * @param int $id
+     *
      * @return Eureka
      */
     public function setId(int $id): Eureka
@@ -135,6 +137,7 @@ class Eureka extends EntityAbstract
 
     /**
      * @param Country $country
+     *
      * @return Eureka
      */
     public function setCountry(Country $country): Eureka
@@ -154,6 +157,7 @@ class Eureka extends EntityAbstract
 
     /**
      * @param string $since
+     *
      * @return Eureka
      */
     public function setSince(string $since): Eureka

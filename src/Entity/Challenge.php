@@ -16,7 +16,6 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -28,7 +27,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Challenge extends EntityAbstract implements ResourceInterface
+class Challenge extends AbstractEntity
 {
     /**
      * @ORM\Column(name="challenge_id",type="integer",nullable=false)
@@ -271,6 +270,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -293,7 +293,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
      *
      * @param Collections\Collection $callCollection
      */
-    public function addCall(Collections\Collection $callCollection)
+    public function addCall(Collections\Collection $callCollection): void
     {
         foreach ($callCollection as $call) {
             $this->call->add($call);
@@ -315,13 +315,14 @@ class Challenge extends EntityAbstract implements ResourceInterface
     /**
      * @return int|null
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
+     *
      * @return Challenge
      */
     public function setId(int $id): Challenge
@@ -341,6 +342,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $challenge
+     *
      * @return Challenge
      */
     public function setChallenge(string $challenge): Challenge
@@ -360,6 +362,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $docRef
+     *
      * @return Challenge
      */
     public function setDocRef(string $docRef): Challenge
@@ -379,6 +382,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $description
+     *
      * @return Challenge
      */
     public function setDescription(string $description): Challenge
@@ -398,6 +402,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $sources
+     *
      * @return Challenge
      */
     public function setSources(string $sources): Challenge
@@ -416,6 +421,18 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param int $sequence
+     *
+     * @return Challenge
+     */
+    public function setSequence($sequence): Challenge
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
      * @return Challenge\Type|null
      */
     public function getType(): ?Challenge\Type
@@ -425,6 +442,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Challenge\Type $type
+     *
      * @return Challenge
      */
     public function setType(Challenge\Type $type): Challenge
@@ -444,22 +462,12 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Program\Entity\Call\Call[] $call
+     *
      * @return Challenge
      */
     public function setCall($call): Challenge
     {
         $this->call = $call;
-
-        return $this;
-    }
-
-    /**
-     * @param int $sequence
-     * @return Challenge
-     */
-    public function setSequence($sequence): Challenge
-    {
-        $this->sequence = $sequence;
 
         return $this;
     }
@@ -474,6 +482,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $backgroundColor
+     *
      * @return Challenge
      */
     public function setBackgroundColor(string $backgroundColor): Challenge
@@ -493,6 +502,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $frontColor
+     *
      * @return Challenge
      */
     public function setFrontColor(string $frontColor): Challenge
@@ -511,6 +521,18 @@ class Challenge extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
+     *
+     * @return Challenge
+     */
+    public function setProjectChallenge($projectChallenge): Challenge
+    {
+        $this->projectChallenge = $projectChallenge;
+
+        return $this;
+    }
+
+    /**
      * @return Collections\ArrayCollection|\Project\Entity\Result\Result[]|iterable
      */
     public function getResult(): iterable
@@ -520,22 +542,12 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Result\Result[] $result
+     *
      * @return Challenge
      */
     public function setResult($result): Challenge
     {
         $this->result = $result;
-
-        return $this;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
-     * @return Challenge
-     */
-    public function setProjectChallenge($projectChallenge): Challenge
-    {
-        $this->projectChallenge = $projectChallenge;
 
         return $this;
     }
@@ -550,6 +562,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Idea\Challenge[] $ideaChallenge
+     *
      * @return Challenge
      */
     public function setIdeaChallenge($ideaChallenge): Challenge
@@ -569,6 +582,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Event\Entity\Booth\Challenge[] $boothChallenge
+     *
      * @return Challenge
      */
     public function setBoothChallenge($boothChallenge): Challenge
@@ -588,6 +602,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|Challenge\Image $image
+     *
      * @return Challenge
      */
     public function setImage($image): Challenge
@@ -607,6 +622,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|Challenge\Icon $icon
+     *
      * @return Challenge
      */
     public function setIcon($icon): Challenge
@@ -626,6 +642,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|Challenge\Pdf $pdf
+     *
      * @return Challenge
      */
     public function setPdf($pdf): Challenge
@@ -645,6 +662,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $abstract
+     *
      * @return Challenge
      */
     public function setAbstract(string $abstract): Challenge
@@ -664,6 +682,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $html
+     *
      * @return Challenge
      */
     public function setHtml(string $html): Challenge
@@ -683,6 +702,7 @@ class Challenge extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $css
+     *
      * @return Challenge
      */
     public function setCss(string $css): Challenge

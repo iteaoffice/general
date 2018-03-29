@@ -25,12 +25,14 @@ use Zend\Validator\File\Extension;
 
 /**
  * Class ChallengeFilter
+ *
  * @package General\InputFilter
  */
 class ChallengeFilter extends InputFilter
 {
     /**
      * ChallengeFilter constructor.
+     *
      * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)

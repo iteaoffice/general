@@ -15,7 +15,6 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the Country.
@@ -25,7 +24,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class ContentType extends EntityAbstract implements ResourceInterface
+class ContentType extends AbstractEntity
 {
     public const TYPE_UNKNOWN = 0;
     public const TYPE_PDF = 1;
@@ -967,6 +966,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Contract\Document[] $contractDocument
+     *
      * @return ContentType
      */
     public function setContractDocument($contractDocument): ContentType
@@ -986,6 +986,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[] $contractVersionDocument
+     *
      * @return ContentType
      */
     public function setContractVersionDocument($contractVersionDocument): ContentType
@@ -1005,6 +1006,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|Challenge\Image[] $challengeImage
+     *
      * @return ContentType
      */
     public function setChallengeImage($challengeImage): ContentType
@@ -1024,6 +1026,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|Challenge\Icon[] $challengeIcon
+     *
      * @return ContentType
      */
     public function setChallengeIcon($challengeIcon): ContentType
@@ -1043,6 +1046,7 @@ class ContentType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Pca[] $pca
+     *
      * @return ContentType
      */
     public function setPca($pca)

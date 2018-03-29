@@ -13,11 +13,14 @@ declare(strict_types=1);
 namespace General\Service;
 
 use Contact\Entity\Contact;
+use Contact\Service\ContactService;
+use Doctrine\ORM\EntityManager;
 use General\Email as Email;
 use General\Entity\EmailMessage;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
 use Publication\Entity\Publication;
+use Zend\Authentication\AuthenticationService;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\Sendmail as SendmailTransport;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
@@ -31,8 +34,20 @@ use ZfcTwig\View\TwigRenderer;
 /**
  * Class EmailService.
  */
-class EmailService extends ServiceAbstract
+class EmailService extends AbstractService
 {
+    /**
+     * @var ContactService
+     */
+    protected $contactService;
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var AuthenticationService
+     */
+    protected $authenticationService;
     /**
      * @var Email
      */
@@ -82,17 +97,37 @@ class EmailService extends ServiceAbstract
      */
     protected $attachments = [];
 
-
     /**
      * EmailService constructor.
      *
-     * @param                         $config
+     * @param array                 $config
+     * @param ContactService        $contactService
+     * @param GeneralService        $generalService
+     * @param AuthenticationService $authenticationService
+     * @param EntityManager         $entityManager
      */
-    public function __construct($config)
+    public function __construct(
+        array $config,
+        ContactService $contactService,
+        GeneralService $generalService,
+        AuthenticationService $authenticationService,
+        EntityManager $entityManager
+    ) {
+        parent::__construct($entityManager);
+
+        $this->config = $config['email'];
+        $this->contactService = $contactService;
+        $this->generalService = $generalService;
+        $this->authenticationService = $authenticationService;
+
+        $this->setTransport();
+    }
+
+    /**
+     * Create the transport
+     */
+    private function setTransport(): void
     {
-        $this->config = $config;
-
-
         if ($this->config["active"]) {
             // Server SMTP config
             $transport = new SendmailTransport();
@@ -139,7 +174,7 @@ class EmailService extends ServiceAbstract
     /**
      * Send the email.
      */
-    public function send()
+    public function send(): void
     {
         switch ($this->email->isPersonal()) {
             case true:
@@ -169,12 +204,12 @@ class EmailService extends ServiceAbstract
                     /*
                      * Overrule the to when we are in development
                      */
-                    if ((!defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT)) {
+                    if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
                         $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !\is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            null !== $contact->getId() ? $contact->getDisplayName() : null
                         );
                     }
 
@@ -234,7 +269,7 @@ class EmailService extends ServiceAbstract
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
-                            !\is_null($contact->getId()) ? $contact->getDisplayName() : null
+                            null !== $contact->getId() ? $contact->getDisplayName() : null
                         );
                     }
                 }
@@ -284,7 +319,7 @@ class EmailService extends ServiceAbstract
         /*
          * If not sender, use default
          */
-        if (!\is_null($this->email->getFrom())) {
+        if (null !== $this->email->getFrom()) {
             $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
         } else {
             $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
@@ -314,7 +349,7 @@ class EmailService extends ServiceAbstract
                 $this->message->addBcc($emailAddress);
             }
         }
-        if (!\is_null($this->email->getReplyTo())) {
+        if (null !== $this->email->getReplyTo()) {
             $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
         }
     }
@@ -326,7 +361,7 @@ class EmailService extends ServiceAbstract
      */
     public function updateTemplateVarsWithContact(Contact $contact): void
     {
-        $this->templateVars['attention'] = $this->getContactService()->parseAttention($contact);
+        $this->templateVars['attention'] = $this->contactService->parseAttention($contact);
         $this->templateVars['firstname'] = $contact->getFirstName();
         $this->templateVars['lastname'] = trim(
             sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName())
@@ -334,12 +369,12 @@ class EmailService extends ServiceAbstract
         $this->templateVars['fullname'] = $contact->parseFullName();
         $this->templateVars['email'] = $contact->getEmail();
 
-        if ($this->getContactService()->hasOrganisation($contact)) {
-            $this->templateVars['country'] = (string)$this->getContactService()->parseCountry($contact)->getCountry();
-            $this->templateVars['organisation'] = $this->getContactService()->parseOrganisation($contact);
+        if ($this->contactService->hasOrganisation($contact)) {
+            $this->templateVars['country'] = (string)$this->contactService->parseCountry($contact)->getCountry();
+            $this->templateVars['organisation'] = $this->contactService->parseOrganisation($contact);
         }
 
-        $this->templateVars['signature'] = $this->getContactService()->parseSignature($contact);
+        $this->templateVars['signature'] = $this->contactService->parseSignature($contact);
         //Fill the unsubscribe with temp data
         $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
         $this->templateVars['deeplink'] = 'http://deeplink.example';
@@ -356,7 +391,7 @@ class EmailService extends ServiceAbstract
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (empty($this->message->getSubject()) && !\is_null($this->template)) {
+        if (empty($this->message->getSubject()) && null !== $this->template) {
             $this->message->setSubject($this->template->getSubject());
         }
 
@@ -374,7 +409,7 @@ class EmailService extends ServiceAbstract
             /*
              * replace the content of the title with the available keys in the template vars
              */
-            if (!is_array($replace)) {
+            if (!\is_array($replace)) {
                 $this->message->setSubject(str_replace(sprintf("[%s]", $key), $replace, $this->message->getSubject()));
             }
         }
@@ -383,7 +418,7 @@ class EmailService extends ServiceAbstract
     /**
      * Inject the deeplink in the email
      */
-    public function parseDeeplink()
+    public function parseDeeplink(): void
     {
         $this->templateVars['deeplink'] = $this->email->getDeeplink();
     }
@@ -391,7 +426,7 @@ class EmailService extends ServiceAbstract
     /**
      * Inject the unsubscribe in the email
      */
-    public function parseUnsubscribe()
+    public function parseUnsubscribe(): void
     {
         $this->templateVars['unsubscribe'] = $this->email->getUnsubscribe();
     }
@@ -411,7 +446,7 @@ class EmailService extends ServiceAbstract
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
         } catch (\Twig_Error_Syntax $e) {
-            $htmlView = $textView = sprintf("Something went wrong with the merge. Error message: %s", $e->getMessage());
+            $htmlView = $textView = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
         }
 
         $this->htmlView = $htmlView;
@@ -463,7 +498,7 @@ class EmailService extends ServiceAbstract
      *
      * @return null|string
      */
-    private function personaliseMessage($message)
+    private function personaliseMessage($message): ?string
     {
         /*
          * Replace first the content of the mailing with the required (new) short tags
@@ -499,7 +534,7 @@ class EmailService extends ServiceAbstract
      *
      * @return string
      */
-    protected function createTwigTemplate($content)
+    protected function createTwigTemplate($content): string
     {
         return preg_replace(
             [
@@ -541,7 +576,7 @@ class EmailService extends ServiceAbstract
      *
      * @return MimePart
      */
-    public function addInlineAttachment($fileName)
+    public function addInlineAttachment($fileName): MimePart
     {
         /**
          * Create the attachment, only when the file exists
@@ -560,11 +595,11 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      *
      * @return string
      */
-    protected function mimeByExtension($filename)
+    protected function mimeByExtension(string $filename): string
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
@@ -617,11 +652,11 @@ class EmailService extends ServiceAbstract
         $emailMessage->setAmountOfAttachments(\count($this->attachments));
 
         //Inject the mailing contact
-        if (!\is_null($this->getMailingContact())) {
+        if (null !== $this->getMailingContact()) {
             $emailMessage->setMailingContact($this->getMailingContact());
         }
 
-        $this->getGeneralService()->newEntity($emailMessage);
+        $this->save($emailMessage);
 
         //Add the custom header id
         $this->message->getHeaders()->addHeaderLine('X-MJ-CustomID', trim($emailMessage->getIdentifier()));
@@ -660,7 +695,7 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     * @param $attachment
+     * @param             $attachment
      * @param string|null $type
      * @param string|null $fileName
      */
@@ -677,6 +712,7 @@ class EmailService extends ServiceAbstract
      * @param string $content
      * @param string $type
      * @param string $fileName
+     *
      * @return MimePart
      */
     public function createAttachment(string $content, string $type, string $fileName): MimePart
@@ -695,10 +731,10 @@ class EmailService extends ServiceAbstract
     }
 
     /**
-     * @param $name
-     * @param $content
+     * @param        $name
+     * @param string $content
      */
-    public function addHeader($name, $content)
+    public function addHeader($name, string $content): void
     {
         $this->headers[$name] = $content;
     }
@@ -706,7 +742,7 @@ class EmailService extends ServiceAbstract
     /**
      * @param $publication
      */
-    public function addPublication(Publication $publication)
+    public function addPublication(Publication $publication): void
     {
         /*
          * Create the attachment
@@ -726,20 +762,21 @@ class EmailService extends ServiceAbstract
      *
      * @param \Mailing\Entity\Mailing $mailing
      */
-    public function setMailing($mailing)
+    public function setMailing($mailing): void
     {
         $this->mailing = $mailing;
 
-        if (\is_null($this->email)) {
+        if (null === $this->email) {
             throw new \RuntimeException('The email object is empty. Did you call create() first?');
         }
 
         //There is a special case when the mail is sent on behalf of the user. The sender is then called _self, we also add the function __owner for the owner of the mailing
         switch (true) {
             case strpos($this->mailing->getSender()->getEmail(), '_self') !== false:
-                if ($this->getAuthenticationService()->hasIdentity()) {
-                    $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
-                    $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
+                /** @var Contact $contact */
+                if ($contact = $this->authenticationService->hasIdentity()) {
+                    $this->email->setFrom($contact->getEmail());
+                    $this->email->setFromName($contact->getDisplayName());
                 } else {
                     $this->email->setFrom($this->mailing->getContact()->getEmail());
                     $this->email->setFromName($this->mailing->getContact()->getDisplayName());
@@ -766,12 +803,12 @@ class EmailService extends ServiceAbstract
      *
      * @return null|string
      */
-    public function generatePreview()
+    public function generatePreview(): string
     {
-        $this->updateTemplateVarsWithContact($this->getAuthenticationService()->getIdentity());
+        $this->updateTemplateVarsWithContact($this->authenticationService->getIdentity());
 
-        if (\is_null($this->mailing)) {
-            throw new \RuntimeException("The mailing object is empty. Did set the template");
+        if (null === $this->mailing) {
+            throw new \RuntimeException("The mailing object is empty. Did you set the mailing?");
         }
 
         try {
@@ -783,7 +820,7 @@ class EmailService extends ServiceAbstract
             print sprintf('Something went wrong. Error message: %s', $e->getMessage());
         }
 
-        return true;
+        return '';
     }
 
     /**
@@ -795,13 +832,13 @@ class EmailService extends ServiceAbstract
      */
     public function setTemplate($templateName): EmailService
     {
-        $this->template = $this->getGeneralService()->findWebInfoByInfo($templateName);
+        $this->template = $this->generalService->findWebInfoByInfo($templateName);
 
-        if (\is_null($this->template)) {
+        if (null === $this->template) {
             throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
         }
 
-        if (\is_null($this->email)) {
+        if (null === $this->email) {
             throw new \RuntimeException('The email object is empty. Did you call create() first?');
         }
 
@@ -812,8 +849,8 @@ class EmailService extends ServiceAbstract
         //There is a special case when the mail is sent on behalf of the user. The sender is then called _self, we also add the function __owner for the owner of the mailing
         switch (true) {
             case strpos($this->template->getSender()->getEmail(), '_self') !== false:
-                $this->email->setFrom($this->getAuthenticationService()->getIdentity()->getEmail());
-                $this->email->setFromName($this->getAuthenticationService()->getIdentity()->getDisplayName());
+                $this->email->setFrom($this->authenticationService->getIdentity()->getEmail());
+                $this->email->setFromName($this->authenticationService->getIdentity()->getDisplayName());
                 break;
             default:
                 $this->email->setFrom($this->template->getSender()->getEmail());

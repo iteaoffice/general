@@ -16,7 +16,6 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the Country.
@@ -28,7 +27,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Country extends EntityAbstract implements ResourceInterface
+class Country extends AbstractEntity
 {
     /**
      * @ORM\Column(name="country_id",type="integer",nullable=false)
@@ -236,6 +235,7 @@ class Country extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -636,6 +636,7 @@ class Country extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Collections\ArrayCollection|\Project\Entity\Contract[] $contract
+     *
      * @return Country
      */
     public function setContract($contract)

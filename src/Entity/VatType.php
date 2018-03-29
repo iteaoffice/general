@@ -15,7 +15,6 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -27,7 +26,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class VatType extends EntityAbstract implements ResourceInterface
+class VatType extends AbstractEntity
 {
     public const VAT_TYPE_LOCAL = 1;
     public const VAT_TYPE_IN_EU_SHIFT = 2;
@@ -139,6 +138,7 @@ class VatType extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)

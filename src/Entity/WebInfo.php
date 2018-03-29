@@ -15,7 +15,6 @@ namespace General\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Mailing\Entity\Sender;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * WebInfo.
@@ -25,7 +24,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("content_stylesheet")
  */
-class WebInfo extends EntityAbstract implements ResourceInterface
+class WebInfo extends AbstractEntity
 {
     public const PLAIN = 1;
     public const NOT_PLAIN = 0;
@@ -162,6 +161,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -293,6 +293,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Sender $sender
+     *
      * @return WebInfo
      */
     public function setSender(Sender $sender): WebInfo
@@ -312,6 +313,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \Mailing\Entity\Template $template
+     *
      * @return WebInfo
      */
     public function setTemplate(\Mailing\Entity\Template $template): WebInfo

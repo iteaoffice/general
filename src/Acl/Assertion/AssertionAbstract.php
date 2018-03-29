@@ -117,7 +117,7 @@ abstract class AssertionAbstract implements AssertionInterface
     /**
      * @return int|null
      */
-    public function getId(): ?int
+    public function getId()
     {
         if (!\is_null($id = $this->getRequest()->getPost('id'))) {
             return (int)$id;

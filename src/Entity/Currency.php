@@ -26,7 +26,7 @@ use Zend\Form\Annotation;
  *
  * @category General
  */
-class Currency extends EntityAbstract
+class Currency extends AbstractEntity
 {
     /**
      * @ORM\Column(name="currency_id",type="integer",nullable=false)
@@ -115,6 +115,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -135,13 +136,14 @@ class Currency extends EntityAbstract
     /**
      * @return int
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
+     *
      * @return Currency
      */
     public function setId($id): Currency
@@ -161,6 +163,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param string $name
+     *
      * @return Currency
      */
     public function setName(string $name): Currency
@@ -180,6 +183,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param string $symbol
+     *
      * @return Currency
      */
     public function setSymbol(string $symbol): Currency
@@ -199,6 +203,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param string $iso4217
+     *
      * @return Currency
      */
     public function setIso4217(string $iso4217): Currency
@@ -218,6 +223,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param ArrayCollection|\Project\Entity\Contract[] $contract
+     *
      * @return Currency
      */
     public function setContract($contract)
@@ -237,6 +243,7 @@ class Currency extends EntityAbstract
 
     /**
      * @param ArrayCollection|ExchangeRate[] $exchangeRate
+     *
      * @return Currency
      */
     public function setExchangeRate($exchangeRate)

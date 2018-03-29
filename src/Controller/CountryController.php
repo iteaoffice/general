@@ -14,25 +14,66 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Country;
 use General\Form\CountryFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\Http\Response;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
  * Class CountryController
+ *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class CountryController extends GeneralAbstractController
+class CountryController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * CountryController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+
+    /**
+     * @return ViewModel
+     */
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Country::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(Country::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -55,12 +96,12 @@ class CountryController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $country = $this->getGeneralService()->findEntityById(Country::class, $this->params('id'));
-        if (\is_null($country)) {
+        $country = $this->generalService->find(Country::class, (int)$this->params('id'));
+        if (null === $country) {
             return $this->notFoundAction();
         }
 
@@ -68,15 +109,15 @@ class CountryController extends GeneralAbstractController
     }
 
     /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Country::class, null, $data);
+        $form = $this->formService->prepare(Country::class, $data);
         $form->remove('delete');
 
 
@@ -89,8 +130,8 @@ class CountryController extends GeneralAbstractController
                 /* @var $country Country */
                 $country = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($country);
-                $this->redirect()->toRoute(
+                $result = $this->generalService->save($country);
+                return $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
                         'id' => $result->getId(),
@@ -107,11 +148,12 @@ class CountryController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $country = $this->getGeneralService()->findEntityById(Country::class, $this->params('id'));
+        /** @var Country $country */
+        $country = $this->generalService->find(Country::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($country, $country, $data);
+        $form = $this->formService->prepare($country, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -119,7 +161,7 @@ class CountryController extends GeneralAbstractController
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($country);
+                $this->generalService->delete($country);
 
                 return $this->redirect()->toRoute('zfcadmin/country/list');
             }
@@ -128,8 +170,8 @@ class CountryController extends GeneralAbstractController
                 /** @var Country $country */
                 $country = $form->getData();
 
-                $country = $this->getGeneralService()->updateEntity($country);
-                $this->redirect()->toRoute(
+                $country = $this->generalService->save($country);
+                return $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
                         'id' => $country->getId(),
@@ -139,5 +181,24 @@ class CountryController extends GeneralAbstractController
         }
 
         return new ViewModel(['form' => $form, 'country' => $country]);
+    }
+
+    /**
+     * @return Response
+     */
+    public function codeAction(): Response
+    {
+        $country = $this->generalService->findCountryByCD($this->params('cd'));
+
+        if (null !== $country) {
+            return $this->redirect()->toRoute(
+                'route-' . $country->get('underscore_entity_name'),
+                [
+                    'docRef' => $country->getDocRef(),
+                ]
+            )->setStatusCode(301);
+        }
+
+        return $this->redirect()->toRoute('home');
     }
 }

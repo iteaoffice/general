@@ -15,49 +15,39 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Challenge\Icon;
 use General\Entity\Challenge\Image;
 use General\Entity\Country;
+use General\Service\GeneralService;
 use Zend\Http\Response;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 /**
  * The index of the system.
  *
  * @category Content
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class ImageController extends GeneralAbstractController
+class ImageController extends AbstractActionController
 {
     /**
-     * Index of the Index.
+     * @var GeneralService
      */
-    public function assetAction()
+    protected $generalService;
+
+    /**
+     * ImageController constructor.
+     *
+     * @param GeneralService $generalService
+     */
+    public function __construct(GeneralService $generalService)
     {
-        /** @var Response $response */
-        $response = $this->getResponse();
-
-
-        foreach ($this->getModuleOptions()->getStyleLocations() as $location) {
-            $requestedFile = $location .
-                DIRECTORY_SEPARATOR .
-                $this->getModuleOptions()->getImageLocation() .
-                DIRECTORY_SEPARATOR .
-                $this->params('name');
-
-            if (file_exists($requestedFile)) {
-                $response->getHeaders()
-                    ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-                    ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-                    ->addHeaderLine("Pragma: public")
-                    ->addHeaderLine('Content-Type: image/png');
-
-                $response->setContent(file_get_contents($requestedFile));
-
-                return $response;
-            }
-        }
-
-        return $response;
+        $this->generalService = $generalService;
     }
+
 
     /**
      * @return Response
@@ -67,21 +57,17 @@ class ImageController extends GeneralAbstractController
         /** @var Response $response */
         $response = $this->getResponse();
 
-        $id = $this->params('id');
-        if (\is_null($id)) {
-            return $response;
-        }
         /** @var Country $country */
-        $country = $this->getGeneralService()->findEntityById(Country::class, $id);
+        $country = $this->generalService->find(Country::class, (int)$this->params('id'));
 
-        if (\is_null($country)) {
-            return $response;
+        if (null === $country) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: image/png');
 
         $response->setContent(stream_get_contents($country->getFlag()->getObject()));
@@ -97,21 +83,17 @@ class ImageController extends GeneralAbstractController
         /** @var Response $response */
         $response = $this->getResponse();
 
-        $id = $this->params('id');
-        if (\is_null($id)) {
-            return $response;
-        }
         /** @var Icon $icon */
-        $icon = $this->getGeneralService()->findEntityById(Icon::class, $id);
+        $icon = $this->generalService->find(Icon::class, (int)$this->params('id'));
 
-        if (\is_null($icon)) {
-            return $response;
+        if (null === $icon) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: image/png');
 
         $response->setContent(stream_get_contents($icon->getIcon()));
@@ -127,21 +109,17 @@ class ImageController extends GeneralAbstractController
         /** @var Response $response */
         $response = $this->getResponse();
 
-        $id = $this->params('id');
-        if (\is_null($id)) {
-            return $response;
-        }
         /** @var Image $image */
-        $image = $this->getGeneralService()->findEntityById(Image::class, $id);
+        $image = $this->generalService->find(Image::class, (int)$this->params('id'));
 
-        if (\is_null($image)) {
-            return $response;
+        if (null === $image) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")
-            ->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: image/png');
 
         $response->setContent(stream_get_contents($image->getImage()));

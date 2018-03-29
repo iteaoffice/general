@@ -14,42 +14,31 @@ namespace General\Service;
 
 use Affiliation\Service\AffiliationService;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query;
 use Event\Entity\Meeting\Meeting;
 use General\Entity;
+use General\Entity\AbstractEntity;
 use General\Repository;
 use Program\Entity\Call\Call;
 use Project\Entity\Evaluation;
 use Project\Entity\Project;
 use Project\Entity\Result\Result;
-use Zend\Http\Client;
-use Zend\Http\Response;
-use Zend\Json\Json;
 
 /**
  * Class GeneralService
+ *
  * @package General\Service
  */
-class GeneralService extends ServiceAbstract
+class GeneralService extends AbstractService
 {
     /**
-     * @param $entity
-     * @param array $filter
-     * @return Query
+     * @param string $entity
+     * @param string $docRef
+     *
+     * @return null|AbstractEntity
      */
-    public function findFiltered(string $entity, array $filter): Query
+    public function findEntityByDocRef(string $entity, string $docRef): ?AbstractEntity
     {
-        return $this->getEntityManager()->getRepository($entity)->findFiltered($filter);
-    }
-
-    /**
-     * @param $entity
-     * @param $docRef
-     * @return null|object
-     */
-    public function findEntityByDocRef($entity, $docRef)
-    {
-        return $this->getEntityManager()->getRepository($entity)->findOneBy(['docRef' => $docRef]);
+        return $this->entityManager->getRepository($entity)->findOneBy(['docRef' => $docRef]);
     }
 
     /**
@@ -59,7 +48,7 @@ class GeneralService extends ServiceAbstract
     public function truncateLog(): void
     {
         /** @var Repository\Log $repository */
-        $repository =  $this->getEntityManager()->getRepository(Entity\Log::class);
+        $repository = $this->entityManager->getRepository(Entity\Log::class);
 
         $repository->truncateLog();
     }
@@ -69,18 +58,19 @@ class GeneralService extends ServiceAbstract
      */
     public function findAllChallenges(): array
     {
-        return $this->getEntityManager()->getRepository(Entity\Challenge::class)
+        return $this->entityManager->getRepository(Entity\Challenge::class)
             ->findBy([], ['challenge' => 'ASC']);
     }
 
     /**
      * @param Entity\Currency $currency
-     * @param \DateTime|null $dateTime
+     * @param \DateTime|null  $dateTime
+     *
      * @return Entity\ExchangeRate|null
      */
     public function findActiveExchangeRate(Entity\Currency $currency, \DateTime $dateTime = null): ?Entity\ExchangeRate
     {
-        if (\is_null($dateTime)) {
+        if (null === $dateTime) {
             $dateTime = new \DateTime();
         }
 
@@ -99,11 +89,11 @@ class GeneralService extends ServiceAbstract
     /**
      * @param string $identifier
      *
-     * @return null|object|Entity\EmailMessage
+     * @return null|Entity\EmailMessage
      */
     public function findEmailMessageByIdentifier(string $identifier): ?Entity\EmailMessage
     {
-        return $this->getEntityManager()->getRepository(Entity\EmailMessage::class)
+        return $this->entityManager->getRepository(Entity\EmailMessage::class)
             ->findOneBy(['identifier' => $identifier]);
     }
 
@@ -113,7 +103,7 @@ class GeneralService extends ServiceAbstract
     public function findContentTypeByImage(): array
     {
         /** @var Repository\ContentType $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\ContentType::class);
+        $repository = $this->entityManager->getRepository(Entity\ContentType::class);
 
         return $repository->findContentTypeByImage();
     }
@@ -124,7 +114,7 @@ class GeneralService extends ServiceAbstract
     public function findActiveCountries(): array
     {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findActive();
     }
@@ -135,7 +125,7 @@ class GeneralService extends ServiceAbstract
     public function findCountryInProjectLog(): array
     {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountryInProjectLog();
     }
@@ -146,7 +136,7 @@ class GeneralService extends ServiceAbstract
     public function findItacCountries(): array
     {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findItac();
     }
@@ -154,66 +144,57 @@ class GeneralService extends ServiceAbstract
     /**
      * @param string $iso3
      *
-     * @return null|Entity\Country|object
+     * @return null|Entity\Country
      *
      * @throws \InvalidArgumentException
      */
     public function findCountryByIso3($iso3): ?Entity\Country
     {
-        /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
-
-        return $repository->findOneBy(['iso3' => strtoupper($iso3)]);
+        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['iso3' => strtoupper($iso3)]);
     }
 
     /**
      * @param $gender
      *
-     * @return null|Entity\Gender|object
+     * @return null|Entity\Gender
      */
     public function findGenderByGender($gender): ?Entity\Gender
     {
-        return $this->getEntityManager()->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
+        return $this->entityManager->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
     }
 
     /**
      * @param $title
      *
-     * @return null|Entity\Title|object
+     * @return null|Entity\Title
      */
     public function findTitleByTitle($title): ?Entity\Title
     {
-        return $this->getEntityManager()->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
+        return $this->entityManager->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
     }
 
     /**
      * @param string $name
      *
-     * @return null|Entity\Country|object
+     * @return null|Entity\Country
      *
      * @throws \InvalidArgumentException
      */
     public function findCountryByName($name): ?Entity\Country
     {
-        /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
-
-        return $repository->findOneBy(['country' => $name]);
+        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['country' => $name]);
     }
 
     /**
      * @param $cd
      *
-     * @return null|Entity\Country|object
+     * @return null|Entity\Country
      *
      * @throws \InvalidArgumentException
      */
     public function findCountryByCD($cd): ?Entity\Country
     {
-        /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
-
-        return $repository->findOneBy(['cd' => strtoupper($cd)]);
+        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
     }
 
     /**
@@ -224,14 +205,14 @@ class GeneralService extends ServiceAbstract
     public function findCountriesByMeeting(Meeting $meeting): array
     {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountriesByMeeting($meeting);
     }
 
     /**
      * @param Call $call
-     * @param int $which
+     * @param int  $which
      *
      * @return Entity\Country[]
      */
@@ -240,14 +221,14 @@ class GeneralService extends ServiceAbstract
         $which = AffiliationService::WHICH_ONLY_ACTIVE
     ): array {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountryByCall($call, $which);
     }
 
     /**
      * @param Project $project
-     * @param int $which
+     * @param int     $which
      *
      * @return Entity\Country[]|ArrayCollection;
      */
@@ -256,7 +237,7 @@ class GeneralService extends ServiceAbstract
         $which = AffiliationService::WHICH_ONLY_ACTIVE
     ): ArrayCollection {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return new ArrayCollection($repository->findCountryByProject($project, $which));
     }
@@ -271,7 +252,7 @@ class GeneralService extends ServiceAbstract
     public function findCountryOfProjectContact(Project $project): ?Entity\Country
     {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountryOfProjectContact($project);
     }
@@ -280,7 +261,7 @@ class GeneralService extends ServiceAbstract
      * Produce a list of countries active in a call and evaluation type.
      *
      * @param Evaluation\Type $type
-     * @param Call|null $call
+     * @param Call|null       $call
      *
      * @return Entity\Country[]
      */
@@ -289,66 +270,46 @@ class GeneralService extends ServiceAbstract
         Call $call = null
     ): array {
         /** @var Repository\Country $repository */
-        $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
+        $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountryByEvaluationTypeAndCall($type, $call);
     }
 
     /**
      * @param $info
-     * @return Entity\WebInfo|null|object
+     *
+     * @return Entity\WebInfo|null
      */
     public function findWebInfoByInfo($info): ?Entity\WebInfo
     {
-        return $this->getEntityManager()->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
+        return $this->entityManager->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
     }
 
     /**
      * @param $contentTypeName
+     *
      * @return Entity\ContentType
      */
     public function findContentTypeByContentTypeName($contentTypeName): Entity\ContentType
     {
         /** @var Entity\ContentType $entity */
-        $contentType = $this->getEntityManager()->getRepository(Entity\ContentType::class)
+        $contentType = $this->entityManager->getRepository(Entity\ContentType::class)
             ->findOneBy(['contentType' => $contentTypeName]);
 
         //Create a fallback to the unknown type when the requested type cannot be found.
-        if (\is_null($contentType)) {
+        if (null === $contentType) {
             /** @var Entity\ContentType $contentType */
-            $contentType = $this->getEntityManager()->getRepository(Entity\ContentType::class)
-                ->find(Entity\ContentType::TYPE_UNKNOWN);
+            return $this->entityManager->getRepository(Entity\ContentType::class)->find(
+                Entity\ContentType::TYPE_UNKNOWN
+            );
         }
 
         return $contentType;
     }
 
     /**
-     * Give the location of a user based on an IP address IPAddress of a person by checking an online service.
-     *
-     * @return null|Entity\Country|object
-     */
-    public function findLocationByIPAddress()
-    {
-        $client = new Client();
-        $client->setUri(sprintf($this->getModuleOptions()->getGeoIpServiceURL(), $_SERVER['REMOTE_ADDR']));
-        if ($client->send()->getStatusCode() === Response::STATUS_CODE_200) {
-            /*
-             * We have the country, try to find the country in our database
-             */
-            $countryResult = Json::decode($client->send()->getContent());
-
-            /** @var Repository\Country $repository */
-            $repository = $this->getEntityManager()->getRepository(Entity\Country::class);
-
-            return $repository->findOneBy(['cd' => $countryResult->country_code]);
-        }
-
-        return $this->findEntityById(Entity\Country::class, 0); //Unknown
-    }
-
-    /**
      * @param Entity\Currency $currency
+     *
      * @return bool
      */
     public function canDeleteCurrency(Entity\Currency $currency): bool
@@ -359,15 +320,16 @@ class GeneralService extends ServiceAbstract
     /**
      * @param $id
      *
-     * @return \General\Entity\Challenge|object
+     * @return \General\Entity\Challenge
      */
     public function findChallengeById($id): Entity\Challenge
     {
-        return $this->getEntityManager()->getRepository(Entity\Challenge::class)->find($id);
+        return $this->entityManager->getRepository(Entity\Challenge::class)->find($id);
     }
 
     /**
      * @param Call $call
+     *
      * @return array
      */
     public function findChallengesByCall(Call $call): array
@@ -393,6 +355,7 @@ class GeneralService extends ServiceAbstract
 
     /**
      * @param Result $result
+     *
      * @return array|Entity\Challenge[]
      */
     public function parseChallengesByResult(Result $result): array

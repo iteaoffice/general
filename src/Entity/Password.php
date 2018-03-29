@@ -14,7 +14,6 @@ namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * WebInfo.
@@ -24,7 +23,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("password")
  */
-class Password extends EntityAbstract implements ResourceInterface
+class Password extends AbstractEntity
 {
     /**
      * @ORM\Column(name="password_id", type="integer", nullable=false)
@@ -108,6 +107,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -133,6 +133,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param int $id
+     *
      * @return Password
      */
     public function setId(int $id): Password
@@ -152,6 +153,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $description
+     *
      * @return Password
      */
     public function setDescription(string $description): Password
@@ -171,6 +173,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $website
+     *
      * @return Password
      */
     public function setWebsite(string $website): Password
@@ -190,6 +193,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $account
+     *
      * @return Password
      */
     public function setAccount(string $account): Password
@@ -209,6 +213,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $username
+     *
      * @return Password
      */
     public function setUsername(string $username): Password
@@ -228,6 +233,7 @@ class Password extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $password
+     *
      * @return Password
      */
     public function setPassword(string $password): Password

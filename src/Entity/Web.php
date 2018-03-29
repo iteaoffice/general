@@ -22,7 +22,7 @@ use Zend\Form\Annotation;
  * @ORM\Table(name="web")
  * @ORM\Entity
  */
-class Web extends EntityAbstract
+class Web extends AbstractEntity
 {
     /**
      * @ORM\Column(name="web_id", type="integer", nullable=false)
@@ -98,6 +98,7 @@ class Web extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)

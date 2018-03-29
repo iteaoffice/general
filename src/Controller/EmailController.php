@@ -12,12 +12,19 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
 use General\Form\EmailFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Json\Json;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -26,25 +33,61 @@ use Zend\View\Model\ViewModel;
  * Class EmailController
  *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class EmailController extends GeneralAbstractController
+class EmailController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * ContentTypeController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return ViewModel
+     */
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered(EmailMessage::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService
+            ->findFiltered(EmailMessage::class, $filterPlugin->getFilter());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new EmailFilter($this->getEntityManager());
+        $form = new EmailFilter($this->entityManager);
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -61,10 +104,9 @@ class EmailController extends GeneralAbstractController
     /**
      * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $emailMessage = $this->getGeneralService()
-            ->findEntityById(EmailMessage::class, $this->params('id'));
+        $emailMessage = $this->generalService->find(EmailMessage::class, (int)$this->params('id'));
         if (null === $emailMessage) {
             return $this->notFoundAction();
         }
@@ -78,7 +120,7 @@ class EmailController extends GeneralAbstractController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function eventAction()
+    public function eventAction(): JsonModel
     {
         $data = Json::decode($this->getRequest()->getContent());
 
@@ -89,7 +131,7 @@ class EmailController extends GeneralAbstractController
         /**
          * Try to find the email message, if this cannot be found, short circuit it
          */
-        $emailMessage = $this->getGeneralService()->findEmailMessageByIdentifier($data->CustomID);
+        $emailMessage = $this->generalService->findEmailMessageByIdentifier($data->CustomID);
         if (null === $emailMessage) {
             return new JsonModel();
         }
@@ -128,12 +170,12 @@ class EmailController extends GeneralAbstractController
             $emailMessageEvent->setSource($data->source);
         }
 
-        $this->getGeneralService()->newEntity($emailMessageEvent);
+        $this->generalService->save($emailMessageEvent);
 
         //Store the latest status in the emailMessage
         $emailMessage->setLatestEvent($data->event);
         $emailMessage->setDateLatestEvent(new \DateTime());
-        $this->getGeneralService()->updateEntity($emailMessage);
+        $this->generalService->save($emailMessage);
 
         return new JsonModel();
     }

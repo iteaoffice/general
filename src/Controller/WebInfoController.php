@@ -12,10 +12,19 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use Contact\Entity\Contact;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\WebInfo;
 use General\Form\WebInfoFilter;
+use General\Service\EmailService;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Zend\Mvc\Plugin\Identity\Identity;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
@@ -23,17 +32,37 @@ use Zend\View\Model\ViewModel;
  * Class WebInfoController
  *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
+ * @method Identity|Contact identity()
  */
-class WebInfoController extends GeneralAbstractController
+class WebInfoController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    /**
+     * @var EmailService
+     */
+    protected $emailService;
+
+    /**
+     * @return ViewModel
+     */
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(WebInfo::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(WebInfo::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -56,13 +85,13 @@ class WebInfoController extends GeneralAbstractController
     }
 
     /**
-     * @return array|ViewModel
+     * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
         /** @var WebInfo $webInfo */
-        $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
-        if (\is_null($webInfo)) {
+        $webInfo = $this->generalService->find(WebInfo::class, (int)$this->params('id'));
+        if (null === $webInfo) {
             return $this->notFoundAction();
         }
 
@@ -70,14 +99,14 @@ class WebInfoController extends GeneralAbstractController
             $this->flashMessenger()->setNamespace('info')
                 ->addMessage(
                     sprintf(
-                        $this->translate("txt-test-mail-of-web-info-%s-has-been-send-successfully"),
+                        $this->translator->translate("txt-test-mail-of-web-info-%s-has-been-send-successfully"),
                         $webInfo->getInfo()
                     )
                 );
-            $email = $this->getEmailService()->create();
-            $this->getEmailService()->setTemplate($webInfo->getInfo());
-            $email->addTo($this->zfcUserAuthentication()->getIdentity());
-            $this->getEmailService()->send();
+            $email = $this->emailService->create();
+            $this->emailService->setTemplate($webInfo->getInfo());
+            $email->addTo($this->identity());
+            $this->emailService->send();
         }
 
         return new ViewModel(['webInfo' => $webInfo]);
@@ -85,12 +114,14 @@ class WebInfoController extends GeneralAbstractController
 
     /**
      * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(WebInfo::class, null, $data);
+        $form = $this->formService->prepare(WebInfo::class, $data);
         $form->remove('delete');
 
 
@@ -103,12 +134,12 @@ class WebInfoController extends GeneralAbstractController
                 /** @var $webInfo WebInfo */
                 $webInfo = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($webInfo);
+                $result = $this->generalService->save($webInfo);
 
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-web-info-%s-has-been-created-successfully"),
+                            $this->translator->translate("txt-web-info-%s-has-been-created-successfully"),
                             $webInfo->getInfo()
                         )
                     );
@@ -131,11 +162,11 @@ class WebInfoController extends GeneralAbstractController
     public function editAction()
     {
         /** @var WebInfo $webInfo */
-        $webInfo = $this->getGeneralService()->findEntityById(WebInfo::class, $this->params('id'));
+        $webInfo = $this->generalService->find(WebInfo::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($webInfo, $webInfo, $data);
+        $form = $this->formService->prepare($webInfo, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -146,12 +177,12 @@ class WebInfoController extends GeneralAbstractController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-web-info-%s-has-been-removed-successfully"),
+                            $this->translator->translate("txt-web-info-%s-has-been-removed-successfully"),
                             $webInfo->getInfo()
                         )
                     );
 
-                $this->getGeneralService()->removeEntity($webInfo);
+                $this->generalService->delete($webInfo);
 
                 return $this->redirect()->toRoute('zfcadmin/web-info/list');
             }
@@ -159,12 +190,12 @@ class WebInfoController extends GeneralAbstractController
             if ($form->isValid()) {
                 /** @var WebInfo $webInfo */
                 $webInfo = $form->getData();
-                $result = $this->getGeneralService()->updateEntity($webInfo);
+                $result = $this->generalService->save($webInfo);
 
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translate("txt-web-info-%s-has-been-updated-successfully"),
+                            $this->translator->translate("txt-web-info-%s-has-been-updated-successfully"),
                             $webInfo->getInfo()
                         )
                     );

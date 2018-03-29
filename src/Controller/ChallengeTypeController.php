@@ -19,8 +19,14 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Challenge;
 use General\Form\ChallengeTypeFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
@@ -28,21 +34,52 @@ use Zend\View\Model\ViewModel;
  * Class ChallengeTypeController
  *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class ChallengeTypeController extends GeneralAbstractController
+class ChallengeTypeController extends AbstractActionController
 {
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * ChallengeTypeController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
     /**
      * @return ViewModel
      */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-            ->findEntitiesFiltered(Challenge\Type::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService
+            ->findFiltered(Challenge\Type::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -66,7 +103,7 @@ class ChallengeTypeController extends GeneralAbstractController
      */
     public function viewAction(): ViewModel
     {
-        $challengeType = $this->getGeneralService()->findEntityById(Challenge\Type::class, $this->params('id'));
+        $challengeType = $this->generalService->find(Challenge\Type::class, (int)$this->params('id'));
 
         if (null === $challengeType) {
             return $this->notFoundAction();
@@ -82,9 +119,9 @@ class ChallengeTypeController extends GeneralAbstractController
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Challenge\Type::class, null, $data);
+        $form = $this->formService->prepare(Challenge\Type::class, $data);
         $form->remove('delete');
 
         if ($this->getRequest()->isPost()) {
@@ -96,7 +133,7 @@ class ChallengeTypeController extends GeneralAbstractController
                 /* @var $challengeTypeType Challenge\Type */
                 $challengeTypeType = $form->getData();
 
-                $challengeTypeType = $this->getGeneralService()->newEntity($challengeTypeType);
+                $challengeTypeType = $this->generalService->save($challengeTypeType);
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/challenge/type/view',
@@ -118,10 +155,10 @@ class ChallengeTypeController extends GeneralAbstractController
     public function editAction()
     {
         /** @var Challenge\Type $challengeType */
-        $challengeType = $this->getGeneralService()->findEntityById(Challenge\Type::class, $this->params('id'));
+        $challengeType = $this->generalService->find(Challenge\Type::class, (int)$this->params('id'));
 
         $data = $this->getRequest()->getPost()->toArray();
-        $form = $this->getFormService()->prepare($challengeType, $challengeType, $data);
+        $form = $this->formService->prepare($challengeType, $data);
 
         if (null === $challengeType) {
             return $this->notFoundAction();
@@ -137,7 +174,7 @@ class ChallengeTypeController extends GeneralAbstractController
             }
 
             if (isset($data['delete']) && $challengeType->getChallenge()->isEmpty()) {
-                $this->getGeneralService()->removeEntity($challengeType);
+                $this->generalService->delete($challengeType);
 
                 return $this->redirect()->toRoute('zfcadmin/challenge/type/list');
             }
@@ -146,7 +183,7 @@ class ChallengeTypeController extends GeneralAbstractController
                 /** @var Challenge\Type $challengeType */
                 $challengeType = $form->getData();
 
-                $this->getGeneralService()->updateEntity($challengeType);
+                $this->generalService->save($challengeType);
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/challenge/type/view',

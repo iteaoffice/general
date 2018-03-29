@@ -14,28 +14,67 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Currency;
 use General\Form\CurrencyFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 /**
  * Class CurrencyController
+ *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
+ *
  */
-class CurrencyController extends GeneralAbstractController
+class CurrencyController extends AbstractActionController
 {
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * ContentTypeController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
     /**
      * @return ViewModel
      */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Currency::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(Currency::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -47,7 +86,7 @@ class CurrencyController extends GeneralAbstractController
             [
                 'paginator'      => $paginator,
                 'form'           => $form,
-                'generalService' => $this->getGeneralService(),
+                'generalService' => $this->generalService,
                 'encodedFilter'  => urlencode($filterPlugin->getHash()),
                 'order'          => $filterPlugin->getOrder(),
                 'direction'      => $filterPlugin->getDirection(),
@@ -60,15 +99,17 @@ class CurrencyController extends GeneralAbstractController
      */
     public function viewAction(): ViewModel
     {
-        $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
-        if (\is_null($currency)) {
+        $currency = $this->generalService->find(Currency::class, (int)$this->params('id'));
+        if (null === $currency) {
             return $this->notFoundAction();
         }
 
-        return new ViewModel([
-            'generalService' => $this->getGeneralService(),
-            'currency'       => $currency
-        ]);
+        return new ViewModel(
+            [
+                'generalService' => $this->generalService,
+                'currency'       => $currency
+            ]
+        );
     }
 
     /**
@@ -78,7 +119,7 @@ class CurrencyController extends GeneralAbstractController
     {
         $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Currency::class, null, $data);
+        $form = $this->formService->prepare(Currency::class, $data);
         $form->remove('delete');
 
 
@@ -91,7 +132,15 @@ class CurrencyController extends GeneralAbstractController
                 /* @var $currency Currency */
                 $currency = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($currency);
+                $result = $this->generalService->save($currency);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-currency-%s-has-been-created-successfully"),
+                            $currency->getName()
+                        )
+                    );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
@@ -111,12 +160,12 @@ class CurrencyController extends GeneralAbstractController
     public function editAction()
     {
         /** @var Currency $currency */
-        $currency = $this->getGeneralService()->findEntityById(Currency::class, $this->params('id'));
+        $currency = $this->generalService->find(Currency::class, (int)$this->params('id'));
         $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($currency, $currency, $data);
+        $form = $this->formService->prepare($currency, $data);
 
-        if ($this->getGeneralService()->canDeleteCurrency($currency)) {
+        if (!$this->generalService->canDeleteCurrency($currency)) {
             $form->remove('delete');
         }
 
@@ -125,8 +174,16 @@ class CurrencyController extends GeneralAbstractController
                 return $this->redirect()->toRoute('zfcadmin/currency/list');
             }
 
-            if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($currency);
+            if (isset($data['delete']) && $this->generalService->canDeleteCurrency($currency)) {
+                $this->generalService->delete($currency);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-currency-%s-has-been-deleted-successfully"),
+                            $currency->getName()
+                        )
+                    );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',
@@ -140,7 +197,15 @@ class CurrencyController extends GeneralAbstractController
                 /** @var Currency $currency */
                 $currency = $form->getData();
 
-                $currency = $this->getGeneralService()->updateEntity($currency);
+                $this->generalService->save($currency);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-currency-%s-has-been-updated-successfully"),
+                            $currency->getName()
+                        )
+                    );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/currency/view',

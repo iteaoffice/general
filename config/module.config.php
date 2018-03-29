@@ -19,37 +19,36 @@ use General\Navigation;
 use General\Options;
 use General\Service;
 use General\View;
+use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Zend\Stdlib;
 
 $config = [
     'controllers'        => [
         'factories' => [
-            Controller\ChallengeController::class     => Controller\Factory\ControllerFactory::class,
-            Controller\ChallengeTypeController::class => Controller\Factory\ControllerFactory::class,
-            Controller\ContentTypeController::class   => Controller\Factory\ControllerFactory::class,
-            Controller\CountryController::class       => Controller\Factory\ControllerFactory::class,
-            Controller\CurrencyController::class      => Controller\Factory\ControllerFactory::class,
-            Controller\ExchangeRateController::class  => Controller\Factory\ControllerFactory::class,
-            Controller\ImageController::class         => Controller\Factory\ControllerFactory::class,
-            Controller\PasswordController::class      => Controller\Factory\ControllerFactory::class,
-            Controller\GenderController::class        => Controller\Factory\ControllerFactory::class,
-            Controller\ImpactStreamController::class  => Controller\Factory\ControllerFactory::class,
-            Controller\IndexController::class         => Controller\Factory\ControllerFactory::class,
-            Controller\StyleController::class         => Controller\Factory\ControllerFactory::class,
-            Controller\EmailController::class         => Controller\Factory\ControllerFactory::class,
-            Controller\LogController::class           => Controller\Factory\ControllerFactory::class,
-            Controller\TitleController::class         => Controller\Factory\ControllerFactory::class,
-            Controller\VatController::class           => Controller\Factory\ControllerFactory::class,
-            Controller\VatTypeController::class       => Controller\Factory\ControllerFactory::class,
-            Controller\WebInfoController::class       => Controller\Factory\ControllerFactory::class,
+            Controller\ChallengeController::class     => ConfigAbstractFactory::class,
+            Controller\ChallengeTypeController::class => ConfigAbstractFactory::class,
+            Controller\ContentTypeController::class   => ConfigAbstractFactory::class,
+            Controller\CountryController::class       => ConfigAbstractFactory::class,
+            Controller\CurrencyController::class      => ConfigAbstractFactory::class,
+            Controller\ExchangeRateController::class  => ConfigAbstractFactory::class,
+            Controller\ImageController::class         => ConfigAbstractFactory::class,
+            Controller\PasswordController::class      => ConfigAbstractFactory::class,
+            Controller\GenderController::class        => ConfigAbstractFactory::class,
+            Controller\ImpactStreamController::class  => ConfigAbstractFactory::class,
+            Controller\EmailController::class         => ConfigAbstractFactory::class,
+            Controller\LogController::class           => ConfigAbstractFactory::class,
+            Controller\TitleController::class         => ConfigAbstractFactory::class,
+            Controller\VatController::class           => ConfigAbstractFactory::class,
+            Controller\VatTypeController::class       => ConfigAbstractFactory::class,
+            Controller\WebInfoController::class       => ConfigAbstractFactory::class,
         ],
     ],
     'controller_plugins' => [
         'aliases'   => [
-            'getGeneralFilter' => Controller\Plugin\GetFilter::class,
+            'getFilter' => Controller\Plugin\GetFilter::class,
         ],
         'factories' => [
-            Controller\Plugin\GetFilter::class => Controller\Factory\PluginFactory::class,
+            Controller\Plugin\GetFilter::class => ConfigAbstractFactory::class,
         ],
     ],
     'view_manager'       => [
@@ -70,7 +69,7 @@ $config = [
             'exchangeRateLink'    => View\Helper\ExchangeRateLink::class,
             'passwordLink'        => View\Helper\PasswordLink::class,
             'emailMessageLink'    => View\Helper\EmailMessageLink::class,
-            'generalLogLink'             => View\Helper\LogLink::class,
+            'generalLogLink'      => View\Helper\LogLink::class,
             'vatLink'             => View\Helper\VatLink::class,
             'genderLink'          => View\Helper\GenderLink::class,
             'titleLink'           => View\Helper\TitleLink::class,
@@ -107,22 +106,14 @@ $config = [
         ],
     ],
     'service_manager'    => [
-        'factories' => [
+        'factories'  => [
             Options\ModuleOptions::class                   => Factory\ModuleOptionsFactory::class,
-            Service\GeneralService::class                  => Factory\GeneralServiceFactory::class,
-            Service\EmailService::class                    => Factory\EmailServiceFactory::class,
+            Service\GeneralService::class                  => ConfigAbstractFactory::class,
+            Service\EmailService::class                    => ConfigAbstractFactory::class,
             Service\FormService::class                     => Factory\FormServiceFactory::class,
             Acl\Assertion\ContentType::class               => Acl\Factory\AssertionFactory::class,
             Acl\Assertion\Country::class                   => Acl\Factory\AssertionFactory::class,
             Acl\Assertion\WebInfo::class                   => Acl\Factory\AssertionFactory::class,
-            InputFilter\ChallengeFilter::class             => Factory\InputFilterFactory::class,
-            InputFilter\Challenge\TypeFilter::class        => Factory\InputFilterFactory::class,
-            InputFilter\CommunityTypeFilter::class         => Factory\InputFilterFactory::class,
-            InputFilter\CountryFilter::class               => Factory\InputFilterFactory::class,
-            InputFilter\PasswordFilter::class              => Factory\InputFilterFactory::class,
-            InputFilter\GenderFilter::class                => Factory\InputFilterFactory::class,
-            InputFilter\TitleFilter::class                 => Factory\InputFilterFactory::class,
-            InputFilter\WebInfoFilter::class               => Factory\InputFilterFactory::class,
             Navigation\Invokable\ChallengeLabel::class     => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\ChallengeTypeLabel::class => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\ContentTypeLabel::class   => Navigation\Factory\NavigationInvokableFactory::class,
@@ -137,6 +128,9 @@ $config = [
             Navigation\Invokable\VatTypeLabel::class       => Navigation\Factory\NavigationInvokableFactory::class,
             Navigation\Invokable\WebInfoLabel::class       => Navigation\Factory\NavigationInvokableFactory::class,
         ],
+        'invokables' => [
+            InputFilter\PasswordFilter::class,
+        ]
     ],
     'asset_manager'      => [
         'resolver_configs' => [

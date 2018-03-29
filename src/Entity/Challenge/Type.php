@@ -19,7 +19,7 @@ namespace General\Entity\Challenge;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use General\Entity\EntityAbstract;
+use General\Entity\AbstractEntity;
 use Zend\Form\Annotation;
 
 /**
@@ -30,7 +30,7 @@ use Zend\Form\Annotation;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("challenge_type")
  */
-class Type extends EntityAbstract
+class Type extends AbstractEntity
 {
     /**
      * @ORM\Column(name="type_id", type="integer", nullable=false)
@@ -106,6 +106,7 @@ class Type extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -133,6 +134,7 @@ class Type extends EntityAbstract
 
     /**
      * @param int $id
+     *
      * @return Type
      */
     public function setId($id): Type
@@ -152,6 +154,7 @@ class Type extends EntityAbstract
 
     /**
      * @param string $type
+     *
      * @return Type
      */
     public function setType(string $type): Type
@@ -171,6 +174,7 @@ class Type extends EntityAbstract
 
     /**
      * @param string $description
+     *
      * @return Type
      */
     public function setDescription(string $description): Type
@@ -190,6 +194,7 @@ class Type extends EntityAbstract
 
     /**
      * @param int $sequence
+     *
      * @return Type
      */
     public function setSequence($sequence): Type
@@ -209,6 +214,7 @@ class Type extends EntityAbstract
 
     /**
      * @param Collections\ArrayCollection|\General\Entity\Challenge[] $challenge
+     *
      * @return Type
      */
     public function setChallenge($challenge): Type

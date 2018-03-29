@@ -103,11 +103,11 @@ class Email
     /**
      * Subject.
      */
-    protected $subject = "";
+    protected $subject = '';
     /**
      * Message.
      */
-    protected $message = "";
+    protected $message = '';
     /**
      * Value to check if a mail is sent personal or send to everyone in the to if set to false.
      *
@@ -131,13 +131,11 @@ class Email
     }
 
     /**
-     * Set all values from $data to each property.
+     * @param array $data
      *
-     * @param $data array set
-     *
-     * @return $this
+     * @return Email
      */
-    public function setProperties(array $data)
+    public function setProperties(array $data): Email
     {
         foreach ($data as $key => $value) {
             $this->$key = $value;
@@ -147,25 +145,29 @@ class Email
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getFrom()
+    public function getFrom(): string
     {
         return $this->from;
     }
 
     /**
-     * @param mixed $from
+     * @param $from
+     *
+     * @return Email
      */
-    public function setFrom($from)
+    public function setFrom(string $from): Email
     {
         $this->from = $from;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getFromName()
+    public function getFromName(): ?string
     {
         return $this->fromName;
     }
@@ -173,7 +175,7 @@ class Email
     /**
      * @param mixed $fromName
      */
-    public function setFromName($fromName)
+    public function setFromName($fromName): void
     {
         $this->fromName = $fromName;
     }
@@ -181,12 +183,11 @@ class Email
     /**
      * @param Contact $contact
      */
-    public function setFromContact(Contact $contact)
+    public function setFromContact(Contact $contact): void
     {
         //If the domain of the contact email is the same as the default email
-        list($name, $defaultDomain) = explode('@', $this->config['defaults']['from_email']);
-
-        list($contactName, $contactDomain) = explode('@', $contact->getEmail());
+        [$name, $defaultDomain] = explode('@', $this->config['defaults']['from_email']);
+        [$contactName, $contactDomain] = explode('@', $contact->getEmail());
 
         //When the domains are the same, use the sender without a trick
         if ($defaultDomain === $contactDomain) {
@@ -195,12 +196,11 @@ class Email
         } else {
             $this->from = $this->config['defaults']['from_email'];
             $this->fromName = sprintf(
-                "%s (via %s)",
+                '%s (via %s)',
                 $contact->getDisplayName(),
                 $this->config['defaults']['from_name']
             );
         }
-
 
         $this->replyTo = $contact->getEmail();
         $this->replyToName = $contact->getDisplayName();
@@ -223,7 +223,7 @@ class Email
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getCc()
     {
@@ -231,43 +231,55 @@ class Email
     }
 
     /**
-     * @param mixed $cc
+     * @param array $cc
+     *
+     * @return Email
      */
-    public function setCc($cc)
+    public function setCc(array $cc): Email
     {
         $this->cc = $cc;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getBcc()
+    public function getBcc(): array
     {
         return $this->bcc;
     }
 
     /**
-     * @param mixed $bcc
+     * @param array $bcc
+     *
+     * @return Email
      */
-    public function setBcc($bcc)
+    public function setBcc(array $bcc): Email
     {
         $this->bcc = $bcc;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
      * @param string $message
+     *
+     * @return Email
      */
-    public function setMessage($message)
+    public function setMessage(string $message): Email
     {
         $this->message = $message;
+
+        return $this;
     }
 
     /**
@@ -287,12 +299,12 @@ class Email
      * @param      $var
      * @param null $user
      */
-    public function addTo($var, $user = null)
+    public function addTo($var, $user = null): void
     {
         if ($var instanceof Contact) {
             $this->to[$var->getEmail()] = $var;
         } else {
-            $this->to[$var] = \is_null($user) ? $var : $user;
+            $this->to[$var] = $user ?? $var;
         }
     }
 
@@ -302,12 +314,12 @@ class Email
      * @param      $var
      * @param null $user
      */
-    public function addCc($var, $user = null)
+    public function addCc($var, $user = null): void
     {
         if ($var instanceof Contact) {
             $this->cc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->cc[$var] = \is_null($user) ? $var : $user;
+            $this->cc[$var] = $user ?? $var;
         }
     }
 
@@ -317,30 +329,20 @@ class Email
      * @param      $var
      * @param null $user
      */
-    public function addBcc($var, $user = null)
+    public function addBcc($var, $user = null): void
     {
         if ($var instanceof Contact) {
             $this->bcc[$var->getEmail()] = $var->getDisplayName();
         } else {
-            $this->bcc[$var] = \is_null($user) ? $var : $user;
+            $this->bcc[$var] = $user ?? $var;
         }
     }
 
     /**
-     * Set/Get Magic function.
-     *
-     * Set
-     * $user->setSubject("This is a test")
-     *
-     * Get
-     * $user->getName();
-     * $user->getPhonenumbers(3);
-     *
      * @param $method
      * @param $args
      *
-     * @return null|string
-     *
+     * @return string
      * @throws \Exception
      */
     public function __call($method, $args)
@@ -348,21 +350,21 @@ class Email
         switch (substr($method, 0, 3)) {
             case 'get':
                 $key = $this->underscore(substr($method, 3));
-                $index = isset($args[0]) ? $args[0] : null;
+                $index = $args[0] ?? null;
 
                 if (!$index && isset($this->$key)) {
                     return $this->$key;
                 }
 
-                return "";
+                return '';
             case 'set':
                 $key = $this->underscore(substr($method, 3));
-                $result = isset($args[0]) ? $args[0] : null;
+                $result = $args[0] ?? null;
 
                 //Only keep the item when it can be set to a toString
-                if ((!is_array($result))
-                    && ((!is_object($result) && settype($result, 'string') !== false)
-                        || (is_object($result) && method_exists($result, '__toString')))
+                if ((!\is_array($result))
+                    && ((!\is_object($result) && \settype($result, 'string') !== false)
+                        || (\is_object($result) && \method_exists($result, '__toString')))
                 ) {
                     $this->$key = (string)$result;
 
@@ -469,9 +471,9 @@ class Email
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isPersonal()
+    public function isPersonal(): bool
     {
         return $this->personal;
     }
@@ -481,7 +483,7 @@ class Email
      *
      * @return Email
      */
-    public function setPersonal($personal)
+    public function setPersonal($personal): bool
     {
         $this->personal = $personal;
 

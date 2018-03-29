@@ -19,10 +19,10 @@
 
 {% if challenge.icon %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-icon") }}</label>
+        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-icon") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static">{{ challengeIcon(challenge, 100) }}</p>
+            <p class="form-control-static form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
         </div>
     </div>
 {% endif %}
@@ -31,10 +31,10 @@
 
 {% if challenge.image %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-image") }}</label>
+        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-image") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static">{{ challengeImage(challenge, 200) }}</p>
+            <p class="form-control-static form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
         </div>
     </div>
 {% endif %}
@@ -44,10 +44,10 @@
 
 {% if challenge.pdf %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label">{{ translate("txt-current-pdf") }}</label>
+        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static">{{ challengeLink(challenge,'download-pdf','text') }}</p>
+            <p class="form-control-static form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
         </div>
     </div>
 {% endif %}

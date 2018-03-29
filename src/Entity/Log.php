@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="log")
  * @ORM\Entity(repositoryClass="General\Repository\Log")
  */
-class Log extends EntityAbstract
+class Log extends AbstractEntity
 {
     /**
      * @ORM\Column(type="integer",nullable=false)

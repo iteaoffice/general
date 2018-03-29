@@ -17,28 +17,77 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Challenge;
 use General\Form\ChallengeFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\Http\Response;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\Validator\File\MimeType;
 use Zend\View\Model\ViewModel;
 
 /**
  * Class ChallengeController
+ *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class ChallengeController extends GeneralAbstractController
+class ChallengeController extends AbstractActionController
 {
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * ChallengeController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     * @param EntityManager       $entityManager
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator,
+        EntityManager $entityManager
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+        $this->entityManager = $entityManager;
+    }
+
+
     /**
      * @return ViewModel
      */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(Challenge::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(Challenge::class, $filterPlugin->getFilter());
 
         $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
@@ -64,8 +113,8 @@ class ChallengeController extends GeneralAbstractController
      */
     public function viewAction(): ViewModel
     {
-        $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
-        if (\is_null($challenge)) {
+        $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
+        if (null === $challenge) {
             return $this->notFoundAction();
         }
 
@@ -82,7 +131,7 @@ class ChallengeController extends GeneralAbstractController
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare(Challenge::class, null, $data);
+        $form = $this->formService->prepare(Challenge::class, $data);
         $form->remove('delete');
 
         if ($this->getRequest()->isPost()) {
@@ -101,36 +150,41 @@ class ChallengeController extends GeneralAbstractController
                  */
                 if (!empty($fileData['icon']['tmp_name'])) {
                     $icon = $challenge->getIcon();
-                    $icon->setChallenge($challenge);
+                    if (null === $icon) {
+                        $icon = new Challenge\Icon();
+                        $icon->setChallenge($challenge);
+                    }
+
                     $icon->setIcon(file_get_contents($fileData['icon']['tmp_name']));
 
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['icon']);
-                    $icon->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
-
-                    //Remove the file if it exist
-                    if (file_exists($icon->getCacheFileName())) {
-                        unlink($icon->getCacheFileName());
-                    }
+                    $icon->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
                 }
 
                 //Remove the icon when the tmp is empty and there is not icon at all
                 if (empty($fileData['icon']['tmp_name'])) {
                     $challenge->setIcon(null);
                 }
-
-
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['image']['tmp_name'])) {
                     $image = $challenge->getImage();
-                    $image->setChallenge($challenge);
+                    if (null === $image) {
+                        $image = new Challenge\Image();
+                        $image->setChallenge($challenge);
+                    }
+
                     $image->setImage(file_get_contents($fileData['image']['tmp_name']));
 
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['image']);
-                    $image->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
+                    $image->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
@@ -143,7 +197,10 @@ class ChallengeController extends GeneralAbstractController
                  */
                 if (!empty($fileData['pdf']['tmp_name'])) {
                     $pdf = $challenge->getPdf();
-                    $pdf->setChallenge($challenge);
+                    if (null === $pdf) {
+                        $pdf = new Challenge\Pdf();
+                        $pdf->setChallenge($challenge);
+                    }
                     $pdf->setPdf(file_get_contents($fileData['pdf']['tmp_name']));
                 }
 
@@ -152,13 +209,15 @@ class ChallengeController extends GeneralAbstractController
                     $challenge->setPdf(null);
                 }
 
-                $challenge = $this->getGeneralService()->newEntity($challenge);
+                $challenge = $this->generalService->save($challenge);
 
                 $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(sprintf(
-                        $this->translate("txt-challenge-%s-has-successfully-been-created"),
-                        $challenge
-                    ));
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-challenge-%s-has-successfully-been-created"),
+                            $challenge
+                        )
+                    );
 
                 $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
@@ -178,7 +237,7 @@ class ChallengeController extends GeneralAbstractController
     public function editAction(): ViewModel
     {
         /** @var Challenge $challenge */
-        $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
+        $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
 
         //Store the icon, image, pdf for later use
         $pdf = $challenge->getPdf();
@@ -190,7 +249,7 @@ class ChallengeController extends GeneralAbstractController
             $this->getRequest()->getFiles()->toArray()
         );
 
-        $form = $this->getFormService()->prepare($challenge, $challenge, $data);
+        $form = $this->formService->prepare($challenge, $data);
 
         //We do not need the icon and the PDF right now
         $form->getInputFilter()->get('general_entity_challenge')->get('icon')->setRequired(false);
@@ -202,7 +261,7 @@ class ChallengeController extends GeneralAbstractController
             }
 
             if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($challenge);
+                $this->generalService->delete($challenge);
 
                 return $this->redirect()->toRoute('zfcadmin/challenge/list');
             }
@@ -216,7 +275,7 @@ class ChallengeController extends GeneralAbstractController
                  * Handle the new logo (if any logo is updated)
                  */
                 if (!empty($fileData['icon']['tmp_name'])) {
-                    if (\is_null($icon)) {
+                    if (null === $icon) {
                         $icon = new Challenge\Icon();
                     }
                     $icon->setChallenge($challenge);
@@ -224,13 +283,17 @@ class ChallengeController extends GeneralAbstractController
 
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['icon']);
-                    $icon->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
+                    $icon->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
 
                     $challenge->setIcon($icon);
                 }
 
                 //Remove the icon when the tmp is empty and there is not icon at all
-                if (empty($fileData['icon']['tmp_name']) && !\is_null($challenge->getIcon()) && \is_null($challenge->getIcon()->getId())) {
+                if (empty($fileData['icon']['tmp_name']) && null !== $challenge->getIcon()
+                    && null === $challenge->getIcon()->getId()
+                ) {
                     $challenge->setIcon(null);
                 }
 
@@ -247,13 +310,19 @@ class ChallengeController extends GeneralAbstractController
 
                     $fileTypeValidator = new MimeType();
                     $fileTypeValidator->isValid($fileData['image']);
-                    $image->setContentType($this->getGeneralService()->findContentTypeByContentTypeName($fileTypeValidator->type));
+                    $image->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
 
                     $challenge->setImage($image);
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
-                if (empty($fileData['image']['tmp_name']) && !\is_null($challenge->getImage()) && \is_null($challenge->getImage()->getId())) {
+                if (empty($fileData['image']['tmp_name'])
+                    && null !== $challenge->getImage()
+                    && null === $challenge->getImage()->getId()
+
+                ) {
                     $challenge->setImage(null);
                 }
 
@@ -271,7 +340,10 @@ class ChallengeController extends GeneralAbstractController
                 }
 
                 //Remove the pdf when the tmp is empty and there is not pdf at all
-                if (empty($fileData['pdf']['tmp_name']) && !\is_null($challenge->getPdf()) && \is_null($challenge->getPdf()->getId())) {
+                if (empty($fileData['pdf']['tmp_name'])
+                    && null !== $challenge->getPdf()
+                    && null === $challenge->getPdf()->getId()
+                ) {
                     $challenge->setPdf(null);
                 }
 
@@ -282,13 +354,15 @@ class ChallengeController extends GeneralAbstractController
                     $challenge->setCall([]);
                 }
 
-                $challenge = $this->getGeneralService()->updateEntity($challenge);
+                $challenge = $this->generalService->save($challenge);
 
                 $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(sprintf(
-                        $this->translate("txt-challenge-%s-has-successfully-been-updated"),
-                        $challenge
-                    ));
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-challenge-%s-has-successfully-been-updated"),
+                            $challenge
+                        )
+                    );
 
                 $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
@@ -304,27 +378,29 @@ class ChallengeController extends GeneralAbstractController
 
 
     /**
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
+     * @return Response
      */
-    public function downloadPdfAction()
+    public function downloadPdfAction(): Response
     {
         /**
          * @var $challenge Challenge
          */
-        $challenge = $this->getGeneralService()->findEntityById(Challenge::class, $this->params('id'));
+        $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
+
+        /** @var Response $response */
+        $response = $this->getResponse();
 
         /*
          * Check if a project is found
          */
-        if (\is_null($challenge) || \is_null($challenge->getPdf())) {
-            return $this->notFoundAction();
+        if (null === $challenge || null === $challenge->getPdf()) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
         $file = stream_get_contents($challenge->getPdf()->getPdf());
 
-        $response = $this->getResponse();
         $response->getHeaders()->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine("Cache-Control: max-age=36000, must-revalidate")->addHeaderLine("Pragma: public")
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: application/pdf')
             ->addHeaderLine('Content-Length: ' . strlen($file));
         $response->setContent($file);

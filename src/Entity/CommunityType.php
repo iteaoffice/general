@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @category General
  */
-class CommunityType extends EntityAbstract
+class CommunityType extends AbstractEntity
 {
     /**
      * @ORM\Column(name="type_id", type="integer", nullable=false)
@@ -97,6 +97,7 @@ class CommunityType extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)

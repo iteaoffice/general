@@ -19,7 +19,7 @@ namespace General\Entity\Challenge;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use General\Entity\EntityAbstract;
+use General\Entity\AbstractEntity;
 
 /**
  * ProjectIcon.
@@ -27,7 +27,7 @@ use General\Entity\EntityAbstract;
  * @ORM\Table(name="challenge_icon")
  * @ORM\Entity
  */
-class Icon extends EntityAbstract
+class Icon extends AbstractEntity
 {
     /**
      * @ORM\Column(name="icon_id", type="integer", nullable=false)
@@ -97,6 +97,7 @@ class Icon extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -107,13 +108,14 @@ class Icon extends EntityAbstract
     /**
      * @return int
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
+     *
      * @return Icon
      */
     public function setId(int $id): Icon
@@ -133,6 +135,7 @@ class Icon extends EntityAbstract
 
     /**
      * @param \General\Entity\ContentType $contentType
+     *
      * @return Icon
      */
     public function setContentType(\General\Entity\ContentType $contentType): Icon
@@ -152,6 +155,7 @@ class Icon extends EntityAbstract
 
     /**
      * @param string $icon
+     *
      * @return Icon
      */
     public function setIcon(string $icon): Icon
@@ -171,6 +175,7 @@ class Icon extends EntityAbstract
 
     /**
      * @param \DateTime $dateUpdated
+     *
      * @return Icon
      */
     public function setDateUpdated(\DateTime $dateUpdated): Icon
@@ -190,6 +195,7 @@ class Icon extends EntityAbstract
 
     /**
      * @param \General\Entity\Challenge $challenge
+     *
      * @return Icon
      */
     public function setChallenge(\General\Entity\Challenge $challenge): Icon

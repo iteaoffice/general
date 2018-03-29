@@ -19,7 +19,7 @@ namespace General\Entity\Challenge;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use General\Entity\EntityAbstract;
+use General\Entity\AbstractEntity;
 
 /**
  * ProjectImage.
@@ -27,7 +27,7 @@ use General\Entity\EntityAbstract;
  * @ORM\Table(name="challenge_image")
  * @ORM\Entity
  */
-class Image extends EntityAbstract
+class Image extends AbstractEntity
 {
     /**
      * @ORM\Column(name="image_id", type="integer", nullable=false)
@@ -97,6 +97,7 @@ class Image extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -107,13 +108,14 @@ class Image extends EntityAbstract
     /**
      * @return int
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
+     *
      * @return Image
      */
     public function setId(int $id): Image
@@ -133,6 +135,7 @@ class Image extends EntityAbstract
 
     /**
      * @param \General\Entity\ContentType $contentType
+     *
      * @return Image
      */
     public function setContentType(\General\Entity\ContentType $contentType): Image
@@ -152,6 +155,7 @@ class Image extends EntityAbstract
 
     /**
      * @param string $image
+     *
      * @return Image
      */
     public function setImage(string $image): Image
@@ -171,6 +175,7 @@ class Image extends EntityAbstract
 
     /**
      * @param \DateTime $dateUpdated
+     *
      * @return Image
      */
     public function setDateUpdated(\DateTime $dateUpdated): Image
@@ -190,6 +195,7 @@ class Image extends EntityAbstract
 
     /**
      * @param \General\Entity\Challenge $challenge
+     *
      * @return Image
      */
     public function setChallenge(\General\Entity\Challenge $challenge): Image

@@ -10,26 +10,26 @@
 
 declare(strict_types=1);
 
-namespace GeneralTest\Entity;
+namespace GeneralTest\InputFilter;
 
-use General\Entity\AbstractEntity;
-use General\Entity\Country;
+use General\InputFilter\PasswordFilter;
 use PHPUnit\Framework\TestCase;
+use Zend\InputFilter\InputFilter;
 
 /**
  * Class GeneralTest
  *
  * @package GeneralTest\Entity
  */
-class CountryTest extends TestCase
+class PasswordFilterTest extends TestCase
 {
     /**
      *
      */
-    public function testCanCreateCountry(): void
+    public function testCanCreateInputFilter(): void
     {
-        $country = new Country();
-        $this->assertInstanceOf(Country::class, $country);
-        $this->assertInstanceOf(AbstractEntity::class, $country);
+        $inputFilter = new PasswordFilter();
+        $this->assertInstanceOf(PasswordFilter::class, $inputFilter);
+        $this->assertInstanceOf(InputFilter::class, $inputFilter);
     }
 }

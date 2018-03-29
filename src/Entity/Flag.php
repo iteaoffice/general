@@ -25,7 +25,7 @@ use Zend\Form\Annotation;
  *
  * @category General
  */
-class Flag extends EntityAbstract
+class Flag extends AbstractEntity
 {
     /**
      * @ORM\Column(name="flag_id",type="integer",nullable=false)
@@ -98,6 +98,7 @@ class Flag extends EntityAbstract
 
     /**
      * @param int $id
+     *
      * @return Flag
      */
     public function setId($id): Flag
@@ -117,6 +118,7 @@ class Flag extends EntityAbstract
 
     /**
      * @param Country $country
+     *
      * @return Flag
      */
     public function setCountry($country): Flag
@@ -136,6 +138,7 @@ class Flag extends EntityAbstract
 
     /**
      * @param resource $object
+     *
      * @return Flag
      */
     public function setObject($object): Flag

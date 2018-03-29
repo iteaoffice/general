@@ -27,7 +27,7 @@ use Zend\Form\Annotation;
  * @ORM\Table(name="currency_exchange_rate")
  * @ORM\Entity
  */
-class ExchangeRate extends EntityAbstract
+class ExchangeRate extends AbstractEntity
 {
     /**
      * @ORM\Column(name="exchange_rate_id", type="integer", nullable=false)
@@ -104,6 +104,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -121,6 +122,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param int $id
+     *
      * @return ExchangeRate
      */
     public function setId(int $id): ExchangeRate
@@ -140,6 +142,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param float $rate
+     *
      * @return ExchangeRate
      */
     public function setRate(float $rate): ExchangeRate
@@ -159,6 +162,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param \DateTime $date
+     *
      * @return ExchangeRate
      */
     public function setDate(\DateTime $date): ExchangeRate
@@ -178,6 +182,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param Currency $currency
+     *
      * @return ExchangeRate
      */
     public function setCurrency(Currency $currency): ExchangeRate
@@ -197,6 +202,7 @@ class ExchangeRate extends EntityAbstract
 
     /**
      * @param \Affiliation\Entity\Invoice[]|ArrayCollection $affiliationInvoice
+     *
      * @return ExchangeRate
      */
     public function setAffiliationInvoice($affiliationInvoice): ExchangeRate

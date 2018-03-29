@@ -18,8 +18,7 @@ namespace General\Entity\Challenge;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use General\Entity\EntityAbstract;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use General\Entity\AbstractEntity;
 
 /**
  * InvoicePdf.
@@ -27,7 +26,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @ORM\Table(name="challenge_pdf")
  * @ORM\Entity
  */
-class Pdf extends EntityAbstract implements ResourceInterface
+class Pdf extends AbstractEntity
 {
     /**
      * @ORM\Column(name="pdf_id", type="integer", nullable=false)
@@ -91,6 +90,7 @@ class Pdf extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -101,13 +101,14 @@ class Pdf extends EntityAbstract implements ResourceInterface
     /**
      * @return int
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
+     *
      * @return Pdf
      */
     public function setId(int $id): Pdf
@@ -127,6 +128,7 @@ class Pdf extends EntityAbstract implements ResourceInterface
 
     /**
      * @param string $pdf
+     *
      * @return Pdf
      */
     public function setPdf(string $pdf): Pdf
@@ -146,6 +148,7 @@ class Pdf extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \DateTime $dateCreated
+     *
      * @return Pdf
      */
     public function setDateCreated(\DateTime $dateCreated): Pdf
@@ -165,6 +168,7 @@ class Pdf extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \DateTime $dateEnd
+     *
      * @return Pdf
      */
     public function setDateEnd(\DateTime $dateEnd): Pdf
@@ -184,6 +188,7 @@ class Pdf extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \General\Entity\Challenge $challenge
+     *
      * @return Pdf
      */
     public function setChallenge(\General\Entity\Challenge $challenge): Pdf

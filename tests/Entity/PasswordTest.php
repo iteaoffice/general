@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace GeneralTest\Entity;
 
 use General\Entity\AbstractEntity;
-use General\Entity\Country;
+use General\Entity\Password;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,15 +21,15 @@ use PHPUnit\Framework\TestCase;
  *
  * @package GeneralTest\Entity
  */
-class CountryTest extends TestCase
+class PasswordTest extends TestCase
 {
     /**
      *
      */
-    public function testCanCreateCountry(): void
+    public function testCanCreatePassword(): void
     {
-        $country = new Country();
-        $this->assertInstanceOf(Country::class, $country);
-        $this->assertInstanceOf(AbstractEntity::class, $country);
+        $password = new Password();
+        $this->assertInstanceOf(Password::class, $password);
+        $this->assertInstanceOf(AbstractEntity::class, $password);
     }
 }

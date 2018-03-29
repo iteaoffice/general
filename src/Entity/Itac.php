@@ -25,7 +25,7 @@ use Zend\Form\Annotation;
  *
  * @category General
  */
-class Itac extends EntityAbstract
+class Itac extends AbstractEntity
 {
     /**
      * @ORM\Column(name="itac_id",type="integer",nullable=false)
@@ -89,6 +89,7 @@ class Itac extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -106,6 +107,7 @@ class Itac extends EntityAbstract
 
     /**
      * @param int $id
+     *
      * @return Itac
      */
     public function setId(int $id): Itac
@@ -125,6 +127,7 @@ class Itac extends EntityAbstract
 
     /**
      * @param Country $country
+     *
      * @return Itac
      */
     public function setCountry(Country $country): Itac
@@ -144,6 +147,7 @@ class Itac extends EntityAbstract
 
     /**
      * @param string $since
+     *
      * @return Itac
      */
     public function setSince(string $since): Itac

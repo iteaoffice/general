@@ -19,25 +19,66 @@ namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Vat;
 use General\Entity\VatType;
 use General\Form\VatFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class VatTypeController
  *
+ * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class VatTypeController extends GeneralAbstractController
+class VatTypeController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    protected $generalService;
+    /**
+     * @var FormService
+     */
+    protected $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * VatTypeController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+
+    /**
+     * @return ViewModel
+     */
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()->findEntitiesFiltered(VatType::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService->findFiltered(VatType::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -60,12 +101,12 @@ class VatTypeController extends GeneralAbstractController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $vatType = $this->getGeneralService()->findEntityById(VatType::class, $this->params('id'));
-        if (\is_null($vatType)) {
+        $vatType = $this->generalService->find(VatType::class, (int)$this->params('id'));
+        if (null === $vatType) {
             return $this->notFoundAction();
         }
 
@@ -73,15 +114,15 @@ class VatTypeController extends GeneralAbstractController
     }
 
     /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(VatType::class, null, $data);
+        $form = $this->formService->prepare(VatType::class, $data);
         $form->remove('delete');
 
 
@@ -94,8 +135,16 @@ class VatTypeController extends GeneralAbstractController
                 /* @var $vatType Vat */
                 $vatType = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($vatType);
-                $this->redirect()->toRoute(
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-vat-type-%s-has-been-created-successfully"),
+                            $vatType->getType()
+                        )
+                    );
+
+                $result = $this->generalService->save($vatType);
+                return $this->redirect()->toRoute(
                     'zfcadmin/vat-type/view',
                     [
                         'id' => $result->getId(),
@@ -112,21 +161,15 @@ class VatTypeController extends GeneralAbstractController
      */
     public function editAction()
     {
-        $vatType = $this->getGeneralService()->findEntityById(VatType::class, $this->params('id'));
+        $vatType = $this->generalService->find(VatType::class, (int)$this->params('id'));
 
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
-
-        $form = $this->getFormService()->prepare($vatType, $vatType, $data);
+        $form = $this->formService->prepare($vatType, $data);
+        $form->remove('delete');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                return $this->redirect()->toRoute('zfcadmin/vat-type/list');
-            }
-
-            if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($vatType);
-
                 return $this->redirect()->toRoute('zfcadmin/vat-type/list');
             }
 
@@ -134,7 +177,15 @@ class VatTypeController extends GeneralAbstractController
                 /** @var VatType $vatType */
                 $vatType = $form->getData();
 
-                $vatType = $this->getGeneralService()->updateEntity($vatType);
+                $vatType = $this->generalService->save($vatType);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-vat-type-%s-has-been-updated-successfully"),
+                            $vatType->getType()
+                        )
+                    );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/vat-type/view',

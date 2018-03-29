@@ -24,6 +24,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  * Class WebInfoFilter
+ *
  * @package General\InputFilterF
  */
 class WebInfoFilter extends InputFilter

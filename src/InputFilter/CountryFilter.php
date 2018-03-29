@@ -24,6 +24,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  * Class CountryFilter
+ *
  * @package General\InputFilter
  */
 class CountryFilter extends InputFilter

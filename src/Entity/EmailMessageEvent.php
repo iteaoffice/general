@@ -23,7 +23,7 @@ use Zend\Form\Annotation;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message_event")
  */
-class EmailMessageEvent extends EntityAbstract
+class EmailMessageEvent extends AbstractEntity
 {
     /**
      * @ORM\Column(name="email_message_event_id",type="integer",nullable=false)

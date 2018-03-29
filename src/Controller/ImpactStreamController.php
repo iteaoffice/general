@@ -17,17 +17,23 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use General\Service\GeneralService;
 use Project\Entity\Result\Result;
 use Project\Search\Service\ImpactStreamSearchService;
+use Project\Service\ProjectService;
 use Search\Paginator\Adapter\SolariumPaginator;
 use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
+use Zend\View\Model\ViewModel;
 
 /**
+ * Class ImpactStreamController
  *
+ * @package General\Controller
  */
-class ImpactStreamController extends GeneralAbstractController
+class ImpactStreamController extends AbstractActionController
 {
     /**
      * @var array
@@ -37,16 +43,47 @@ class ImpactStreamController extends GeneralAbstractController
      * @var array
      */
     protected $result = [];
+    /**
+     * @var ProjectService
+     */
+    protected $projectService;
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var ImpactStreamSearchService
+     */
+    protected $impactStreamSearchService;
 
     /**
-     * @return \Zend\View\Model\ViewModel|string
+     * ImpactStreamController constructor.
+     *
+     * @param ProjectService            $projectService
+     * @param GeneralService            $generalService
+     * @param ImpactStreamSearchService $impactStreamSearchService
+     */
+    public function __construct(
+        ProjectService $projectService,
+        GeneralService $generalService,
+        ImpactStreamSearchService $impactStreamSearchService
+    ) {
+        $this->projectService = $projectService;
+        $this->generalService = $generalService;
+        $this->impactStreamSearchService = $impactStreamSearchService;
+    }
+
+
+    /**
+     * @return string|ViewModel
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function downloadSingleAction()
     {
         /** @var Result $result */
-        $result = $this->getProjectService()->findEntityByDocRef(Result::class, (string)$this->params('docRef'));
+        $result = $this->projectService->findEntityByDocRef(Result::class, (string)$this->params('docRef'));
 
-        if (\is_null($result) || count($result->getObject()) === 0) {
+        if (null === $result || \count($result->getObject()) === 0) {
             return $this->notFoundAction();
         }
 
@@ -63,11 +100,13 @@ class ImpactStreamController extends GeneralAbstractController
      */
     public function parsePDFsByResult(Result $result): void
     {
-        foreach ($this->getGeneralService()->parseChallengesByResult($result) as $challenge) {
+        foreach ($this->generalService->parseChallengesByResult($result) as $challenge) {
             if (!array_key_exists(
                 'challenge_' . $challenge->getSequence(),
                 $this->challenge
-            ) && !\is_null($challenge->getPdf())) {
+            )
+                && null !== $challenge->getPdf()
+            ) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());
 
                 file_put_contents($fileName, stream_get_contents($challenge->getPdf()->getPdf()));
@@ -81,7 +120,8 @@ class ImpactStreamController extends GeneralAbstractController
 
         $ordering = sprintf(
             'result_%s_%s',
-            !$result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()->first()->getChallenge()->getSequence() : 1000,
+            !$result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()
+                ->first()->getChallenge()->getSequence() : 1000,
             $result->getResult()
         );
 
@@ -90,7 +130,8 @@ class ImpactStreamController extends GeneralAbstractController
 
     /**
      * @param string $entity
-     * @param int $id
+     * @param int    $id
+     *
      * @return string
      */
     protected static function parseTempFile(string $entity, int $id): string
@@ -117,7 +158,9 @@ class ImpactStreamController extends GeneralAbstractController
 
         //Add the frontpage
         //Add the references
-        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-frontpage.pdf');
+        $pageCount = $result->setSourceFile(
+            __DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-frontpage.pdf'
+        );
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $frontPage = $result->importPage($pageNo);
             $size = $result->getTemplateSize($frontPage);
@@ -150,7 +193,9 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         //Add the references
-        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-title-page-stories.pdf');
+        $pageCount = $result->setSourceFile(
+            __DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-title-page-stories.pdf'
+        );
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $frontPage = $result->importPage($pageNo);
             $size = $result->getTemplateSize($frontPage);
@@ -177,7 +222,9 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         //Add the references
-        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-references.pdf');
+        $pageCount = $result->setSourceFile(
+            __DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-references.pdf'
+        );
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $frontPage = $result->importPage($pageNo);
             $size = $result->getTemplateSize($frontPage);
@@ -186,7 +233,9 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
         //Add the references
-        $pageCount = $result->setSourceFile(__DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-lastpage.pdf');
+        $pageCount = $result->setSourceFile(
+            __DIR__ . '/../../../../../styles/itea/template/pdf/impact-stream-lastpage.pdf'
+        );
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $frontPage = $result->importPage($pageNo);
             $size = $result->getTemplateSize($frontPage);
@@ -201,10 +250,8 @@ class ImpactStreamController extends GeneralAbstractController
      * @return string
      * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
-    public function downloadAction()
+    public function downloadAction(): string
     {
-        $searchService = $this->getImpactStreamSearchService();
-
         $data = $this->getRequest()->getQuery()->toArray();
 
         $searchFields = [
@@ -219,7 +266,7 @@ class ImpactStreamController extends GeneralAbstractController
         ];
 
 
-        $searchService->setSearch($data['query'], $searchFields, 'result', 'desc');
+        $this->impactStreamSearchService->setSearch($data['query'], $searchFields, 'result', 'desc');
 
         if (isset($data['facet'])) {
             foreach ($data['facet'] as $facetField => $values) {
@@ -228,7 +275,7 @@ class ImpactStreamController extends GeneralAbstractController
                     $quotedValues[] = sprintf("\"%s\"", $value);
                 }
 
-                $searchService->addFilterQuery(
+                $this->impactStreamSearchService->addFilterQuery(
                     $facetField,
                     implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
                 );
@@ -236,13 +283,13 @@ class ImpactStreamController extends GeneralAbstractController
         }
 
 
-        $paginator = new Paginator(new SolariumPaginator($searchService->getSolrClient(), $searchService->getQuery()));
+        $paginator = new Paginator(new SolariumPaginator($this->impactStreamSearchService->getSolrClient(), $this->impactStreamSearchService->getQuery()));
         $paginator::setDefaultItemCountPerPage(2000);
         $paginator->setCurrentPageNumber(1);
 
         foreach ($paginator->getCurrentItems() as $result) {
             /** @var Result $result */
-            $result = $this->getProjectService()->findEntityById(Result::class, $result['result_id']);
+            $result = $this->projectService->findEntityById(Result::class, $result['result_id']);
 
             $this->parsePDFsByResult($result);
         }
@@ -258,23 +305,24 @@ class ImpactStreamController extends GeneralAbstractController
      */
     public function getImpactStreamSearchService(): ImpactStreamSearchService
     {
-        return $this->getProjectService()->getServiceLocator()->get(ImpactStreamSearchService::class);
+        return $this->projectService->getServiceLocator()->get(ImpactStreamSearchService::class);
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel|string
+     * @return string|ViewModel
+     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
      */
     public function downloadSelectedAction()
     {
         $resultIds = explode(',', $this->getRequest()->getQuery('result'));
 
         if (\count($resultIds) === 0) {
-            return $this->notFoundAction();
+            return '';
         }
 
         foreach ($resultIds as $resultId) {
             /** @var Result $result */
-            $result = $this->getProjectService()->findEntityById(Result::class, $resultId);
+            $result = $this->projectService->findEntityById(Result::class, $resultId);
 
             $this->parsePDFsByResult($result);
         }

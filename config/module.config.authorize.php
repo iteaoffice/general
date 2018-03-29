@@ -26,9 +26,6 @@ return [
                 ['route' => 'image/country-flag', 'roles' => []],
                 ['route' => 'image/challenge-icon', 'roles' => []],
                 ['route' => 'image/challenge-image', 'roles' => []],
-                ['route' => 'image/asset', 'roles' => []],
-
-                ['route' => 'assets/style-image', 'roles' => []],
 
                 ['route' => 'country/code', 'roles' => []],
                 ['route' => 'impact-stream/download', 'roles' => []],

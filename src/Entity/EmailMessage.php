@@ -26,7 +26,7 @@ use Zend\Math\Rand;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message")
  */
-class EmailMessage extends EntityAbstract
+class EmailMessage extends AbstractEntity
 {
     /**
      * @ORM\Column(name="email_message_id",type="integer",nullable=false)
@@ -422,6 +422,7 @@ class EmailMessage extends EntityAbstract
 
     /**
      * @param string $cc
+     *
      * @return EmailMessage
      */
     public function setCc(string $cc = null): EmailMessage
@@ -441,6 +442,7 @@ class EmailMessage extends EntityAbstract
 
     /**
      * @param string $bcc
+     *
      * @return EmailMessage
      */
     public function setBcc(string $bcc = null): EmailMessage
