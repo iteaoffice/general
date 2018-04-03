@@ -465,7 +465,7 @@ class CountryHandler extends AbstractViewHelper
      */
     public function getLimit()
     {
-        return $this->limit;
+        return (int) $this->limit;
     }
 
     /**

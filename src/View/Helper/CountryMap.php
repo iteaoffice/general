@@ -24,26 +24,25 @@ use General\Service\GeneralService;
 class CountryMap extends AbstractViewHelper
 {
     /**
-     * @param Country[] $countries
-     * @param Country $selectedCountry
-     * @param array $options
+     * @param array        $countries
+     * @param Country|null $selectedCountry
+     * @param array        $options
      *
      * @return string
      */
-
     public function __invoke(array $countries, Country $selectedCountry = null, array $options = [])
     {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
         $pointer = $clickable ? 'pointer' : 'default';
         $clickable = $clickable ? 'true' : 'false';
-        $colorMin = isset($options['colorMin']) ? $options['colorMin'] : '#00a651';
-        $colorMax = isset($options['colorMax']) ? $options['colorMax'] : '#005C00';
-        $regionFill = isset($options['regionFill']) ? $options['regionFill'] : '#C5C7CA';
-        $height = isset($options['height']) ? $options['height'] : '400px';
-        $tipData = isset($options['tipData']) ? $options['tipData'] : null;
-        $focusOn = isset($options['focusOn']) ? $options['focusOn'] : ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
-        $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
+        $colorMin = $options['colorMin'] ?? '#00a651';
+        $colorMax = $options['colorMax'] ?? '#005C00';
+        $regionFill = $options['regionFill'] ?? '#C5C7CA';
+        $height = $options['height'] ?? '400px';
+        $tipData = $options['tipData'] ?? null;
+        $focusOn = $options['focusOn'] ?? ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
+        $focusOn = \is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
+        $zoomOnScroll = \array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
 
         $js = $countryList = [];

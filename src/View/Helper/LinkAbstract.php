@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
-use BjyAuthorize\Controller\Plugin\IsAllowed;
-use BjyAuthorize\Service\Authorize;
 use General\Acl\Assertion\AssertionAbstract;
-use General\Entity\AbstractEntity;
 use General\Entity\Challenge;
 use General\Entity\ContentType;
 use General\Entity\Country;
@@ -326,65 +323,6 @@ abstract class LinkAbstract extends AbstractViewHelper
         $this->showOptions = $showOptions;
     }
 
-    /**
-     * @param AbstractEntity $entity
-     * @param string         $assertionName
-     * @param string         $action
-     *
-     * @return bool
-     */
-    public function hasAccess(AbstractEntity $entity, string $assertionName, string $action): bool
-    {
-        $assertion = $this->getAssertion($assertionName);
-        if (null !== $entity && !$this->getAuthorizeService()->getAcl()->hasResource($entity)) {
-            $this->getAuthorizeService()->getAcl()->addResource($entity);
-            $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
-        }
-
-        if (!$this->isAllowed($entity, $action)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $assertion
-     *
-     * @return AssertionAbstract
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function getAssertion(string $assertion): AssertionAbstract
-    {
-        return $this->getServiceManager()->get($assertion);
-    }
-
-    /**
-     * @return Authorize
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function getAuthorizeService(): Authorize
-    {
-        return $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
-    }
-
-    /**
-     * @param null|AbstractEntity $resource
-     * @param string              $privilege
-     *
-     * @return bool
-     */
-    public function isAllowed($resource, $privilege = null): bool
-    {
-        /**
-         * @var $isAllowed IsAllowed
-         */
-        $isAllowed = $this->getHelperPluginManager()->get('isAllowed');
-
-        return $isAllowed($resource, $privilege);
-    }
 
     /**
      * Add a parameter to the list of parameters for the router.

@@ -40,15 +40,6 @@ class ContentTypeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!$this->hasAccess(
-            $this->getContentType(),
-            \General\Acl\Assertion\ContentType::class,
-            $this->getAction()
-        )
-        ) {
-            return $action === 'view' ? (string)$this->getContentType() : null;
-        }
-
         $this->setShowOptions(
             [
                 'name'            => $this->getContentType(),

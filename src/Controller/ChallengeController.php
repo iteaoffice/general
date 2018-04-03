@@ -267,6 +267,7 @@ class ChallengeController extends AbstractActionController
             }
 
             if ($form->isValid()) {
+                /** @var Challenge $challenge */
                 $challenge = $form->getData();
 
                 $fileData = $this->params()->fromFiles()['general_entity_challenge'];
