@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace General;
 
-use General\Acl;
 use General\Controller;
 use General\Factory;
 use General\InputFilter;

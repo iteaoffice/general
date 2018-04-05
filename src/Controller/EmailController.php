@@ -56,21 +56,25 @@ class EmailController extends AbstractActionController
     protected $translator;
 
     /**
-     * ContentTypeController constructor.
+     * EmailController constructor.
      *
      * @param GeneralService      $generalService
      * @param FormService         $formService
+     * @param EntityManager       $entityManager
      * @param TranslatorInterface $translator
      */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
+        EntityManager $entityManager,
         TranslatorInterface $translator
     ) {
         $this->generalService = $generalService;
         $this->formService = $formService;
+        $this->entityManager = $entityManager;
         $this->translator = $translator;
     }
+
 
     /**
      * @return ViewModel

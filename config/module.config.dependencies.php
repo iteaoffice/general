@@ -26,7 +26,7 @@ use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
-use Zend\Validator\Translator\TranslatorInterface;
+use Zend\I18n\Translator\TranslatorInterface;
 
 return [
     ConfigAbstractFactory::class => [
