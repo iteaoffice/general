@@ -25,8 +25,8 @@ use General\Service\GeneralService;
 use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Zend\I18n\Translator\TranslatorInterface;
+use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 
 return [
     ConfigAbstractFactory::class => [
@@ -85,7 +85,7 @@ return [
         ],
         Controller\LogController::class           => [
             GeneralService::class,
-            FormService::class,
+            EntityManager::class,
             TranslatorInterface::class
         ],
         Controller\PasswordController::class      => [

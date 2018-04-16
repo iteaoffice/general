@@ -48,6 +48,22 @@ class LogController extends AbstractActionController
     protected $translator;
 
     /**
+     * LogController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param EntityManager       $entityManager
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(GeneralService $generalService, EntityManager $entityManager,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
+
+
+    /**
      * @return ViewModel
      */
     public function listAction(): ViewModel

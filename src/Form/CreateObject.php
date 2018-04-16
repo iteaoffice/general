@@ -21,7 +21,7 @@ use Zend\Form\Element;
 /**
  * Class CreateObject
  *
- * @package Application\Form
+ * @package General\Form
  */
 class CreateObject extends Form
 {
@@ -37,7 +37,7 @@ class CreateObject extends Form
         AbstractEntity $object,
         ContainerInterface $serviceManager
     ) {
-        parent::__construct($object->get("entity_name"));
+        parent::__construct($object->get('entity_name'));
 
         /**
          * There is an option to drag the fieldset from the serviceManager,
@@ -58,11 +58,8 @@ class CreateObject extends Form
             $objectFieldset = new ObjectFieldset($entityManager, $object);
         }
 
-
-
         $objectFieldset->setUseAsBaseFieldset(true);
         $this->add($objectFieldset);
-
 
         $this->setAttribute('method', 'post');
         $this->setAttribute('class', 'form-horizontal');
