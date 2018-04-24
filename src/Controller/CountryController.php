@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use Content\Entity\Route;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Controller\Plugin\GetFilter;
@@ -192,7 +193,7 @@ class CountryController extends AbstractActionController
 
         if (null !== $country) {
             return $this->redirect()->toRoute(
-                'route-' . $country->get('underscore_entity_name'),
+                Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY),
                 [
                     'docRef' => $country->getDocRef(),
                 ]

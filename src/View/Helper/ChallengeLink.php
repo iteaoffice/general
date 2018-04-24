@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Content\Entity\Route;
 use General\Entity\Challenge;
 
 /**
@@ -44,7 +45,7 @@ class ChallengeLink extends LinkAbstract
         $this->addRouterParam('docRef', $this->getChallenge()->getDocRef());
         $this->setShowOptions(
             [
-                'name' => $this->getChallenge(),
+                'name'      => $this->getChallenge(),
                 'read-more' => $this->translate("txt-read-more"),
             ]
         );
@@ -81,7 +82,7 @@ class ChallengeLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             case 'view':
-                $this->setRouter('route-' . $this->getChallenge()->get("underscore_entity_name"));
+                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_CHALLENGE));
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             default:

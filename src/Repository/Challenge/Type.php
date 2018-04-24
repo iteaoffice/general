@@ -18,20 +18,22 @@ declare(strict_types=1);
 namespace General\Repository\Challenge;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use General\Entity\Challenge;
 
 /**
- * @category    General
+ * Class Type
+ *
+ * @package General\Repository\Challenge
  */
 class Type extends EntityRepository
 {
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter): Query
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_challenge_type');
@@ -67,6 +69,6 @@ class Type extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_challenge_type.id', $direction);
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 }

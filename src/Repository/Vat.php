@@ -18,11 +18,12 @@ declare(strict_types=1);
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
 /**
  * Class Vat
+ *
  * @package General\Repository
  */
 class Vat extends EntityRepository
@@ -30,14 +31,14 @@ class Vat extends EntityRepository
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter)
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_vat');
         $queryBuilder->from(Entity\Vat::class, 'general_entity_vat');
-        $queryBuilder->join("general_entity_vat.country", 'c');
+        $queryBuilder->join('general_entity_vat.country', 'general_entity_country');
 
 
         $direction = 'DESC';
@@ -61,12 +62,12 @@ class Vat extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_vat.dateStart', $direction);
                 break;
             case 'country':
-                $queryBuilder->addOrderBy('general_entity_vat.country', $direction);
+                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
                 break;
             default:
                 $queryBuilder->addOrderBy('general_entity_vat.id', $direction);
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 }

@@ -17,16 +17,18 @@ use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
 /**
- * @category    Contact
+ * Class Currency
+ *
+ * @package General\Repository
  */
 class Currency extends EntityRepository
 {
     /**
-     * @param array ()
+     * @param array $filter
      *
      * @return QueryBuilder
      */
-    public function findFiltered($filter): QueryBuilder
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_currency');

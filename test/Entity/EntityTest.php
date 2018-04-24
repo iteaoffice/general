@@ -10,7 +10,8 @@
 
 namespace GeneralTest\Entity;
 
-use Event\Entity\EntityAbstract;
+
+use General\Entity\AbstractEntity;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Zend\Form\Annotation\AnnotationBuilder;
@@ -37,7 +38,7 @@ class EntityTest extends TestCase
             $testClass = new \ReflectionClass($className);
 
             if ($testClass->isInstantiable()) {
-                /** @var EntityAbstract $object */
+                /** @var AbstractEntity $object */
                 $object = new $className;
 
                 $this->assertInstanceOf($className, $object);

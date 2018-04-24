@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
 /**
@@ -29,9 +29,9 @@ class EmailMessage extends EntityRepository
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter): Query
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_email_message');
@@ -79,7 +79,7 @@ class EmailMessage extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_email_message.id', 'DESC');
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 
     /**

@@ -30,9 +30,9 @@ class Challenge extends EntityRepository
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter): Query
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_challenge');
@@ -68,7 +68,7 @@ class Challenge extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_challenge.challenge', 'ASC');
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 
     /**

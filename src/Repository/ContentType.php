@@ -58,7 +58,7 @@ class ContentType extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_content_type.description', 'ASC');
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 
     /**

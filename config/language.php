@@ -111,5 +111,5 @@ _("txt-password-password-help-block");
 _("txt-exchange-rate-rate-placeholder");
 _("txt-exchange-rate-rate-label");
 _("txt-exchange-rate-rate-help-block");
-_("txt-exchagen-rate-date-label");
+_("txt-exchange-rate-date-label");
 _("txt-exchange-rate-date-help-block");

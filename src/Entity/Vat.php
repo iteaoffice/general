@@ -100,13 +100,6 @@ class Vat extends AbstractEntity
      */
     private $invoiceRow;
     /**
-     * @ORM\OneToMany(targetEntity="\Invoice\Entity\Financial\Row", cascade={"persist"}, mappedBy="vat")
-     * @Annotation\Exclude()
-     *
-     * @var \Invoice\Entity\Financial\Row[]
-     */
-    private $financialRow;
-    /**
      * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
@@ -135,7 +128,6 @@ class Vat extends AbstractEntity
     {
         $this->type = new Collections\ArrayCollection();
         $this->invoiceRow = new Collections\ArrayCollection();
-        $this->financialRow = new Collections\ArrayCollection();
         $this->deskCosts = new Collections\ArrayCollection();
         $this->optionCost = new Collections\ArrayCollection();
         $this->dimension = new Collections\ArrayCollection();
@@ -294,22 +286,6 @@ class Vat extends AbstractEntity
     public function setInvoiceRow($invoiceRow)
     {
         $this->invoiceRow = $invoiceRow;
-    }
-
-    /**
-     * @return \Invoice\Entity\Financial\Row[]
-     */
-    public function getFinancialRow()
-    {
-        return $this->financialRow;
-    }
-
-    /**
-     * @param \Invoice\Entity\Financial\Row[] $financialRow
-     */
-    public function setFinancialRow($financialRow)
-    {
-        $this->financialRow = $financialRow;
     }
 
     /**

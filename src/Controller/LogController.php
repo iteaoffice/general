@@ -54,7 +54,9 @@ class LogController extends AbstractActionController
      * @param EntityManager       $entityManager
      * @param TranslatorInterface $translator
      */
-    public function __construct(GeneralService $generalService, EntityManager $entityManager,
+    public function __construct(
+        GeneralService $generalService,
+        EntityManager $entityManager,
         TranslatorInterface $translator
     ) {
         $this->generalService = $generalService;

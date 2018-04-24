@@ -143,11 +143,11 @@ class VatTypeController extends AbstractActionController
                         )
                     );
 
-                $result = $this->generalService->save($vatType);
+                $this->generalService->save($vatType);
                 return $this->redirect()->toRoute(
                     'zfcadmin/vat-type/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $vatType->getId(),
                     ]
                 );
             }
@@ -177,7 +177,7 @@ class VatTypeController extends AbstractActionController
                 /** @var VatType $vatType */
                 $vatType = $form->getData();
 
-                $vatType = $this->generalService->save($vatType);
+                $this->generalService->save($vatType);
 
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(

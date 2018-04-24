@@ -16,8 +16,8 @@ declare(strict_types=1);
 
 namespace General\Service;
 
-use Application\Entity\AbstractEntity;
-use Application\Form\CreateObject;
+use General\Entity\AbstractEntity;
+use General\Form\CreateObject;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;

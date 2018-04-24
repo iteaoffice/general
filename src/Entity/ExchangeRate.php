@@ -50,7 +50,7 @@ class ExchangeRate extends AbstractEntity
     /**
      * @ORM\Column(name="date", type="date", nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Date")
-     * @Annotation\Options({"label":"txt-exchagen-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
+     * @Annotation\Options({"label":"txt-exchange-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
      *
      * @var \DateTime
      */

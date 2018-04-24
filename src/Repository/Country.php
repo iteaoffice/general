@@ -23,16 +23,18 @@ use Project\Entity\Evaluation;
 use Project\Entity\Project;
 
 /**
- * @category    Contact
+ * Class Country
+ *
+ * @package General\Repository
  */
 class Country extends EntityRepository
 {
     /**
-     * @param array ()
+     * @param array $filter
      *
      * @return QueryBuilder
      */
-    public function findFiltered($filter): QueryBuilder
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_country');

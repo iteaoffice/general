@@ -26,7 +26,7 @@ use General\Entity;
 class WebInfo extends EntityRepository
 {
     /**
-     * @param $filter
+     * @param array|null $filter
      *
      * @return QueryBuilder
      */
@@ -76,7 +76,7 @@ class WebInfo extends EntityRepository
      * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
      *
      * @param QueryBuilder $queryBuilder
-     * @param array $filter
+     * @param array        $filter
      *
      * @return QueryBuilder
      */

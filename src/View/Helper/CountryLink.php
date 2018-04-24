@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Content\Entity\Route;
 use General\Entity\Country;
 
 /**
@@ -25,9 +26,9 @@ class CountryLink extends LinkAbstract
 
     /**
      * @param Country $country
-     * @param string $action
-     * @param string $show
-     * @param string $alternativeShow
+     * @param string  $action
+     * @param string  $show
+     * @param string  $alternativeShow
      *
      * @return string
      *
@@ -59,26 +60,22 @@ class CountryLink extends LinkAbstract
     }
 
     /**
-     * @return string|void
+     *
      */
     public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'view':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_entity_name'));
+                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY));
                 $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
                 break;
             case 'view-project':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_entity_name') . '-project');
+                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY_PROJECT));
                 $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-organisation':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_entity_name') . '-organisation');
+                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY_ORGANISATION));
                 $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
-                break;
-            case 'view-article':
-                $this->setRouter('route-' . $this->getCountry()->get('underscore_entity_name') . '-article');
-                $this->setText(sprintf($this->translate("txt-view-article-for-country-%s"), $this->getCountry()));
                 break;
             case 'list':
                 $this->setRouter('zfcadmin/country/list');

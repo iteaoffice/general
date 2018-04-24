@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
 /**
@@ -29,14 +29,14 @@ class VatType extends EntityRepository
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter): Query
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_vattype');
         $queryBuilder->from(Entity\VatType::class, 'general_entity_vattype');
-        $queryBuilder->join("general_entity_vattype.vat", 'general_entity_vat');
+        $queryBuilder->join('general_entity_vattype.vat', 'general_entity_vat');
 
 
         $direction = 'DESC';
@@ -63,6 +63,6 @@ class VatType extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_vattype.type', $direction);
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 }

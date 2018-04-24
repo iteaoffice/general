@@ -774,7 +774,8 @@ class EmailService extends AbstractService
         switch (true) {
             case strpos($this->mailing->getSender()->getEmail(), '_self') !== false:
                 /** @var Contact $contact */
-                if ($contact = $this->authenticationService->hasIdentity()) {
+                if ($this->authenticationService->hasIdentity()) {
+                    $contact = $this->authenticationService->getIdentity();
                     $this->email->setFrom($contact->getEmail());
                     $this->email->setFromName($contact->getDisplayName());
                 } else {
