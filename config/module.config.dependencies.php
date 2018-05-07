@@ -27,6 +27,7 @@ use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
+use ZfcTwig\View\TwigRenderer;
 
 return [
     ConfigAbstractFactory::class => [
@@ -119,7 +120,8 @@ return [
             ContactService::class,
             GeneralService::class,
             AuthenticationService::class,
-            EntityManager::class
+            EntityManager::class,
+            TwigRenderer::class
         ],
         Service\GeneralService::class             => [
             EntityManager::class

@@ -56,6 +56,27 @@ class WebInfoController extends AbstractActionController
     protected $emailService;
 
     /**
+     * WebInfoController constructor.
+     *
+     * @param GeneralService      $generalService
+     * @param FormService         $formService
+     * @param TranslatorInterface $translator
+     * @param EmailService        $emailService
+     */
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator,
+        EmailService $emailService
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+        $this->emailService = $emailService;
+    }
+
+
+    /**
      * @return ViewModel
      */
     public function listAction(): ViewModel

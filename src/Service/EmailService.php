@@ -105,13 +105,15 @@ class EmailService extends AbstractService
      * @param GeneralService        $generalService
      * @param AuthenticationService $authenticationService
      * @param EntityManager         $entityManager
+     * @param TwigRenderer          $renderer
      */
     public function __construct(
         array $config,
         ContactService $contactService,
         GeneralService $generalService,
         AuthenticationService $authenticationService,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        TwigRenderer $renderer
     ) {
         parent::__construct($entityManager);
 
@@ -119,6 +121,7 @@ class EmailService extends AbstractService
         $this->contactService = $contactService;
         $this->generalService = $generalService;
         $this->authenticationService = $authenticationService;
+        $this->renderer = $renderer;
 
         $this->setTransport();
     }
@@ -364,7 +367,7 @@ class EmailService extends AbstractService
         $this->templateVars['attention'] = $this->contactService->parseAttention($contact);
         $this->templateVars['firstname'] = $contact->getFirstName();
         $this->templateVars['lastname'] = trim(
-            sprintf("%s %s", $contact->getMiddleName(), $contact->getLastName())
+            sprintf('%s %s', $contact->getMiddleName(), $contact->getLastName())
         );
         $this->templateVars['fullname'] = $contact->parseFullName();
         $this->templateVars['email'] = $contact->getEmail();
@@ -437,15 +440,15 @@ class EmailService extends AbstractService
     public function parseBody(): bool
     {
         try {
-            $htmlView = $this->getRenderer()->render(
+            $htmlView = $this->renderer->render(
                 $this->email->getHtmlLayoutName(),
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-            $textView = $this->getRenderer()->render(
+            $textView = $this->renderer->render(
                 'plain',
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-        } catch (\Twig_Error_Syntax $e) {
+        } catch (\Exception $e) {
             $htmlView = $textView = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
         }
 
@@ -469,26 +472,6 @@ class EmailService extends AbstractService
         $this->message->setBody($body);
 
         return true;
-    }
-
-    /**
-     * @return TwigRenderer
-     */
-    public function getRenderer(): TwigRenderer
-    {
-        return $this->renderer;
-    }
-
-    /**
-     * @param TwigRenderer $renderer
-     *
-     * @return EmailService
-     */
-    public function setRenderer($renderer): EmailService
-    {
-        $this->renderer = $renderer;
-
-        return $this;
     }
 
     /**
@@ -809,19 +792,36 @@ class EmailService extends AbstractService
         $this->updateTemplateVarsWithContact($this->authenticationService->getIdentity());
 
         if (null === $this->mailing) {
-            throw new \RuntimeException("The mailing object is empty. Did you set the mailing?");
+            throw new \RuntimeException('The mailing object is empty. Did you set the mailing?');
         }
 
         try {
-            return $this->getRenderer()->render(
+            return $this->renderer->render(
                 $this->mailing->getTemplate()->getTemplate(),
                 array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
             );
-        } catch (\Twig_Error_Syntax $e) {
-            print sprintf('Something went wrong. Error message: %s', $e->getMessage());
+        } catch (\Exception $e) {
+            return sprintf('Something went wrong. Error message: %s', $e->getMessage());
         }
+    }
 
-        return '';
+    /**
+     * Function to test if a mail can be rendered
+     *
+     * @return null|string
+     */
+    public function cannotRenderEmailReason():?string
+    {
+        try {
+            $this->renderer->render(
+                $this->mailing->getTemplate()->getTemplate(),
+                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+            );
+
+            return null;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

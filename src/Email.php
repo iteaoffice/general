@@ -263,19 +263,19 @@ class Email
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
     /**
-     * @param string $message
+     * @param string|null $message
      *
      * @return Email
      */
-    public function setMessage(string $message): Email
+    public function setMessage(?string $message): Email
     {
         $this->message = $message;
 
