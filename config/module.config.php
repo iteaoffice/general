@@ -106,6 +106,12 @@ $config = [
     ],
     'service_manager'    => [
         'factories'  => [
+            InputFilter\ChallengeFilter::class             => ConfigAbstractFactory::class,
+            InputFilter\Challenge\TypeFilter::class        => ConfigAbstractFactory::class,
+            InputFilter\CountryFilter::class               => ConfigAbstractFactory::class,
+            InputFilter\GenderFilter::class                => ConfigAbstractFactory::class,
+            InputFilter\TitleFilter::class                 => ConfigAbstractFactory::class,
+            InputFilter\WebInfoFilter::class               => ConfigAbstractFactory::class,
             Options\ModuleOptions::class                   => Factory\ModuleOptionsFactory::class,
             Service\GeneralService::class                  => ConfigAbstractFactory::class,
             Service\EmailService::class                    => ConfigAbstractFactory::class,
