@@ -78,7 +78,7 @@
 
                                 <div class="col-md-3">
                                     {% if result.image %}
-                                        <div class="result-list-detailed-image">{{ image(result.image, 150) }}</div>
+                                        <div class="result-list-detailed-image">{{ image(result.image, 200, null, false, true, constant('\\Content\\Form\\ImageManipulation::FIT_IN')) }}</div>
                                     {% endif %}
                                 </div>
                             </div>
