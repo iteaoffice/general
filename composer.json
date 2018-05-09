@@ -25,7 +25,8 @@
     "zendframework/zendframework": "^3.1"
   },
   "require-dev": {
-    "iteaoffice/testing": "dev-master"
+    "iteaoffice/testing": "dev-master",
+    "iteaoffice/affiliation": "^3.1"
   },
   "autoload": {
     "psr-4": {
