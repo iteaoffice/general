@@ -2,50 +2,105 @@
 /**
  * ITEA Office all rights reserved
  *
- * @category   Challenge
+ * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2004-2017 ITEA Office (http://itea3.org)
  */
-
 declare(strict_types=1);
 
-namespace General\View\Helper;
+namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Content\Entity\Param;
+use Content\Navigation\Service\UpdateNavigationService;
 use General\Service\GeneralService;
 use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
 use Search\Form\SearchResult;
 use Search\Paginator\Adapter\SolariumPaginator;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
-use Zend\Http\Request;
+use Zend\Authentication\AuthenticationService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Application;
 use Zend\Paginator\Paginator;
+use Zend\View\HelperPluginManager;
+use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class ImpactStreamHandler.
+ * Class ProjectHandler
+ *
+ * @package Project\View\Handler
  */
-class ImpactStreamHandler extends AbstractViewHelper
+final class ImpactStreamHandler extends AbstractHandler
 {
+    /**
+     * @var ImpactStreamSearchService
+     */
+    protected $impactStreamSearchService;
+    /**
+     * @var GeneralService
+     */
+    protected $generalService;
+    /**
+     * @var ProjectService
+     */
+    protected $projectService;
+
+    /**
+     * ImpactStreamHandler constructor.
+     *
+     * @param Application               $application
+     * @param HelperPluginManager       $helperPluginManager
+     * @param TwigRenderer              $renderer
+     * @param AuthenticationService     $authenticationService
+     * @param UpdateNavigationService   $updateNavigationService
+     * @param TranslatorInterface       $translator
+     * @param ImpactStreamSearchService $impactStreamSearchService
+     * @param GeneralService            $generalService
+     * @param ProjectService            $projectService
+     */
+    public function __construct(
+        Application $application,
+        HelperPluginManager $helperPluginManager,
+        TwigRenderer $renderer,
+        AuthenticationService $authenticationService,
+        UpdateNavigationService $updateNavigationService,
+        TranslatorInterface $translator,
+        ImpactStreamSearchService $impactStreamSearchService,
+        GeneralService $generalService,
+        ProjectService $projectService
+    ) {
+        parent::__construct(
+            $application,
+            $helperPluginManager,
+            $renderer,
+            $authenticationService,
+            $updateNavigationService,
+            $translator
+        );
+
+        $this->impactStreamSearchService = $impactStreamSearchService;
+        $this->generalService = $generalService;
+        $this->projectService = $projectService;
+    }
+
     /**
      * @param Content $content
      *
-     * @return string
+     * @return null|string
+     * @throws \Exception
      */
-    public function __invoke(Content $content): string
+    public function __invoke(Content $content): ?string
     {
-        $this->extractContentParam($content);
-
         switch ($content->getHandler()->getHandler()) {
             case 'impactstream_index':
-                $this->getHelperPluginManager()->get('headtitle')->append($this->translate("txt-impact-stream"));
+                $this->getHeadTitle()->append($this->translate("txt-impact-stream"));
 
                 return $this->parseIndex();
 
             default:
                 return sprintf(
-                    "No handler available for <code>%s</code> in class <code>%s</code>",
+                    'No handler available for <code>%s</code> in class <code>%s</code>',
                     $content->getHandler()->getHandler(),
                     __CLASS__
                 );
@@ -63,25 +118,24 @@ class ImpactStreamHandler extends AbstractViewHelper
         $lastYear = new \DateTime();
         $lastYear->sub(new \DateInterval("P12M"));
 
-        $searchService = $this->getImpactStreamSearchService();
-        $page = $this->getRequest()->getQuery('page', 1);
+        $page = $this->request->getQuery('page', 1);
         $form = new SearchResult();
-        $data = array_merge(
+        $data = \array_merge(
             [
                 'order'     => '',
-                'toDate' => [
-                    'year' => $today->format('Y'),
+                'toDate'    => [
+                    'year'  => $today->format('Y'),
                     'month' => $today->format('m'),
                 ],
-                'fromDate' => [
-                    'year' => $lastYear->format('Y'),
+                'fromDate'  => [
+                    'year'  => $lastYear->format('Y'),
                     'month' => $lastYear->format('m'),
                 ],
                 'direction' => '',
                 'query'     => '',
                 'facet'     => [],
             ],
-            $this->getRequest()->getQuery()->toArray()
+            $this->request->getQuery()->toArray()
         );
 
         $searchFields = [
@@ -95,10 +149,10 @@ class ImpactStreamHandler extends AbstractViewHelper
             'html'
         ];
 
-        if ($this->getRequest()->isGet()) {
-            $dateInterval = $this->getImpactStreamSearchService()->parseDateInterval($data);
+        if ($this->request->isGet()) {
+            $dateInterval = $this->impactStreamSearchService->parseDateInterval($data);
 
-            $searchService->setSearch(
+            $this->impactStreamSearchService->setSearch(
                 $data['query'],
                 $searchFields,
                 $data['order'],
@@ -113,7 +167,7 @@ class ImpactStreamHandler extends AbstractViewHelper
                         $quotedValues[] = sprintf("\"%s\"", $value);
                     }
 
-                    $searchService->addFilterQuery(
+                    $this->impactStreamSearchService->addFilterQuery(
                         $facetField,
                         implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
                     );
@@ -121,19 +175,24 @@ class ImpactStreamHandler extends AbstractViewHelper
             }
 
             $form->addSearchResults(
-                $searchService->getQuery()->getFacetSet(),
-                $searchService->getResultSet()->getFacetSet()
+                $this->impactStreamSearchService->getQuery()->getFacetSet(),
+                $this->impactStreamSearchService->getResultSet()->getFacetSet()
             );
             $form->setData($data);
         }
 
-        $paginator = new Paginator(new SolariumPaginator($searchService->getSolrClient(), $searchService->getQuery()));
+        $paginator = new Paginator(
+            new SolariumPaginator(
+                $this->impactStreamSearchService->getSolrClient(),
+                $this->impactStreamSearchService->getQuery()
+            )
+        );
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? 1000 : 25);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
         // Remove order and direction from the GET params to prevent duplication
-        $filteredData = array_filter(
+        $filteredData = \array_filter(
             $data,
             function ($key) {
                 return !\in_array($key, ['order', 'direction'], true);
@@ -141,7 +200,7 @@ class ImpactStreamHandler extends AbstractViewHelper
             ARRAY_FILTER_USE_KEY
         );
 
-        return $this->getRenderer()->render(
+        return $this->renderer->render(
             'general/partial/impact-stream/index',
             [
                 'form'               => $form,
@@ -150,8 +209,8 @@ class ImpactStreamHandler extends AbstractViewHelper
                 'query'              => $data['query'],
                 'arguments'          => http_build_query($filteredData),
                 'paginator'          => $paginator,
-                'allChallenges'      => $this->getGeneralService()->findAllChallenges(),
-                'projectService'     => $this->getProjectService(),
+                'allChallenges'      => $this->generalService->findAllChallenges(),
+                'projectService'     => $this->projectService,
                 'highlighting'       => $paginator->getCurrentItems()->getHighlighting(),
                 'highlightingFields' => [
                     'result_search',
@@ -165,85 +224,5 @@ class ImpactStreamHandler extends AbstractViewHelper
                 ]
             ]
         );
-    }
-
-
-    /**
-     * @param Content $content
-     */
-    public function extractContentParam(Content $content): void
-    {
-        /**
-         * Go over the handler params and try to see if it is hardcoded or just set via the route
-         */
-        foreach ($content->getHandler()->getParam() as $parameter) {
-            switch ($parameter->getParam()) {
-                case 'docRef':
-                    $docRef = $this->findParamValueFromContent($content, $parameter);
-
-
-                    break;
-            }
-        }
-    }
-
-    /**
-     * @param Content $content
-     * @param Param $param
-     *
-     * @return null|string
-     */
-    private function findParamValueFromContent(Content $content, Param $param): ?string
-    {
-        //Hardcoded is always first,If it cannot be found, try to find it from the docref (rule 2)
-        foreach ($content->getContentParam() as $contentParam) {
-            if ($contentParam->getParameter() === $param && !empty($contentParam->getParameterId())) {
-                return $contentParam->getParameterId();
-            }
-        }
-
-        //Try first to see if the param can be found from the route (rule 1)
-        if (!\is_null($this->getRouteMatch()->getParam($param->getParam()))) {
-            return $this->getRouteMatch()->getParam($param->getParam());
-        }
-
-        //If not found, take rule 3
-        return null;
-    }
-
-    /**
-     * @return GeneralService
-     */
-    public function getGeneralService(): GeneralService
-    {
-        return $this->getServiceManager()->get(GeneralService::class);
-    }
-
-    /**
-     * @return ProjectService
-     */
-    public function getProjectService(): ProjectService
-    {
-        return $this->getServiceManager()->get(ProjectService::class);
-    }
-
-    /**
-     * @return ImpactStreamSearchService
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function getImpactStreamSearchService(): ImpactStreamSearchService
-    {
-        return $this->getServiceManager()->get(ImpactStreamSearchService::class);
-    }
-
-    /**
-     * Proxy to the original request object to handle form.
-     *
-     * @return Request
-     */
-    public function getRequest(): Request
-    {
-        return $this->getServiceManager()->get('application')->getMvcEvent()->getRequest();
     }
 }

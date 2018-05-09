@@ -23,7 +23,9 @@ use General\Module;
 use General\Service\EmailService;
 use Testing\Util\AbstractServiceTest;
 use Zend\Mvc\Application;
+use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
+use Zend\View\HelperPluginManager;
 
 /**
  * Class GeneralTest
@@ -67,15 +69,33 @@ class ModuleTest extends AbstractServiceTest
 
             $instantiatedDependencies = [];
             foreach ($dependencies as $dependency) {
-
                 if ($dependency === 'Application') {
                     $dependency = Application::class;
+                }
+                if ($dependency === 'ViewHelperManager') {
+                    $dependency = HelperPluginManager::class;
                 }
                 if ($dependency === 'Config') {
                     $dependency = [];
                 }
-                $instantiatedDependencies[]
-                    = $this->getMockBuilder($dependency)->disableOriginalConstructor()->getMock();
+                if ($dependency !== Application::class) {
+                    $instantiatedDependencies[]
+                        = $this->getMockBuilder($dependency)->disableOriginalConstructor()->getMock();
+
+                } else {
+
+                    $applicationMock = $this->getMockBuilder($dependency)->disableOriginalConstructor()->setMethods(
+                        ['getMvcEvent']
+                    )->getMock();
+
+                    $mvcEvent = new MvcEvent();
+
+                    $applicationMock->expects($this->any())
+                        ->method('getMvcEvent')
+                        ->will($this->returnValue($mvcEvent));
+
+                    $instantiatedDependencies[] = $applicationMock;
+                }
             }
 
             $instance = new $service(...$instantiatedDependencies);

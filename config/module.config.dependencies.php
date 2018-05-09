@@ -18,10 +18,15 @@ declare(strict_types=1);
 namespace General;
 
 use Contact\Service\ContactService;
+use Content\Navigation\Service\UpdateNavigationService;
+use Content\Service\ArticleService;
 use Doctrine\ORM\EntityManager;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
+use Organisation\Service\OrganisationService;
+use Program\Service\ProgramService;
+use Project\Options\ModuleOptions;
 use Project\Search\Service\ImpactStreamSearchService;
 use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
@@ -147,6 +152,40 @@ return [
         InputFilter\WebInfoFilter::class          => [
             EntityManager::class
         ],
+        View\Handler\ImpactStreamHandler::class   => [
+            'Application',
+            'ViewHelperManager',
+            TwigRenderer::class,
+            AuthenticationService::class,
+            UpdateNavigationService::class,
+            TranslatorInterface::class,
+            ImpactStreamSearchService::class,
+            GeneralService::class,
+            ProjectService::class
+        ],
+        View\Handler\ChallengeHandler::class      => [
+            'Application',
+            'ViewHelperManager',
+            TwigRenderer::class,
+            AuthenticationService::class,
+            UpdateNavigationService::class,
+            TranslatorInterface::class,
+            GeneralService::class,
+            ProjectService::class
+        ],
+        View\Handler\CountryHandler::class        => [
+            'Application',
+            'ViewHelperManager',
+            TwigRenderer::class,
+            AuthenticationService::class,
+            UpdateNavigationService::class,
+            TranslatorInterface::class,
+            ModuleOptions::class,
+            GeneralService::class,
+            ProjectService::class,
+            ProgramService::class,
+            OrganisationService::class,
+            ArticleService::class
+        ],
     ]
 ];
-
