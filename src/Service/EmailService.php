@@ -97,16 +97,6 @@ class EmailService extends AbstractService
      */
     protected $attachments = [];
 
-    /**
-     * EmailService constructor.
-     *
-     * @param array                 $config
-     * @param ContactService        $contactService
-     * @param GeneralService        $generalService
-     * @param AuthenticationService $authenticationService
-     * @param EntityManager         $entityManager
-     * @param TwigRenderer          $renderer
-     */
     public function __construct(
         array $config,
         ContactService $contactService,
@@ -126,33 +116,30 @@ class EmailService extends AbstractService
         $this->setTransport();
     }
 
-    /**
-     * Create the transport
-     */
     private function setTransport(): void
     {
-        if ($this->config["active"]) {
+        if ($this->config['active']) {
             // Server SMTP config
             $transport = new SendmailTransport();
             // Relay SMTP
-            if ($this->config["relay"]["active"]) {
+            if ($this->config['relay']['active']) {
                 $transport = new SmtpTransport();
                 $transportConfig = [
-                    'name'              => "ITEA_Office_General_Email",
-                    'host'              => $this->config["relay"]["host"],
+                    'name'              => 'ITEA_Office_General_Email',
+                    'host'              => $this->config['relay']['host'],
                     'connection_class'  => 'login',
                     'connection_config' => [
-                        'username' => $this->config["relay"]["username"],
-                        'password' => $this->config["relay"]["password"],
+                        'username' => $this->config['relay']['username'],
+                        'password' => $this->config['relay']['password'],
                     ],
                 ];
                 // Add port
-                if ($this->config["relay"]["port"]) {
-                    $transportConfig["port"] = $this->config["relay"]["port"];
+                if ($this->config['relay']['port']) {
+                    $transportConfig['port'] = $this->config['relay']['port'];
                 }
                 // Add ssl
-                if ($this->config["relay"]["ssl"]) {
-                    $transportConfig["connection_config"]["ssl"] = $this->config["relay"]["ssl"];
+                if ($this->config['relay']['ssl']) {
+                    $transportConfig['connection_config']['ssl'] = $this->config['relay']['ssl'];
                 }
                 $options = new SmtpOptions($transportConfig);
                 $transport->setOptions($options);
@@ -162,11 +149,6 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * @param array $data
-     *
-     * @return Email
-     */
     public function create(array $data = []): Email
     {
         $this->email = new Email($data, $this->config);
@@ -174,9 +156,6 @@ class EmailService extends AbstractService
         return $this->email;
     }
 
-    /**
-     * Send the email.
-     */
     public function send(): void
     {
         switch ($this->email->isPersonal()) {
@@ -304,9 +283,6 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * @return void
-     */
     private function generateMessage(): void
     {
         /*
@@ -329,11 +305,6 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * Set the BCC and CC recipients to the email (they are the same for every email).
-     *
-     * @return Message
-     */
     public function setShadowRecipients(): void
     {
         //Cc recipients
@@ -357,11 +328,6 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * Extract the contact and include the variables in the template array settings.
-     *
-     * @var Contact
-     */
     public function updateTemplateVarsWithContact(Contact $contact): void
     {
         $this->templateVars['attention'] = $this->contactService->parseAttention($contact);
@@ -383,10 +349,7 @@ class EmailService extends AbstractService
         $this->templateVars['deeplink'] = 'http://deeplink.example';
     }
 
-    /**
-     * Parse the subject of the email.
-     */
-    public function parseSubject()
+    public function parseSubject(): void
     {
         //Transfer first the subject form the email (if any)
         $this->message->setSubject($this->email->getSubject());
@@ -418,25 +381,16 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * Inject the deeplink in the email
-     */
     public function parseDeeplink(): void
     {
         $this->templateVars['deeplink'] = $this->email->getDeeplink();
     }
 
-    /**
-     * Inject the unsubscribe in the email
-     */
     public function parseUnsubscribe(): void
     {
         $this->templateVars['unsubscribe'] = $this->email->getUnsubscribe();
     }
 
-    /**
-     * @return bool
-     */
     public function parseBody(): bool
     {
         try {
@@ -459,7 +413,7 @@ class EmailService extends AbstractService
 
 
         $htmlContent = new MimePart($htmlView);
-        $htmlContent->type = "text/html";
+        $htmlContent->type = 'text/html';
         $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
@@ -474,13 +428,6 @@ class EmailService extends AbstractService
         return true;
     }
 
-    /**
-     * Render the content twig-wise.
-     *
-     * @param $message
-     *
-     * @return null|string
-     */
     private function personaliseMessage($message): ?string
     {
         /*
@@ -512,11 +459,6 @@ class EmailService extends AbstractService
         return $twigRenderer->render('email', $this->templateVars);
     }
 
-    /**
-     * @param $content
-     *
-     * @return string
-     */
     protected function createTwigTemplate($content): string
     {
         return preg_replace(
@@ -524,18 +466,13 @@ class EmailService extends AbstractService
                 '~\[(.*?)\]~',
             ],
             [
-                "{{ $1|raw }}",
+                '{{ $1|raw }}',
             ],
             $content
         );
     }
 
-    /**
-     * @param $htmlView
-     *
-     * @return mixed
-     */
-    protected function embedImagesAsAttachment($htmlView)
+    protected function embedImagesAsAttachment(string $htmlView): string
     {
         $matches = [];
         preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
@@ -554,11 +491,6 @@ class EmailService extends AbstractService
         return $htmlView;
     }
 
-    /**
-     * @param $fileName
-     *
-     * @return MimePart
-     */
     public function addInlineAttachment($fileName): MimePart
     {
         /**
@@ -577,11 +509,6 @@ class EmailService extends AbstractService
         return $attachment;
     }
 
-    /**
-     * @param string $filename
-     *
-     * @return string
-     */
     protected function mimeByExtension(string $filename): string
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -605,9 +532,6 @@ class EmailService extends AbstractService
         return $type;
     }
 
-    /**
-     * @param Contact $contact
-     */
     private function sendPersonalEmail(Contact $contact): void
     {
         $emailMessage = new EmailMessage();
@@ -649,27 +573,16 @@ class EmailService extends AbstractService
         $this->transport->send($this->message);
     }
 
-    /**
-     * @return string
-     */
     public function getHtmlView(): string
     {
         return $this->htmlView;
     }
 
-    /**
-     * @return \Mailing\Entity\Contact
-     */
     public function getMailingContact(): ?\Mailing\Entity\Contact
     {
         return $this->mailingContact;
     }
 
-    /**
-     * @param \Mailing\Entity\Contact $mailingContact
-     *
-     * @return EmailService
-     */
     public function setMailingContact(\Mailing\Entity\Contact $mailingContact): EmailService
     {
         $this->mailingContact = $mailingContact;
@@ -677,11 +590,6 @@ class EmailService extends AbstractService
         return $this;
     }
 
-    /**
-     * @param             $attachment
-     * @param string|null $type
-     * @param string|null $fileName
-     */
     public function addAttachment($attachment, string $type = null, string $fileName = null): void
     {
         if (!$attachment instanceof MimePart) {
@@ -691,13 +599,6 @@ class EmailService extends AbstractService
         $this->attachments[] = $attachment;
     }
 
-    /**
-     * @param string $content
-     * @param string $type
-     * @param string $fileName
-     *
-     * @return MimePart
-     */
     public function createAttachment(string $content, string $type, string $fileName): MimePart
     {
         /**
@@ -713,18 +614,11 @@ class EmailService extends AbstractService
         return $attachment;
     }
 
-    /**
-     * @param        $name
-     * @param string $content
-     */
-    public function addHeader($name, string $content): void
+    public function addHeader(string $name, string $content): void
     {
         $this->headers[$name] = $content;
     }
 
-    /**
-     * @param $publication
-     */
     public function addPublication(Publication $publication): void
     {
         /*
@@ -740,11 +634,6 @@ class EmailService extends AbstractService
         $this->attachments[] = $attachment;
     }
 
-    /**
-     * When the mailing is set, we need to take some features over from the mailing to the email.
-     *
-     * @param \Mailing\Entity\Mailing $mailing
-     */
     public function setMailing($mailing): void
     {
         $this->mailing = $mailing;
@@ -782,11 +671,6 @@ class EmailService extends AbstractService
         $this->email->setMessage($this->mailing->getMailHtml());
     }
 
-    /**
-     * Produce a preview of the mailing content.
-     *
-     * @return null|string
-     */
     public function generatePreview(): string
     {
         $this->updateTemplateVarsWithContact($this->authenticationService->getIdentity());
@@ -805,11 +689,6 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * Function to test if a mail can be rendered
-     *
-     * @return null|string
-     */
     public function cannotRenderEmailReason():?string
     {
         try {
@@ -824,14 +703,7 @@ class EmailService extends AbstractService
         }
     }
 
-    /**
-     * @param $templateName
-     *
-     * @return EmailService
-     *
-     * @throws \Exception
-     */
-    public function setTemplate($templateName): EmailService
+    public function setTemplate(string $templateName): EmailService
     {
         $this->template = $this->generalService->findWebInfoByInfo($templateName);
 
@@ -865,9 +737,6 @@ class EmailService extends AbstractService
         return $this;
     }
 
-    /**
-     * @return Message
-     */
     public function getMessage(): Message
     {
         return $this->message;

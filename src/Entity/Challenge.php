@@ -305,7 +305,7 @@ class Challenge extends AbstractEntity
      *
      * @param Collections\Collection $callCollection
      */
-    public function removeCall(Collections\Collection $callCollection)
+    public function removeCall(Collections\Collection $callCollection): void
     {
         foreach ($callCollection as $call) {
             $this->call->removeElement($call);

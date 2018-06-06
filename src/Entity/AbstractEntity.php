@@ -38,11 +38,10 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
     {
         switch ($switch) {
             case 'class_name':
+            case 'full_entity_name':
                 return str_replace('DoctrineORMModule\Proxy\__CG__\\', '', static::class);
             case 'entity_name':
                 return implode('', \array_slice(explode('\\', $this->get('class_name')), -1));
-            case 'full_entity_name':
-                return implode('', explode('\\', $this->get('class_name')));
             case 'underscore_entity_name':
                 return strtolower(implode('_', explode('\\', $this->get('class_name'))));
             case 'entity_fieldset_name':

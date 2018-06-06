@@ -10,6 +10,7 @@ namespace General;
 use Contact\Entity\Contact;
 use Contact\Entity\Selection;
 use Contact\Service\ContactService;
+use Contact\Service\SelectionContactService;
 
 /**
  * Class Email.
@@ -282,13 +283,9 @@ class Email
         return $this;
     }
 
-    /**
-     * @param Selection $selection
-     * @param ContactService $contactService
-     */
-    public function addSelection(Selection $selection, ContactService $contactService)
+    public function addSelection(Selection $selection, SelectionContactService $selectionContactService): void
     {
-        foreach ($contactService->findContactsInSelection($selection) as $contact) {
+        foreach ($selectionContactService->findContactsInSelection($selection) as $contact) {
             $this->addTo($contact);
         }
     }

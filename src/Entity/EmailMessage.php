@@ -47,7 +47,7 @@ class EmailMessage extends AbstractEntity
      * @ORM\Column(name="date_created", type="datetime",nullable=false)
      * @Gedmo\Timestampable(on="create")
      *
-     * @var \datetime
+     * @var \DateTime
      */
     private $dateCreated;
     /**
