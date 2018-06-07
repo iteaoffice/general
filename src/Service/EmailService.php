@@ -165,7 +165,7 @@ class EmailService extends AbstractService
                      * Create a new message for everyone
                      */
                     $this->message = new Message();
-                    $this->message->setEncoding('UTF-8');
+                    //$this->message->setEncoding('UTF-8');
 
                     $this->generateMessage();
 
@@ -184,10 +184,10 @@ class EmailService extends AbstractService
                     }
 
                     /*
-                     * Overrule the to when we are in development
-                     */
+                   * Overrule the to when we are in development
+                   */
                     if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
-                        $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
+                        $this->message->addTo('info@jield.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
@@ -226,7 +226,7 @@ class EmailService extends AbstractService
                  * Create a new message for everyone
                  */
                 $this->message = new Message();
-                $this->message->setEncoding('UTF-8');
+                //$this->message->setEncoding('UTF-8');
 
                 $this->generateMessage();
 
@@ -246,7 +246,7 @@ class EmailService extends AbstractService
                     /*
                      * Overrule the to when we are in development
                      */
-                    if (!defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
+                    if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
                         $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
@@ -357,7 +357,7 @@ class EmailService extends AbstractService
         /*
          * When the subject is empty AND we have a template, simply take the subject of the template
          */
-        if (empty($this->message->getSubject()) && null !== $this->template) {
+        if (null !== $this->template && empty($this->message->getSubject())) {
             $this->message->setSubject($this->template->getSubject());
         }
 
@@ -689,7 +689,7 @@ class EmailService extends AbstractService
         }
     }
 
-    public function cannotRenderEmailReason():?string
+    public function cannotRenderEmailReason(): ?string
     {
         try {
             $this->renderer->render(
