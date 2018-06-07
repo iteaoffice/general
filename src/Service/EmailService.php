@@ -19,6 +19,7 @@ use General\Email as Email;
 use General\Entity\EmailMessage;
 use General\Entity\WebInfo;
 use Mailing\Entity\Mailing;
+use Mailing\Entity\Sender;
 use Publication\Entity\Publication;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mail\Message;
@@ -165,7 +166,7 @@ class EmailService extends AbstractService
                      * Create a new message for everyone
                      */
                     $this->message = new Message();
-                    //$this->message->setEncoding('UTF-8');
+                    $this->message->setEncoding('UTF-8');
 
                     $this->generateMessage();
 
@@ -187,7 +188,7 @@ class EmailService extends AbstractService
                    * Overrule the to when we are in development
                    */
                     if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
-                        $this->message->addTo('info@jield.nl', $contact->getDisplayName());
+                        $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
                     } else {
                         $this->message->addTo(
                             $contact->getEmail(),
@@ -276,7 +277,6 @@ class EmailService extends AbstractService
                  */
                 $this->parseBody();
 
-
                 $this->transport->send($this->message);
 
                 break;
@@ -288,7 +288,7 @@ class EmailService extends AbstractService
         /*
          * Produce a list of template vars
          */
-        $this->templateVars = array_merge($this->config["template_vars"], $this->email->toArray());
+        $this->templateVars = array_merge($this->templateVars, $this->config["template_vars"], $this->email->toArray());
 
         //If not layout, use default
         if (!$this->email->getHtmlLayoutName()) {
@@ -361,6 +361,7 @@ class EmailService extends AbstractService
             $this->message->setSubject($this->template->getSubject());
         }
 
+
         /*
          * Go over the templateVars to replace content in the subject
          */
@@ -411,9 +412,9 @@ class EmailService extends AbstractService
         //Download the embedded files ad attach them to the mailing
         $htmlView = $this->embedImagesAsAttachment($htmlView);
 
-
         $htmlContent = new MimePart($htmlView);
-        $htmlContent->type = 'text/html';
+        $htmlContent->setType(Mime::TYPE_HTML);
+        $htmlContent->setCharset('UTF-8');
         $textContent = new MimePart($textView);
         $textContent->type = 'text/plain';
         $body = new MimeMessage();
@@ -475,15 +476,15 @@ class EmailService extends AbstractService
     protected function embedImagesAsAttachment(string $htmlView): string
     {
         $matches = [];
-        preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
+        \preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
 
-        $matches = array_unique($matches[1]);
+        $matches = \array_unique($matches[1]);
 
         if (\count($matches) > 0) {
             foreach ($matches as $key => $filename) {
-                if (($filename) && file_exists($filename)) {
+                if ($filename && \file_exists($filename)) {
                     $attachment = $this->addInlineAttachment($filename);
-                    $htmlView = str_replace($filename, 'cid:' . $attachment->id, $htmlView);
+                    $htmlView = \str_replace($filename, 'cid:' . $attachment->id, $htmlView);
                 }
             }
         }
@@ -669,6 +670,44 @@ class EmailService extends AbstractService
         $this->email->setSubject($this->mailing->getMailSubject());
         $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
         $this->email->setMessage($this->mailing->getMailHtml());
+
+        //Parse some information form the sender in the email;
+        $this->updateTemplateVarsWithSender($this->mailing->getSender());
+
+    }
+
+    public function updateTemplateVarsWithSender(Sender $sender): void
+    {
+
+        switch (true) {
+            case strpos($this->mailing->getSender()->getEmail(), '_self') !== false:
+                /** @var Contact $contact */
+                if ($this->authenticationService->hasIdentity()) {
+                    $contact = $this->authenticationService->getIdentity();
+                    $this->templateVars['sender_name'] = $contact->parseFullName();
+                    $this->templateVars['sender_email'] = $contact->getEmail();
+                    $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
+                } else {
+                    $contact = $this->mailing->getContact();
+                    $this->templateVars['sender_name'] = $contact->parseFullName();
+                    $this->templateVars['sender_email'] = $contact->getEmail();
+                    $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
+
+                }
+
+                break;
+            case strpos($this->mailing->getSender()->getEmail(), '_owner') !== false:
+                $contact = $this->mailing->getContact();
+                $this->templateVars['sender_name'] = $contact->parseFullName();
+                $this->templateVars['sender_email'] = $contact->getEmail();
+                $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
+                break;
+            default:
+                $this->templateVars['sender_name'] = $sender->getSender();
+                $this->templateVars['sender_email'] = $sender->getEmail();
+                $this->templateVars['sender_signature'] = '';
+                break;
+        }
     }
 
     public function generatePreview(): string
