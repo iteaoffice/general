@@ -154,31 +154,25 @@ class EmailService
         $this->htmlPart = '';
     }
 
-    public function setSender(Sender $sender, Contact $contact): void
+    public function setSender(Sender $sender, Contact $owner = null): void
     {
         switch ($sender->getEmail()) {
             case '_self':
                 /** @var Contact $contact */
                 if ($this->authenticationService->hasIdentity()) {
-                    $contact = $this->authenticationService->getIdentity();
-                    $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
-
-                    $this->templateVariables['sender_name'] = $contact->parseFullName();
-                    $this->templateVariables['sender_email'] = $contact->getEmail();
-                    $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
-                } else {
-                    $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
-                    $this->templateVariables['sender_name'] = $contact->parseFullName();
-                    $this->templateVariables['sender_email'] = $contact->getEmail();
-                    $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
+                    $owner = $this->authenticationService->getIdentity();
                 }
-                break;
             case '_owner':
-                $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
 
-                $this->templateVariables['sender_name'] = $contact->parseFullName();
-                $this->templateVariables['sender_email'] = $contact->getEmail();
-                $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
+                if (null === $owner) {
+                    throw new \InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
+                }
+
+                $this->from = new ValueObject\Recipient($owner->parseFullName(), $owner->getEmail());
+
+                $this->templateVariables['sender_name'] = $owner->parseFullName();
+                $this->templateVariables['sender_email'] = $owner->getEmail();
+                $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($owner);
                 break;
             default:
                 $this->from = new ValueObject\Recipient($sender->getSender(), $sender->getEmail());
