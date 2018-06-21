@@ -435,7 +435,7 @@ class EmailService
         try {
             $htmlPart = $this->renderer->render(
                 $this->template->getTemplate(),
-                ['content' => $message]
+                \array_merge(['content' => $message], $this->templateVariables)
             );
             $textPart = $this->renderer->render(
                 'plain',
