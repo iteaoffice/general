@@ -26,11 +26,6 @@ use General\Entity;
  */
 class EmailMessage extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -82,9 +77,6 @@ class EmailMessage extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @return array
-     */
     public function findPossibleLatestEvents(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

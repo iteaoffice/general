@@ -2,438 +2,245 @@
 /**
  * ITEA Office all rights reserved
  *
- * @category  General
+ * PHP Version 7
  *
- * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @category    General
+ *
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2004-2018 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
+ *
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
-
 declare(strict_types=1);
 
 namespace General\Service;
 
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
-use Doctrine\ORM\EntityManager;
-use General\Email as Email;
+use Deeplink\Entity\Target;
+use Deeplink\Service\DeeplinkService;
 use General\Entity\EmailMessage;
-use General\Entity\WebInfo;
+use General\Entity\EmailMessageEvent;
+use General\ValueObject;
 use Mailing\Entity\Mailing;
 use Mailing\Entity\Sender;
+use Mailing\Entity\Template;
+use Mailjet\Client;
+use Mailjet\Resources;
 use Publication\Entity\Publication;
 use Zend\Authentication\AuthenticationService;
-use Zend\Mail\Message;
-use Zend\Mail\Transport\Sendmail as SendmailTransport;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Mime;
-use Zend\Mime\Part as MimePart;
-use Zend\ServiceManager\ServiceManager;
+use Zend\View\Helper\Url;
+use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class EmailService.
+ * Class FormService
+ *
+ * @package Application\Service
  */
-class EmailService extends AbstractService
+class EmailService
 {
+    private $config;
     /**
      * @var ContactService
      */
-    protected $contactService;
+    private $contactService;
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
+    /**
+     * @var DeeplinkService
+     */
+    private $deeplinkService;
     /**
      * @var AuthenticationService
      */
-    protected $authenticationService;
-    /**
-     * @var Email
-     */
-    protected $email;
-    /**
-     * @var SendmailTransport|SmtpTransport
-     */
-    protected $transport;
-    /**
-     * @var array
-     */
-    protected $config;
+    private $authenticationService;
     /**
      * @var TwigRenderer
      */
-    protected $renderer;
+    private $renderer;
     /**
-     * @var WebInfo
+     * @var HelperPluginManager
      */
-    protected $template;
-    /**
-     * @var Mailing
-     */
-    protected $mailing;
-    /**
-     * @var \Mailing\Entity\Contact
-     */
-    protected $mailingContact;
-    /**
-     * @var Message
-     */
-    protected $message;
-    /**
-     * @var string
-     */
-    protected $htmlView;
-    /**
-     * @var array
-     */
-    protected $templateVars = [];
-    /**
-     * @var array
-     */
-    protected $headers = [];
-    /**
-     * @var MimePart[]
-     */
-    protected $attachments = [];
+    private $viewHelperManager;
+
+    /** @var Client */
+    private $client;
+
+    /** @var Template */
+    private $template;
+
+    /** @var \Mailing\Entity\Contact */
+    private $mailingContact;
+
+    private $templateVariables = [];
+    /** @var ValueObject\Attachment[] */
+    private $attachments = [];
+    /** @var ValueObject\Attachment[] */
+    private $inlinedAttachments = [];
+    /** @var ValueObject\Recipient */
+    private $from;
+    /** @var ValueObject\Recipient[] */
+    private $to = [];
+    /** @var ValueObject\Recipient[] */
+    private $cc = [];
+    /** @var ValueObject\Recipient[] */
+    private $bcc = [];
+    /** @var ValueObject\Header[] */
+    private $headers = [];
+
+    /** @var string */
+    private $emailContent;
+    /** @var string */
+    private $textPart;
+    /** @var string */
+    private $htmlPart;
+    /** @var string */
+    private $emailSubject;
+    /** @var string */
+    private $emailCampaign;
 
     public function __construct(
         array $config,
         ContactService $contactService,
         GeneralService $generalService,
+        DeeplinkService $deeplinkService,
         AuthenticationService $authenticationService,
-        EntityManager $entityManager,
-        TwigRenderer $renderer
+        TwigRenderer $renderer,
+        HelperPluginManager $viewHelperManager
     ) {
-        parent::__construct($entityManager);
-
-        $this->config = $config['email'];
+        $this->config = $config;
         $this->contactService = $contactService;
         $this->generalService = $generalService;
+        $this->deeplinkService = $deeplinkService;
         $this->authenticationService = $authenticationService;
         $this->renderer = $renderer;
+        $this->viewHelperManager = $viewHelperManager;
 
-        $this->setTransport();
-    }
-
-    private function setTransport(): void
-    {
-        if ($this->config['active']) {
-            // Server SMTP config
-            $transport = new SendmailTransport();
-            // Relay SMTP
-            if ($this->config['relay']['active']) {
-                $transport = new SmtpTransport();
-                $transportConfig = [
-                    'name'              => 'ITEA_Office_General_Email',
-                    'host'              => $this->config['relay']['host'],
-                    'connection_class'  => 'login',
-                    'connection_config' => [
-                        'username' => $this->config['relay']['username'],
-                        'password' => $this->config['relay']['password'],
-                    ],
-                ];
-                // Add port
-                if ($this->config['relay']['port']) {
-                    $transportConfig['port'] = $this->config['relay']['port'];
-                }
-                // Add ssl
-                if ($this->config['relay']['ssl']) {
-                    $transportConfig['connection_config']['ssl'] = $this->config['relay']['ssl'];
-                }
-                $options = new SmtpOptions($transportConfig);
-                $transport->setOptions($options);
-            }
-
-            $this->transport = $transport;
-        }
-    }
-
-    public function create(array $data = []): Email
-    {
-        $this->email = new Email($data, $this->config);
-
-        return $this->email;
-    }
-
-    public function send(): void
-    {
-        switch ($this->email->isPersonal()) {
-            case true:
-                foreach ($this->email->getTo() as $recipient => $contact) {
-                    /*
-                     * Create a new message for everyone
-                     */
-                    $this->message = new Message();
-                    $this->message->setEncoding('UTF-8');
-
-                    $this->generateMessage();
-
-                    //add the CC and BCC to the email
-                    $this->setShadowRecipients();
-
-                    /*
-                     * We have a recipient which can be an instance of the contact. Produce a contactService object
-                     * and fill the templateVars with extra options
-                     */
-                    if ($contact instanceof Contact) {
-                        $this->updateTemplateVarsWithContact($contact);
-                    } else {
-                        $contact = new Contact();
-                        $contact->setEmail($recipient);
-                    }
-
-                    /*
-                   * Overrule the to when we are in development
-                   */
-                    if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
-                        $this->message->addTo('johan.van.der.heide@itea3.org', $contact->getDisplayName());
-                    } else {
-                        $this->message->addTo(
-                            $contact->getEmail(),
-                            null !== $contact->getId() ? $contact->getDisplayName() : null
-                        );
-                    }
-
-                    /**
-                     * We have the contact and can now produce the content of the message
-                     */
-                    $this->parseSubject();
-
-                    /**
-                     * If we have a deeplink, parse it
-                     */
-                    $this->parseDeeplink();
-
-                    /**
-                     * If we have an unsubscribe, parse it
-                     */
-                    $this->parseUnsubscribe();
-
-                    /**
-                     * We have the contact and can now produce the content of the message
-                     */
-                    $this->parseBody();
-
-                    /**
-                     * Send the email
-                     */
-                    $this->sendPersonalEmail($contact);
-                }
-                break;
-            case false:
-                /*
-                 * Create a new message for everyone
-                 */
-                $this->message = new Message();
-                //$this->message->setEncoding('UTF-8');
-
-                $this->generateMessage();
-
-                //add the CC and BCC to the email
-                $this->setShadowRecipients();
-
-                foreach ($this->email->getTo() as $recipient => $contact) {
-                    /*
-                     * We have a recipient which can be an instance of the contact. Produce a contactService object
-                     * and fill the templateVars with extra options
-                     */
-                    if (!$contact instanceof Contact) {
-                        $contact = new Contact();
-                        $contact->setEmail($recipient);
-                    }
-
-                    /*
-                     * Overrule the to when we are in development
-                     */
-                    if (!\defined("ITEAOFFICE_ENVIRONMENT") || 'development' === ITEAOFFICE_ENVIRONMENT) {
-                        $this->message->addTo('info@japaveh.nl', $contact->getDisplayName());
-                    } else {
-                        $this->message->addTo(
-                            $contact->getEmail(),
-                            null !== $contact->getId() ? $contact->getDisplayName() : null
-                        );
-                    }
-                }
-
-                /*
-                 * We have the contact and can now produce the content of the message
-                 */
-                $this->parseSubject();
-
-                /**
-                 * If we have a deeplink, parse it
-                 */
-                $this->parseDeeplink();
-
-                /**
-                 * If we have an unsubscribe, parse it
-                 */
-                $this->parseUnsubscribe();
-
-                /*
-                 * We have the contact and can now produce the content of the message
-                 */
-                $this->parseBody();
-
-                $this->transport->send($this->message);
-
-                break;
-        }
-    }
-
-    private function generateMessage(): void
-    {
-        /*
-         * Produce a list of template vars
-         */
-        $this->templateVars = array_merge($this->templateVars, $this->config["template_vars"], $this->email->toArray());
-
-        //If not layout, use default
-        if (!$this->email->getHtmlLayoutName()) {
-            $this->email->setHtmlLayoutName($this->config["defaults"]["html_layout_name"]);
-        }
-
-        /*
-         * If not sender, use default
-         */
-        if (null !== $this->email->getFrom()) {
-            $this->message->setFrom($this->email->getFrom(), $this->email->getFromName());
-        } else {
-            $this->message->setFrom($this->config["defaults"]["from_email"], $this->config["defaults"]["from_name"]);
-        }
-    }
-
-    public function setShadowRecipients(): void
-    {
-        //Cc recipients
-        foreach ($this->email->getCc() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $this->message->addCc($contact->getEmail(), $contact);
-            } else {
-                $this->message->addCc($emailAddress);
-            }
-        }
-        //Bcc recipients
-        foreach ($this->email->getBcc() as $emailAddress => $contact) {
-            if ($contact instanceof Contact) {
-                $this->message->addBcc($contact->getEmail(), $contact);
-            } else {
-                $this->message->addBcc($emailAddress);
-            }
-        }
-        if (null !== $this->email->getReplyTo()) {
-            $this->message->addReplyTo($this->email->getReplyTo(), $this->email->getReplyToName());
-        }
-    }
-
-    public function updateTemplateVarsWithContact(Contact $contact): void
-    {
-        $this->templateVars['attention'] = $this->contactService->parseAttention($contact);
-        $this->templateVars['firstname'] = $contact->getFirstName();
-        $this->templateVars['lastname'] = trim(
-            sprintf('%s %s', $contact->getMiddleName(), $contact->getLastName())
+        $this->client = new Client(
+            $config['email']['relay']['username'],
+            $config['email']['relay']['password'],
+            true,
+            ['version' => 'v3.1']
         );
-        $this->templateVars['fullname'] = $contact->parseFullName();
-        $this->templateVars['email'] = $contact->getEmail();
+    }
 
-        if ($this->contactService->hasOrganisation($contact)) {
-            $this->templateVars['country'] = (string)$this->contactService->parseCountry($contact)->getCountry();
-            $this->templateVars['organisation'] = $this->contactService->parseOrganisation($contact);
+    public function setMailing(Mailing $mailing): void
+    {
+        $this->resetEmailContent();
+
+        $this->setSender($mailing->getSender(), $mailing->getContact());
+
+        $this->template = $mailing->getTemplate();
+        $this->emailContent = $mailing->getMailHtml();
+        $this->emailSubject = $mailing->getMailSubject();
+        $this->emailCampaign = $mailing->getMailing();
+    }
+
+    private function resetEmailContent(): void
+    {
+        $this->from = null;
+        $this->attachments = [];
+        $this->inlinedAttachments = [];
+        $this->templateVariables = [];
+        $this->to = [];
+        $this->cc = [];
+        $this->bcc = [];
+        $this->headers = [];
+        $this->textPart = '';
+        $this->htmlPart = '';
+    }
+
+    public function setSender(Sender $sender, Contact $contact): void
+    {
+        switch ($sender->getEmail()) {
+            case '_self':
+                /** @var Contact $contact */
+                if ($this->authenticationService->hasIdentity()) {
+                    $contact = $this->authenticationService->getIdentity();
+                    $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
+
+                    $this->templateVariables['sender_name'] = $contact->parseFullName();
+                    $this->templateVariables['sender_email'] = $contact->getEmail();
+                    $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
+                } else {
+                    $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
+                    $this->templateVariables['sender_name'] = $contact->parseFullName();
+                    $this->templateVariables['sender_email'] = $contact->getEmail();
+                    $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
+                }
+                break;
+            case '_owner':
+                $this->from = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
+
+                $this->templateVariables['sender_name'] = $contact->parseFullName();
+                $this->templateVariables['sender_email'] = $contact->getEmail();
+                $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($contact);
+                break;
+            default:
+                $this->from = new ValueObject\Recipient($sender->getSender(), $sender->getEmail());
+
+                $this->templateVariables['sender_name'] = $sender->getSender();
+                $this->templateVariables['sender_email'] = $sender->getEmail();
+                break;
+        }
+    }
+
+    public function setWebInfo(string $webInfoName): void
+    {
+        $this->resetEmailContent();
+
+        $webInfo = $this->generalService->findWebInfoByInfo($webInfoName);
+
+        if (null === $webInfo) {
+            throw new \InvalidArgumentException(sprintf('The requested template %s cannot be found', $webInfoName));
         }
 
-        $this->templateVars['signature'] = $this->contactService->parseSignature($contact);
-        //Fill the unsubscribe with temp data
-        $this->templateVars['unsubscribe'] = 'http://unsubscribe.example';
-        $this->templateVars['deeplink'] = 'http://deeplink.example';
+        $this->setSender($webInfo->getSender(), $this->authenticationService->getIdentity());
+
+        $this->template = $webInfo->getTemplate();
+        $this->emailContent = $webInfo->getContent();
+        $this->emailSubject = $webInfo->getSubject();
+        $this->emailCampaign = $webInfo->getInfo();
     }
 
-    public function parseSubject(): void
+    public function setSubject(string $subject): void
     {
-        //Transfer first the subject form the email (if any)
-        $this->message->setSubject($this->email->getSubject());
+        $this->emailSubject = $subject;
+    }
 
-        /*
-         * When the subject is empty AND we have a template, simply take the subject of the template
-         */
-        if (null !== $this->template && empty($this->message->getSubject())) {
-            $this->message->setSubject($this->template->getSubject());
+    public function setEmailContent(string $content): void
+    {
+        $this->emailContent = $content;
+    }
+
+    public function cannotRenderMailingReason(Mailing $mailing): ?string
+    {
+        if (null === $mailing->getMailHtml()) {
+            return null;
         }
 
-
-        /*
-         * Go over the templateVars to replace content in the subject
-         */
-        foreach ($this->templateVars as $key => $replace) {
-            /*
-             * Skip the service manager
-             */
-            if ($replace instanceof ServiceManager) {
-                continue;
-            }
-
-            /*
-             * replace the content of the title with the available keys in the template vars
-             */
-            if (!\is_array($replace)) {
-                $this->message->setSubject(str_replace(sprintf("[%s]", $key), $replace, $this->message->getSubject()));
-            }
-        }
-    }
-
-    public function parseDeeplink(): void
-    {
-        $this->templateVars['deeplink'] = $this->email->getDeeplink();
-    }
-
-    public function parseUnsubscribe(): void
-    {
-        $this->templateVars['unsubscribe'] = $this->email->getUnsubscribe();
-    }
-
-    public function parseBody(): bool
-    {
         try {
-            $htmlView = $this->renderer->render(
-                $this->email->getHtmlLayoutName(),
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
+            $message = $this->createTwigTemplate($mailing->getMailHtml());
+
+            $this->renderer->render(
+                $mailing->getTemplate()->getTemplate(),
+                ['content' => $message]
             );
-            $textView = $this->renderer->render(
-                'plain',
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
-            );
+            return null;
         } catch (\Exception $e) {
-            $htmlView = $textView = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
+            return $e->getMessage();
         }
-
-        $this->htmlView = $htmlView;
-
-        //Download the embedded files ad attach them to the mailing
-        $htmlView = $this->embedImagesAsAttachment($htmlView);
-
-        $htmlContent = new MimePart($htmlView);
-        $htmlContent->setType(Mime::TYPE_HTML);
-        $htmlContent->setCharset('UTF-8');
-        $textContent = new MimePart($textView);
-        $textContent->type = 'text/plain';
-        $body = new MimeMessage();
-        $body->setParts(array_merge($this->attachments, [$htmlContent]));
-
-        foreach ($this->headers as $name => $value) {
-            $this->message->getHeaders()->addHeaderLine($name, trim($value));
-        }
-
-        $this->message->setBody($body);
-
-        return true;
     }
 
-    private function personaliseMessage($message): ?string
+    private function createTwigTemplate(string $content): string
     {
         /*
-         * Replace first the content of the mailing with the required (new) short tags
-         */
+        * Replace first the content of the mailing with the required (new) short tags
+        */
         $content = preg_replace(
             [
                 '~\[parent::getContact\(\)::firstname\]~',
@@ -449,20 +256,10 @@ class EmailService extends AbstractService
                 "[organisation]",
                 "[country]",
             ],
-            $message
+            $content
         );
 
-        /**
-         * Create a new instance of the Twig_Environment
-         */
-        $twigRenderer = new \Twig_Environment(new \Twig_Loader_Array(['email' => $this->createTwigTemplate($content)]));
-
-        return $twigRenderer->render('email', $this->templateVars);
-    }
-
-    protected function createTwigTemplate($content): string
-    {
-        return preg_replace(
+        $content = \preg_replace(
             [
                 '~\[(.*?)\]~',
             ],
@@ -471,49 +268,225 @@ class EmailService extends AbstractService
             ],
             $content
         );
+
+        $twigRenderer = new \Twig_Environment(new \Twig_Loader_Array(['email_template' => $content]));
+
+        return $twigRenderer->render('email_template', $this->templateVariables);
     }
 
-    protected function embedImagesAsAttachment(string $htmlView): string
+
+    public function addAttachment(string $contentType, string $fileName, string $content): void
+    {
+        $this->attachments[] = new ValueObject\Attachment(
+            $contentType,
+            $fileName,
+            base64_encode($content)
+        );
+    }
+
+    public function addTo(Contact $contact): void
+    {
+        $this->to[] = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
+
+        $this->updateTemplateVarsWithContact($contact);
+    }
+
+    private function updateTemplateVarsWithContact(Contact $contact): void
+    {
+        $this->templateVariables['attention'] = $this->contactService->parseAttention($contact);
+        $this->templateVariables['firstname'] = $contact->getFirstName();
+        $this->templateVariables['lastname'] = trim(
+            sprintf('%s %s', $contact->getMiddleName(), $contact->getLastName())
+        );
+        $this->templateVariables['fullname'] = $contact->parseFullName();
+        $this->templateVariables['email'] = $contact->getEmail();
+
+        if ($this->contactService->hasOrganisation($contact)) {
+            $this->templateVariables['country'] = (string)$this->contactService->parseCountry($contact)->getCountry();
+            $this->templateVariables['organisation'] = $this->contactService->parseOrganisation($contact);
+        }
+
+        $this->templateVariables['signature'] = $this->contactService->parseSignature($contact);
+    }
+
+    public function addToEmailAddress(string $emailAddress): void
+    {
+        $this->to[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+    }
+
+    public function addCCEmailAddress(string $emailAddress): void
+    {
+        $this->cc[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+    }
+
+    public function addBCCEmailAddress(string $emailAddress): void
+    {
+        $this->bcc[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+    }
+
+    public function setDeeplink(Target $target, Contact $contact, ?string $key = null): void
+    {
+        $deeplink = $this->deeplinkService->createDeeplink(
+            $target,
+            $contact,
+            null,
+            $key
+        );
+
+        $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink, 'link');
+    }
+
+    public function setUnsubscribe(string $unsubscribe): void
+    {
+        $this->templateVariables['unsubscribe'] = $unsubscribe;
+
+        $this->headers[] = new ValueObject\Header('List-Unsubscribe', '<' . trim($unsubscribe) . '>');
+    }
+
+    public function send(): bool
+    {
+        $this->renderEmailContent();
+
+        $emailMessage = new EmailMessage();
+        $emailMessage->setEmailAddress($this->to[0]->toArray()['Email']);
+        $emailMessage->setSubject($this->emailSubject);
+        $emailMessage->setMessage($this->htmlPart);
+        $emailMessage->setAmountOfAttachments(\count($this->attachments));
+
+        //Inject the mailing contact
+        if (null !== $this->mailingContact) {
+            $emailMessage->setMailingContact($this->mailingContact);
+        }
+
+        $this->generalService->save($emailMessage);
+
+        $urlHelper = $this->viewHelperManager->get(Url::class);
+        $link = $urlHelper('email/event', ['customId' => $emailMessage->getIdentifier()]);
+
+        $messages = [];
+
+        $message = new ValueObject\Email(
+            $this->from->toArray(),
+            $this->getTo(),
+            $this->getCC(),
+            $this->getBCC(),
+            $this->emailSubject,
+            $this->textPart,
+            $this->htmlPart,
+            $emailMessage->getIdentifier(),
+            $this->config['deeplink']['serverUrl'] . $link,
+            'enabled',
+            'enabled',
+            $this->emailCampaign,
+            $this->getAttachments(),
+            $this->getInlinedAttachments(),
+            $this->getHeaders()
+        );
+        $messages[] = $message->toArray();
+
+        $body = new ValueObject\Body($messages);
+
+        $response = $this->client->post(Resources::$Email, ['body' => $body->toArray()]);
+
+        if (!$response->success()) {
+            //Update the email message
+            $emailMessage->setLatestEvent('not_sent');
+            $emailMessage->setDateLatestEvent(new \DateTime());
+
+            //Update the mailingContact
+            if (null !== $this->mailingContact) {
+                $this->mailingContact->setDateSent(new \DateTime());
+            }
+
+            $emailEvent = new EmailMessageEvent();
+            $emailEvent->setEmailMessage($emailMessage);
+            $emailEvent->setEvent('not_sent');
+            $emailEvent->setTime(new \DateTime());
+            $emailEvent->setMessageId(0);
+            $emailEvent->setEmail('');
+            $emailEvent->setCampaign('');
+            $emailEvent->setError($response->getReasonPhrase());
+            $this->generalService->save($emailEvent);
+
+            return false;
+        }
+
+        //Update the email message
+        $emailMessage->setLatestEvent('sent_to_mailjet');
+        $emailMessage->setDateLatestEvent(new \DateTime());
+
+        $emailEvent = new EmailMessageEvent();
+        $emailEvent->setEmailMessage($emailMessage);
+        $emailEvent->setEvent('sent_to_mailjet');
+        $emailEvent->setTime(new \DateTime());
+        $emailEvent->setMessageId(0);
+        $emailEvent->setEmail('');
+        $emailEvent->setCampaign('');
+        $emailEvent->setError($response->getReasonPhrase());
+        $this->generalService->save($emailEvent);
+
+        return true;
+    }
+
+    private function renderEmailContent(): void
+    {
+        $message = $this->createTwigTemplate($this->emailContent);
+
+        try {
+            $htmlPart = $this->renderer->render(
+                $this->template->getTemplate(),
+                ['content' => $message]
+            );
+            $textPart = $this->renderer->render(
+                'plain',
+                ['content' => \strip_tags($message)]
+            );
+        } catch (\Exception $e) {
+            $htmlPart = $textPart = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
+        }
+
+        $this->embedImagesAsAttachment($htmlPart);
+
+        $this->htmlPart = $htmlPart;
+        $this->textPart = $textPart;
+
+        foreach ($this->templateVariables as $key => $replace) {
+            //Do not replace booleans or \DateTime instances
+            if (\is_bool($replace) || $replace instanceof \DateTime) {
+                continue;
+            }
+            $this->emailSubject = \str_replace(\sprintf('[%s]', $key), $replace, $this->emailSubject);
+        }
+    }
+
+    private function embedImagesAsAttachment(string &$htmlPart): void
     {
         $matches = [];
-        \preg_match_all("#src=['\"]([^'\"]+)#i", $htmlView, $matches);
+        \preg_match_all("#src=['\"]([^'\"]+)#i", $htmlPart, $matches);
 
         $matches = \array_unique($matches[1]);
 
         if (\count($matches) > 0) {
             foreach ($matches as $key => $filename) {
                 if ($filename && \file_exists($filename)) {
-                    $attachment = $this->addInlineAttachment($filename);
-                    $htmlView = \str_replace($filename, 'cid:' . $attachment->id, $htmlView);
+                    $id = md5_file($filename);
+
+                    $this->inlinedAttachments = new ValueObject\Attachment(
+                        $this->mimeByExtension($filename),
+                        \substr($id, 0, 10),
+                        \file_get_contents($filename),
+                        $id
+                    );
+
+                    $htmlPart = \str_replace($filename, 'cid:' . $id, $htmlPart);
                 }
             }
         }
-
-        return $htmlView;
     }
 
-    public function addInlineAttachment($fileName): MimePart
-    {
-        /**
-         * Create the attachment, only when the file exists
-         */
-        $attachment = new MimePart(file_get_contents($fileName));
-        $attachment->id = 'cid_' . md5_file($fileName);
-        $attachment->type = $this->mimeByExtension($fileName);
-        $attachment->filename = substr(md5($attachment->id), 0, 10);
-        $attachment->disposition = Mime::DISPOSITION_INLINE;
-        // Setting the encoding is recommended for binary data
-        $attachment->encoding = Mime::ENCODING_BASE64;
-
-        $this->attachments[] = $attachment;
-
-        return $attachment;
-    }
-
-    protected function mimeByExtension(string $filename): string
+    private function mimeByExtension(string $filename): string
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-
 
         switch ($extension) {
             case 'gif':
@@ -533,251 +506,108 @@ class EmailService extends AbstractService
         return $type;
     }
 
-    private function sendPersonalEmail(Contact $contact): void
+    private function getTo(): array
     {
-        $emailMessage = new EmailMessage();
+        $to = [];
 
-        if (!$contact->isEmpty()) {
-            $emailMessage->setContact($contact);
-        }
-        $emailMessage->setEmailAddress($contact->getEmail());
-        $ccList = '';
-        foreach ($this->message->getCc() as $cc) {
-            $ccList .= sprintf('%s <%s> ', $cc->getName(), $cc->getEmail());
-        }
-        if (!empty($ccList)) {
-            $emailMessage->setCc($ccList);
-        }
-        $bccList = '';
-        foreach ($this->message->getBcc() as $bcc) {
-            $bccList .= sprintf('%s <%s> ', $bcc->getName(), $bcc->getEmail());
-        }
-        if (!empty($bccList)) {
-            $emailMessage->setBcc($bccList);
-        }
-        $emailMessage->setSubject($this->message->getSubject());
-        $emailMessage->setMessage($this->getHtmlView());
-        $emailMessage->setAmountOfAttachments(\count($this->attachments));
-
-        //Inject the mailing contact
-        if (null !== $this->getMailingContact()) {
-            $emailMessage->setMailingContact($this->getMailingContact());
+        foreach ($this->to as $singleTo) {
+            $toValue = $singleTo->toArray();
+            if (!\defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
+                $toValue['Email'] = 'info@jield.nl';
+            }
+            $to[] = $toValue;
         }
 
-        $this->save($emailMessage);
-
-        //Add the custom header id
-        $this->message->getHeaders()->addHeaderLine('X-MJ-CustomID', trim($emailMessage->getIdentifier()));
-        /**
-         * Send the email
-         */
-        $this->transport->send($this->message);
+        return $to;
     }
 
-    public function getHtmlView(): string
+    private function getCC(): ?array
     {
-        return $this->htmlView;
-    }
-
-    public function getMailingContact(): ?\Mailing\Entity\Contact
-    {
-        return $this->mailingContact;
-    }
-
-    public function setMailingContact(\Mailing\Entity\Contact $mailingContact): EmailService
-    {
-        $this->mailingContact = $mailingContact;
-
-        return $this;
-    }
-
-    public function addAttachment($attachment, string $type = null, string $fileName = null): void
-    {
-        if (!$attachment instanceof MimePart) {
-            $attachment = $this->createAttachment($attachment, $type, $fileName);
+        $cc = [];
+        foreach ($this->cc as $singleCC) {
+            $cc[] = $singleCC->toArray();
         }
 
-        $this->attachments[] = $attachment;
+        return $cc;
     }
 
-    public function createAttachment(string $content, string $type, string $fileName): MimePart
+    private function getBCC(): ?array
     {
-        /**
-         * Create the attachment
-         */
-        $attachment = new MimePart($content);
-        $attachment->type = $type;
-        $attachment->filename = $fileName;
-        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-        // Setting the encoding is recommended for binary data
-        $attachment->encoding = Mime::ENCODING_BASE64;
+        $bcc = [];
+        foreach ($this->bcc as $singleBCC) {
+            $bcc[] = $singleBCC->toArray();
+        }
 
-        return $attachment;
+        return $bcc;
     }
 
-    public function addHeader(string $name, string $content): void
+    private function getAttachments(): ?array
     {
-        $this->headers[$name] = $content;
+        $attachments = [];
+        foreach ($this->attachments as $singleAttachment) {
+            $attachments[] = $singleAttachment->toArray();
+        }
+
+        return $attachments;
+    }
+
+    private function getInlinedAttachments(): ?array
+    {
+        $inlinedAttachments = [];
+        foreach ($this->inlinedAttachments as $singleAttachment) {
+            $inlinedAttachments[] = $singleAttachment->toArray();
+        }
+
+        return $inlinedAttachments;
+    }
+
+    private function getHeaders(): ?array
+    {
+        $headers = [];
+        foreach ($this->headers as $singleHeader) {
+            $headers += $singleHeader->toArray();
+        }
+
+        return $headers;
+    }
+
+    public function setFrom(string $name, string $email): void
+    {
+        $this->from = new ValueObject\Recipient($name, $email);
     }
 
     public function addPublication(Publication $publication): void
     {
-        /*
-         * Create the attachment
-         */
-        $attachment = new MimePart(stream_get_contents($publication->getObject()->first()->getObject()));
-        $attachment->type = $publication->getContentType()->getContentType();
-        $attachment->filename = $publication->getOriginal();
-        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-        // Setting the encoding is recommended for binary data
-        $attachment->encoding = Mime::ENCODING_BASE64;
-
-        $this->attachments[] = $attachment;
+        $this->attachments[] = new ValueObject\Attachment(
+            $publication->getContentType()->getContentType(),
+            $publication->getOriginal(),
+            \base64_encode(\stream_get_contents($publication->getObject()->first()->getObject()))
+        );
     }
 
-    public function setMailing($mailing): void
+    public function setMailingContact(\Mailing\Entity\Contact $mailingContact): void
     {
-        $this->mailing = $mailing;
-
-        if (null === $this->email) {
-            throw new \RuntimeException('The email object is empty. Did you call create() first?');
-        }
-
-        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self, we also add the function __owner for the owner of the mailing
-        switch (true) {
-            case strpos($this->mailing->getSender()->getEmail(), '_self') !== false:
-                /** @var Contact $contact */
-                if ($this->authenticationService->hasIdentity()) {
-                    $contact = $this->authenticationService->getIdentity();
-                    $this->email->setFrom($contact->getEmail());
-                    $this->email->setFromName($contact->getDisplayName());
-                } else {
-                    $this->email->setFrom($this->mailing->getContact()->getEmail());
-                    $this->email->setFromName($this->mailing->getContact()->getDisplayName());
-                }
-
-                break;
-            case strpos($this->mailing->getSender()->getEmail(), '_owner') !== false:
-                $this->email->setFrom($this->mailing->getContact()->getEmail());
-                $this->email->setFromName($this->mailing->getContact()->getDisplayName());
-                break;
-            default:
-                $this->email->setFrom($this->mailing->getSender()->getEmail());
-                $this->email->setFromName($this->mailing->getSender()->getSender());
-                break;
-        }
-
-        $this->email->setSubject($this->mailing->getMailSubject());
-        $this->email->setHtmlLayoutName($this->mailing->getTemplate()->getTemplate());
-        $this->email->setMessage($this->mailing->getMailHtml());
-
-        //Parse some information form the sender in the email;
-        $this->updateTemplateVarsWithSender($this->mailing->getSender());
-
+        $this->mailingContact = $mailingContact;
     }
 
-    public function updateTemplateVarsWithSender(Sender $sender): void
+    public function addTemplateVariables(array $variables): void
     {
-
-        switch (true) {
-            case strpos($this->mailing->getSender()->getEmail(), '_self') !== false:
-                /** @var Contact $contact */
-                if ($this->authenticationService->hasIdentity()) {
-                    $contact = $this->authenticationService->getIdentity();
-                    $this->templateVars['sender_name'] = $contact->parseFullName();
-                    $this->templateVars['sender_email'] = $contact->getEmail();
-                    $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
-                } else {
-                    $contact = $this->mailing->getContact();
-                    $this->templateVars['sender_name'] = $contact->parseFullName();
-                    $this->templateVars['sender_email'] = $contact->getEmail();
-                    $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
-
-                }
-
-                break;
-            case strpos($this->mailing->getSender()->getEmail(), '_owner') !== false:
-                $contact = $this->mailing->getContact();
-                $this->templateVars['sender_name'] = $contact->parseFullName();
-                $this->templateVars['sender_email'] = $contact->getEmail();
-                $this->templateVars['sender_signature'] = $this->contactService->parseSignature($contact);
-                break;
-            default:
-                $this->templateVars['sender_name'] = $sender->getSender();
-                $this->templateVars['sender_email'] = $sender->getEmail();
-                $this->templateVars['sender_signature'] = '';
-                break;
+        foreach ($variables as $variable => $value) {
+            $this->setTemplateVariable($variable, $value);
         }
     }
 
-    public function generatePreview(): string
+    public function setTemplateVariable(string $variable, $value): void
     {
-        $this->updateTemplateVarsWithContact($this->authenticationService->getIdentity());
-
-        if (null === $this->mailing) {
-            throw new \RuntimeException('The mailing object is empty. Did you set the mailing?');
+        if (!\is_bool($value) && !$value instanceof \DateTime) {
+            $value = (string)$value;
         }
 
-        try {
-            return $this->renderer->render(
-                $this->mailing->getTemplate()->getTemplate(),
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
-            );
-        } catch (\Exception $e) {
-            return sprintf('Something went wrong. Error message: %s', $e->getMessage());
-        }
+        $this->templateVariables[$this->underscore($variable)] = $value;
     }
 
-    public function cannotRenderEmailReason(): ?string
+    private function underscore(string $name): string
     {
-        try {
-            $this->renderer->render(
-                $this->mailing->getTemplate()->getTemplate(),
-                array_merge(['content' => $this->personaliseMessage($this->email->getMessage())], $this->templateVars)
-            );
-
-            return null;
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    public function setTemplate(string $templateName): EmailService
-    {
-        $this->template = $this->generalService->findWebInfoByInfo($templateName);
-
-        if (null === $this->template) {
-            throw new \InvalidArgumentException(sprintf('There is no no template with info "%s"', $templateName));
-        }
-
-        if (null === $this->email) {
-            throw new \RuntimeException('The email object is empty. Did you call create() first?');
-        }
-
-        $this->email->setMessage($this->createTwigTemplate($this->template->getContent()));
-        $this->email->setSubject($this->template->getSubject());
-
-        //Inject the sender
-        //There is a special case when the mail is sent on behalf of the user. The sender is then called _self, we also add the function __owner for the owner of the mailing
-        switch (true) {
-            case strpos($this->template->getSender()->getEmail(), '_self') !== false:
-                $this->email->setFrom($this->authenticationService->getIdentity()->getEmail());
-                $this->email->setFromName($this->authenticationService->getIdentity()->getDisplayName());
-                break;
-            default:
-                $this->email->setFrom($this->template->getSender()->getEmail());
-                $this->email->setFromName($this->template->getSender()->getSender());
-                break;
-        }
-
-        $this->email->setHtmlLayoutName($this->template->getTemplate()->getTemplate());
-
-
-        return $this;
-    }
-
-    public function getMessage(): Message
-    {
-        return $this->message;
+        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
     }
 }

@@ -35,9 +35,7 @@ class EmailMessageEvent extends AbstractEntity
     private $id;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\EmailMessage", inversedBy="event", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="email_message_id", referencedColumnName="email_message_id")
-     * })
      *
      * @var \General\Entity\EmailMessage
      */

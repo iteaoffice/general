@@ -41,28 +41,20 @@ class WebInfoController extends AbstractActionController
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
     /**
      * @var EmailService
      */
-    protected $emailService;
+    private $emailService;
 
-    /**
-     * WebInfoController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     * @param EmailService        $emailService
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -75,18 +67,13 @@ class WebInfoController extends AbstractActionController
         $this->emailService = $emailService;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getFilter();
         $contactQuery = $this->generalService->findFiltered(WebInfo::class, $filterPlugin->getFilter());
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
+        $paginator = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
@@ -105,9 +92,6 @@ class WebInfoController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         /** @var WebInfo $webInfo */
@@ -117,27 +101,31 @@ class WebInfoController extends AbstractActionController
         }
 
         if ($this->getRequest()->isPost()) {
-            $this->flashMessenger()->setNamespace('info')
-                ->addMessage(
+            $this->emailService->setWebInfo($webInfo->getInfo());
+            $this->emailService->addTo($this->identity());
+            $this->emailService->setFrom($this->identity()->parseFullName(), $this->identity()->getEmail());
+            $this->emailService->setTemplateVariable('site', ITEAOFFICE_HOST);
+
+            if ($this->emailService->send()) {
+                $this->flashMessenger()->addSuccessMessage(
                     sprintf(
                         $this->translator->translate("txt-test-mail-of-web-info-%s-has-been-send-successfully"),
                         $webInfo->getInfo()
                     )
                 );
-            $email = $this->emailService->create();
-            $this->emailService->setTemplate($webInfo->getInfo());
-            $email->addTo($this->identity());
-            $this->emailService->send();
+            } else {
+                $this->flashMessenger()->addErrorMessage(
+                    sprintf(
+                        $this->translator->translate("txt-test-mail-of-web-info-%s-has-not-been-sent"),
+                        $webInfo->getInfo()
+                    )
+                );
+            }
         }
 
         return new ViewModel(['webInfo' => $webInfo]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -177,9 +165,6 @@ class WebInfoController extends AbstractActionController
         return new ViewModel(['form' => $form, 'fullVersion' => true]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         /** @var WebInfo $webInfo */

@@ -52,9 +52,7 @@ class EmailMessage extends AbstractEntity
     private $dateCreated;
     /**
      * @ORM\ManyToOne(targetEntity="Contact\Entity\Contact", inversedBy="emailMessage", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="contact_id", nullable=true)
-     * })
      * @Annotation\Exclude()
      *
      * @var \Contact\Entity\Contact|null
@@ -62,9 +60,7 @@ class EmailMessage extends AbstractEntity
     private $contact;
     /**
      * @ORM\ManyToOne(targetEntity="Mailing\Entity\Contact", inversedBy="emailMessage", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="mailing_contact_id", referencedColumnName="mailing_contact_id", nullable=true)
-     * })
      * @Annotation\Exclude()
      *
      * @var \Mailing\Entity\Contact|null
@@ -193,7 +189,7 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getIdentifier()
     {

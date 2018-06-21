@@ -30,21 +30,11 @@ use Project\Entity\Result\Result;
  */
 class GeneralService extends AbstractService
 {
-    /**
-     * @param string $entity
-     * @param string $docRef
-     *
-     * @return null|AbstractEntity
-     */
     public function findEntityByDocRef(string $entity, string $docRef): ?AbstractEntity
     {
         return $this->entityManager->getRepository($entity)->findOneBy(['docRef' => $docRef]);
     }
 
-    /**
-     * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     */
     public function truncateLog(): void
     {
         /** @var Repository\Log $repository */
@@ -62,12 +52,6 @@ class GeneralService extends AbstractService
             ->findBy([], ['challenge' => 'ASC']);
     }
 
-    /**
-     * @param Entity\Currency $currency
-     * @param \DateTime|null  $dateTime
-     *
-     * @return Entity\ExchangeRate|null
-     */
     public function findActiveExchangeRate(Entity\Currency $currency, \DateTime $dateTime = null): ?Entity\ExchangeRate
     {
         if (null === $dateTime) {
@@ -86,11 +70,6 @@ class GeneralService extends AbstractService
         return null;
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return null|Entity\EmailMessage
-     */
     public function findEmailMessageByIdentifier(string $identifier): ?Entity\EmailMessage
     {
         return $this->entityManager->getRepository(Entity\EmailMessage::class)
@@ -141,58 +120,27 @@ class GeneralService extends AbstractService
         return $repository->findItac();
     }
 
-    /**
-     * @param string $iso3
-     *
-     * @return null|Entity\Country
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function findCountryByIso3($iso3): ?Entity\Country
+    public function findCountryByIso3(string $iso3): ?Entity\Country
     {
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['iso3' => strtoupper($iso3)]);
     }
 
-    /**
-     * @param $gender
-     *
-     * @return null|Entity\Gender
-     */
-    public function findGenderByGender($gender): ?Entity\Gender
+    public function findGenderByGender(string $gender): ?Entity\Gender
     {
         return $this->entityManager->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
     }
 
-    /**
-     * @param $title
-     *
-     * @return null|Entity\Title
-     */
-    public function findTitleByTitle($title): ?Entity\Title
+    public function findTitleByTitle(string $title): ?Entity\Title
     {
         return $this->entityManager->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return null|Entity\Country
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function findCountryByName($name): ?Entity\Country
+    public function findCountryByName(string $name): ?Entity\Country
     {
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['country' => $name]);
     }
 
-    /**
-     * @param $cd
-     *
-     * @return null|Entity\Country
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function findCountryByCD($cd): ?Entity\Country
+    public function findCountryByCD(string $cd): ?Entity\Country
     {
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
     }
@@ -200,11 +148,10 @@ class GeneralService extends AbstractService
     /**
      * @param Meeting $meeting
      *
-     * @return array
+     * @return Entity\Country[]
      */
     public function findCountriesByMeeting(Meeting $meeting): array
     {
-        /** @var Repository\Country $repository */
         $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountriesByMeeting($meeting);
@@ -275,22 +222,12 @@ class GeneralService extends AbstractService
         return $repository->findCountryByEvaluationTypeAndCall($type, $call);
     }
 
-    /**
-     * @param $info
-     *
-     * @return Entity\WebInfo|null
-     */
-    public function findWebInfoByInfo($info): ?Entity\WebInfo
+    public function findWebInfoByInfo(string $info): ?Entity\WebInfo
     {
         return $this->entityManager->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
     }
 
-    /**
-     * @param $contentTypeName
-     *
-     * @return Entity\ContentType
-     */
-    public function findContentTypeByContentTypeName($contentTypeName): Entity\ContentType
+    public function findContentTypeByContentTypeName(string $contentTypeName): Entity\ContentType
     {
         /** @var Entity\ContentType $entity */
         $contentType = $this->entityManager->getRepository(Entity\ContentType::class)
@@ -307,31 +244,16 @@ class GeneralService extends AbstractService
         return $contentType;
     }
 
-    /**
-     * @param Entity\Currency $currency
-     *
-     * @return bool
-     */
     public function canDeleteCurrency(Entity\Currency $currency): bool
     {
         return $currency->getContract()->isEmpty();
     }
 
-    /**
-     * @param $id
-     *
-     * @return \General\Entity\Challenge
-     */
-    public function findChallengeById($id): Entity\Challenge
+    public function findChallengeById(int $id): Entity\Challenge
     {
         return $this->entityManager->getRepository(Entity\Challenge::class)->find($id);
     }
 
-    /**
-     * @param Call $call
-     *
-     * @return array
-     */
     public function findChallengesByCall(Call $call): array
     {
         $challenges = [];
@@ -353,11 +275,6 @@ class GeneralService extends AbstractService
         return $challenges;
     }
 
-    /**
-     * @param Result $result
-     *
-     * @return array|Entity\Challenge[]
-     */
     public function parseChallengesByResult(Result $result): array
     {
         $challenges = [];

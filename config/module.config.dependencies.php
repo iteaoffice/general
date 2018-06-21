@@ -20,6 +20,7 @@ namespace General;
 use Contact\Service\ContactService;
 use Content\Navigation\Service\UpdateNavigationService;
 use Content\Service\ArticleService;
+use Deeplink\Service\DeeplinkService;
 use Doctrine\ORM\EntityManager;
 use General\Service\EmailService;
 use General\Service\FormService;
@@ -67,9 +68,7 @@ return [
         ],
         Controller\EmailController::class         => [
             GeneralService::class,
-            FormService::class,
-            EntityManager::class,
-            TranslatorInterface::class
+            EntityManager::class
         ],
         Controller\ExchangeRateController::class  => [
             GeneralService::class,
@@ -124,9 +123,10 @@ return [
             'Config',
             ContactService::class,
             GeneralService::class,
+            DeeplinkService::class,
             AuthenticationService::class,
-            EntityManager::class,
-            TwigRenderer::class
+            TwigRenderer::class,
+            'ViewHelperManager'
         ],
         Service\GeneralService::class             => [
             EntityManager::class

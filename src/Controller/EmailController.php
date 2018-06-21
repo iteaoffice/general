@@ -19,9 +19,7 @@ use General\Controller\Plugin\GetFilter;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
 use General\Form\EmailFilter;
-use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
@@ -41,44 +39,20 @@ class EmailController extends AbstractActionController
     /**
      * @var GeneralService
      */
-    protected $generalService;
-    /**
-     * @var FormService
-     */
-    protected $formService;
+    private $generalService;
     /**
      * @var EntityManager
      */
-    protected $entityManager;
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    private $entityManager;
 
-    /**
-     * EmailController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param EntityManager       $entityManager
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
-        FormService $formService,
-        EntityManager $entityManager,
-        TranslatorInterface $translator
+        EntityManager $entityManager
     ) {
         $this->generalService = $generalService;
-        $this->formService = $formService;
         $this->entityManager = $entityManager;
-        $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -105,9 +79,6 @@ class EmailController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $emailMessage = $this->generalService->find(EmailMessage::class, (int)$this->params('id'));
@@ -119,67 +90,61 @@ class EmailController extends AbstractActionController
     }
 
 
-    /**
-     * @return JsonModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function eventAction(): JsonModel
     {
-        $data = Json::decode($this->getRequest()->getContent());
+        $events = Json::decode($this->getRequest()->getContent());
 
-        if (!isset($data->CustomID)) {
-            return new JsonModel();
-        }
+        foreach ($events as $data) {
 
-        /**
-         * Try to find the email message, if this cannot be found, short circuit it
-         */
-        $emailMessage = $this->generalService->findEmailMessageByIdentifier($data->CustomID);
-        if (null === $emailMessage) {
-            return new JsonModel();
-        }
+            /**
+             * Try to find the email message, if this cannot be found, short circuit it
+             */
+            $emailMessage = $this->generalService->findEmailMessageByIdentifier($data->CustomID);
+            if (null === $emailMessage) {
+                return new JsonModel();
+            }
 
-        //Create a new EmailEvent
-        $emailMessageEvent = new EmailMessageEvent();
-        $emailMessageEvent->setEmail($data->email);
+            //Create a new EmailEvent
+            $emailMessageEvent = new EmailMessageEvent();
+            $emailMessageEvent->setEmail($data->email);
 
-        $dateTime = new \DateTime();
-        $emailMessageEvent->setTime($dateTime->setTimestamp($data->time));
-        $emailMessageEvent->setEmailMessage($emailMessage);
-        $emailMessageEvent->setEvent($data->event);
-        $emailMessageEvent->setMessageId($data->MessageID);
-        if (isset($data->customcampaign)) {
-            $emailMessageEvent->setCampaign($data->customcampaign);
-        }
-        if (isset($data->smtp_reply)) {
-            $emailMessageEvent->setSmtpReply($data->smtp_reply);
-        }
-        if (isset($data->url)) {
-            $emailMessageEvent->setUrl($data->url);
-        }
-        if (isset($data->ip)) {
-            $emailMessageEvent->setIp($data->ip);
-        }
-        if (isset($data->agent)) {
-            $emailMessageEvent->setAgent($data->agent);
-        }
-        if (isset($data->error)) {
-            $emailMessageEvent->setError($data->error);
-        }
-        if (isset($data->error_related_to)) {
-            $emailMessageEvent->setErrorRelatedTo($data->error_related_to);
-        }
-        if (isset($data->source)) {
-            $emailMessageEvent->setSource($data->source);
-        }
+            $dateTime = new \DateTime();
+            $emailMessageEvent->setTime($dateTime->setTimestamp($data->time));
+            $emailMessageEvent->setEmailMessage($emailMessage);
+            $emailMessageEvent->setEvent($data->event);
+            $emailMessageEvent->setMessageId($data->MessageID);
+            if (isset($data->customcampaign)) {
+                $emailMessageEvent->setCampaign($data->customcampaign);
+            }
+            if (isset($data->smtp_reply)) {
+                $emailMessageEvent->setSmtpReply($data->smtp_reply);
+            }
+            if (isset($data->url)) {
+                $emailMessageEvent->setUrl($data->url);
+            }
+            if (isset($data->ip)) {
+                $emailMessageEvent->setIp($data->ip);
+            }
+            if (isset($data->agent)) {
+                $emailMessageEvent->setAgent($data->agent);
+            }
+            if (isset($data->error)) {
+                $emailMessageEvent->setError($data->error);
+            }
+            if (isset($data->error_related_to)) {
+                $emailMessageEvent->setErrorRelatedTo($data->error_related_to);
+            }
+            if (isset($data->source)) {
+                $emailMessageEvent->setSource($data->source);
+            }
 
-        $this->generalService->save($emailMessageEvent);
+            $this->generalService->save($emailMessageEvent);
 
-        //Store the latest status in the emailMessage
-        $emailMessage->setLatestEvent($data->event);
-        $emailMessage->setDateLatestEvent(new \DateTime());
-        $this->generalService->save($emailMessage);
+            //Store the latest status in the emailMessage
+            $emailMessage->setLatestEvent($data->event);
+            $emailMessage->setDateLatestEvent(new \DateTime());
+            $this->generalService->save($emailMessage);
+        }
 
         return new JsonModel();
     }

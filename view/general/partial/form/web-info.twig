@@ -27,7 +27,7 @@
 
 {{ form().closeTag()|raw }}
 
-{% do headScript().appendFile("//cdn.tinymce.com/4/tinymce.min.js",'text/javascript') %}
+{% do headScript().appendFile("//cloud.tinymce.com/stable/tinymce.min.js?apiKey=ldq46yojrss1zuwb8q3962xgchritqxw8z0sxhivdmd0zbdk",'text/javascript') %}
 
 <script type="text/javascript">
     tinymce.init({
@@ -38,9 +38,8 @@
             "save table contextmenu directionality emoticons template paste textcolor"
         ],
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
-        forced_root_block: false,
         force_br_newlines: true,
-        relative_urls: false,
+        relative_urls: true,
         remove_script_host: false,
         document_base_url: "{{ serverUrl() }}",
         entity_encoding: "raw",
