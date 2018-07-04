@@ -10,8 +10,6 @@
 
 declare(strict_types=1);
 
-namespace News;
-
 return [
     'bjyauthorize' => [
         /* Currently, only controller and route guards exist

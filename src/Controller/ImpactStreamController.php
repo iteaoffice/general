@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace General\Controller;
 
+use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Entity\Result\Result;
 use Project\Search\Service\ImpactStreamSearchService;
@@ -38,31 +39,24 @@ class ImpactStreamController extends AbstractActionController
     /**
      * @var array
      */
-    protected $challenge = [];
+    private $challenge = [];
     /**
      * @var array
      */
-    protected $result = [];
+    private $result = [];
     /**
      * @var ProjectService
      */
-    protected $projectService;
+    private $projectService;
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var ImpactStreamSearchService
      */
-    protected $impactStreamSearchService;
+    private $impactStreamSearchService;
 
-    /**
-     * ImpactStreamController constructor.
-     *
-     * @param ProjectService            $projectService
-     * @param GeneralService            $generalService
-     * @param ImpactStreamSearchService $impactStreamSearchService
-     */
     public function __construct(
         ProjectService $projectService,
         GeneralService $generalService,
@@ -73,11 +67,6 @@ class ImpactStreamController extends AbstractActionController
         $this->impactStreamSearchService = $impactStreamSearchService;
     }
 
-
-    /**
-     * @return string|ViewModel
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
     public function downloadSingleAction()
     {
         /** @var Result $result */
@@ -100,6 +89,7 @@ class ImpactStreamController extends AbstractActionController
      */
     public function parsePDFsByResult(Result $result): void
     {
+        /** @var Challenge $challenge */
         foreach ($this->generalService->parseChallengesByResult($result) as $challenge) {
             if (!array_key_exists(
                 'challenge_' . $challenge->getSequence(),

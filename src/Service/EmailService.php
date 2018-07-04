@@ -162,8 +162,8 @@ class EmailService
                 if ($this->authenticationService->hasIdentity()) {
                     $owner = $this->authenticationService->getIdentity();
                 }
+                // no break
             case '_owner':
-
                 if (null === $owner) {
                     throw new \InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
                 }
