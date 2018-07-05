@@ -39,23 +39,16 @@ class CountryController extends AbstractActionController
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * CountryController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -66,10 +59,6 @@ class CountryController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -96,9 +85,6 @@ class CountryController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $country = $this->generalService->find(Country::class, (int)$this->params('id'));
@@ -109,11 +95,6 @@ class CountryController extends AbstractActionController
         return new ViewModel(['country' => $country]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -144,9 +125,6 @@ class CountryController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         /** @var Country $country */
@@ -184,12 +162,9 @@ class CountryController extends AbstractActionController
         return new ViewModel(['form' => $form, 'country' => $country]);
     }
 
-    /**
-     * @return Response
-     */
     public function codeAction(): Response
     {
-        $country = $this->generalService->findCountryByCD($this->params('cd'));
+        $country = $this->generalService->findCountryByCD((string)$this->params('cd'));
 
         if (null !== $country) {
             return $this->redirect()->toRoute(
