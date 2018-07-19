@@ -17,11 +17,10 @@ declare(strict_types=1);
 
 namespace General\Service;
 
-use General\Entity\AbstractEntity;
-use Contact\Entity;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use General\Entity\AbstractEntity;
 
 /**
  * Class AbstractService
@@ -80,55 +79,34 @@ abstract class AbstractService
         return $this->entityManager->getRepository($entity)->find($id);
     }
 
-    /**
-     * @param string $entity
-     * @param string $column
-     * @param string $name
-     *
-     * @return null|AbstractEntity
-     */
     public function findByName(string $entity, string $column, string $name): ?AbstractEntity
     {
         return $this->entityManager->getRepository($entity)->findOneBy([$column => $name]);
     }
 
-    /**
-     * @param AbstractEntity $entity
-     *
-     * @return AbstractEntity
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function save(AbstractEntity $entity): AbstractEntity
     {
         if (!$this->entityManager->contains($entity)) {
             $this->entityManager->persist($entity);
         }
 
-
         $this->entityManager->flush();
         return $entity;
     }
 
-    /**
-     * @param AbstractEntity $abstractEntity
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function delete(AbstractEntity $abstractEntity): void
     {
         $this->entityManager->remove($abstractEntity);
         $this->entityManager->flush();
     }
 
-    /**
-     * @param AbstractEntity $abstractEntity
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
     public function refresh(AbstractEntity $abstractEntity): void
     {
         $this->entityManager->refresh($abstractEntity);
+    }
+
+    public function detach(AbstractEntity $abstractEntity): void
+    {
+        $this->entityManager->detach($abstractEntity);
     }
 }

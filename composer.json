@@ -24,7 +24,7 @@
     "php": "^7.2",
     "zendframework/zendframework": "^3.1",
     "doctrine/doctrine-orm-module": "^2.1.0",
-    "zendframework/zend-code": "dev-master"
+    "mailjet/mailjet-apiv3-php": "dev-master"
   },
   "require-dev": {
     "iteaoffice/testing": "dev-master",
