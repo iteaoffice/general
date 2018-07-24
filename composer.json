@@ -22,9 +22,9 @@
   "minimum-stability": "dev",
   "require": {
     "php": "^7.2",
-    "zendframework/zendframework": "^3.1",
-    "doctrine/doctrine-orm-module": "^2.1.0",
-    "mailjet/mailjet-apiv3-php": "dev-master"
+    "zendframework/zend-mvc": "^3.0.1",
+    "doctrine/common": "2.9.*",
+    "mailjet/mailjet-apiv3-php": "1.2.*"
   },
   "require-dev": {
     "iteaoffice/testing": "dev-master",

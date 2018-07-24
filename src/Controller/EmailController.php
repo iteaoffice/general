@@ -96,12 +96,16 @@ class EmailController extends AbstractActionController
 
         foreach ($events as $data) {
 
+            if (!isset($data->CustomID)) {
+                continue;
+            }
+
             /**
              * Try to find the email message, if this cannot be found, short circuit it
              */
             $emailMessage = $this->generalService->findEmailMessageByIdentifier($data->CustomID);
             if (null === $emailMessage) {
-                return new JsonModel();
+                continue;
             }
 
             //Create a new EmailEvent

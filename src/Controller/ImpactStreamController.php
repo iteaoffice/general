@@ -306,8 +306,8 @@ class ImpactStreamController extends AbstractActionController
     {
         $resultIds = explode(',', $this->getRequest()->getQuery('result'));
 
-        if (\count($resultIds) === 0) {
-            return '';
+        if ('' === $this->getRequest()->getQuery('result') || \count($resultIds) === 0) {
+            return $this->notFoundAction();
         }
 
         foreach ($resultIds as $resultId) {
