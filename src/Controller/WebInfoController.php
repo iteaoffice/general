@@ -104,7 +104,7 @@ class WebInfoController extends AbstractActionController
             $this->emailService->setWebInfo($webInfo->getInfo());
             $this->emailService->addTo($this->identity());
             $this->emailService->setFrom($this->identity()->parseFullName(), $this->identity()->getEmail());
-            $this->emailService->setTemplateVariable('site', ITEAOFFICE_HOST);
+            $this->emailService->setTemplateVariable('site', \defined('ITEAOFFICE_HOST') ? ITEAOFFICE_HOST : 'test');
 
             if ($this->emailService->send()) {
                 $this->flashMessenger()->addSuccessMessage(

@@ -23,6 +23,7 @@
   "require": {
     "php": "^7.2",
     "zendframework/zend-mvc": "^3.0.1",
+    "zendframework/zend-permissions-acl": "2.7.*",
     "doctrine/common": "2.9.*",
     "mailjet/mailjet-apiv3-php": "1.2.*"
   },

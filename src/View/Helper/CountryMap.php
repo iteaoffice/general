@@ -16,6 +16,10 @@ namespace General\View\Helper;
 use General\Entity\Country;
 use General\Service\GeneralService;
 
+if (!\defined('ITEAOFFICE_HOST')) {
+    \define('ITEAOFFICE_HOST', 'test');
+}
+
 /**
  * Create a country map based on a list of countries.
  *
