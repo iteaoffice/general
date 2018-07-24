@@ -37,7 +37,7 @@
     "iteaoffice/testing": "1.1.*",
     "iteaoffice/affiliation": "^3.1",
     "iteaoffice/search": "^1.0",
-    "iteaoffice/project":"^3.0"
+    "iteaoffice/project": "^3.1"
   },
   "autoload": {
     "psr-4": {
