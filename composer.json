@@ -28,6 +28,7 @@
     "zendframework/zend-mvc-console": "^1.2.0",
     "zendframework/zend-mvc-plugins": "^1.0.1",
     "zendframework/zend-navigation": "^2.9.0",
+    "zendframework/zend-math": "^3.1.1",
     "kokspflanze/bjy-authorize": "^1.6.2",
     "doctrine/doctrine-orm-module": "@stable",
     "mailjet/mailjet-apiv3-php": "1.2.*"
