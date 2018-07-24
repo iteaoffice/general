@@ -95,7 +95,6 @@ class EmailController extends AbstractActionController
         $events = Json::decode($this->getRequest()->getContent());
 
         foreach ($events as $data) {
-
             if (!isset($data->CustomID)) {
                 continue;
             }
