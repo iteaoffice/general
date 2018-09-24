@@ -33,25 +33,13 @@ use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
  */
 class ImageController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
     protected $generalService;
 
-    /**
-     * ImageController constructor.
-     *
-     * @param GeneralService $generalService
-     */
     public function __construct(GeneralService $generalService)
     {
         $this->generalService = $generalService;
     }
 
-
-    /**
-     * @return Response
-     */
     public function flagAction(): Response
     {
         /** @var Response $response */
@@ -75,9 +63,6 @@ class ImageController extends AbstractActionController
         return $response;
     }
 
-    /**
-     * @return Response
-     */
     public function challengeIconAction(): Response
     {
         /** @var Response $response */
@@ -101,9 +86,6 @@ class ImageController extends AbstractActionController
         return $response;
     }
 
-    /**
-     * @return Response
-     */
     public function challengeImageAction(): Response
     {
         /** @var Response $response */

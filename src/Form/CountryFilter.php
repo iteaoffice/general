@@ -18,13 +18,11 @@ use Zend\Form\Form;
 
 /**
  * Class CountryFilter
+ *
  * @package General\Form
  */
 class CountryFilter extends Form
 {
-    /**
-     * CountryFilter constructor.
-     */
     public function __construct()
     {
         parent::__construct();

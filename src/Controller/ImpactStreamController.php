@@ -256,7 +256,7 @@ class ImpactStreamController extends AbstractActionController
         ];
 
 
-        $this->impactStreamSearchService->setSearch($data['query'], $searchFields, 'result', 'desc');
+        $this->impactStreamSearchService->setSearch($data['query'] ?? '', $searchFields, 'result', 'desc');
 
         if (isset($data['facet'])) {
             foreach ($data['facet'] as $facetField => $values) {
@@ -273,7 +273,12 @@ class ImpactStreamController extends AbstractActionController
         }
 
 
-        $paginator = new Paginator(new SolariumPaginator($this->impactStreamSearchService->getSolrClient(), $this->impactStreamSearchService->getQuery()));
+        $paginator = new Paginator(
+            new SolariumPaginator(
+                $this->impactStreamSearchService->getSolrClient(),
+                $this->impactStreamSearchService->getQuery()
+            )
+        );
         $paginator::setDefaultItemCountPerPage(2000);
         $paginator->setCurrentPageNumber(1);
 
