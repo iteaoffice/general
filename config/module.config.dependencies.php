@@ -17,18 +17,20 @@ declare(strict_types=1);
 
 namespace General;
 
+use Affiliation\Service\AffiliationService;
 use Contact\Service\ContactService;
-use Content\Navigation\Service\UpdateNavigationService;
 use Content\Service\ArticleService;
 use Deeplink\Service\DeeplinkService;
 use Doctrine\ORM\EntityManager;
+use General\Search\Service\CountrySearchService;
+use General\Service\CountryService;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
 use Project\Options\ModuleOptions;
-use Project\Search\Service\ImpactStreamSearchService;
+use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
 use Zend\I18n\Translator\TranslatorInterface;
@@ -37,89 +39,89 @@ use ZfcTwig\View\TwigRenderer;
 
 return [
     ConfigAbstractFactory::class => [
-        Controller\Plugin\GetFilter::class        => [
+        Controller\Plugin\GetFilter::class         => [
             'Application'
         ],
-        Controller\ChallengeController::class     => [
+        Controller\ChallengeController::class      => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class,
             EntityManager::class
         ],
-        Controller\ChallengeTypeController::class => [
+        Controller\ChallengeTypeController::class  => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\ContentTypeController::class   => [
+        Controller\ContentTypeController::class    => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\CountryController::class       => [
+        Controller\CountryController::class        => [
+            CountryService::class,
+            FormService::class,
+            TranslatorInterface::class
+        ],
+        Controller\CurrencyController::class       => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\CurrencyController::class      => [
-            GeneralService::class,
-            FormService::class,
-            TranslatorInterface::class
-        ],
-        Controller\EmailController::class         => [
+        Controller\EmailController::class          => [
             GeneralService::class,
             EntityManager::class
         ],
-        Controller\ExchangeRateController::class  => [
+        Controller\ExchangeRateController::class   => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\GenderController::class        => [
+        Controller\GenderController::class         => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\ImageController::class         => [
+        Controller\ImageController::class          => [
             GeneralService::class,
         ],
-        Controller\ImpactStreamController::class  => [
+        Controller\ImpactStreamController::class   => [
             ProjectService::class,
             GeneralService::class,
-            ImpactStreamSearchService::class
+            ResultSearchService::class
         ],
-        Controller\LogController::class           => [
+        Controller\LogController::class            => [
             GeneralService::class,
             EntityManager::class,
             TranslatorInterface::class
         ],
-        Controller\PasswordController::class      => [
+        Controller\PasswordController::class       => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\TitleController::class         => [
+        Controller\TitleController::class          => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\VatController::class           => [
+        Controller\VatController::class            => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\VatTypeController::class       => [
+        Controller\VatTypeController::class        => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\WebInfoController::class       => [
+        Controller\WebInfoController::class        => [
             GeneralService::class,
             FormService::class,
             TranslatorInterface::class,
             EmailService::class
         ],
-        Service\EmailService::class               => [
+        Service\EmailService::class                => [
             'Config',
             ContactService::class,
             GeneralService::class,
@@ -128,64 +130,70 @@ return [
             TwigRenderer::class,
             'ViewHelperManager'
         ],
-        Service\GeneralService::class             => [
+        Service\GeneralService::class              => [
             EntityManager::class
         ],
-        InputFilter\ChallengeFilter::class        => [
+        Service\CountryService::class              => [
+            EntityManager::class,
+            CountrySearchService::class,
+            ProjectService::class,
+            AffiliationService::class
+        ],
+        InputFilter\ChallengeFilter::class         => [
             EntityManager::class
         ],
-        InputFilter\Challenge\TypeFilter::class   => [
+        InputFilter\Challenge\TypeFilter::class    => [
             EntityManager::class
         ],
-        InputFilter\Challenge\TypeFilter::class   => [
+        InputFilter\Challenge\TypeFilter::class    => [
             EntityManager::class
         ],
-        InputFilter\CountryFilter::class          => [
+        InputFilter\CountryFilter::class           => [
             EntityManager::class
         ],
-        InputFilter\GenderFilter::class           => [
+        InputFilter\GenderFilter::class            => [
             EntityManager::class
         ],
-        InputFilter\TitleFilter::class            => [
+        InputFilter\TitleFilter::class             => [
             EntityManager::class
         ],
-        InputFilter\WebInfoFilter::class          => [
+        InputFilter\WebInfoFilter::class           => [
             EntityManager::class
         ],
-        View\Handler\ImpactStreamHandler::class   => [
+        View\Handler\ImpactStreamHandler::class    => [
             'Application',
             'ViewHelperManager',
             TwigRenderer::class,
             AuthenticationService::class,
-            UpdateNavigationService::class,
             TranslatorInterface::class,
-            ImpactStreamSearchService::class,
+            ResultSearchService::class,
             GeneralService::class,
             ProjectService::class
         ],
-        View\Handler\ChallengeHandler::class      => [
+        View\Handler\ChallengeHandler::class       => [
             'Application',
             'ViewHelperManager',
             TwigRenderer::class,
             AuthenticationService::class,
-            UpdateNavigationService::class,
             TranslatorInterface::class,
             GeneralService::class,
             ProjectService::class
         ],
-        View\Handler\CountryHandler::class        => [
+        View\Handler\CountryHandler::class         => [
             'Application',
             'ViewHelperManager',
             TwigRenderer::class,
             AuthenticationService::class,
-            UpdateNavigationService::class,
             TranslatorInterface::class,
             ModuleOptions::class,
-            GeneralService::class,
+            CountryService::class,
             ProjectService::class,
             ProgramService::class,
             OrganisationService::class,
             ArticleService::class
         ],
+        Search\Service\CountrySearchService::class => [
+            'Config'
+        ]
     ]
 ];

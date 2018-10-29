@@ -12,9 +12,8 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Content\Navigation\Service\UpdateNavigationService;
 use General\Service\GeneralService;
-use Project\Search\Service\ImpactStreamSearchService;
+use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
 use Search\Form\SearchResult;
 use Search\Paginator\Adapter\SolariumPaginator;
@@ -27,46 +26,32 @@ use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class ProjectHandler
+ * Class ImpactStreamHandler
  *
- * @package Project\View\Handler
+ * @package General\View\Handler
  */
 final class ImpactStreamHandler extends AbstractHandler
 {
     /**
-     * @var ImpactStreamSearchService
+     * @var ResultSearchService
      */
-    protected $impactStreamSearchService;
+    private $resultSearchService;
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var ProjectService
      */
-    protected $projectService;
+    private $projectService;
 
-    /**
-     * ImpactStreamHandler constructor.
-     *
-     * @param Application               $application
-     * @param HelperPluginManager       $helperPluginManager
-     * @param TwigRenderer              $renderer
-     * @param AuthenticationService     $authenticationService
-     * @param UpdateNavigationService   $updateNavigationService
-     * @param TranslatorInterface       $translator
-     * @param ImpactStreamSearchService $impactStreamSearchService
-     * @param GeneralService            $generalService
-     * @param ProjectService            $projectService
-     */
     public function __construct(
         Application $application,
         HelperPluginManager $helperPluginManager,
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
-        UpdateNavigationService $updateNavigationService,
         TranslatorInterface $translator,
-        ImpactStreamSearchService $impactStreamSearchService,
+        ResultSearchService $resultSearchService,
         GeneralService $generalService,
         ProjectService $projectService
     ) {
@@ -75,21 +60,14 @@ final class ImpactStreamHandler extends AbstractHandler
             $helperPluginManager,
             $renderer,
             $authenticationService,
-            $updateNavigationService,
             $translator
         );
 
-        $this->impactStreamSearchService = $impactStreamSearchService;
+        $this->resultSearchService = $resultSearchService;
         $this->generalService = $generalService;
         $this->projectService = $projectService;
     }
 
-    /**
-     * @param Content $content
-     *
-     * @return null|string
-     * @throws \Exception
-     */
     public function __invoke(Content $content): ?string
     {
         switch ($content->getHandler()->getHandler()) {
@@ -107,9 +85,6 @@ final class ImpactStreamHandler extends AbstractHandler
         }
     }
 
-    /**
-     * @return string
-     */
     public function parseIndex(): string
     {
         //Set the default date on now
@@ -150,9 +125,9 @@ final class ImpactStreamHandler extends AbstractHandler
         ];
 
         if ($this->request->isGet()) {
-            $dateInterval = $this->impactStreamSearchService->parseDateInterval($data);
+            $dateInterval = $this->resultSearchService->parseDateInterval($data);
 
-            $this->impactStreamSearchService->setSearch(
+            $this->resultSearchService->setSearchImpactStream(
                 $data['query'],
                 $searchFields,
                 $data['order'],
@@ -167,7 +142,7 @@ final class ImpactStreamHandler extends AbstractHandler
                         $quotedValues[] = sprintf("\"%s\"", $value);
                     }
 
-                    $this->impactStreamSearchService->addFilterQuery(
+                    $this->resultSearchService->addFilterQuery(
                         $facetField,
                         implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
                     );
@@ -175,16 +150,16 @@ final class ImpactStreamHandler extends AbstractHandler
             }
 
             $form->addSearchResults(
-                $this->impactStreamSearchService->getQuery()->getFacetSet(),
-                $this->impactStreamSearchService->getResultSet()->getFacetSet()
+                $this->resultSearchService->getQuery()->getFacetSet(),
+                $this->resultSearchService->getResultSet()->getFacetSet()
             );
             $form->setData($data);
         }
 
         $paginator = new Paginator(
             new SolariumPaginator(
-                $this->impactStreamSearchService->getSolrClient(),
-                $this->impactStreamSearchService->getQuery()
+                $this->resultSearchService->getSolrClient(),
+                $this->resultSearchService->getQuery()
             )
         );
         $paginator::setDefaultItemCountPerPage(($page === 'all') ? 1000 : 25);

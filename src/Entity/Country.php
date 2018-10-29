@@ -104,7 +104,7 @@ class Country extends AbstractEntity
      * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Eureka
+     * @var \General\Entity\Itac
      */
     private $itac;
     /**
@@ -192,9 +192,6 @@ class Country extends AbstractEntity
      */
     private $contract;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->address = new Collections\ArrayCollection();
@@ -210,55 +207,41 @@ class Country extends AbstractEntity
         $this->contract = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
+    public function isItac(): bool
+    {
+        return null !== $this->itac;
+    }
+
+    public function isEu(): bool
+    {
+        return null !== $this->eu;
+    }
+
+    public function isEureka(): bool
+    {
+        return null !== $this->eureka;
+    }
+
     public function __toString(): string
     {
         return (string)$this->country;
     }
 
-
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $vatCollection
-     */
     public function addVat(Collections\Collection $vatCollection)
     {
         foreach ($vatCollection as $vat) {
@@ -266,11 +249,6 @@ class Country extends AbstractEntity
         }
     }
 
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $vatCollection
-     */
     public function removeVat(Collections\Collection $vatCollection)
     {
         foreach ($vatCollection as $vat) {
@@ -278,17 +256,11 @@ class Country extends AbstractEntity
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getCd()
+    public function getCd(): ?string
     {
         return $this->cd;
     }
 
-    /**
-     * @param string $cd
-     */
     public function setCd($cd)
     {
         $this->cd = $cd;

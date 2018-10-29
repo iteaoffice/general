@@ -12,15 +12,9 @@ declare(strict_types=1);
 
 namespace General\Service;
 
-use Affiliation\Service\AffiliationService;
-use Doctrine\Common\Collections\ArrayCollection;
-use Event\Entity\Meeting\Meeting;
 use General\Entity;
-use General\Entity\AbstractEntity;
 use General\Repository;
 use Program\Entity\Call\Call;
-use Project\Entity\Evaluation;
-use Project\Entity\Project;
 use Project\Entity\Result\Result;
 
 /**
@@ -30,9 +24,9 @@ use Project\Entity\Result\Result;
  */
 class GeneralService extends AbstractService
 {
-    public function findEntityByDocRef(string $entity, string $docRef): ?AbstractEntity
+    public function findChallengeByDocRef(string $docRef): ?Entity\Challenge
     {
-        return $this->entityManager->getRepository($entity)->findOneBy(['docRef' => $docRef]);
+        return $this->entityManager->getRepository(Entity\Challenge::class)->findOneBy(['docRef' => $docRef]);
     }
 
     public function truncateLog(): void
@@ -87,44 +81,6 @@ class GeneralService extends AbstractService
         return $repository->findContentTypeByImage();
     }
 
-    /**
-     * @return Entity\Country[]
-     */
-    public function findActiveCountries(): array
-    {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findActive();
-    }
-
-    /**
-     * @return Entity\Country[]
-     */
-    public function findCountryInProjectLog(): array
-    {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findCountryInProjectLog();
-    }
-
-    /**
-     * @return Entity\Country[]
-     */
-    public function findItacCountries(): array
-    {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findItac();
-    }
-
-    public function findCountryByIso3(string $iso3): ?Entity\Country
-    {
-        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['iso3' => strtoupper($iso3)]);
-    }
-
     public function findGenderByGender(string $gender): ?Entity\Gender
     {
         return $this->entityManager->getRepository(Entity\Gender::class)->findOneBy(['gender' => $gender]);
@@ -133,93 +89,6 @@ class GeneralService extends AbstractService
     public function findTitleByTitle(string $title): ?Entity\Title
     {
         return $this->entityManager->getRepository(Entity\Title::class)->findOneBy(['attention' => $title]);
-    }
-
-    public function findCountryByName(string $name): ?Entity\Country
-    {
-        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['country' => $name]);
-    }
-
-    public function findCountryByCD(string $cd): ?Entity\Country
-    {
-        return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
-    }
-
-    /**
-     * @param Meeting $meeting
-     *
-     * @return Entity\Country[]
-     */
-    public function findCountriesByMeeting(Meeting $meeting): array
-    {
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findCountriesByMeeting($meeting);
-    }
-
-    /**
-     * @param Call $call
-     * @param int  $which
-     *
-     * @return Entity\Country[]
-     */
-    public function findCountryByCall(
-        Call $call,
-        $which = AffiliationService::WHICH_ONLY_ACTIVE
-    ): array {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findCountryByCall($call, $which);
-    }
-
-    /**
-     * @param Project $project
-     * @param int     $which
-     *
-     * @return Entity\Country[]|ArrayCollection;
-     */
-    public function findCountryByProject(
-        Project $project,
-        $which = AffiliationService::WHICH_ONLY_ACTIVE
-    ): ArrayCollection {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return new ArrayCollection($repository->findCountryByProject($project, $which));
-    }
-
-    /**
-     * Returns the country of the project leader (project.contact).
-     *
-     * @param Project $project
-     *
-     * @return null|Entity\Country
-     */
-    public function findCountryOfProjectContact(Project $project): ?Entity\Country
-    {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findCountryOfProjectContact($project);
-    }
-
-    /**
-     * Produce a list of countries active in a call and evaluation type.
-     *
-     * @param Evaluation\Type $type
-     * @param Call|null       $call
-     *
-     * @return Entity\Country[]
-     */
-    public function findCountryByEvaluationTypeAndCall(
-        Evaluation\Type $type,
-        Call $call = null
-    ): array {
-        /** @var Repository\Country $repository */
-        $repository = $this->entityManager->getRepository(Entity\Country::class);
-
-        return $repository->findCountryByEvaluationTypeAndCall($type, $call);
     }
 
     public function findWebInfoByInfo(string $info): ?Entity\WebInfo

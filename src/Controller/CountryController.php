@@ -19,7 +19,7 @@ use General\Controller\Plugin\GetFilter;
 use General\Entity\Country;
 use General\Form\CountryFilter;
 use General\Service\FormService;
-use General\Service\GeneralService;
+use General\Service\CountryService;
 use Zend\Http\Response;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -37,9 +37,9 @@ use Zend\View\Model\ViewModel;
 class CountryController extends AbstractActionController
 {
     /**
-     * @var GeneralService
+     * @var CountryService
      */
-    private $generalService;
+    private $countryService;
     /**
      * @var FormService
      */
@@ -50,11 +50,11 @@ class CountryController extends AbstractActionController
     private $translator;
 
     public function __construct(
-        GeneralService $generalService,
+        CountryService $countryService,
         FormService $formService,
         TranslatorInterface $translator
     ) {
-        $this->generalService = $generalService;
+        $this->countryService = $countryService;
         $this->formService = $formService;
         $this->translator = $translator;
     }
@@ -63,7 +63,7 @@ class CountryController extends AbstractActionController
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getFilter();
-        $contactQuery = $this->generalService->findFiltered(Country::class, $filterPlugin->getFilter());
+        $contactQuery = $this->countryService->findFiltered(Country::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -87,7 +87,7 @@ class CountryController extends AbstractActionController
 
     public function viewAction(): ViewModel
     {
-        $country = $this->generalService->find(Country::class, (int)$this->params('id'));
+        $country = $this->countryService->find(Country::class, (int)$this->params('id'));
         if (null === $country) {
             return $this->notFoundAction();
         }
@@ -112,7 +112,7 @@ class CountryController extends AbstractActionController
                 /* @var $country Country */
                 $country = $form->getData();
 
-                $result = $this->generalService->save($country);
+                $result = $this->countryService->save($country);
                 return $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
@@ -128,7 +128,7 @@ class CountryController extends AbstractActionController
     public function editAction()
     {
         /** @var Country $country */
-        $country = $this->generalService->find(Country::class, (int)$this->params('id'));
+        $country = $this->countryService->find(Country::class, (int)$this->params('id'));
 
         $data = $this->getRequest()->getPost()->toArray();
 
@@ -140,7 +140,7 @@ class CountryController extends AbstractActionController
             }
 
             if (isset($data['delete'])) {
-                $this->generalService->delete($country);
+                $this->countryService->delete($country);
 
                 return $this->redirect()->toRoute('zfcadmin/country/list');
             }
@@ -149,7 +149,7 @@ class CountryController extends AbstractActionController
                 /** @var Country $country */
                 $country = $form->getData();
 
-                $country = $this->generalService->save($country);
+                $country = $this->countryService->save($country);
                 return $this->redirect()->toRoute(
                     'zfcadmin/country/view',
                     [
@@ -164,7 +164,7 @@ class CountryController extends AbstractActionController
 
     public function codeAction(): Response
     {
-        $country = $this->generalService->findCountryByCD((string)$this->params('cd'));
+        $country = $this->countryService->findCountryByCD((string)$this->params('cd'));
 
         if (null !== $country) {
             return $this->redirect()->toRoute(

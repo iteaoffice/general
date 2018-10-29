@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Content\Navigation\Service\UpdateNavigationService;
 use Zend\Authentication\AuthenticationService;
 use Zend\Http\Request;
 use Zend\Http\Response;
@@ -62,36 +61,20 @@ abstract class AbstractHandler extends AbstractHelper
      */
     protected $authenticationService;
     /**
-     * @var UpdateNavigationService
-     */
-    protected $updateNavigationService;
-    /**
      * @var TranslatorInterface
      */
     protected $translator;
 
-    /**
-     * AbstractHandler constructor.
-     *
-     * @param Application             $application
-     * @param HelperPluginManager     $helperPluginManager
-     * @param TwigRenderer            $renderer
-     * @param AuthenticationService   $authenticationService
-     * @param UpdateNavigationService $updateNavigationService
-     * @param TranslatorInterface     $translator
-     */
     public function __construct(
         Application $application,
         HelperPluginManager $helperPluginManager,
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
-        UpdateNavigationService $updateNavigationService,
         TranslatorInterface $translator
     ) {
         $this->helperPluginManager = $helperPluginManager;
         $this->renderer = $renderer;
         $this->authenticationService = $authenticationService;
-        $this->updateNavigationService = $updateNavigationService;
         $this->translator = $translator;
 
         //Take the last remaining properties from the application
@@ -100,11 +83,6 @@ abstract class AbstractHandler extends AbstractHelper
         $this->request = $application->getMvcEvent()->getRequest();
     }
 
-    /**
-     * @param Content $content
-     *
-     * @return array
-     */
     public function extractContentParam(Content $content): array
     {
         $params = [

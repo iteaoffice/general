@@ -12,12 +12,11 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Content\Navigation\Service\UpdateNavigationService;
 use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Country;
-use General\Service\GeneralService;
+use General\Service\CountryService;
 use General\View\Helper\CountryLink;
 use General\View\Helper\CountryMap;
 use Organisation\Service\OrganisationService;
@@ -44,9 +43,9 @@ final class CountryHandler extends AbstractHandler
      */
     protected $moduleOptions;
     /**
-     * @var GeneralService
+     * @var CountryService
      */
-    protected $generalService;
+    protected $countryService;
     /**
      * @var ProjectService
      */
@@ -64,31 +63,14 @@ final class CountryHandler extends AbstractHandler
      */
     protected $articleService;
 
-    /**
-     * CountryHandler constructor.
-     *
-     * @param Application             $application
-     * @param HelperPluginManager     $helperPluginManager
-     * @param TwigRenderer            $renderer
-     * @param AuthenticationService   $authenticationService
-     * @param UpdateNavigationService $updateNavigationService
-     * @param TranslatorInterface     $translator
-     * @param ModuleOptions           $moduleOptions
-     * @param GeneralService          $generalService
-     * @param ProjectService          $projectService
-     * @param ProgramService          $programService
-     * @param OrganisationService     $organisationService
-     * @param ArticleService          $articleService
-     */
     public function __construct(
         Application $application,
         HelperPluginManager $helperPluginManager,
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
-        UpdateNavigationService $updateNavigationService,
         TranslatorInterface $translator,
         ModuleOptions $moduleOptions,
-        GeneralService $generalService,
+        CountryService $countryService,
         ProjectService $projectService,
         ProgramService $programService,
         OrganisationService $organisationService,
@@ -99,24 +81,17 @@ final class CountryHandler extends AbstractHandler
             $helperPluginManager,
             $renderer,
             $authenticationService,
-            $updateNavigationService,
             $translator
         );
 
         $this->moduleOptions = $moduleOptions;
-        $this->generalService = $generalService;
+        $this->countryService = $countryService;
         $this->projectService = $projectService;
         $this->programService = $programService;
         $this->organisationService = $organisationService;
         $this->articleService = $articleService;
     }
 
-    /**
-     * @param Content $content
-     *
-     * @return null|string
-     * @throws \Exception
-     */
     public function __invoke(Content $content): ?string
     {
         $params = $this->extractContentParam($content);
@@ -188,12 +163,12 @@ final class CountryHandler extends AbstractHandler
 
         if (null !== $params['id']) {
             /** @var Country $country */
-            $country = $this->generalService->find(Country::class, (int)$params['id']);
+            $country = $this->countryService->find(Country::class, (int)$params['id']);
         }
 
         if (null !== $params['docRef']) {
             /** @var Country $country */
-            $country = $this->generalService->findEntityByDocRef(Country::class, $params['docRef']);
+            $country = $this->countryService->findByCountryByDocRef($params['docRef']);
         }
 
         return $country;
@@ -223,17 +198,12 @@ final class CountryHandler extends AbstractHandler
         );
     }
 
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
     private function parseMap(Country $country): string
     {
         $mapOptions = [
             'clickable' => true,
-            'colorMin'  => $this->moduleOptions->getCountryColorFaded(),
-            'colorMax'  => $this->moduleOptions->getCountryColor(),
+            'colorMin'  => '#005C00',
+            'colorMax'  => '#00a651',
             'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
             'height'    => '340px',
         ];
@@ -243,34 +213,20 @@ final class CountryHandler extends AbstractHandler
         return $countryMap([$country], null, $mapOptions);
     }
 
-    /**
-     * @return string
-     */
     private function parseCountryList(): string
     {
-        $country = $this->generalService->findActiveCountries();
+        $country = $this->countryService->findActiveCountries();
 
         return $this->renderer->render('cms/country/list', ['countries' => $country]);
     }
 
-    /**
-     * Create a list of countries which are member of the itac.
-     *
-     * @return string
-     */
     private function parseCountryListItac(): string
     {
-        $countries = $this->generalService->findItacCountries();
+        $countries = $this->countryService->findItacCountries();
 
         return $this->renderer->render('cms/country/list-itac', ['countries' => $countries]);
     }
 
-    /**
-     * @param Country $country
-     * @param int     $page
-     *
-     * @return string
-     */
     private function parseOrganisationList(Country $country, int $page = 1): string
     {
         $organisationQuery = $this->organisationService->findOrganisationByCountry($country, true, true);
@@ -289,11 +245,6 @@ final class CountryHandler extends AbstractHandler
         );
     }
 
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
     private function parseCountryProjectList(Country $country): string
     {
         $projects = $this->projectService->findProjectByCountry($country, ProjectService::WHICH_ONLY_ACTIVE);

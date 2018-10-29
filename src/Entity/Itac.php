@@ -64,52 +64,26 @@ class Itac extends AbstractEntity
      */
     private $since;
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Itac
-     */
     public function setId(int $id): Itac
     {
         $this->id = $id;
@@ -117,19 +91,11 @@ class Itac extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Country
-     */
     public function getCountry(): Country
     {
         return $this->country;
     }
 
-    /**
-     * @param Country $country
-     *
-     * @return Itac
-     */
     public function setCountry(Country $country): Itac
     {
         $this->country = $country;
@@ -137,19 +103,11 @@ class Itac extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSince(): string
     {
         return $this->since;
     }
 
-    /**
-     * @param string $since
-     *
-     * @return Itac
-     */
     public function setSince(string $since): Itac
     {
         $this->since = $since;

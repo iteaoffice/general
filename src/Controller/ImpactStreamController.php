@@ -20,8 +20,8 @@ namespace General\Controller;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Entity\Result\Result;
-use Project\Search\Service\ImpactStreamSearchService;
-use Project\Service\ProjectService;
+use Project\Search\Service\ResultSearchService;
+use Project\Service\ResultService;
 use Search\Paginator\Adapter\SolariumPaginator;
 use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
@@ -45,32 +45,32 @@ class ImpactStreamController extends AbstractActionController
      */
     private $result = [];
     /**
-     * @var ProjectService
+     * @var ResultService
      */
-    private $projectService;
+    private $resultService;
     /**
      * @var GeneralService
      */
     private $generalService;
     /**
-     * @var ImpactStreamSearchService
+     * @var ResultSearchService
      */
-    private $impactStreamSearchService;
+    private $resultSearchService;
 
     public function __construct(
-        ProjectService $projectService,
+        ResultService $resultService,
         GeneralService $generalService,
-        ImpactStreamSearchService $impactStreamSearchService
+        ResultSearchService $resultSearchService
     ) {
-        $this->projectService = $projectService;
+        $this->resultService = $resultService;
         $this->generalService = $generalService;
-        $this->impactStreamSearchService = $impactStreamSearchService;
+        $this->resultSearchService = $resultSearchService;
     }
 
     public function downloadSingleAction()
     {
         /** @var Result $result */
-        $result = $this->projectService->findEntityByDocRef(Result::class, (string)$this->params('docRef'));
+        $result = $this->resultService->findResultByDocRef((string)$this->params('docRef'));
 
         if (null === $result || \count($result->getObject()) === 0) {
             return $this->notFoundAction();
@@ -84,9 +84,6 @@ class ImpactStreamController extends AbstractActionController
         return $result->Output();
     }
 
-    /**
-     * @param Result $result
-     */
     public function parsePDFsByResult(Result $result): void
     {
         /** @var Challenge $challenge */
@@ -118,21 +115,11 @@ class ImpactStreamController extends AbstractActionController
         $this->result[$ordering] = $fileName;
     }
 
-    /**
-     * @param string $entity
-     * @param int    $id
-     *
-     * @return string
-     */
     protected static function parseTempFile(string $entity, int $id): string
     {
         return sys_get_temp_dir() . '/' . $entity . '_' . $id;
     }
 
-    /**
-     * @return TcpdfFpdi
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
     protected function generatePdf(): TcpdfFpdi
     {
         $result = new TcpdfFpdi();
@@ -236,10 +223,6 @@ class ImpactStreamController extends AbstractActionController
         return $result;
     }
 
-    /**
-     * @return string
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
     public function downloadAction(): string
     {
         $data = $this->getRequest()->getQuery()->toArray();
@@ -256,7 +239,7 @@ class ImpactStreamController extends AbstractActionController
         ];
 
 
-        $this->impactStreamSearchService->setSearch($data['query'] ?? '', $searchFields, 'result', 'desc');
+        $this->resultSearchService->setSearchImpactStream($data['query'] ?? '', $searchFields, 'result', 'desc');
 
         if (isset($data['facet'])) {
             foreach ($data['facet'] as $facetField => $values) {
@@ -265,7 +248,7 @@ class ImpactStreamController extends AbstractActionController
                     $quotedValues[] = sprintf("\"%s\"", $value);
                 }
 
-                $this->impactStreamSearchService->addFilterQuery(
+                $this->resultSearchService->addFilterQuery(
                     $facetField,
                     implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
                 );
@@ -275,8 +258,8 @@ class ImpactStreamController extends AbstractActionController
 
         $paginator = new Paginator(
             new SolariumPaginator(
-                $this->impactStreamSearchService->getSolrClient(),
-                $this->impactStreamSearchService->getQuery()
+                $this->resultSearchService->getSolrClient(),
+                $this->resultSearchService->getQuery()
             )
         );
         $paginator::setDefaultItemCountPerPage(2000);
@@ -284,7 +267,7 @@ class ImpactStreamController extends AbstractActionController
 
         foreach ($paginator->getCurrentItems() as $result) {
             /** @var Result $result */
-            $result = $this->projectService->findEntityById(Result::class, $result['result_id']);
+            $result = $this->resultService->findResultById((int) $result['result_id']);
 
             $this->parsePDFsByResult($result);
         }
@@ -295,21 +278,9 @@ class ImpactStreamController extends AbstractActionController
         return $result->Output();
     }
 
-    /**
-     * @return ImpactStreamSearchService
-     */
-    public function getImpactStreamSearchService(): ImpactStreamSearchService
-    {
-        return $this->projectService->getServiceLocator()->get(ImpactStreamSearchService::class);
-    }
-
-    /**
-     * @return string|ViewModel
-     * @throws \setasign\Fpdi\PdfReader\PdfReaderException
-     */
     public function downloadSelectedAction()
     {
-        $resultIds = explode(',', $this->getRequest()->getQuery('result'));
+        $resultIds = \explode(',', $this->getRequest()->getQuery('result'));
 
         if ('' === $this->getRequest()->getQuery('result') || \count($resultIds) === 0) {
             return $this->notFoundAction();
@@ -317,7 +288,7 @@ class ImpactStreamController extends AbstractActionController
 
         foreach ($resultIds as $resultId) {
             /** @var Result $result */
-            $result = $this->projectService->findEntityById(Result::class, $resultId);
+            $result = $this->resultService->findResultById((int) $resultId);
 
             $this->parsePDFsByResult($result);
         }

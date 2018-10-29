@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Content\Navigation\Service\UpdateNavigationService;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
@@ -33,30 +32,17 @@ final class ChallengeHandler extends AbstractHandler
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var ProjectService
      */
-    protected $projectService;
+    private $projectService;
 
-    /**
-     * ChallengeHandler constructor.
-     *
-     * @param Application             $application
-     * @param HelperPluginManager     $helperPluginManager
-     * @param TwigRenderer            $renderer
-     * @param AuthenticationService   $authenticationService
-     * @param UpdateNavigationService $updateNavigationService
-     * @param TranslatorInterface     $translator
-     * @param GeneralService          $generalService
-     * @param ProjectService          $projectService
-     */
     public function __construct(
         Application $application,
         HelperPluginManager $helperPluginManager,
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
-        UpdateNavigationService $updateNavigationService,
         TranslatorInterface $translator,
         GeneralService $generalService,
         ProjectService $projectService
@@ -66,7 +52,6 @@ final class ChallengeHandler extends AbstractHandler
             $helperPluginManager,
             $renderer,
             $authenticationService,
-            $updateNavigationService,
             $translator
         );
 
@@ -74,12 +59,6 @@ final class ChallengeHandler extends AbstractHandler
         $this->projectService = $projectService;
     }
 
-    /**
-     * @param Content $content
-     *
-     * @return null|string
-     * @throws \Exception
-     */
     public function __invoke(Content $content): ?string
     {
         $params = $this->extractContentParam($content);
@@ -129,8 +108,7 @@ final class ChallengeHandler extends AbstractHandler
         }
 
         if (null !== $params['docRef']) {
-            /** @var Challenge $challenge */
-            $challenge = $this->generalService->findEntityByDocRef(Challenge::class, $params['docRef']);
+            $challenge = $this->generalService->findChallengeByDocRef($params['docRef']);
         }
 
         return $challenge;
