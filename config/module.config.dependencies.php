@@ -29,9 +29,10 @@ use General\Service\FormService;
 use General\Service\GeneralService;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
-use Project\Options\ModuleOptions;
+use Project\Search\Service\ProjectSearchService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
+use Project\Service\ResultService;
 use Zend\Authentication\AuthenticationService;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
@@ -168,7 +169,8 @@ return [
             TranslatorInterface::class,
             ResultSearchService::class,
             GeneralService::class,
-            ProjectService::class
+            ProjectService::class,
+            ResultService::class
         ],
         View\Handler\ChallengeHandler::class       => [
             'Application',
@@ -185,12 +187,16 @@ return [
             TwigRenderer::class,
             AuthenticationService::class,
             TranslatorInterface::class,
-            ModuleOptions::class,
             CountryService::class,
+            CountrySearchService::class,
             ProjectService::class,
+            ProjectSearchService::class,
             ProgramService::class,
             OrganisationService::class,
             ArticleService::class
+        ],
+        View\Helper\ContentTypeIcon::class         => [
+            GeneralService::class
         ],
         Search\Service\CountrySearchService::class => [
             'Config'

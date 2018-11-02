@@ -21,24 +21,29 @@ use General\Service\GeneralService;
  *
  * @category   General
  */
-class ContentTypeIcon extends AbstractViewHelper
+final class ContentTypeIcon extends AbstractViewHelper
 {
     /**
-     * @param ContentType|null $contentType
-     * @param string|null $contentTypeName
-     *
-     * @return string
+     * @var GeneralService
      */
-    public function __invoke(ContentType $contentType = null, $contentTypeName = null)
-    {
-        if (!\is_null($contentTypeName)) {
-            /** @var GeneralService $generalService */
-            $generalService = $this->getServiceManager()->get(GeneralService::class);
+    private $generalSerivce;
 
-            $contentType = $generalService->findContentTypeByContentTypeName($contentTypeName);
+    public function __construct(GeneralService $generalSerivce)
+    {
+        $this->generalSerivce = $generalSerivce;
+    }
+
+    public function __invoke(ContentType $contentType = null, string $contentTypeName = null)
+    {
+        if (null === $contentType && null !== $contentType) {
+            $contentType = $this->generalSerivce->findContentTypeByContentTypeName($contentTypeName);
         }
 
-        if (\is_null($contentType)) {
+        if (null === $contentType && null !== $contentTypeName) {
+            $contentType = $this->generalSerivce->findContentTypeByContentTypeDescription($contentTypeName);
+        }
+
+        if (null === $contentType) {
             return null;
         }
 
@@ -46,20 +51,20 @@ class ContentTypeIcon extends AbstractViewHelper
             case 'image/jpeg':
             case 'image/tiff':
             case 'image/png':
-                $class = " fa-file-image-o";
+                $class = ' fa-file-image-o';
                 break;
             case 'application/pdf':
             case 'application/postscript':
-                $class = "fa-file-pdf-o";
+                $class = 'fa-file-pdf-o';
                 break;
             case 'application/zip':
             case 'application/x-zip-compressed':
-                $class = "fa-file-archive-o";
+                $class = 'fa-file-archive-o';
                 break;
             case 'application/vnd.ms-excel':
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
             case 'application/vnd.ms-excel.sheet.macroEnabled.12':
-                $class = "fa-file-excel-o";
+                $class = 'fa-file-excel-o';
                 break;
             case 'application/mspowerpoint':
             case 'application/vnd.ms-powerpoint':
@@ -71,15 +76,15 @@ class ContentTypeIcon extends AbstractViewHelper
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
             case 'application/msword':
-                $class = "fa-file-word-o";
+                $class = 'fa-file-word-o';
                 break;
             case 'application/octet-stream':
             case 'application/csv':
             case 'text/xml':
-                $class = "fa-file-o";
+                $class = 'fa-file-o';
                 break;
             case 'video/mp4':
-                $class = "fa-file-video-o";
+                $class = 'fa-file-video-o';
                 break;
             default:
                 return sprintf('%s not found', $contentType->getContentType());

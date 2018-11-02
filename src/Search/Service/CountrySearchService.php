@@ -17,8 +17,10 @@ declare(strict_types=1);
 
 namespace General\Search\Service;
 
+use General\Entity\Country;
 use Search\Service\AbstractSearchService;
 use Search\Service\SearchServiceInterface;
+use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
 
 /**
@@ -61,5 +63,51 @@ final class CountrySearchService extends AbstractSearchService
             ->setExcludes(['is_itac_text']);
 
         return $this;
+    }
+
+    public function findCountriesOnWebsite(): ResultInterface
+    {
+        $this->setQuery($this->getSolrClient()->createSelect());
+
+        //Add the 'on_website' constraint
+        $query = '(has_projects:true)';
+
+        $this->query->setQuery($query);
+        $this->query->addSort('country_sort', Query::SORT_ASC);
+        $this->query->setRows(20000);
+
+        return $this->getSolrClient()->execute($this->query);
+    }
+
+    public function findItacCountries(): ResultInterface
+    {
+        $this->setQuery($this->getSolrClient()->createSelect());
+
+        //Add the 'on_website' constraint
+        $query = '(is_itac:true)';
+
+        $this->query->setQuery($query);
+        $this->query->addSort('country_sort', Query::SORT_ASC);
+
+        return $this->getSolrClient()->execute($this->query);
+    }
+
+    public function findCountry(Country $country): ?array
+    {
+        $this->setQuery($this->getSolrClient()->createSelect());
+
+        //Add the 'on_website' constraint
+        $query = '(country_id:' . $country->getId() . ')';
+
+        $this->query->setQuery($query);
+        $this->query->addSort('country_sort', Query::SORT_ASC);
+        $this->query->setRows(1);
+
+        /** @var ResultInterface $countryResult */
+        foreach ($this->getSolrClient()->execute($this->query) as $countryResult) {
+            return $countryResult->getFields();
+        }
+
+        return null;
     }
 }

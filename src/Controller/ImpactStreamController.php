@@ -245,7 +245,7 @@ class ImpactStreamController extends AbstractActionController
             foreach ($data['facet'] as $facetField => $values) {
                 $quotedValues = [];
                 foreach ($values as $value) {
-                    $quotedValues[] = sprintf("\"%s\"", $value);
+                    $quotedValues[] = \sprintf('"%s"', $value);
                 }
 
                 $this->resultSearchService->addFilterQuery(

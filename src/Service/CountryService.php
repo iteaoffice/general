@@ -71,6 +71,11 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         return $repository->findCountryInProjectLog();
     }
 
+    public function findCountryById(int $id): ?Entity\Country
+    {
+        return $this->entityManager->getRepository(Entity\Country::class)->find($id);
+    }
+
     public function findByCountryByDocRef(string $docRef): ?Entity\Country
     {
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['docRef' => $docRef]);
@@ -91,12 +96,6 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
     }
 
-    public function getAffiliationCountries(
-        Project $project,
-        $which = AffiliationService::WHICH_ONLY_ACTIVE
-    ): array {
-        return $this->affiliationService->findAffiliationCountriesByProjectAndWhich($project, $which);
-    }
 
     public function findCountryByCall(
         Call $call,
@@ -105,6 +104,14 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         $repository = $this->entityManager->getRepository(Entity\Country::class);
 
         return $repository->findCountryByCall($call, $which);
+    }
+
+
+    public function getAffiliationCountries(
+        Project $project,
+        $which = AffiliationService::WHICH_ONLY_ACTIVE
+    ): array {
+        return $this->affiliationService->findAffiliationCountriesByProjectAndWhich($project, $which);
     }
 
     public function findCountryByProject(
@@ -190,7 +197,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
                 $affiliationId = $affiliation->getId();
 
                 $projects[$projectId] = $projectId;
-                $affiliations[$affiliationId] = $affiliationId;
+                $affiliations[$affiliation->getOrganisation()->getId()] = $affiliationId;
             }
         }
 

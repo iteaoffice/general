@@ -74,6 +74,8 @@ class CountryLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
                 break;
             case 'view-organisation':
+                //@todo
+
                 $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY_ORGANISATION));
                 $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
                 break;

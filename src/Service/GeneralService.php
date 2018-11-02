@@ -113,6 +113,23 @@ class GeneralService extends AbstractService
         return $contentType;
     }
 
+    public function findContentTypeByContentTypeDescription(string $description): Entity\ContentType
+    {
+        /** @var Entity\ContentType $entity */
+        $contentType = $this->entityManager->getRepository(Entity\ContentType::class)
+            ->findOneBy(['description' => $description]);
+
+        //Create a fallback to the unknown type when the requested type cannot be found.
+        if (null === $contentType) {
+            /** @var Entity\ContentType $contentType */
+            return $this->entityManager->getRepository(Entity\ContentType::class)->find(
+                Entity\ContentType::TYPE_UNKNOWN
+            );
+        }
+
+        return $contentType;
+    }
+
     public function canDeleteCurrency(Entity\Currency $currency): bool
     {
         return $currency->getContract()->isEmpty();

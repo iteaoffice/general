@@ -93,11 +93,6 @@ final class ChallengeHandler extends AbstractHandler
         }
     }
 
-    /**
-     * @param array $params
-     *
-     * @return Challenge|null
-     */
     private function getChallengeByParams(array $params): ?Challenge
     {
         $challenge = null;
@@ -114,11 +109,6 @@ final class ChallengeHandler extends AbstractHandler
         return $challenge;
     }
 
-    /**
-     * @param Challenge $challenge
-     *
-     * @return string
-     */
     private function parseChallenge(Challenge $challenge): string
     {
         return $this->renderer->render(
@@ -130,9 +120,6 @@ final class ChallengeHandler extends AbstractHandler
         );
     }
 
-    /**
-     * @return string
-     */
     private function parseChallengeList(): string
     {
         $challenge = $this->generalService->findAll(Challenge::class);

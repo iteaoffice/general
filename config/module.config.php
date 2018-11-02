@@ -98,7 +98,7 @@ $config = [
             View\Helper\ChallengeLink::class        => View\Factory\ViewHelperFactory::class,
             View\Helper\WebInfoLink::class          => View\Factory\ViewHelperFactory::class,
             View\Helper\ContentTypeLink::class      => View\Factory\ViewHelperFactory::class,
-            View\Helper\ContentTypeIcon::class      => View\Factory\ViewHelperFactory::class,
+            View\Helper\ContentTypeIcon::class      => ConfigAbstractFactory::class,
 
         ],
     ],

@@ -17,7 +17,6 @@ return array(
     'general/currency/list'                 => __DIR__ . '//view/general/currency/list.twig',
     'general/partial/pagination-control'    => __DIR__ . '//view/general/partial/pagination-control.twig',
     'general/partial/sortable-table-header' => __DIR__ . '//view/general/partial/sortable-table-header.twig',
-    'general/partial/impact-stream/index'   => __DIR__ . '//view/general/partial/impact-stream/index.twig',
     'general/partial/form/vat-type'         => __DIR__ . '//view/general/partial/form/vat-type.twig',
     'general/partial/form/vat'              => __DIR__ . '//view/general/partial/form/vat.twig',
     'general/partial/form/challenge'        => __DIR__ . '//view/general/partial/form/challenge.twig',

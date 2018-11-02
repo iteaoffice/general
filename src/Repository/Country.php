@@ -15,11 +15,8 @@ namespace General\Repository;
 use Affiliation\Service\AffiliationService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Event\Entity\Meeting\Meeting;
-use Event\Entity\Registration;
 use General\Entity;
 use Program\Entity\Call\Call;
-use Project\Entity\Evaluation;
 use Project\Entity\Project;
 
 /**
@@ -75,7 +72,7 @@ class Country extends EntityRepository
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param array $filter
+     * @param array        $filter
      *
      * @return QueryBuilder
      */
@@ -112,15 +109,6 @@ class Country extends EntityRepository
         return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
 
-    /**
-     * Produces a default query to get a country and the required joins.
-     *
-     * This one is not folly correct as I need to exclude the still actives as well.
-     *
-     * @param $which
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
     public function getQueryBuilderForCountryByWhich($which): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();

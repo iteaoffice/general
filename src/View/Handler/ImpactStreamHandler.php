@@ -15,6 +15,7 @@ use Content\Entity\Content;
 use General\Service\GeneralService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
+use Project\Service\ResultService;
 use Search\Form\SearchResult;
 use Search\Paginator\Adapter\SolariumPaginator;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
@@ -32,6 +33,10 @@ use ZfcTwig\View\TwigRenderer;
  */
 final class ImpactStreamHandler extends AbstractHandler
 {
+    /**
+     * @var ResultService
+     */
+    private $resultService;
     /**
      * @var ResultSearchService
      */
@@ -53,7 +58,8 @@ final class ImpactStreamHandler extends AbstractHandler
         TranslatorInterface $translator,
         ResultSearchService $resultSearchService,
         GeneralService $generalService,
-        ProjectService $projectService
+        ProjectService $projectService,
+        ResultService $resultService
     ) {
         parent::__construct(
             $application,
@@ -66,6 +72,7 @@ final class ImpactStreamHandler extends AbstractHandler
         $this->resultSearchService = $resultSearchService;
         $this->generalService = $generalService;
         $this->projectService = $projectService;
+        $this->resultService = $resultService;
     }
 
     public function __invoke(Content $content): ?string
@@ -91,7 +98,7 @@ final class ImpactStreamHandler extends AbstractHandler
         $today = new \DateTime();
 
         $lastYear = new \DateTime();
-        $lastYear->sub(new \DateInterval("P12M"));
+        $lastYear->sub(new \DateInterval('P12M'));
 
         $page = $this->request->getQuery('page', 1);
         $form = new SearchResult();
@@ -139,7 +146,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
                     foreach ($values as $value) {
-                        $quotedValues[] = sprintf("\"%s\"", $value);
+                        $quotedValues[] = \sprintf('"%s"', $value);
                     }
 
                     $this->resultSearchService->addFilterQuery(
@@ -176,7 +183,7 @@ final class ImpactStreamHandler extends AbstractHandler
         );
 
         return $this->renderer->render(
-            'general/partial/impact-stream/index',
+            'cms/result/impact-stream',
             [
                 'form'               => $form,
                 'order'              => $data['order'],
@@ -186,6 +193,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 'paginator'          => $paginator,
                 'allChallenges'      => $this->generalService->findAllChallenges(),
                 'projectService'     => $this->projectService,
+                'resultService'      => $this->resultService,
                 'highlighting'       => $paginator->getCurrentItems()->getHighlighting(),
                 'highlightingFields' => [
                     'result_search',

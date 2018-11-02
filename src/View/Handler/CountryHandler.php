@@ -16,12 +16,13 @@ use Content\Service\ArticleService;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Entity\Country;
+use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
 use General\View\Helper\CountryLink;
 use General\View\Helper\CountryMap;
 use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
-use Project\Options\ModuleOptions;
+use Project\Search\Service\ProjectSearchService;
 use Project\Service\ProjectService;
 use Zend\Authentication\AuthenticationService;
 use Zend\Http\Response;
@@ -39,29 +40,33 @@ use ZfcTwig\View\TwigRenderer;
 final class CountryHandler extends AbstractHandler
 {
     /**
-     * @var ModuleOptions
-     */
-    protected $moduleOptions;
-    /**
      * @var CountryService
      */
-    protected $countryService;
+    private $countryService;
+    /**
+     * @var CountrySearchService
+     */
+    private $countrySearchService;
+    /**
+     * @var ProjectSearchService
+     */
+    private $projectSearchService;
     /**
      * @var ProjectService
      */
-    protected $projectService;
+    private $projectService;
     /**
      * @var ProgramService
      */
-    protected $programService;
+    private $programService;
     /**
      * @var OrganisationService
      */
-    protected $organisationService;
+    private $organisationService;
     /**
      * @var ArticleService
      */
-    protected $articleService;
+    private $articleService;
 
     public function __construct(
         Application $application,
@@ -69,9 +74,10 @@ final class CountryHandler extends AbstractHandler
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
         TranslatorInterface $translator,
-        ModuleOptions $moduleOptions,
         CountryService $countryService,
+        CountrySearchService $countrySearchService,
         ProjectService $projectService,
+        ProjectSearchService $projectSearchService,
         ProgramService $programService,
         OrganisationService $organisationService,
         ArticleService $articleService
@@ -84,9 +90,10 @@ final class CountryHandler extends AbstractHandler
             $translator
         );
 
-        $this->moduleOptions = $moduleOptions;
         $this->countryService = $countryService;
+        $this->countrySearchService = $countrySearchService;
         $this->projectService = $projectService;
+        $this->projectSearchService = $projectSearchService;
         $this->programService = $programService;
         $this->organisationService = $organisationService;
         $this->articleService = $articleService;
@@ -152,11 +159,6 @@ final class CountryHandler extends AbstractHandler
         }
     }
 
-    /**
-     * @param array $params
-     *
-     * @return Country|null
-     */
     private function getCountryByParams(array $params): ?Country
     {
         $country = null;
@@ -174,26 +176,17 @@ final class CountryHandler extends AbstractHandler
         return $country;
     }
 
-    /**
-     * @param Country $country
-     *
-     * @return string
-     */
     private function parseCountry(Country $country): string
     {
         return $this->renderer->render(
             'cms/country/country',
             [
-                'country'       => $country,
-                'projects'      => $this->projectService->findProjectByCountry(
-                    $country,
-                    ProjectService::WHICH_ONLY_ACTIVE
-                ),
-                'organisations' => $this->organisationService->findOrganisationByCountry($country, true)
-                    ->getArrayResult(),
-                'map'           => $this->parseMap($country),
-                'funder'        => $this->programService->findFunderByCountry($country),
-                'articles'      => $this->articleService->findArticlesByCountry($country, 15)
+                'countrySearchResult' => $this->countrySearchService->findCountry($country),
+                'country'             => $country,
+                'countryService'      => $this->countryService,
+                'map'                 => $this->parseMap($country),
+                'funder'              => $this->programService->findFunderByCountry($country),
+                'articles'            => $this->articleService->findArticlesByCountry($country, 15)
             ]
         );
     }
@@ -215,18 +208,33 @@ final class CountryHandler extends AbstractHandler
 
     private function parseCountryList(): string
     {
-        $country = $this->countryService->findActiveCountries();
-
-        return $this->renderer->render('cms/country/list', ['countries' => $country]);
+        return $this->renderer->render(
+            'cms/country/list',
+            [
+                'countries'      => $this->countrySearchService->findCountriesOnWebsite(),
+                'countryService' => $this->countryService,
+            ]
+        );
     }
 
     private function parseCountryListItac(): string
     {
-        $countries = $this->countryService->findItacCountries();
-
-        return $this->renderer->render('cms/country/list-itac', ['countries' => $countries]);
+        return $this->renderer->render(
+            'cms/country/list-itac',
+            [
+                'countries'      => $this->countrySearchService->findItacCountries(),
+                'countryService' => $this->countryService,
+            ]
+        );
     }
 
+    /**
+     * @param Country $country
+     * @param int     $page
+     *
+     * @return string
+     * @deprecated This overview can be replaced by: https://dev1.itea4.org/project-partners.html?query=&facet%5Bcountry%5D%5B%5D=Italy
+     */
     private function parseOrganisationList(Country $country, int $page = 1): string
     {
         $organisationQuery = $this->organisationService->findOrganisationByCountry($country, true, true);
@@ -247,14 +255,14 @@ final class CountryHandler extends AbstractHandler
 
     private function parseCountryProjectList(Country $country): string
     {
-        $projects = $this->projectService->findProjectByCountry($country, ProjectService::WHICH_ONLY_ACTIVE);
+        $projectSearchResult = $this->projectSearchService->findProjectByCountry($country);
 
         return $this->renderer->render(
             'cms/country/project',
             [
-                'country'        => $country,
-                'projectService' => $this->projectService,
-                'projects'       => $projects,
+                'country'             => $country,
+                'projectService'      => $this->projectService,
+                'projectSearchResult' => $projectSearchResult,
             ]
         );
     }
