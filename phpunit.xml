@@ -7,10 +7,9 @@
         stopOnFailure="false"
         processIsolation="false"
         backupGlobals="false"
-        syntaxCheck="true"
 >
     <testsuite name="iteaoffice/general">
-        <directory>./tests</directory>
+        <directory>./test</directory>
     </testsuite>
 
     <filter>

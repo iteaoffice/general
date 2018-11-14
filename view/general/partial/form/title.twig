@@ -1,16 +1,19 @@
 {% do form.prepare() %}
-{% do form.setAttribute('class','form-horizontal') %}
+
 
 {{ form().openTag(form)|raw }}
 
 {% set title = form.get('general_entity_title') %}
 
+{{ ztbformelement(title.get('id')) }}
 {{ ztbformelement(title.get('name')) }}
 {{ ztbformelement(title.get('attention')) }}
 {{ ztbformelement(title.get('salutation')) }}
 
-<div class="form-group">
-    <div class="col-sm-offset-3 col-sm-9">
+{{ formelement(form.get('csrf')) }}
+
+<div class="form-group row">
+    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}
     </div>

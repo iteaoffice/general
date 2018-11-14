@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the Country.
@@ -23,14 +24,14 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class ContentType extends EntityAbstract implements ResourceInterface
+class ContentType extends AbstractEntity
 {
-    const TYPE_UNKNOWN = 0;
-    const TYPE_PDF = 1;
-    const TYPE_OFFICE_2007 = 16;
-    const TYPE_EXCEL = 13;
-    const TYPE_EXCEL_2007 = 19;
-    const TYPE_EXCEL_MACRO = 143;
+    public const TYPE_UNKNOWN = 0;
+    public const TYPE_PDF = 1;
+    public const TYPE_OFFICE_2007 = 16;
+    public const TYPE_EXCEL = 13;
+    public const TYPE_EXCEL_2007 = 19;
+    public const TYPE_EXCEL_MACRO = 143;
     /**
      * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
      * @ORM\Id
@@ -176,6 +177,12 @@ class ContentType extends EntityAbstract implements ResourceInterface
      */
     private $projectDescriptionImage;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Pca[]|Collections\ArrayCollection
+     */
+    private $pca;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      * @var \Project\Entity\Report\Item[]|Collections\ArrayCollection
@@ -193,6 +200,30 @@ class ContentType extends EntityAbstract implements ResourceInterface
      * @var \Project\Entity\Version\Document[]|Collections\ArrayCollection
      */
     private $versionDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract\Document", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Contract\Document[]|Collections\ArrayCollection
+     */
+    private $contractDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract\VersionDocument", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \Project\Entity\Contract\VersionDocument[]|Collections\ArrayCollection
+     */
+    private $contractVersionDocument;
+    /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Image", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Challenge\Image[]|Collections\ArrayCollection
+     */
+    private $challengeImage;
+    /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Icon", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     * @var \General\Entity\Challenge\Icon[]|Collections\ArrayCollection
+     */
+    private $challengeIcon;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
@@ -243,12 +274,17 @@ class ContentType extends EntityAbstract implements ResourceInterface
         $this->result = new Collections\ArrayCollection();
         $this->workpackageDocument = new Collections\ArrayCollection();
         $this->poster = new Collections\ArrayCollection();
+        $this->pca = new Collections\ArrayCollection();
         $this->ideaDocument = new Collections\ArrayCollection();
         $this->ideaImage = new Collections\ArrayCollection();
         $this->projectDescriptionImage = new Collections\ArrayCollection();
         $this->projectReportItem = new Collections\ArrayCollection();
         $this->projectDocument = new Collections\ArrayCollection();
         $this->versionDocument = new Collections\ArrayCollection();
+        $this->contractDocument = new Collections\ArrayCollection();
+        $this->contractVersionDocument = new Collections\ArrayCollection();
+        $this->challengeIcon = new Collections\ArrayCollection();
+        $this->challengeImage = new Collections\ArrayCollection();
         $this->calendarDocument = new Collections\ArrayCollection();
         $this->loi = new Collections\ArrayCollection();
         $this->meetingFloorplan = new Collections\ArrayCollection();
@@ -261,35 +297,11 @@ class ContentType extends EntityAbstract implements ResourceInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->contentType;
     }
 
-    /**
-     * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
-     *
-     * @return string
-     */
-    public function getCacheFileName()
-    {
-        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR
-            . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . DIRECTORY_SEPARATOR
-            . 'content-type-icon';
-
-        return $cacheDir . DIRECTORY_SEPARATOR . $this->getHash() . '.gif';
-    }
-
-    /**
-     * Although an alternative does not have a clear hash, we can create one based on the id;.
-     *
-     * @return string
-     */
-    public function getHash()
-    {
-        return sha1($this->id . $this->contentType . $this->extension);
-    }
 
     /**
      * Magic Getter.
@@ -940,6 +952,106 @@ class ContentType extends EntityAbstract implements ResourceInterface
     public function setParentDoa($parentDoa)
     {
         $this->parentDoa = $parentDoa;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract\Document[]
+     */
+    public function getContractDocument()
+    {
+        return $this->contractDocument;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract\Document[] $contractDocument
+     *
+     * @return ContentType
+     */
+    public function setContractDocument($contractDocument): ContentType
+    {
+        $this->contractDocument = $contractDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[]
+     */
+    public function getContractVersionDocument()
+    {
+        return $this->contractVersionDocument;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[] $contractVersionDocument
+     *
+     * @return ContentType
+     */
+    public function setContractVersionDocument($contractVersionDocument): ContentType
+    {
+        $this->contractVersionDocument = $contractVersionDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|Challenge\Image[]
+     */
+    public function getChallengeImage()
+    {
+        return $this->challengeImage;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Image[] $challengeImage
+     *
+     * @return ContentType
+     */
+    public function setChallengeImage($challengeImage): ContentType
+    {
+        $this->challengeImage = $challengeImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|Challenge\Icon[]
+     */
+    public function getChallengeIcon()
+    {
+        return $this->challengeIcon;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|Challenge\Icon[] $challengeIcon
+     *
+     * @return ContentType
+     */
+    public function setChallengeIcon($challengeIcon): ContentType
+    {
+        $this->challengeIcon = $challengeIcon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Pca[]
+     */
+    public function getPca()
+    {
+        return $this->pca;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Pca[] $pca
+     *
+     * @return ContentType
+     */
+    public function setPca($pca)
+    {
+        $this->pca = $pca;
 
         return $this;
     }

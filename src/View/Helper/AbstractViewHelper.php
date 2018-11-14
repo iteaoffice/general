@@ -10,8 +10,10 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\View\Helper;
 
@@ -50,7 +52,7 @@ abstract class AbstractViewHelper extends AbstractHelper
      */
     public function getRouteMatch()
     {
-        if (is_null($this->routeMatch)) {
+        if (null === $this->routeMatch) {
             $this->routeMatch = $this->getServiceManager()->get('application')->getMvcEvent()->getRouteMatch();
         }
 
@@ -66,7 +68,7 @@ abstract class AbstractViewHelper extends AbstractHelper
     }
 
     /**
-     * @param ContainerInterface|ServiceLocatorInterface $serviceManager
+     * @param ContainerInterface $serviceManager
      *
      * @return AbstractViewHelper
      */
@@ -90,7 +92,7 @@ abstract class AbstractViewHelper extends AbstractHelper
      *
      * @return string
      */
-    public function translate($string)
+    public function translate($string): string
     {
         return $this->getHelperPluginManager()->get('translate')->__invoke($string);
     }

@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/invoice for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Navigation\Invokable;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
@@ -33,8 +35,10 @@ class EmailMessageLabel extends AbstractNavigationInvokable
      *
      * @return void
      */
-    public function __invoke(Mvc $page)
+    public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(EmailMessage::class)) {
             /** @var EmailMessage $emailMessage */
             $emailMessage = $this->getEntities()->get(EmailMessage::class);
@@ -46,8 +50,6 @@ class EmailMessageLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$emailMessage->getSubject();
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

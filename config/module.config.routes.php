@@ -7,64 +7,56 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+
 use General\Controller;
 
 return [
     'router' => [
         'routes' => [
-            'assets'       => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test'),
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                    ],
-                ],
-                'may_terminate' => false,
-                'child_routes'  => [
-                    'country-flag'      => [
+            'image'         => [
+                'child_routes' => [
+                    'country-flag'    => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => "/country-flag/[:iso3].[:ext]",
+                            'route'    => '/f/[:id].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\IndexController::class,
-                                'action'     => 'country-flag',
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'flag',
                             ],
                         ],
                     ],
-                    'content-type-icon' => [
+                    'challenge-icon'  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => "/content-type-icon/[:hash].gif",
+                            'route'    => '/ci/[:id]-[:last-update].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\IndexController::class,
-                                'action'     => 'content-type-icon',
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'challenge-icon',
                             ],
                         ],
                     ],
-                    'style-image'       => [
+                    'challenge-image' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => "/style/image/[:source]",
+                            'route'    => '/cim/[:id]-[:last-update].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
-                                'controller' => Controller\StyleController::class,
-                                'action'     => 'display',
+                                'controller' => Controller\ImageController::class,
+                                'action'     => 'challenge-image',
                             ],
                         ],
                     ],
                 ],
             ],
-            'country'      => [
+            'country'       => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
                     'route'    => '/country',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\CountryController::class,
                         'action'     => 'country',
                     ],
                 ],
@@ -81,30 +73,48 @@ return [
                     ],
                 ],
             ],
-            'content-type' => [
+            'impact-stream' => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [
-                    'route'    => '/content-type',
+                    'route'    => '/impact-stream',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\ImpactStreamController::class,
+                        'action'     => 'impact-stream',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'icon' => [
+                    'download'          => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/icon/[:id].gif',
+                            'route'    => '/download.html',
                             'defaults' => [
-                                'action' => 'content-type-icon',
+                                'action' => 'download',
+                            ],
+                        ],
+                    ],
+                    'download-selected' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download/selected.html',
+                            'defaults' => [
+                                'action' => 'download-selected',
+                            ],
+                        ],
+                    ],
+                    'download-single'   => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download/[:docRef].pdf',
+                            'defaults' => [
+                                'action' => 'download-single',
                             ],
                         ],
                     ],
                 ],
             ],
-            'email'        => [
+            'email'         => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
                 'options'       => [

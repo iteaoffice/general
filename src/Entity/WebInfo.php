@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mailing\Entity\Sender;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * WebInfo.
@@ -23,10 +24,10 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("content_stylesheet")
  */
-class WebInfo extends EntityAbstract implements ResourceInterface
+class WebInfo extends AbstractEntity
 {
-    const PLAIN = 1;
-    const NOT_PLAIN = 0;
+    public const PLAIN = 1;
+    public const NOT_PLAIN = 0;
 
     /**
      * @var array
@@ -160,6 +161,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)
@@ -220,7 +222,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
      *
      * @return int|string
      */
-    public function getPlain($textual = false)
+    public function getPlain(bool $textual = false)
     {
         if ($textual) {
             return self::$plainTemplates[$this->plain];
@@ -291,6 +293,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param Sender $sender
+     *
      * @return WebInfo
      */
     public function setSender(Sender $sender): WebInfo
@@ -310,6 +313,7 @@ class WebInfo extends EntityAbstract implements ResourceInterface
 
     /**
      * @param \Mailing\Entity\Template $template
+     *
      * @return WebInfo
      */
     public function setTemplate(\Mailing\Entity\Template $template): WebInfo

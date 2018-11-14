@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +23,7 @@ use Zend\Form\Annotation;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message_event")
  */
-class EmailMessageEvent extends EntityAbstract
+class EmailMessageEvent extends AbstractEntity
 {
     /**
      * @ORM\Column(name="email_message_event_id",type="integer",nullable=false)
@@ -33,9 +35,7 @@ class EmailMessageEvent extends EntityAbstract
     private $id;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\EmailMessage", inversedBy="event", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="email_message_id", referencedColumnName="email_message_id")
-     * })
      *
      * @var \General\Entity\EmailMessage
      */

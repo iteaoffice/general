@@ -11,8 +11,10 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\View\Helper;
 
@@ -48,7 +50,7 @@ class GenderLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! is_null($gender)) {
+        if (!\is_null($gender)) {
             $this->addRouterParam('id', $gender->getId());
             $this->setShowOptions(
                 [
@@ -65,7 +67,7 @@ class GenderLink extends LinkAbstract
      *
      * @throws \Exception
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'list':

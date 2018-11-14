@@ -10,31 +10,63 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\Title;
 use General\Form\TitleFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 /**
+ * Class TitleController
  *
+ * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class TitleController extends GeneralAbstractController
+final class TitleController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    private $generalService;
+    /**
+     * @var FormService
+     */
+    private $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+    public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $query = $this->getGeneralService()->findEntitiesFiltered(Title::class, $filterPlugin->getFilter());
+        $filterPlugin = $this->getFilter();
+        $query = $this->generalService->findFiltered(Title::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($query, false)));
@@ -42,7 +74,7 @@ class TitleController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new TitleFilter($this->getGeneralService());
+        $form = new TitleFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -56,32 +88,23 @@ class TitleController extends GeneralAbstractController
         );
     }
 
-    /**
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $title = $this->getGeneralService()->findEntityById(Title::class, $this->params('id'));
-        if (is_null($title)) {
+        $title = $this->generalService->find(Title::class, (int)$this->params('id'));
+        if (null === $title) {
             return $this->notFoundAction();
         }
 
         return new ViewModel(['title' => $title]);
     }
 
-    /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(Title::class, null, $data);
+        $form = $this->formService->prepare(Title::class, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -92,11 +115,20 @@ class TitleController extends GeneralAbstractController
                 /* @var $title Title */
                 $title = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($title);
-                $this->redirect()->toRoute(
+                $this->generalService->save($title);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-title-%s-has-been-created-successfully"),
+                            $title->getName()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/title/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $title->getId(),
                     ]
                 );
             }
@@ -105,36 +137,39 @@ class TitleController extends GeneralAbstractController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function editAction()
     {
-        $title = $this->getGeneralService()->findEntityById(Title::class, $this->params('id'));
+        /** @var Title $title */
+        $title = $this->generalService->find(Title::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($title, $title, $data);
+        $form = $this->formService->prepare($title, $data);
+        $form->remove('delete');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
                 return $this->redirect()->toRoute('zfcadmin/title/list');
             }
 
-            if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($title);
-
-                return $this->redirect()->toRoute('zfcadmin/title/list');
-            }
-
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute(
+                /** @var Title $title */
+                $title = $form->getData();
+
+                $this->generalService->save($title);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-title-%s-has-been-updated-successfully"),
+                            $title->getName()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/title/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $title->getId(),
                     ]
                 );
             }

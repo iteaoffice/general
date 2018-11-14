@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
 use General\Entity\ContentType;
@@ -38,15 +40,6 @@ class ContentTypeLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! $this->hasAccess(
-            $this->getContentType(),
-            \General\Acl\Assertion\ContentType::class,
-            $this->getAction()
-        )
-        ) {
-            return $action === 'view' ? (string)$this->getContentType() : null;
-        }
-
         $this->setShowOptions(
             [
                 'name'            => $this->getContentType(),
@@ -64,7 +57,7 @@ class ContentTypeLink extends LinkAbstract
     /**
      * @throws \Exception
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'list':

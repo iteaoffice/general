@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +25,7 @@ use Zend\Form\Annotation;
  *
  * @category General
  */
-class Flag extends EntityAbstract
+class Flag extends AbstractEntity
 {
     /**
      * @ORM\Column(name="flag_id",type="integer",nullable=false)
@@ -52,36 +54,6 @@ class Flag extends EntityAbstract
      * @var resource
      */
     private $object;
-
-    /**
-     * Get the corresponding fileName of a file if it was cached
-     * Use a dash (-) to make the distinction between the format to avoid the need of an extra folder.
-     *
-     * @return string
-     */
-    public function getCacheFileName()
-    {
-        $cacheDir = __DIR__ . '/../../../../../public' . DIRECTORY_SEPARATOR . 'assets' .
-                    DIRECTORY_SEPARATOR . ITEAOFFICE_HOST . DIRECTORY_SEPARATOR . 'country-flag';
-
-        return $cacheDir . DIRECTORY_SEPARATOR . strtolower($this->getCountry()->getIso3()) . '.png';
-    }
-
-    /**
-     * @return \General\Entity\Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param \General\Entity\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
 
     /**
      * Magic Getter.
@@ -126,10 +98,34 @@ class Flag extends EntityAbstract
 
     /**
      * @param int $id
+     *
+     * @return Flag
      */
-    public function setId($id)
+    public function setId($id): Flag
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     *
+     * @return Flag
+     */
+    public function setCountry($country): Flag
+    {
+        $this->country = $country;
+
+        return $this;
     }
 
     /**
@@ -142,9 +138,13 @@ class Flag extends EntityAbstract
 
     /**
      * @param resource $object
+     *
+     * @return Flag
      */
-    public function setObject($object)
+    public function setObject($object): Flag
     {
         $this->object = $object;
+
+        return $this;
     }
 }

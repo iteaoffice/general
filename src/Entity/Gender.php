@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -25,17 +26,17 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Gender extends EntityAbstract implements ResourceInterface
+class Gender extends AbstractEntity
 {
     /**
      * Constant for the default gender.
      */
-    const GENDER_UNKNOWN = 0;
+    public const GENDER_UNKNOWN = 0;
     /**
      * @ORM\Column(name="gender_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */
@@ -83,7 +84,7 @@ class Gender extends EntityAbstract implements ResourceInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->attention;
     }
@@ -109,6 +110,16 @@ class Gender extends EntityAbstract implements ResourceInterface
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+
+    /**
+     * @param $property
+     *
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
     }
 
     /**

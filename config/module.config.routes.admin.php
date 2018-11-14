@@ -7,6 +7,7 @@
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
+
 use General\Controller;
 
 return [
@@ -20,6 +21,39 @@ return [
                             'route'    => '/email',
                             'defaults' => [
                                 'controller' => Controller\EmailController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view' => [
+                                'type'     => 'Segment',
+                                'priority' => 1000,
+                                'options'  => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'log'        => [
+                        'type'          => 'Literal',
+                        'options'       => [
+                            'route'    => '/log',
+                            'defaults' => [
+                                'controller' => Controller\LogController::class,
                                 'action'     => 'list',
                             ],
                         ],
@@ -202,12 +236,12 @@ return [
                             ],
                         ],
                     ],
-                    'challenge'    => [
+                    'currency'     => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'    => '/challenge',
+                            'route'    => '/currency',
                             'defaults' => [
-                                'controller' => Controller\ChallengeController::class,
+                                'controller' => Controller\CurrencyController::class,
                                 'action'     => 'list',
                             ],
                         ],
@@ -246,6 +280,195 @@ return [
                                     'route'    => '/new.html',
                                     'defaults' => [
                                         'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                            'exchange-rate'     => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'    => '/exchange-rate',
+                                    'defaults' => [
+                                        'controller' => Controller\ExchangeRateController::class,
+                                        'action'     => 'list',
+                                    ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes'  => [
+                                    'edit' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/edit/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'edit',
+                                            ],
+                                        ],
+                                    ],
+                                    'new'  => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/new/currency-[:currencyId].html',
+                                            'defaults' => [
+                                                'action' => 'new',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'password'     => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/password',
+                            'defaults' => [
+                                'controller' => Controller\PasswordController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                            'edit' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/edit/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'new'  => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/new.html',
+                                    'defaults' => [
+                                        'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'challenge'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/challenge',
+                            'defaults' => [
+                                'controller' => Controller\ChallengeController::class,
+                                'action'     => 'list',
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes'  => [
+                            'list'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                    'defaults' => [
+                                        'action' => 'list',
+                                    ],
+                                ],
+                            ],
+                            'view'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/view/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'view',
+                                    ],
+                                ],
+                            ],
+                            'edit'         => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/edit/[:id].html',
+                                    'defaults' => [
+                                        'action' => 'edit',
+                                    ],
+                                ],
+                            ],
+                            'new'          => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/new.html',
+                                    'defaults' => [
+                                        'action' => 'new',
+                                    ],
+                                ],
+                            ],
+                            'download-pdf' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/download/[:id].pdf',
+                                    'defaults' => [
+                                        'action' => 'download-pdf',
+                                    ],
+                                ],
+                            ],
+                            'type'     => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'    => '/type',
+                                    'defaults' => [
+                                        'action'     => 'list',
+                                        'controller' => Controller\ChallengeTypeController::class,
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes'  => [
+                                    'list' => [
+                                        'type'     => 'Segment',
+                                        'priority' => 1000,
+                                        'options'  => [
+                                            'route'    => '/list[/f-:encodedFilter][/page-:page].html',
+                                            'defaults' => [
+                                                'action' => 'list',
+                                            ],
+                                        ],
+                                    ],
+                                    'new'  => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/new.html',
+                                            'defaults' => [
+                                                'action' => 'new',
+                                            ],
+                                        ],
+                                    ],
+                                    'view' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/view/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'view',
+
+                                            ],
+                                        ],
+                                    ],
+                                    'edit' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/edit/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'edit',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

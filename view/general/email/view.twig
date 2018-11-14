@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-email-message-%s")|format(emailMessage)) %}
 
-<h1>{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
+<h1 class="display-4">{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
 
 <h2>{{ translate("txt-email-message-information") }}</h2>
 <dl class="dl-horizontal">
@@ -17,6 +17,14 @@
         <dt>{{ translate('txt-email-address') }}</dt>
         <dd>{{ emailMessage.emailAddress }}</dd>
     {% endif %}
+    {% if emailMessage.cc %}
+        <dt>{{ translate('txt-cc') }}</dt>
+        <dd>{{ emailMessage.cc }}</dd>
+    {% endif %}
+    {% if emailMessage.bcc %}
+        <dt>{{ translate('txt-bcc') }}</dt>
+        <dd>{{ emailMessage.bcc }}</dd>
+    {% endif %}
 
     {% if emailMessage.mailingContact %}
         <dt>{{ translate('txt-mailing') }}</dt>
@@ -28,50 +36,55 @@
 
     <dt>{{ translate("txt-email-message-message") }}</dt>
     <dd>
-        <pre style="height: 250px">{{ emailMessage.message }}</pre>
+        <pre style="height: 350px">{{ emailMessage.message }}</pre>
     </dd>
 
-    <dt>{{ translate("txt-email-latest-event") }}</dt>
-    <dd>{{ emailMessage.latestEvent }}</dd>
+    {% if emailMessage.latestEvent %}
+        <dt>{{ translate("txt-email-latest-event") }}</dt>
+        <dd>{{ emailMessage.latestEvent }}</dd>
+    {% endif %}
 
-    <dt>{{ translate("txt-email-latest-event-date") }}</dt>
-    <dd>{{ emailMessage.dateLatestEvent|time_diff }}</dd>
+    {% if emailMessage.dateLatestEvent %}
+        <dt>{{ translate("txt-email-latest-event-date") }}</dt>
+        <dd>{{ emailMessage.dateLatestEvent|time_diff }}</dd>
+    {% endif %}
 </dl>
 
+{% if emailMessage.event.count() > 0 %}
+    <h2>{{ translate("txt-email-tracking") }}</h2>
 
-<h2>{{ translate("txt-email-tracking") }}</h2>
-
-<table class="table table-hover table-striped table-consended">
-    <thead>
-    <tr>
-        <th>{{ translate("txt-id") }}</th>
-        <th>{{ translate("txt-event") }}</th>
-        <th>{{ translate("txt-date") }}</th>
-        <th>{{ translate("txt-smtp-reply") }}</th>
-        <th>{{ translate("txt-url") }}</th>
-        <th>{{ translate("txt-ip") }}</th>
-        <th>{{ translate("txt-agent") }}</th>
-        <th>{{ translate("txt-error") }}</th>
-        <th>{{ translate("txt-error-related-to") }}</th>
-        <th>{{ translate("txt-source") }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for event in emailMessage.event %}
+    <table class="table table-hover table-striped table-condensed table-sm">
+        <thead>
         <tr>
-            <td title="{{ event.messageId }}">{{ event.id }}</td>
-            <td>{{ event.event }}</td>
-            <td>{{ event.time|date("d-m-Y H:i:s") }}</td>
-            <td>{{ event.smtp_reply }}</td>
-            <td>{{ event.url }}</td>
-            <td>{{ event.ip }}</td>
-            <td>
-                <small>{{ event.agent }}</small>
-            </td>
-            <td>{{ event.error }}</td>
-            <td>{{ event.errorRelatedTo }}</td>
-            <td>{{ event.source }}</td>
+            <th>{{ translate("txt-id") }}</th>
+            <th>{{ translate("txt-event") }}</th>
+            <th>{{ translate("txt-date") }}</th>
+            <th>{{ translate("txt-smtp-reply") }}</th>
+            <th>{{ translate("txt-url") }}</th>
+            <th>{{ translate("txt-ip") }}</th>
+            <th>{{ translate("txt-agent") }}</th>
+            <th>{{ translate("txt-error") }}</th>
+            <th>{{ translate("txt-error-related-to") }}</th>
+            <th>{{ translate("txt-source") }}</th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for event in emailMessage.event %}
+            <tr>
+                <td title="{{ event.messageId }}">{{ event.id }}</td>
+                <td>{{ event.event }}</td>
+                <td>{{ event.time|date("d-m-Y H:i:s") }}</td>
+                <td>{{ event.smtp_reply }}</td>
+                <td>{{ event.url }}</td>
+                <td>{{ event.ip }}</td>
+                <td>
+                    <small>{{ event.agent }}</small>
+                </td>
+                <td>{{ event.error }}</td>
+                <td>{{ event.errorRelatedTo }}</td>
+                <td>{{ event.source }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

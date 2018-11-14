@@ -13,6 +13,8 @@
  * @link        http://github.com/iteaoffice/invoice for the canonical source repository
  */
 
+declare(strict_types=1);
+
 namespace General\Navigation\Invokable;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
@@ -33,7 +35,7 @@ class TitleLabel extends AbstractNavigationInvokable
      *
      * @return void
      */
-    public function __invoke(Mvc $page)
+    public function __invoke(Mvc $page): void
     {
         if ($this->getEntities()->containsKey(Title::class)) {
             /** @var Title $title */

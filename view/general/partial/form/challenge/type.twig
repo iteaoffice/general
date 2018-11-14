@@ -1,0 +1,22 @@
+{% do form.prepare() %}
+
+{{ form().openTag(form)|raw }}
+{% set type = form.get('general_entity_challenge_type') %}
+
+{{ ztbformelement(type.get('id')) }}
+{{ ztbformelement(type.get('type')) }}
+{{ ztbformelement(type.get('description')) }}
+{{ ztbformelement(type.get('sequence')) }}
+
+{{ ztbformelement(form.get('csrf')) }}
+
+<div class="form-group row">
+    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+        {{ formelement(form.get('submit')) }}
+        {{ formelement(form.get('cancel')) }}
+        {% if form.has('delete') %}
+            {{ formelement(form.get('delete')) }}
+        {% endif %}
+    </div>
+</div>
+{{ form().closeTag()|raw }}

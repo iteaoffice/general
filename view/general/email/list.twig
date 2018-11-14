@@ -11,7 +11,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <h1>{{ translate("txt-email-message-list") }}</h1>
+        <h1 class="display-4">{{ translate("txt-email-message-list") }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -25,7 +25,7 @@
         </div>
 
         {% if paginator.pageRange > 0 %}
-            <table class="table table-hover table-striped table-condensed">
+            <table class="table table-hover table-striped table-condensed table-sm">
                 <thead>
                 <tr>
                     <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/email/list', 'criteria': 'subject', 'text': translate('txt-name')} %}</th>
@@ -39,7 +39,8 @@
                 <tbody>
                 {% for emailMessage in paginator.getCurrentItems() %}
                     <tr>
-                        <td class="ellipsis" title="{{ emailMessage.identifier }}">{{ emailMessageLink(emailMessage,'view', 'subject') }}</td>
+                        <td class="ellipsis"
+                            title="{{ emailMessage.identifier }}">{{ emailMessageLink(emailMessage,'view', 'subject') }}</td>
                         <td>{{ emailMessage.dateCreated|string_date }}</td>
                         <td>{% if emailMessage.contact %}{{ contactLink(emailMessage.contact,'view-admin','name') }}{% else %}{{ emailMessage.emailAddress }}{% endif %}</td>
                         <td>{% if emailMessage.mailingContact %}{{ mailingLink(emailMessage.mailingContact.mailing,'view','name') }} {{ mailingContactLink(emailMessage.mailingContact,'view','icon') }}{% endif %}</td>
@@ -59,7 +60,7 @@
         <div class="well well-sm">
             <fieldset>
                 {{ ztbformelement(filter.get('latestEvent')) }}
-                <div class="form-group">
+                <div class="form-group row">
                     {{ ztbformelement(form.get('submit')) }}
                     {{ ztbformelement(form.get('clear')) }}
                 </div>

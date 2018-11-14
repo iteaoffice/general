@@ -11,7 +11,7 @@
 <div class="row">
 
     <div class="col-md-10">
-        <h1>{{ translate("txt-country-list") }} {{ countryLink(null, 'new','button') }}</h1>
+        <h1 class="display-4">{{ translate("txt-country-list") }} {{ countryLink(null, 'new','button') }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -25,7 +25,7 @@
         </div>
 
         {% if paginator.pageRange > 0 %}
-            <table class="table table-hover table-striped table-condensed">
+            <table class="table table-hover table-striped table-condensed table-sm">
                 <thead>
                 <tr>
                     <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
@@ -69,7 +69,7 @@
                 {{ ztbformelement(filter.get('eureka')) }}
                 {{ ztbformelement(filter.get('itac')) }}
 
-                <div class="form-group">
+                <div class="form-group row">
                     {{ ztbformelement(form.get('submit')) }}
                     {{ ztbformelement(form.get('clear')) }}
                 </div>

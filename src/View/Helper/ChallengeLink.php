@@ -9,8 +9,11 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
+use Content\Entity\Route;
 use General\Entity\Challenge;
 
 /**
@@ -20,11 +23,6 @@ use General\Entity\Challenge;
  */
 class ChallengeLink extends LinkAbstract
 {
-    /**
-     * @var Challenge
-     */
-    protected $challenge;
-
     /**
      * @param Challenge $challenge
      * @param string    $action
@@ -38,20 +36,19 @@ class ChallengeLink extends LinkAbstract
         Challenge $challenge = null,
         $action = 'view',
         $show = 'name'
-    ) {
+    ): string {
         $this->setChallenge($challenge);
         $this->setAction($action);
         $this->setShow($show);
 
-        if (! is_null($challenge)) {
-            $this->addRouterParam('id', $challenge->getId());
-            $this->addRouterParam('docRef', $challenge->getDocRef());
-            $this->setShowOptions(
-                [
-                    'name' => $challenge,
-                ]
-            );
-        }
+        $this->addRouterParam('id', $this->getChallenge()->getId());
+        $this->addRouterParam('docRef', $this->getChallenge()->getDocRef());
+        $this->setShowOptions(
+            [
+                'name'      => $this->getChallenge(),
+                'read-more' => $this->translate("txt-read-more"),
+            ]
+        );
 
         return $this->createLink();
     }
@@ -61,7 +58,7 @@ class ChallengeLink extends LinkAbstract
      *
      * @throws \Exception
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'list':
@@ -72,6 +69,10 @@ class ChallengeLink extends LinkAbstract
                 $this->setRouter('zfcadmin/challenge/new');
                 $this->setText($this->translate("txt-new-challenge"));
                 break;
+            case 'download-pdf':
+                $this->setRouter('zfcadmin/challenge/download-pdf');
+                $this->setText($this->translate("txt-download-pdf"));
+                break;
             case 'edit':
                 $this->setRouter('zfcadmin/challenge/edit');
                 $this->setText(sprintf($this->translate("txt-edit-challenge-%s"), $this->getChallenge()));
@@ -81,27 +82,11 @@ class ChallengeLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             case 'view':
-                $this->setRouter('route-' . $this->getChallenge()->get("underscore_entity_name"));
+                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_CHALLENGE));
                 $this->setText(sprintf($this->translate("txt-view-challenge-%s"), $this->getChallenge()));
                 break;
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
-
-    /**
-     * @return Challenge
-     */
-    public function getChallenge()
-    {
-        return $this->challenge;
-    }
-
-    /**
-     * @param Challenge $challenge
-     */
-    public function setChallenge($challenge)
-    {
-        $this->challenge = $challenge;
     }
 }

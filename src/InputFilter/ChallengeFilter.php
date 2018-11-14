@@ -10,26 +10,28 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use DoctrineModule\Validator\UniqueObject;
+use General\Entity\Challenge;
 use Zend\InputFilter\InputFilter;
+use Zend\Validator\File\Extension;
 
 /**
- * ITEA Office all rights reserved
+ * Class ChallengeFilter
  *
- * @category    Partner
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @package General\InputFilter
  */
 class ChallengeFilter extends InputFilter
 {
     /**
-     * PartnerFilter constructor.
+     * ChallengeFilter constructor.
      *
      * @param EntityManager $entityManager
      */
@@ -53,13 +55,37 @@ class ChallengeFilter extends InputFilter
                             'max'      => 100,
                         ],
                     ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Challenge::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'challenge',
+                        ],
+                    ],
                 ],
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'type',
+                'required' => false,
             ]
         );
         $inputFilter->add(
             [
                 'name'     => 'description',
                 'required' => true,
+                'filters'  => [
+                    ['name' => 'StringTrim'],
+                ],
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'sources',
+                'required' => false,
                 'filters'  => [
                     ['name' => 'StringTrim'],
                 ],
@@ -106,6 +132,32 @@ class ChallengeFilter extends InputFilter
             ]
         );
 
+        $inputFilter->add(
+            [
+                'name'     => 'icon',
+                'required' => true,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'call',
+                'required' => false,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'       => 'pdf',
+                'required'   => true,
+                'validators' => [
+                    [
+                        'name'    => Extension::class,
+                        'options' => [
+                            'extension' => ['pdf'],
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         $this->add($inputFilter, 'general_entity_challenge');
     }

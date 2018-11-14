@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -25,17 +26,17 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Title extends EntityAbstract implements ResourceInterface
+class Title extends AbstractEntity
 {
     /**
      * Constant for the default title.
      */
-    const TITLE_UNKNOWN = 0;
+    public const TITLE_UNKNOWN = 0;
     /**
      * @ORM\Column(name="title_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */
@@ -106,6 +107,7 @@ class Title extends EntityAbstract implements ResourceInterface
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)

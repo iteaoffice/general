@@ -10,26 +10,30 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
 /**
- * @category    General
+ * Class Gender
+ *
+ * @package General\Repository
  */
 class Gender extends EntityRepository
 {
     /**
      * @param array $filter
      *
-     * @return Query
+     * @return QueryBuilder
      */
-    public function findFiltered(array $filter)
+    public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_gender');
@@ -38,7 +42,7 @@ class Gender extends EntityRepository
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -60,6 +64,6 @@ class Gender extends EntityRepository
                 $queryBuilder->addOrderBy('general_entity_gender.id', $direction);
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder;
     }
 }

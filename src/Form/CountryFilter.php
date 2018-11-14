@@ -9,24 +9,20 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Form;
 
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
- * Jield copyright message placeholder.
+ * Class CountryFilter
  *
- * @category    Contact
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @package General\Form
  */
 class CountryFilter extends Form
 {
-    /**
-     * CountryFilter constructor.
-     */
     public function __construct()
     {
         parent::__construct();

@@ -1,0 +1,33 @@
+{% do form.prepare() %}
+
+
+{{ form().openTag(form)|raw }}
+
+
+
+<div class="form-group row">
+    <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-currency") }}</label>
+
+    <div class="col-sm-9">
+        <p class="form-control-static form-control-plaintext">{{ currencyLink(currency,'view','name') }}</p>
+    </div>
+</div>
+
+{% set currency = form.get('general_entity_exchangerate') %}
+
+{{ ztbformelement(currency.get('rate')) }}
+{{ ztbformelement(currency.get('date')) }}
+
+{{ formelement(form.get('csrf')) }}
+
+<div class="form-group row">
+    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+        {{ ztbformelement(form.get('submit')) }}
+        {% if form.has('delete') %}
+            {{ ztbformelement(form.get('delete')) }}
+        {% endif %}
+        {{ ztbformelement(form.get('cancel')) }}
+    </div>
+</div>
+
+{{ form().closeTag()|raw }}

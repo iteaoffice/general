@@ -8,14 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Web.
@@ -23,7 +22,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(name="web")
  * @ORM\Entity
  */
-class Web extends EntityAbstract
+class Web extends AbstractEntity
 {
     /**
      * @ORM\Column(name="web_id", type="integer", nullable=false)
@@ -99,6 +98,7 @@ class Web extends EntityAbstract
 
     /**
      * @param $property
+     *
      * @return bool
      */
     public function __isset($property)

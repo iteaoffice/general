@@ -9,26 +9,23 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Form;
 
-use General\Service\GeneralService;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
- * Jield copyright message placeholder.
- *
- * @category    Contact
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class ContentTypeFilter
+ * @package General\Form
  */
 class ContentTypeFilter extends Form
 {
     /**
-     * @param GeneralService $mailingService
+     * ContentTypeFilter constructor.
      */
-    public function __construct(GeneralService $mailingService)
+    public function __construct()
     {
         parent::__construct();
         $this->setAttribute('method', 'get');

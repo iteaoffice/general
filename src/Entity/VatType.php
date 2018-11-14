@@ -8,15 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -28,12 +26,12 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class VatType extends EntityAbstract implements ResourceInterface
+class VatType extends AbstractEntity
 {
-    const VAT_TYPE_LOCAL = 1;
-    const VAT_TYPE_IN_EU_SHIFT = 2;
-    const VAT_TYPE_IN_EU_NO_SHIFT = 3;
-    const VAT_TYPE_NON_EU = 4;
+    public const VAT_TYPE_LOCAL = 1;
+    public const VAT_TYPE_IN_EU_SHIFT = 2;
+    public const VAT_TYPE_IN_EU_NO_SHIFT = 3;
+    public const VAT_TYPE_NON_EU = 4;
 
     /**
      * @ORM\Column(name="type_id",type="integer",nullable=false)
@@ -110,8 +108,8 @@ class VatType extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->invoice               = new Collections\ArrayCollection();
-        $this->dimension             = new Collections\ArrayCollection();
+        $this->invoice = new Collections\ArrayCollection();
+        $this->dimension = new Collections\ArrayCollection();
         $this->organisationFinancial = new Collections\ArrayCollection();
     }
 
@@ -139,121 +137,23 @@ class VatType extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     *
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->type;
-    }
-
-    /**
-     * Returns the string identifier of the Resource.
-     *
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
-    }
-
-    /**
-     * Set input filter.
-     *
-     * @param  InputFilterInterface $inputFilter
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (! $this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'       => 'type',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
-                        ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 30,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'       => 'description',
-                        'required'   => true,
-                        'filters'    => [
-                            ['name' => 'StripTags'],
-                            ['name' => 'StringTrim'],
-                        ],
-                        'validators' => [
-                            [
-                                'name'    => 'StringLength',
-                                'options' => [
-                                    'encoding' => 'UTF-8',
-                                    'min'      => 1,
-                                    'max'      => 64,
-                                ],
-                            ],
-                        ],
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'vat',
-                        'required' => true,
-                    ]
-                )
-            );
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'type'        => $this->type,
-            'description' => $this->description,
-            'vat'         => $this->vat,
-        ];
     }
 
     /**

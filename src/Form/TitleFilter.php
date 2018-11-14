@@ -11,29 +11,26 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\Form;
 
-use General\Service\GeneralService;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
- * Jield copyright message placeholder.
- *
- * @category    Contact
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * Class TitleFilter
+ * @package General\Form
  */
 class TitleFilter extends Form
 {
     /**
-     * @param GeneralService $mailingService
+     * TitleFilter constructor.
      */
-    public function __construct(GeneralService $mailingService)
+    public function __construct()
     {
         parent::__construct();
         $this->setAttribute('method', 'get');

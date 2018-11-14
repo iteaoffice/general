@@ -1,40 +1,92 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-challenge-%s")|format(challenge)) %}
 
-<h1>{{ translate("txt-challenge-%s")|format(challenge) }} {{ challengeLink(challenge,'edit','button') }}</h1>
+<h1 class="display-4">{{ translate("txt-challenge-%s")|format(challenge) }} {{ challengeLink(challenge,'edit','button') }}</h1>
 
-<h2>{{ translate("txt-challenge-information") }}</h2>
-<dl class="dl-horizontal">
-    <dt>{{ translate("txt-challenge-name") }}</dt>
-    <dd>{{ challenge.challenge }}</dd>
+<div class="row">
+    <div class="col-md-8">
+        <dl class="dl-horizontal">
+            <dt>{{ translate("txt-challenge-name") }}</dt>
+            <dd>{{ challenge.challenge }}</dd>
 
-    <dt>{{ translate("txt-challenge-description") }}</dt>
-    <dd>{{ challenge.description|raw }}</dd>
+            <dt>{{ translate("txt-challenge-sequence") }}</dt>
+            <dd>{{ challenge.sequence }}</dd>
 
-    <dt>{{ translate("txt-front-color") }}</dt>
-    <dd>{{ challenge.frontColor }}</dd>
+            <dt>{{ translate("txt-challenge-type") }}</dt>
+            <dd>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</dd>
 
-    <dt>{{ translate("txt-background-color") }}</dt>
-    <dd>{{ challenge.backgroundColor }}</dd>
+            <dt>{{ translate("txt-challenge-sources") }}</dt>
+            <dd>{{ challenge.sources }}</dd>
 
-    <dt>{{ translate("txt-sample") }}</dt>
-    <dd><a class="btn"
-           style="color:#{{ challenge.frontColor }}; background-color:#{{ challenge.backgroundColor }}">{{ challenge }}</a>
-    </dd>
+            <dt>{{ translate("txt-abstract") }}</dt>
+            <dd>{{ challenge.abstract|default(translate("txt-no-abstract")) }}</dd>
 
-    <dt>{{ translate('txt-projects') }}</dt>
-    {% for projectChallenge in challenge.projectChallenge %}
-        <dd>{{ projectLink(project,'view-admin','name') }}</dd>
-    {% else %}
-        <dd>{{ translate("txt-project-for-this-challenge") }}</dd>
-    {% endfor %}
+            <dt>{{ translate("txt-html") }}</dt>
+            <dd><code>{{ challenge.html|default(translate("txt-no-html"))|nl2br }}</code></dd>
 
-    <dt>{{ translate('txt-booths') }}</dt>
-    {% for boothChallenge in challenge.boothChallenge %}
-        <dd>{{ boothLink(boothChallenge.booth,'view','name') }}</dd>
-    {% else %}
-        <dd>{{ translate("txt-booth-for-this-challenge") }}</dd>
-    {% endfor %}
-</dl>
+            <dt>{{ translate("txt-css") }}</dt>
+            <dd><code>{{ challenge.css|default(translate("txt-no-css"))|nl2br }}</code></dd>
+
+            <dt>{{ translate("txt-front-color") }}</dt>
+            <dd>{{ challenge.frontColor }}</dd>
+
+            <dt>{{ translate("txt-background-color") }}</dt>
+            <dd>{{ challenge.backgroundColor }}</dd>
+
+            <dt>{{ translate("txt-sample") }}</dt>
+            <dd><a class="btn"
+                   style="color:{{ challenge.frontColor }}; background-color:{{ challenge.backgroundColor }}">{{ challenge }}</a>
+            </dd>
+
+            <dt>{{ translate("txt-program-calls") }}</dt>
+            {% for call in challenge.call %}
+                <dd>{{ callLink(call,'view-admin','name') }}</dd>
+            {% else %}
+                <dd>{{ translate("txt-challenge-is-active-in-every-call") }}</dd>
+            {% endfor %}
+
+            <dt>{{ translate('txt-ideas') }}</dt>
+            {% for ideaChallenge in challenge.ideaChallenge %}
+                <dd>{{ ideaLink(ideaChallenge.idea,'view-admin','name') }}</dd>
+            {% else %}
+                <dd>{{ translate("txt-no-ideas-for-this-challenge") }}</dd>
+            {% endfor %}
+
+            <dt>{{ translate('txt-projects') }}</dt>
+            {% for projectChallenge in challenge.projectChallenge %}
+                <dd>{{ projectLink(projectChallenge.project,'view-admin','name') }}</dd>
+            {% else %}
+                <dd>{{ translate("txt-no-projects-for-this-challenge") }}</dd>
+            {% endfor %}
+
+            <dt>{{ translate('txt-booths') }}</dt>
+            {% for boothChallenge in challenge.boothChallenge %}
+                <dd>{{ boothLink(boothChallenge.booth,'view','name') }}</dd>
+            {% else %}
+                <dd>{{ translate("txt-no-booth-with-this-challenge") }}</dd>
+            {% endfor %}
+
+
+        </dl>
+    </div>
+    <div class="col-md-4">
+        <h3>{{ translate("txt-challenge-icon") }}</h3>
+
+        {{ challengeIcon(challenge, 100) }}
+
+        <h3>{{ translate("txt-challenge-image") }}</h3>
+
+        {{ challengeImage(challenge, 200) }}
+
+
+        {% if challenge.pdf %}
+            <h3>{{ translate('txt-current-pdf') }}</h3>
+            {{ challengeLink(challenge,'download-pdf','text') }}
+        {% endif %}
+    </div>
+</div>
+
+<h2>{{ translate("txt-challenge-description") }}</h2>
+{{ challenge.description|raw }}
 
 

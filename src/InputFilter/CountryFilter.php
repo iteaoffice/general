@@ -10,21 +10,22 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use DoctrineModule\Validator\UniqueObject;
+use General\Entity\Country;
 use Zend\InputFilter\InputFilter;
 
 /**
- * ITEA Office all rights reserved
+ * Class CountryFilter
  *
- * @category    Partner
- *
- * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @package General\InputFilter
  */
 class CountryFilter extends InputFilter
 {
@@ -53,6 +54,15 @@ class CountryFilter extends InputFilter
                             'max'      => 80,
                         ],
                     ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Country::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'country',
+                        ],
+                    ],
                 ],
             ]
         );
@@ -73,6 +83,15 @@ class CountryFilter extends InputFilter
                             'max'      => 2,
                         ],
                     ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Country::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'cd',
+                        ],
+                    ],
                 ],
             ]
         );
@@ -91,6 +110,15 @@ class CountryFilter extends InputFilter
                             'encoding' => 'UTF-8',
                             'min'      => 1,
                             'max'      => 3,
+                        ],
+                    ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Country::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'iso3',
                         ],
                     ],
                 ],

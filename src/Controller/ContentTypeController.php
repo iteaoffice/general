@@ -8,12 +8,20 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use General\Controller\Plugin\GetFilter;
 use General\Entity\ContentType;
 use General\Form\ContentTypeFilter;
+use General\Service\FormService;
+use General\Service\GeneralService;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
@@ -21,18 +29,40 @@ use Zend\View\Model\ViewModel;
  * Class ContentTypeController
  *
  * @package General\Controller
+ * @method GetFilter getFilter()
+ * @method FlashMessenger flashMessenger()
  */
-class ContentTypeController extends GeneralAbstractController
+final class ContentTypeController extends AbstractActionController
 {
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @var GeneralService
      */
-    public function listAction()
+    private $generalService;
+    /**
+     * @var FormService
+     */
+    private $formService;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(
+        GeneralService $generalService,
+        FormService $formService,
+        TranslatorInterface $translator
+    ) {
+        $this->generalService = $generalService;
+        $this->formService = $formService;
+        $this->translator = $translator;
+    }
+
+    public function listAction(): ViewModel
     {
-        $page         = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getGeneralFilter();
-        $contactQuery = $this->getGeneralService()
-                             ->findEntitiesFiltered(ContentType::class, $filterPlugin->getFilter());
+        $page = $this->params()->fromRoute('page', 1);
+        $filterPlugin = $this->getFilter();
+        $contactQuery = $this->generalService
+            ->findFiltered(ContentType::class, $filterPlugin->getFilter());
 
         $paginator
             = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
@@ -40,7 +70,7 @@ class ContentTypeController extends GeneralAbstractController
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new ContentTypeFilter($this->getGeneralService());
+        $form = new ContentTypeFilter();
         $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
@@ -54,32 +84,23 @@ class ContentTypeController extends GeneralAbstractController
         );
     }
 
-    /**
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function viewAction()
+    public function viewAction(): ViewModel
     {
-        $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
-        if (is_null($contentType)) {
+        $contentType = $this->generalService->find(ContentType::class, (int)$this->params('id'));
+        if (null === $contentType) {
             return $this->notFoundAction();
         }
 
         return new ViewModel(['contentType' => $contentType]);
     }
 
-    /**
-     * Create a new template.
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function newAction()
     {
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare(ContentType::class, null, $data);
+        $form = $this->formService->prepare(ContentType::class, $data);
         $form->remove('delete');
 
-        $form->setAttribute('class', 'form-horizontal');
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -90,11 +111,20 @@ class ContentTypeController extends GeneralAbstractController
                 /* @var $contentType ContentType */
                 $contentType = $form->getData();
 
-                $result = $this->getGeneralService()->newEntity($contentType);
-                $this->redirect()->toRoute(
+                $this->generalService->save($contentType);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-content-type-%s-has-been-created-successfully"),
+                            $contentType->getDescription()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/content-type/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $contentType->getId(),
                     ]
                 );
             }
@@ -103,36 +133,38 @@ class ContentTypeController extends GeneralAbstractController
         return new ViewModel(['form' => $form, 'fullVersion' => true]);
     }
 
-    /**
-     * Edit an template by finding it and call the corresponding form.
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function editAction()
     {
-        $contentType = $this->getGeneralService()->findEntityById(ContentType::class, $this->params('id'));
+        /** @var ContentType $contentType */
+        $contentType = $this->generalService->find(ContentType::class, (int)$this->params('id'));
 
-        $data = array_merge($this->getRequest()->getPost()->toArray(), $this->getRequest()->getFiles()->toArray());
+        $data = $this->getRequest()->getPost()->toArray();
 
-        $form = $this->getFormService()->prepare($contentType, $contentType, $data);
+        $form = $this->formService->prepare($contentType, $data);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
                 return $this->redirect()->toRoute('zfcadmin/content-type/list');
             }
 
-            if (isset($data['delete'])) {
-                $this->getGeneralService()->removeEntity($contentType);
-
-                return $this->redirect()->toRoute('zfcadmin/content-type/list');
-            }
-
             if ($form->isValid()) {
-                $result = $this->getGeneralService()->updateEntity($form->getData());
-                $this->redirect()->toRoute(
+                /** @var ContentType $contentType */
+                $contentType = $form->getData();
+
+                $this->generalService->save($contentType);
+
+                $this->flashMessenger()->setNamespace('info')
+                    ->addMessage(
+                        sprintf(
+                            $this->translator->translate("txt-content-type-%s-has-been-updated-successfully"),
+                            $contentType->getDescription()
+                        )
+                    );
+
+                return $this->redirect()->toRoute(
                     'zfcadmin/content-type/view',
                     [
-                        'id' => $result->getId(),
+                        'id' => $contentType->getId(),
                     ]
                 );
             }

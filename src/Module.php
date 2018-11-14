@@ -10,8 +10,10 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General;
 
@@ -20,24 +22,9 @@ use Zend\ModuleManager\Feature;
 /**
  *
  */
-class Module implements Feature\AutoloaderProviderInterface, Feature\ConfigProviderInterface
+class Module implements Feature\ConfigProviderInterface
 {
-    /**
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return [
-            'Zend\Loader\ClassMapAutoloader' => [
-                __DIR__ . '/../autoload_classmap.php',
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         return include __DIR__ . '/../config/module.config.php';
     }

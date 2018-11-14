@@ -8,13 +8,12 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Entity for the General.
@@ -26,7 +25,7 @@ use Zend\InputFilter\InputFilterInterface;
  *
  * @category General
  */
-class Itac extends EntityAbstract
+class Itac extends AbstractEntity
 {
     /**
      * @ORM\Column(name="itac_id",type="integer",nullable=false)
@@ -65,141 +64,54 @@ class Itac extends EntityAbstract
      */
     private $since;
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __isset($property)
     {
-        return $this->name;
+        return isset($this->$property);
     }
 
-    /**
-     * Set input filter.
-     *
-     * @param InputFilterInterface $inputFilter
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (! $this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'     => 'since',
-                        'required' => true,
-                    )
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    array(
-                        'name'     => 'country',
-                        'required' => true,
-                    )
-                )
-            );
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [];
-    }
-
-    /**
-     * @return \General\Entity\Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param \General\Entity\Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): Itac
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSince()
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country): Itac
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getSince(): string
     {
         return $this->since;
     }
 
-    /**
-     * @param string $since
-     */
-    public function setSince($since)
+    public function setSince(string $since): Itac
     {
         $this->since = $since;
+
+        return $this;
     }
 }

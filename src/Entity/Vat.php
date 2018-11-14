@@ -8,15 +8,13 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the General.
@@ -28,9 +26,9 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Vat extends EntityAbstract implements ResourceInterface
+class Vat extends AbstractEntity
 {
-    const VAT_VH = 7;
+    public const VAT_VH = 7;
     /**
      * @ORM\Column(name="vat_id",type="integer",nullable=false)
      * @ORM\Id
@@ -102,13 +100,6 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     private $invoiceRow;
     /**
-     * @ORM\OneToMany(targetEntity="\Invoice\Entity\Financial\Row", cascade={"persist"}, mappedBy="vat")
-     * @Annotation\Exclude()
-     *
-     * @var \Invoice\Entity\Financial\Row[]
-     */
-    private $financialRow;
-    /**
      * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
@@ -135,12 +126,11 @@ class Vat extends EntityAbstract implements ResourceInterface
      */
     public function __construct()
     {
-        $this->type         = new Collections\ArrayCollection();
-        $this->invoiceRow   = new Collections\ArrayCollection();
-        $this->financialRow = new Collections\ArrayCollection();
-        $this->deskCosts    = new Collections\ArrayCollection();
-        $this->optionCost   = new Collections\ArrayCollection();
-        $this->dimension    = new Collections\ArrayCollection();
+        $this->type = new Collections\ArrayCollection();
+        $this->invoiceRow = new Collections\ArrayCollection();
+        $this->deskCosts = new Collections\ArrayCollection();
+        $this->optionCost = new Collections\ArrayCollection();
+        $this->dimension = new Collections\ArrayCollection();
     }
 
     /**
@@ -167,112 +157,23 @@ class Vat extends EntityAbstract implements ResourceInterface
     }
 
     /**
+     * @param $property
+     *
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * toString returns the name.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)sprintf("%s (%s %%)", $this->code, $this->percentage);
-    }
-
-    /**
-     * Returns the string identifier of the Resource.
-     *
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return __NAMESPACE__ . ':' . __CLASS__ . ':' . $this->id;
-    }
-
-    /**
-     * Set input filter.
-     *
-     * @param  InputFilterInterface $inputFilter
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Setting an inputFilter is currently not supported");
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilter|\Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (! $this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'code',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'percentage',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'dateStart',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'type',
-                        'required' => true,
-                    ]
-                )
-            );
-            $inputFilter->add(
-                $factory->createInput(
-                    [
-                        'name'     => 'country',
-                        'required' => false,
-                    ]
-                )
-            );
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
-    }
-
-    public function populate()
-    {
-        return $this->getArrayCopy();
-    }
-
-    /**
-     * Needed for the hydration of form elements.
-     *
-     * @return array
-     */
-    public function getArrayCopy()
-    {
-        return [
-            'code'       => $this->code,
-            'percentage' => $this->percentage,
-            'dateStart'  => $this->dateStart,
-            'type'       => $this->type,
-            'country'    => $this->country,
-        ];
     }
 
     /**
@@ -385,22 +286,6 @@ class Vat extends EntityAbstract implements ResourceInterface
     public function setInvoiceRow($invoiceRow)
     {
         $this->invoiceRow = $invoiceRow;
-    }
-
-    /**
-     * @return \Invoice\Entity\Financial\Row[]
-     */
-    public function getFinancialRow()
-    {
-        return $this->financialRow;
-    }
-
-    /**
-     * @param \Invoice\Entity\Financial\Row[] $financialRow
-     */
-    public function setFinancialRow($financialRow)
-    {
-        $this->financialRow = $financialRow;
     }
 
     /**

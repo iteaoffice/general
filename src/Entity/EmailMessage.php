@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +26,7 @@ use Zend\Math\Rand;
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message")
  */
-class EmailMessage extends EntityAbstract
+class EmailMessage extends AbstractEntity
 {
     /**
      * @ORM\Column(name="email_message_id",type="integer",nullable=false)
@@ -45,14 +47,12 @@ class EmailMessage extends EntityAbstract
      * @ORM\Column(name="date_created", type="datetime",nullable=false)
      * @Gedmo\Timestampable(on="create")
      *
-     * @var \datetime
+     * @var \DateTime
      */
     private $dateCreated;
     /**
      * @ORM\ManyToOne(targetEntity="Contact\Entity\Contact", inversedBy="emailMessage", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="contact_id", nullable=true)
-     * })
      * @Annotation\Exclude()
      *
      * @var \Contact\Entity\Contact|null
@@ -60,9 +60,7 @@ class EmailMessage extends EntityAbstract
     private $contact;
     /**
      * @ORM\ManyToOne(targetEntity="Mailing\Entity\Contact", inversedBy="emailMessage", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="mailing_contact_id", referencedColumnName="mailing_contact_id", nullable=true)
-     * })
      * @Annotation\Exclude()
      *
      * @var \Mailing\Entity\Contact|null
@@ -80,6 +78,18 @@ class EmailMessage extends EntityAbstract
      * @var string
      */
     private $subject;
+    /**
+     * @ORM\Column(name="cc",type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $cc;
+    /**
+     * @ORM\Column(name="bcc",type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $bcc;
     /**
      * @ORM\Column(name="message",type="text")
      *
@@ -161,7 +171,7 @@ class EmailMessage extends EntityAbstract
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -179,7 +189,7 @@ class EmailMessage extends EntityAbstract
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getIdentifier()
     {
@@ -394,6 +404,46 @@ class EmailMessage extends EntityAbstract
     public function setDateLatestEvent(\DateTime $dateLatestEvent): EmailMessage
     {
         $this->dateLatestEvent = $dateLatestEvent;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCc(): ?string
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param string $cc
+     *
+     * @return EmailMessage
+     */
+    public function setCc(string $cc = null): EmailMessage
+    {
+        $this->cc = $cc;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBcc(): ?string
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param string $bcc
+     *
+     * @return EmailMessage
+     */
+    public function setBcc(string $bcc = null): EmailMessage
+    {
+        $this->bcc = $bcc;
 
         return $this;
     }

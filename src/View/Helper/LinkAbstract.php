@@ -9,14 +9,18 @@
  * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\View\Helper;
 
-use BjyAuthorize\Controller\Plugin\IsAllowed;
-use BjyAuthorize\Service\Authorize;
 use General\Acl\Assertion\AssertionAbstract;
+use General\Entity\Challenge;
 use General\Entity\ContentType;
 use General\Entity\Country;
+use General\Entity\Currency;
 use General\Entity\EntityAbstract;
+use General\Entity\ExchangeRate;
+use General\Entity\Password;
 use General\Entity\WebInfo;
 use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
@@ -55,6 +59,22 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     protected $country;
     /**
+     * @var Currency
+     */
+    protected $currency;
+    /**
+     * @var ExchangeRate
+     */
+    protected $exchangeRate;
+    /**
+     * @var Challenge
+     */
+    protected $challenge;
+    /**
+     * @var Password
+     */
+    protected $password;
+    /**
      * @var string
      */
     protected $alternativeShow;
@@ -80,7 +100,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return string
      */
-    public function createLink()
+    public function createLink(): string
     {
         /**
          * @var $url Url
@@ -89,22 +109,22 @@ abstract class LinkAbstract extends AbstractViewHelper
         /**
          * @var $serverUrl ServerUrl
          */
-        $serverUrl         = $this->getHelperPluginManager()->get('serverUrl');
+        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
         $this->linkContent = [];
-        $this->classes     = [];
+        $this->classes = [];
         $this->parseAction();
         $this->parseShow();
         if ('social' === $this->getShow()) {
-            return $serverUrl->__invoke() . $url($this->router, $this->routerParams);
+            return $serverUrl() . $url($this->router, $this->routerParams);
         }
         $uri = '<a href="%s" title="%s" class="%s">%s</a>';
 
         return sprintf(
             $uri,
             $serverUrl() . $url($this->router, $this->routerParams),
-            htmlentities($this->text),
+            htmlentities((string)$this->text),
             implode(' ', $this->classes),
-            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
+            \in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
                 : htmlentities(implode('', $this->linkContent))
         );
     }
@@ -112,15 +132,15 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      *
      */
-    public function parseAction()
+    public function parseAction(): void
     {
-        return $this->action = null;
+        $this->action = null;
     }
 
     /**
      * @throws \Exception
      */
-    public function parseShow()
+    public function parseShow(): void
     {
         switch ($this->getShow()) {
             case 'button':
@@ -142,6 +162,9 @@ abstract class LinkAbstract extends AbstractViewHelper
                     case 'view':
                         $this->addLinkContent('<i class="fa fa-external-link"></i>');
                         break;
+                    case 'download-pdf':
+                        $this->addLinkContent('<i class="fa fa-file-pdf-o"></i>');
+                        break;
                     default:
                         $this->addLinkContent('<i class="fa fa-file-o"></i>');
                         break;
@@ -152,7 +175,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                     if ($this->getAction() === 'delete') {
                         $this->addClasses("btn btn-danger");
                     } else {
-                        $this->addClasses("btn btn-primary");
+                        $this->addClasses('btn btn-primary');
                     }
                 }
                 break;
@@ -160,7 +183,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                 $this->addLinkContent($this->getText());
                 break;
             case 'paginator':
-                if (is_null($this->getAlternativeShow())) {
+                if (null === $this->getAlternativeShow()) {
                     throw new \InvalidArgumentException(
                         sprintf("this->alternativeShow cannot be null for a paginator link")
                     );
@@ -174,7 +197,7 @@ abstract class LinkAbstract extends AbstractViewHelper
 
                 return;
             default:
-                if (! array_key_exists($this->getShow(), $this->showOptions)) {
+                if (!array_key_exists($this->getShow(), $this->showOptions)) {
                     throw new \InvalidArgumentException(
                         sprintf(
                             "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
@@ -227,7 +250,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addLinkContent($linkContent)
     {
-        if (! is_array($linkContent)) {
+        if (!is_array($linkContent)) {
             $linkContent = [$linkContent];
         }
 
@@ -261,10 +284,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addClasses($classes)
     {
-        if (! is_array($classes)) {
-            $classes = [$classes];
-        }
-        foreach ($classes as $class) {
+        foreach ((array)$classes as $class) {
             $this->classes[] = $class;
         }
 
@@ -303,62 +323,6 @@ abstract class LinkAbstract extends AbstractViewHelper
         $this->showOptions = $showOptions;
     }
 
-    /**
-     * @param EntityAbstract $entity
-     * @param string         $assertion
-     * @param string         $action
-     *
-     * @return bool
-     */
-    public function hasAccess(EntityAbstract $entity, $assertion, $action)
-    {
-        $assertion = $this->getAssertion($assertion);
-        if (! is_null($entity)
-             && ! $this->getAuthorizeService()->getAcl()->hasResource($entity)
-        ) {
-            $this->getAuthorizeService()->getAcl()->addResource($entity);
-            $this->getAuthorizeService()->getAcl()->allow([], $entity, [], $assertion);
-        }
-        if (! $this->isAllowed($entity, $action)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $assertion
-     *
-     * @return AssertionAbstract
-     */
-    public function getAssertion($assertion)
-    {
-        return $this->getServiceManager()->get($assertion);
-    }
-
-    /**
-     * @return Authorize
-     */
-    public function getAuthorizeService()
-    {
-        return $this->getServiceManager()->get('BjyAuthorize\Service\Authorize');
-    }
-
-    /**
-     * @param null|EntityAbstract $resource
-     * @param string              $privilege
-     *
-     * @return bool
-     */
-    public function isAllowed($resource, $privilege = null)
-    {
-        /**
-         * @var $isAllowed IsAllowed
-         */
-        $isAllowed = $this->getHelperPluginManager()->get('isAllowed');
-
-        return $isAllowed($resource, $privilege);
-    }
 
     /**
      * Add a parameter to the list of parameters for the router.
@@ -369,10 +333,10 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function addRouterParam($key, $value, $allowNull = true)
     {
-        if (! $allowNull && is_null($value)) {
+        if (!$allowNull && null === $value) {
             throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
-        if (! is_null($value)) {
+        if (null !== $value) {
             $this->routerParams[$key] = $value;
         }
     }
@@ -396,7 +360,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return array
      */
-    public function getRouterParams()
+    public function getRouterParams(): array
     {
         return $this->routerParams;
     }
@@ -407,17 +371,17 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return string
      */
-    public function getCountryFlag(Country $country, $width)
+    public function getCountryFlag(Country $country, $width): string
     {
-        return $this->getHelperPluginManager()->get('countryFlag')->__invoke($country, $width);
+        return $this->getHelperPluginManager()->get('countryFlag')($country, $width);
     }
 
     /**
      * @return WebInfo
      */
-    public function getWebInfo()
+    public function getWebInfo(): WebInfo
     {
-        if (is_null($this->webInfo)) {
+        if (\is_null($this->webInfo)) {
             $this->webInfo = new WebInfo();
         }
 
@@ -429,7 +393,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setWebInfo($webInfo)
+    public function setWebInfo($webInfo): LinkAbstract
     {
         $this->webInfo = $webInfo;
 
@@ -439,9 +403,9 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return Country
      */
-    public function getCountry()
+    public function getCountry(): Country
     {
-        if (is_null($this->country)) {
+        if (\is_null($this->country)) {
             $this->country = new Country();
         }
 
@@ -453,7 +417,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setCountry($country)
+    public function setCountry($country): LinkAbstract
     {
         $this->country = $country;
 
@@ -463,9 +427,9 @@ abstract class LinkAbstract extends AbstractViewHelper
     /**
      * @return ContentType
      */
-    public function getContentType()
+    public function getContentType(): ContentType
     {
-        if (is_null($this->contentType)) {
+        if (\is_null($this->contentType)) {
             $this->contentType = new ContentType();
         }
 
@@ -477,9 +441,106 @@ abstract class LinkAbstract extends AbstractViewHelper
      *
      * @return LinkAbstract
      */
-    public function setContentType($contentType)
+    public function setContentType($contentType): LinkAbstract
     {
         $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * @return Currency
+     */
+    public function getCurrency(): Currency
+    {
+        if (\is_null($this->currency)) {
+            $this->currency = new Currency();
+        }
+
+        return $this->currency;
+    }
+
+    /**
+     * @param Currency $currency
+     *
+     * @return LinkAbstract
+     */
+    public function setCurrency($currency): LinkAbstract
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+
+    /**
+     * @return ExchangeRate
+     */
+    public function getExchangeRate(): ExchangeRate
+    {
+        if (\is_null($this->exchangeRate)) {
+            $this->exchangeRate = new ExchangeRate();
+        }
+
+        return $this->exchangeRate;
+    }
+
+    /**
+     * @param ExchangeRate $exchangeRate
+     *
+     * @return LinkAbstract
+     */
+    public function setExchangeRate($exchangeRate): LinkAbstract
+    {
+        $this->exchangeRate = $exchangeRate;
+
+        return $this;
+    }
+
+    /**
+     * @return Challenge
+     */
+    public function getChallenge(): Challenge
+    {
+        if (\is_null($this->challenge)) {
+            $this->challenge = new Challenge();
+        }
+
+        return $this->challenge;
+    }
+
+    /**
+     * @param Challenge $challenge
+     *
+     * @return LinkAbstract
+     */
+    public function setChallenge(Challenge $challenge = null): LinkAbstract
+    {
+        $this->challenge = $challenge;
+
+        return $this;
+    }
+
+    /**
+     * @return Password
+     */
+    public function getPassword(): Password
+    {
+        if (\is_null($this->password)) {
+            $this->password = new Password();
+        }
+
+        return $this->password;
+    }
+
+    /**
+     * @param Password $password
+     *
+     * @return LinkAbstract
+     */
+    public function setPassword(Password $password = null): LinkAbstract
+    {
+        $this->password = $password;
 
         return $this;
     }

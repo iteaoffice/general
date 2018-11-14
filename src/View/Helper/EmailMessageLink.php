@@ -11,8 +11,10 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\View\Helper;
 
@@ -32,8 +34,8 @@ class EmailMessageLink extends LinkAbstract
 
     /**
      * @param EmailMessage $emailMessage
-     * @param string       $action
-     * @param string       $show
+     * @param string $action
+     * @param string $show
      *
      * @return string
      *
@@ -59,11 +61,31 @@ class EmailMessageLink extends LinkAbstract
     }
 
     /**
+     * @return EmailMessage
+     */
+    public function getEmailMessage(): EmailMessage
+    {
+        if (\is_null($this->emailMessage)) {
+            $this->emailMessage = new EmailMessage();
+        }
+
+        return $this->emailMessage;
+    }
+
+    /**
+     * @param EmailMessage $emailMessage
+     */
+    public function setEmailMessage($emailMessage)
+    {
+        $this->emailMessage = $emailMessage;
+    }
+
+    /**
      * Parse the action.
      *
      * @throws \Exception
      */
-    public function parseAction()
+    public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'list':
@@ -77,25 +99,5 @@ class EmailMessageLink extends LinkAbstract
             default:
                 throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
-
-    /**
-     * @return EmailMessage
-     */
-    public function getEmailMessage(): EmailMessage
-    {
-        if (is_null($this->emailMessage)) {
-            $this->emailMessage = new EmailMessage();
-        }
-
-        return $this->emailMessage;
-    }
-
-    /**
-     * @param EmailMessage $emailMessage
-     */
-    public function setEmailMessage($emailMessage)
-    {
-        $this->emailMessage = $emailMessage;
     }
 }

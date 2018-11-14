@@ -10,17 +10,21 @@
  * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
+ * @link        https://github.com/iteaoffice/general for the canonical source repository
  */
+
+declare(strict_types=1);
 
 namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
+use DoctrineModule\Validator\UniqueObject;
 use General\Entity;
 use Zend\InputFilter\InputFilter;
 
 /**
  * Class WebInfoFilter
+ *
  * @package General\InputFilterF
  */
 class WebInfoFilter extends InputFilter
@@ -47,7 +51,7 @@ class WebInfoFilter extends InputFilter
                         ],
                     ],
                     [
-                        'name'    => '\DoctrineModule\Validator\UniqueObject',
+                        'name'    => UniqueObject::class,
                         'options' => [
                             'object_repository' => $entityManager->getRepository(Entity\WebInfo::class),
                             'object_manager'    => $entityManager,

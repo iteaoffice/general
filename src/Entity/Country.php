@@ -8,13 +8,14 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Entity for the Country.
@@ -26,13 +27,13 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @category General
  */
-class Country extends EntityAbstract implements ResourceInterface
+class Country extends AbstractEntity
 {
     /**
      * @ORM\Column(name="country_id",type="integer",nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Exclude()
+     * @Annotation\Type("\Zend\Form\Element\Hidden")
      *
      * @var int
      */
@@ -103,7 +104,7 @@ class Country extends EntityAbstract implements ResourceInterface
      * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Eureka
+     * @var \General\Entity\Itac
      */
     private $itac;
     /**
@@ -168,7 +169,7 @@ class Country extends EntityAbstract implements ResourceInterface
      *
      * @var \Project\Entity\ChangeRequest\Country[]|Collections\ArrayCollection
      */
-    private $changerequestCountry;
+    private $changeRequestCountry;
     /**
      * @ORM\ManyToMany(targetEntity="Project\Entity\Log", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
@@ -183,10 +184,14 @@ class Country extends EntityAbstract implements ResourceInterface
      * @var \Program\Entity\Call\Country[]|Collections\ArrayCollection
      */
     private $callCountry;
-
     /**
-     * Class constructor.
+     * @ORM\OneToMany(targetEntity="Project\Entity\Contract", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Contract[]|Collections\ArrayCollection
      */
+    private $contract;
+
     public function __construct()
     {
         $this->address = new Collections\ArrayCollection();
@@ -196,59 +201,47 @@ class Country extends EntityAbstract implements ResourceInterface
         $this->vat = new Collections\ArrayCollection();
         $this->funder = new Collections\ArrayCollection();
         $this->evaluation = new Collections\ArrayCollection();
-        $this->changerequestCountry = new Collections\ArrayCollection();
+        $this->changeRequestCountry = new Collections\ArrayCollection();
         $this->projectLog = new Collections\ArrayCollection();
         $this->callCountry = new Collections\ArrayCollection();
+        $this->contract = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
+    public function isItac(): bool
+    {
+        return null !== $this->itac;
+    }
+
+    public function isEu(): bool
+    {
+        return null !== $this->eu;
+    }
+
+    public function isEureka(): bool
+    {
+        return null !== $this->eureka;
+    }
+
     public function __toString(): string
     {
         return (string)$this->country;
     }
 
-
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $vatCollection
-     */
     public function addVat(Collections\Collection $vatCollection)
     {
         foreach ($vatCollection as $vat) {
@@ -256,11 +249,6 @@ class Country extends EntityAbstract implements ResourceInterface
         }
     }
 
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $vatCollection
-     */
     public function removeVat(Collections\Collection $vatCollection)
     {
         foreach ($vatCollection as $vat) {
@@ -268,17 +256,11 @@ class Country extends EntityAbstract implements ResourceInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getCd()
+    public function getCd(): ?string
     {
         return $this->cd;
     }
 
-    /**
-     * @param string $cd
-     */
     public function setCd($cd)
     {
         $this->cd = $cd;
@@ -365,7 +347,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return Collections\ArrayCollection|Vat[]
      */
     public function getVat()
     {
@@ -373,7 +355,7 @@ class Country extends EntityAbstract implements ResourceInterface
     }
 
     /**
-     * @param int $vat
+     * @param $vat
      */
     public function setVat($vat)
     {
@@ -561,17 +543,17 @@ class Country extends EntityAbstract implements ResourceInterface
      */
     public function getChangeRequestCountry()
     {
-        return $this->changerequestCountry;
+        return $this->changeRequestCountry;
     }
 
     /**
-     * @param Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[] $changerequestCountry
+     * @param Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[] $changeRequestCountry
      *
      * @return Country
      */
-    public function setChangeRequestCountry($changerequestCountry)
+    public function setChangeRequestCountry($changeRequestCountry): Country
     {
-        $this->changerequestCountry = $changerequestCountry;
+        $this->changeRequestCountry = $changeRequestCountry;
 
         return $this;
     }
@@ -612,6 +594,26 @@ class Country extends EntityAbstract implements ResourceInterface
     public function setCallCountry($callCountry)
     {
         $this->callCountry = $callCountry;
+
+        return $this;
+    }
+
+    /**
+     * @return Collections\ArrayCollection|\Project\Entity\Contract[]
+     */
+    public function getContract()
+    {
+        return $this->contract;
+    }
+
+    /**
+     * @param Collections\ArrayCollection|\Project\Entity\Contract[] $contract
+     *
+     * @return Country
+     */
+    public function setContract($contract)
+    {
+        $this->contract = $contract;
 
         return $this;
     }

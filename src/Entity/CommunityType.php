@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
  */
 
+declare(strict_types=1);
+
 namespace General\Entity;
 
 use Doctrine\Common\Collections;
@@ -21,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @category General
  */
-class CommunityType extends EntityAbstract
+class CommunityType extends AbstractEntity
 {
     /**
      * @ORM\Column(name="type_id", type="integer", nullable=false)
@@ -94,9 +96,19 @@ class CommunityType extends EntityAbstract
     }
 
     /**
+     * @param $property
+     *
+     * @return bool
+     */
+    public function __isset($property)
+    {
+        return isset($this->$property);
+    }
+
+    /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->type;
     }
