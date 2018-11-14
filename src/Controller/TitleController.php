@@ -37,28 +37,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class TitleController extends AbstractActionController
+final class TitleController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * TitleController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -69,10 +62,6 @@ class TitleController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -99,9 +88,6 @@ class TitleController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $title = $this->generalService->find(Title::class, (int)$this->params('id'));
@@ -112,11 +98,6 @@ class TitleController extends AbstractActionController
         return new ViewModel(['title' => $title]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -156,9 +137,6 @@ class TitleController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         /** @var Title $title */

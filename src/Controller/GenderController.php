@@ -37,28 +37,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class GenderController extends AbstractActionController
+final class GenderController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * ContentTypeController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -69,9 +62,6 @@ class GenderController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -98,9 +88,6 @@ class GenderController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $gender = $this->generalService->find(Gender::class, (int)$this->params('id'));
@@ -112,11 +99,6 @@ class GenderController extends AbstractActionController
         return new ViewModel(['gender' => $gender]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -155,11 +137,6 @@ class GenderController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function editAction()
     {
         /** @var Gender $gender */

@@ -32,28 +32,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class ContentTypeController extends AbstractActionController
+final class ContentTypeController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * ContentTypeController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -64,10 +57,6 @@ class ContentTypeController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -95,9 +84,6 @@ class ContentTypeController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $contentType = $this->generalService->find(ContentType::class, (int)$this->params('id'));
@@ -108,11 +94,6 @@ class ContentTypeController extends AbstractActionController
         return new ViewModel(['contentType' => $contentType]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -152,11 +133,6 @@ class ContentTypeController extends AbstractActionController
         return new ViewModel(['form' => $form, 'fullVersion' => true]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function editAction()
     {
         /** @var ContentType $contentType */

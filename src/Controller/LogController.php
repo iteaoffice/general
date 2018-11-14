@@ -32,28 +32,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class LogController extends AbstractActionController
+final class LogController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    private $entityManager;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * LogController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param EntityManager       $entityManager
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         EntityManager $entityManager,
@@ -64,10 +57,6 @@ class LogController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -86,10 +75,9 @@ class LogController extends AbstractActionController
         if ($this->getRequest()->isGet() && null !== $this->getRequest()->getQuery('submit')) {
             $this->generalService->truncateLog();
 
-            $this->flashMessenger()->setNamespace('success')
-                ->addMessage(
-                    $this->translator->translate("txt-log-has-been-truncated-successfully")
-                );
+            $this->flashMessenger()->addSuccessMessage(
+                $this->translator->translate("txt-log-has-been-truncated-successfully")
+            );
         }
 
         return new ViewModel(
@@ -103,9 +91,6 @@ class LogController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $log = $this->generalService->find(Log::class, (int)$this->params('id'));

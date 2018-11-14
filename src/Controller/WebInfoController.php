@@ -36,7 +36,7 @@ use Zend\View\Model\ViewModel;
  * @method FlashMessenger flashMessenger()
  * @method Identity|Contact identity()
  */
-class WebInfoController extends AbstractActionController
+final class WebInfoController extends AbstractActionController
 {
     /**
      * @var GeneralService

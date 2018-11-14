@@ -33,28 +33,21 @@ use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
  * @method FlashMessenger flashMessenger()
  *
  */
-class CurrencyController extends AbstractActionController
+final class CurrencyController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * ContentTypeController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -65,9 +58,6 @@ class CurrencyController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -94,9 +84,6 @@ class CurrencyController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $currency = $this->generalService->find(Currency::class, (int)$this->params('id'));
@@ -112,9 +99,6 @@ class CurrencyController extends AbstractActionController
         );
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -154,9 +138,6 @@ class CurrencyController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         /** @var Currency $currency */

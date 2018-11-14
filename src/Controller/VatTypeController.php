@@ -38,28 +38,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class VatTypeController extends AbstractActionController
+final class VatTypeController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * VatTypeController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -70,10 +63,6 @@ class VatTypeController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -100,9 +89,6 @@ class VatTypeController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $vatType = $this->generalService->find(VatType::class, (int)$this->params('id'));
@@ -113,11 +99,6 @@ class VatTypeController extends AbstractActionController
         return new ViewModel(['vatType' => $vatType]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -156,9 +137,6 @@ class VatTypeController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         $vatType = $this->generalService->find(VatType::class, (int)$this->params('id'));

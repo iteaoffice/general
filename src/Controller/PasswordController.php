@@ -32,28 +32,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class PasswordController extends AbstractActionController
+final class PasswordController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * PasswordController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -64,9 +57,6 @@ class PasswordController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -92,9 +82,6 @@ class PasswordController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $password = $this->generalService->find(Password::class, (int)$this->params('id'));
@@ -105,9 +92,6 @@ class PasswordController extends AbstractActionController
         return new ViewModel(['password' => $password]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -125,13 +109,12 @@ class PasswordController extends AbstractActionController
                 /* @var $password Password */
                 $password = $form->getData();
 
-                $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-password-for-%s-has-been-created-successfully"),
-                            $password->getDescription()
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate("txt-password-for-%s-has-been-created-successfully"),
+                        $password->getDescription()
+                    )
+                );
 
                 $this->generalService->save($password);
 
@@ -147,9 +130,6 @@ class PasswordController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
     public function editAction()
     {
         /** @var Password $password */
@@ -167,13 +147,12 @@ class PasswordController extends AbstractActionController
             if (isset($data['delete'])) {
                 $this->generalService->delete($password);
 
-                $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-password-for-%s-has-been-deleted-successfully"),
-                            $password->getDescription()
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate("txt-password-for-%s-has-been-deleted-successfully"),
+                        $password->getDescription()
+                    )
+                );
 
 
                 return $this->redirect()->toRoute('zfcadmin/password/list');
@@ -183,13 +162,12 @@ class PasswordController extends AbstractActionController
                 /** @var Password $password */
                 $password = $form->getData();
 
-                $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-password-for-%s-has-been-updated-successfully"),
-                            $password->getDescription()
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate("txt-password-for-%s-has-been-updated-successfully"),
+                        $password->getDescription()
+                    )
+                );
 
 
                 $password = $this->generalService->save($password);

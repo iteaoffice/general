@@ -34,7 +34,7 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class EmailController extends AbstractActionController
+final class EmailController extends AbstractActionController
 {
     /**
      * @var GeneralService

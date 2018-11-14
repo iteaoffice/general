@@ -37,28 +37,21 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class VatController extends AbstractActionController
+final class VatController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * VatController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -69,10 +62,6 @@ class VatController extends AbstractActionController
         $this->translator = $translator;
     }
 
-
-    /**
-     * ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -98,9 +87,6 @@ class VatController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $vat = $this->generalService->find(Vat::class, (int)$this->params('id'));
@@ -111,11 +97,6 @@ class VatController extends AbstractActionController
         return new ViewModel(['vat' => $vat]);
     }
 
-    /**
-     * Create a new template.
-     *
-     * ViewModel
-     */
     public function newAction()
     {
         $data = $this->getRequest()->getPost()->toArray();
@@ -155,11 +136,6 @@ class VatController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function editAction()
     {
         /** @var Vat $vat */

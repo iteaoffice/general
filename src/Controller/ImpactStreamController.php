@@ -34,7 +34,7 @@ use Zend\View\Model\ViewModel;
  *
  * @package General\Controller
  */
-class ImpactStreamController extends AbstractActionController
+final class ImpactStreamController extends AbstractActionController
 {
     /**
      * @var array

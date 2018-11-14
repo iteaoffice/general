@@ -87,7 +87,7 @@ return [
             GeneralService::class,
         ],
         Controller\ImpactStreamController::class   => [
-            ProjectService::class,
+            ResultService::class,
             GeneralService::class,
             ResultSearchService::class
         ],

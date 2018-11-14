@@ -26,6 +26,7 @@ use Project\Service\ProjectService;
 use Search\Service\SearchUpdateInterface;
 use Solarium\Client;
 use Solarium\Core\Query\AbstractQuery;
+use Solarium\QueryType\Update\Query\Document\Document;
 
 /**
  * Class CountryService
@@ -156,27 +157,25 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         $searchClient = new Client();
         $update = $searchClient->createUpdate();
 
-        // Add the country data as the document
+        /** @var Document $countryDocument */
         $countryDocument = $update->createDocument();
-        // Country properties
-        $countryDocument->id = $country->getResourceId();
 
-        $countryDocument->country_id = $country->getId();
-        $countryDocument->country = $country->getCountry();
-        $countryDocument->country_cd = $country->getCd();
-        $countryDocument->country_iso3 = $country->getIso3();
-        $countryDocument->country_sort = $country->getCountry();
-        $countryDocument->country_search = $country->getCountry();
+        $countryDocument->setField('id', $country->getResourceId());
+        $countryDocument->setField('country_id', $country->getId());
+        $countryDocument->setField('country', $country->getCountry());
+        $countryDocument->setField('country_cd', $country->getCd());
+        $countryDocument->setField('country_iso3', $country->getIso3());
+        $countryDocument->setField('country_sort', $country->getCountry());
+        $countryDocument->setField('country_search', $country->getCountry());
 
-        $countryDocument->docref = $country->getDocRef();
+        $countryDocument->setField('docref', $country->getDocRef());
 
-        $countryDocument->is_itac = $country->isItac();
-        $countryDocument->is_itac_text = $country->isItac() ? 'YES' : 'NO';
-        $countryDocument->is_eu = $country->isEu();
-        $countryDocument->is_eu_text = $country->isEu() ? 'YES' : 'NO';
-        $countryDocument->is_eureka = $country->isEureka();
-        $countryDocument->is_eureka_text = $country->isEureka() ? 'YES' : 'NO';
-
+        $countryDocument->setField('is_itac', $country->isItac());
+        $countryDocument->setField('is_itac_text', $country->isItac() ? 'YES' : 'NO');
+        $countryDocument->setField('is_eu', $country->isEu());
+        $countryDocument->setField('is_eu_text', $country->isEu() ? 'YES' : 'NO');
+        $countryDocument->setField('is_eureka', $country->isEureka());
+        $countryDocument->setField('is_eureka_text', $country->isEureka() ? 'YES' : 'NO');
 
         //Find all the projects and partners
         $projects = [];
@@ -202,15 +201,18 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         }
 
 
-        $countryDocument->projects = \count($projects);
-        $countryDocument->has_projects = \count($projects) > 0;
-        $countryDocument->affiliations = \count($affiliations);
-        $countryDocument->has_affiliations = \count($affiliations) > 0;
-        $countryDocument->funders = $country->getFunder()->filter(
-            function (Funder $funder) {
-                return $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE;
-            }
-        )->count();
+        $countryDocument->setField('projects', \count($projects));
+        $countryDocument->setField('has_projects', \count($projects) > 0);
+        $countryDocument->setField('affiliations', \count($affiliations));
+        $countryDocument->setField('has_affiliations', \count($affiliations) > 0);
+        $countryDocument->setField(
+            'funders',
+            $country->getFunder()->filter(
+                function (Funder $funder) {
+                    return $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE;
+                }
+            )->count()
+        );
 
         $update->addDocument($countryDocument);
         $update->addCommit();

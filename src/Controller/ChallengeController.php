@@ -40,33 +40,25 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class ChallengeController extends AbstractActionController
+final class ChallengeController extends AbstractActionController
 {
     /**
      * @var GeneralService
      */
-    protected $generalService;
+    private $generalService;
     /**
      * @var FormService
      */
-    protected $formService;
+    private $formService;
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    private $entityManager;
 
-    /**
-     * ChallengeController constructor.
-     *
-     * @param GeneralService      $generalService
-     * @param FormService         $formService
-     * @param TranslatorInterface $translator
-     * @param EntityManager       $entityManager
-     */
     public function __construct(
         GeneralService $generalService,
         FormService $formService,
@@ -79,10 +71,6 @@ class ChallengeController extends AbstractActionController
         $this->entityManager = $entityManager;
     }
 
-
-    /**
-     * @return ViewModel
-     */
     public function listAction(): ViewModel
     {
         $page = $this->params()->fromRoute('page', 1);
@@ -108,9 +96,6 @@ class ChallengeController extends AbstractActionController
         );
     }
 
-    /**
-     * @return ViewModel
-     */
     public function viewAction(): ViewModel
     {
         $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
@@ -121,9 +106,6 @@ class ChallengeController extends AbstractActionController
         return new ViewModel(['challenge' => $challenge]);
     }
 
-    /**
-     * @return ViewModel
-     */
     public function newAction(): ViewModel
     {
         $data = array_merge_recursive(
@@ -211,13 +193,12 @@ class ChallengeController extends AbstractActionController
 
                 $challenge = $this->generalService->save($challenge);
 
-                $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-challenge-%s-has-successfully-been-created"),
-                            $challenge
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate("txt-challenge-%s-has-successfully-been-created"),
+                        $challenge
+                    )
+                );
 
                 $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
@@ -231,10 +212,7 @@ class ChallengeController extends AbstractActionController
         return new ViewModel(['form' => $form]);
     }
 
-    /**
-     * @return \Zend\Http\Response|ViewModel
-     */
-    public function editAction(): ViewModel
+    public function editAction()
     {
         /** @var Challenge $challenge */
         $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
@@ -357,13 +335,12 @@ class ChallengeController extends AbstractActionController
 
                 $challenge = $this->generalService->save($challenge);
 
-                $this->flashMessenger()->setNamespace('success')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-challenge-%s-has-successfully-been-updated"),
-                            $challenge
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate("txt-challenge-%s-has-successfully-been-updated"),
+                        $challenge
+                    )
+                );
 
                 $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
@@ -377,10 +354,6 @@ class ChallengeController extends AbstractActionController
         return new ViewModel(['form' => $form, 'challenge' => $challenge]);
     }
 
-
-    /**
-     * @return Response
-     */
     public function downloadPdfAction(): Response
     {
         /**

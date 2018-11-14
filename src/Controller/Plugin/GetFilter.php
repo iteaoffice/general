@@ -21,7 +21,7 @@ use Zend\Router\Http\RouteMatch;
 /**
  * @category    Application
  */
-class GetFilter extends AbstractPlugin
+final class GetFilter extends AbstractPlugin
 {
     /**
      * @var Request
@@ -73,7 +73,7 @@ class GetFilter extends AbstractPlugin
         $direction = $this->request->getQuery('direction');
 
         //Take the filter from the URL
-        $filter = (array)json_decode(base64_decode($encodedFilter));
+        $filter = (array)\json_decode(base64_decode($encodedFilter));
 
 
         //If the form is submitted, refresh the URL
@@ -107,44 +107,26 @@ class GetFilter extends AbstractPlugin
         return $this;
     }
 
-    /**
-     * Give the compressed version of the filter
-     *
-     * @return string
-     */
     public function getHash(): string
     {
-        return base64_encode(json_encode($this->filter));
+        return \base64_encode(\json_encode($this->filter));
     }
 
-    /**
-     * @return array
-     */
     public function getFilter(): array
     {
         return $this->filter;
     }
 
-
-    /**
-     * @return null|string
-     */
     public function getOrder(): ?string
     {
         return $this->order;
     }
 
-    /**
-     * @return null|string
-     */
     public function getDirection(): ?string
     {
         return $this->direction;
     }
 
-    /**
-     * @return null|string
-     */
     public function getQuery(): ?string
     {
         return $this->query;

@@ -34,7 +34,7 @@ use Zend\View\Model\ViewModel;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class CountryController extends AbstractActionController
+final class CountryController extends AbstractActionController
 {
     /**
      * @var CountryService

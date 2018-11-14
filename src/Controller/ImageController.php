@@ -31,7 +31,7 @@ use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
-class ImageController extends AbstractActionController
+final class ImageController extends AbstractActionController
 {
     protected $generalService;
 
