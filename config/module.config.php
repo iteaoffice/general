@@ -55,7 +55,7 @@ $config = [
     ],
     'view_helpers'       => [
         'aliases'   => [
-            'countryHandler'    => View\Helper\CountryHandler::class,
+            'challengeHandler'  => View\Handler\ChallengeHandler::class,
             'challengeIcon'     => View\Helper\ChallengeIcon::class,
             'challengeImage'    => View\Helper\ChallengeImage::class,
             'challengeTypeLink' => View\Helper\ChallengeTypeLink::class,
@@ -110,7 +110,6 @@ $config = [
             InputFilter\GenderFilter::class                => ConfigAbstractFactory::class,
             InputFilter\TitleFilter::class                 => ConfigAbstractFactory::class,
             InputFilter\WebInfoFilter::class               => ConfigAbstractFactory::class,
-            Options\ModuleOptions::class                   => Factory\ModuleOptionsFactory::class,
             Service\GeneralService::class                  => ConfigAbstractFactory::class,
             Service\CountryService::class                  => ConfigAbstractFactory::class,
             Service\EmailService::class                    => ConfigAbstractFactory::class,
@@ -141,6 +140,7 @@ $config = [
                     'js/jquery/jquery.mousewheel.min.js',
                     'js/jquery/jquery-jvectormap-2.0.2.min.js',
                     'js/jquery/jquery-jvectormap-europe-mill-en.js',
+                    'js/jquery/jquery-jvectormap-world.js',
                 ],
                 'assets/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/css/jvectormap.css' => [
                     'css/jquery-jvectormap-2.0.2.css',

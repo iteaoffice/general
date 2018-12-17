@@ -19,7 +19,6 @@ namespace General;
 
 use Affiliation\Service\AffiliationService;
 use Contact\Service\ContactService;
-use Content\Service\ArticleService;
 use Deeplink\Service\DeeplinkService;
 use Doctrine\ORM\EntityManager;
 use General\Search\Service\CountrySearchService;
@@ -27,9 +26,7 @@ use General\Service\CountryService;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Organisation\Service\OrganisationService;
 use Program\Service\ProgramService;
-use Project\Search\Service\ProjectSearchService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
 use Project\Service\ResultService;
@@ -189,11 +186,8 @@ return [
             TranslatorInterface::class,
             CountryService::class,
             CountrySearchService::class,
-            ProjectService::class,
-            ProjectSearchService::class,
-            ProgramService::class,
-            OrganisationService::class,
-            ArticleService::class
+            ContactService::class,
+            ProgramService::class
         ],
         View\Helper\ContentTypeIcon::class         => [
             GeneralService::class

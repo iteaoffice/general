@@ -12,6 +12,7 @@
 {{ ztbformelement(country.get('abstract')) }}
 {{ ztbformelement(country.get('description')) }}
 {{ ztbformelement(country.get('html')) }}
+{{ ztbformelement(country.get('backgroundImage')) }}
 {{ ztbformelement(country.get('css')) }}
 {{ ztbformelement(country.get('backgroundColor')) }}
 {{ ztbformelement(country.get('frontColor')) }}
@@ -48,6 +49,16 @@
 
         <div class="col-sm-9">
             <p class="form-control-static form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% if challenge.backgroundImage %}
+    <div class="form-group row">
+        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-background-image") }}</label>
+
+        <div class="col-sm-9">
+            <p class="form-control-static form-control-plaintext">{{ image(challenge.image,100) }}</p>
         </div>
     </div>
 {% endif %}

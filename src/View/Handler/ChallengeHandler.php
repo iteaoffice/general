@@ -59,8 +59,12 @@ final class ChallengeHandler extends AbstractHandler
         $this->projectService = $projectService;
     }
 
-    public function __invoke(Content $content): ?string
+    public function __invoke(Content $content = null)
     {
+        if (null === $content) {
+            return $this;
+        }
+
         $params = $this->extractContentParam($content);
 
         $challenge = $this->getChallengeByParams($params);
@@ -125,5 +129,12 @@ final class ChallengeHandler extends AbstractHandler
         $challenge = $this->generalService->findAll(Challenge::class);
 
         return $this->renderer->render('cms/challenge/list', ['challenge' => $challenge]);
+    }
+
+    public function parseChallengeListFrontpage(): string
+    {
+        $challenge = $this->generalService->findAll(Challenge::class);
+
+        return $this->renderer->render('cms/challenge/list-frontpage', ['challenge' => $challenge]);
     }
 }

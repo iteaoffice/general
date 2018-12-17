@@ -81,6 +81,8 @@ _("txt-challenge-sources-help-block");
 _("txt-challenge-abstract-placeholder");
 _("txt-challenge-abstract-label");
 _("txt-challenge-abstract-explanation");
+_("txt-challenge-background-image-label");
+_("txt-challenge-backgrond-image-explanation");
 _("txt-challenge-background-color-label");
 _("txt-challenge-background-color-help-block");
 _("txt-challenge-front-color-label");

@@ -17,23 +17,12 @@ use Content\Entity\Route;
 use General\Entity\Country;
 
 /**
- * Create a link to an country.
+ * Class CountryLink
  *
- * @category   General
+ * @package General\View\Helper
  */
-class CountryLink extends LinkAbstract
+final class CountryLink extends LinkAbstract
 {
-
-    /**
-     * @param Country $country
-     * @param string  $action
-     * @param string  $show
-     * @param string  $alternativeShow
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         Country $country = null,
         $action = 'view',
@@ -50,34 +39,18 @@ class CountryLink extends LinkAbstract
             [
                 'name'   => $this->getCountry(),
                 'iso3'   => $this->getCountry()->getIso3(),
-                'more'   => $this->translate("txt-read-more"),
-                'custom' => $this->getAlternativeShow(),
-                'flag'   => $this->getCountryFlag($this->getCountry(), 40),
             ]
         );
 
         return $this->createLink();
     }
 
-    /**
-     *
-     */
     public function parseAction(): void
     {
         switch ($this->getAction()) {
             case 'view':
                 $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY));
                 $this->setText(sprintf($this->translate("txt-view-country-%s"), $this->getCountry()));
-                break;
-            case 'view-project':
-                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY_PROJECT));
-                $this->setText(sprintf($this->translate("txt-view-project-for-country-%s"), $this->getCountry()));
-                break;
-            case 'view-organisation':
-                //@todo
-
-                $this->setRouter(Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY_ORGANISATION));
-                $this->setText(sprintf($this->translate("txt-view-organisation-for-country-%s"), $this->getCountry()));
                 break;
             case 'list':
                 $this->setRouter('zfcadmin/country/list');
@@ -95,14 +68,6 @@ class CountryLink extends LinkAbstract
                 $this->setRouter('zfcadmin/country/edit');
                 $this->setText(sprintf($this->translate('txt-edit-country-%s'), $this->getCountry()));
                 break;
-            default:
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        "%s is an incorrect action for %s",
-                        $this->getAction(),
-                        __CLASS__
-                    )
-                );
         }
     }
 }

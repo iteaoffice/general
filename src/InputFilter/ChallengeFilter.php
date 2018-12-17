@@ -75,6 +75,12 @@ class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
+                'name'     => 'backgroundImage',
+                'required' => false,
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'     => 'description',
                 'required' => true,
                 'filters'  => [

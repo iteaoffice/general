@@ -1,5 +1,5 @@
 {% do headTitle().append(translate("txt-admin")) %}
-{% do headTitle().append(translate("txt-log-list")) %}
+{% do headTitle().append(translate("txt-errorlog-list")) %}
 
 {% do form.prepare() %}
 {{ form().openTag(form)|raw }}
@@ -11,7 +11,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <h1 class="display-4">{{ translate("txt-log-list") }}</h1>
+        <h1 class="display-4">{{ translate("txt-error-log-list") }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -20,7 +20,10 @@
             <div class="col-md-6">
                 <div class="input-group">
                     {{ formelement(filter.get('search')) }}
-                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+                    <div class="input-group-append">
+                        {{ formelement(form.get('submit')) }}
+                    </div>
+                </div>
             </div>
         </div>
 

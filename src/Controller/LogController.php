@@ -57,7 +57,7 @@ final class LogController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    public function listAction(): ViewModel
+    public function listAction()
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getFilter();
@@ -78,6 +78,8 @@ final class LogController extends AbstractActionController
             $this->flashMessenger()->addSuccessMessage(
                 $this->translator->translate("txt-log-has-been-truncated-successfully")
             );
+
+            return $this->redirect()->toRoute('zfcadmin/log/list');
         }
 
         return new ViewModel(

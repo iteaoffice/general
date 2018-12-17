@@ -20,28 +20,21 @@ use General\Entity\Challenge;
 
 /**
  * Class ChallengeIcon
+ *
  * @package Challenge\View\Helper
  */
-class ChallengeIcon extends ImageAbstract
+final class ChallengeIcon extends ImageAbstract
 {
-    /**
-     * @param Challenge $challenge
-     * @param null $width
-     * @param bool $responsive
-     * @param array $classes
-     * @return string
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
     public function __invoke(
         Challenge $challenge,
-        $width = null,
-        $responsive = true,
-        $classes = []
+        int $width = null,
+        bool $responsive = true,
+        array $classes = [],
+        bool $onlyUrl = false
     ): string {
         $icon = $challenge->getIcon();
 
-        if (\is_null($icon)) {
+        if (null === $icon) {
             return '';
         }
 
@@ -53,6 +46,6 @@ class ChallengeIcon extends ImageAbstract
 
         $this->setWidth($width);
 
-        return $this->createImageUrl();
+        return $this->createImageUrl($onlyUrl);
     }
 }

@@ -52,12 +52,6 @@ abstract class ImageAbstract extends AbstractViewHelper
      */
     protected $width;
 
-    /**
-     * @param bool $onlyUrl
-     * @return string
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
     public function createImageUrl(bool $onlyUrl = false): string
     {
         /**
@@ -90,12 +84,13 @@ abstract class ImageAbstract extends AbstractViewHelper
             implode(' ', $this->classes)
         );
 
-        if (!$this->lightBox) {
-            return $image;
-        }
 
         if ($onlyUrl) {
             return (string)$thumberLink;
+        }
+
+        if (!$this->lightBox) {
+            return $image;
         }
 
         $thumberLinkFull = Builder::construct(
@@ -105,7 +100,8 @@ abstract class ImageAbstract extends AbstractViewHelper
         );
 
 
-        return '<a href="' . $thumberLinkFull . '" class="thumbnail fancybox-thumbs" data-fancybox-group="album-6">' . $image . '</a>';
+        return '<a href="' . $thumberLinkFull . '" class="thumbnail fancybox-thumbs" data-fancybox-group="album-6">'
+            . $image . '</a>';
     }
 
     /**
@@ -113,7 +109,7 @@ abstract class ImageAbstract extends AbstractViewHelper
      *
      * @param string $key
      * @param        $value
-     * @param bool $allowNull
+     * @param bool   $allowNull
      */
     public function addRouterParam($key, $value, $allowNull = true): void
     {
@@ -213,6 +209,7 @@ abstract class ImageAbstract extends AbstractViewHelper
 
     /**
      * @param int $width
+     *
      * @return ImageAbstract
      */
     public function setWidth($width): ImageAbstract

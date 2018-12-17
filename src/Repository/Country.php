@@ -70,12 +70,6 @@ class Country extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
         if (!empty($filter['search'])) {
@@ -146,6 +140,24 @@ class Country extends EntityRepository
         $queryBuilder->addOrderBy('general_entity_country.country', 'ASC');
 
         return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
+    }
+
+    public function findAmountOfActiveCountries(): int
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select($queryBuilder->expr()->countDistinct('general_entity_country'));
+        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
+        $queryBuilder->innerJoin('general_entity_country.organisation', 'organisation_entity_organisation');
+
+        $queryBuilder->innerJoin('organisation_entity_organisation.affiliation', 'affiliation_entity_affiliation');
+        $queryBuilder->innerJoin('affiliation_entity_affiliation.project', 'project_entity_project');
+
+        $projectRepository = $this->_em->getRepository(\Project\Entity\Project::class);
+        $queryBuilder = $projectRepository->onlyActiveProject($queryBuilder);
+
+        $queryBuilder->andWhere($queryBuilder->expr()->isNull('affiliation_entity_affiliation.dateEnd'));
+
+        return (int)$queryBuilder->getQuery()->useQueryCache(true)->useResultCache(true)->getSingleScalarResult();
     }
 
     public function findForForm(): array

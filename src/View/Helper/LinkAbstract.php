@@ -366,17 +366,6 @@ abstract class LinkAbstract extends AbstractViewHelper
     }
 
     /**
-     * @param Country $country
-     * @param int     $width
-     *
-     * @return string
-     */
-    public function getCountryFlag(Country $country, $width): string
-    {
-        return $this->getHelperPluginManager()->get('countryFlag')($country, $width);
-    }
-
-    /**
      * @return WebInfo
      */
     public function getWebInfo(): WebInfo

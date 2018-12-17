@@ -27,25 +27,19 @@ if (!\defined('ITEAOFFICE_HOST')) {
  */
 class CountryMap extends AbstractViewHelper
 {
-    /**
-     * @param array        $countries
-     * @param Country|null $selectedCountry
-     * @param array        $options
-     *
-     * @return string
-     */
-    public function __invoke(array $countries, Country $selectedCountry = null, array $options = [])
+    public function __invoke(array $countries, Country $selectedCountry = null, array $options = [], bool $world = false
+    )
     {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
         $pointer = $clickable ? 'pointer' : 'default';
         $clickable = $clickable ? 'true' : 'false';
-        $colorMin = $options['colorMin'] ?? '#00a651';
-        $colorMax = $options['colorMax'] ?? '#005C00';
+        $colorMin = $options['colorMin'] ?? '#005C00';
+        $colorMax = $options['colorMax'] ?? '#00a651';
         $regionFill = $options['regionFill'] ?? '#C5C7CA';
         $height = $options['height'] ?? '400px';
         $tipData = $options['tipData'] ?? null;
         $focusOn = $options['focusOn'] ?? ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = \is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
+        $focusOn = \is_array($focusOn) ? \json_encode($focusOn) : "'" . $focusOn . "'";
         $zoomOnScroll = \array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
 
@@ -60,7 +54,7 @@ class CountryMap extends AbstractViewHelper
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "},\n";
         if (is_array($tipData)) {
-            $js[] = "            tipData = " . json_encode($tipData) . ",\n";
+            $js[] = "            tipData = " . \json_encode($tipData) . ",\n";
         }
         $js[] = "            clickable = " . $clickable . ",\n";
         $js[] = "            countries = [";
@@ -72,12 +66,15 @@ class CountryMap extends AbstractViewHelper
         $js[] = "];";
         $data = implode('', $js);
 
+
+        $map = $world ? 'world_mill' : 'europe_mill_en';
+
         $jQuery
             = <<< EOT
 $(function () {
         $data
         $('#country-map').vectorMap({
-            map: 'europe_mill_en',
+            map: '$map',
             backgroundColor: 'transparent',
             series: {
                 regions: [{

@@ -138,6 +138,14 @@ class Challenge extends AbstractEntity
      */
     private $abstract;
     /**
+     * @ORM\Column(name="background_image", type="smallint", nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Number")
+     * @Annotation\Options({"label":"txt-challenge-background-image-label","help-block": "txt-challenge-backgrond-image-explanation"})
+     *
+     * @var int
+     */
+    private $backgroundImage;
+    /**
      * @ORM\Column(name="backcolor",type="string",length=20,unique=false)
      * @Annotation\Type("\Zend\Form\Element\Color")
      * @Annotation\Options({"label":"txt-challenge-background-color-label","help-block":"txt-challenge-background-color-help-block"})
@@ -232,9 +240,6 @@ class Challenge extends AbstractEntity
      */
     private $call;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->result = new Collections\ArrayCollection();
@@ -245,34 +250,17 @@ class Challenge extends AbstractEntity
         $this->sequence = 1;
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
+
     public function __isset($property)
     {
         return isset($this->$property);
@@ -312,9 +300,6 @@ class Challenge extends AbstractEntity
         }
     }
 
-    /**
-     * @return int|null
-     */
     public function getId()
     {
         return $this->id;
@@ -412,9 +397,6 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSequence()
     {
         return $this->sequence;
@@ -660,11 +642,6 @@ class Challenge extends AbstractEntity
         return $this->abstract;
     }
 
-    /**
-     * @param string $abstract
-     *
-     * @return Challenge
-     */
     public function setAbstract(string $abstract): Challenge
     {
         $this->abstract = $abstract;
@@ -672,19 +649,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHtml(): ?string
     {
         return $this->html;
     }
 
-    /**
-     * @param string $html
-     *
-     * @return Challenge
-     */
     public function setHtml(string $html): Challenge
     {
         $this->html = $html;
@@ -692,23 +661,26 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCss(): ?string
     {
         return $this->css;
     }
 
-    /**
-     * @param string $css
-     *
-     * @return Challenge
-     */
     public function setCss(string $css): Challenge
     {
         $this->css = $css;
 
+        return $this;
+    }
+
+    public function getBackgroundImage()
+    {
+        return $this->backgroundImage;
+    }
+
+    public function setBackgroundImage(int $backgroundImage): Challenge
+    {
+        $this->backgroundImage = $backgroundImage;
         return $this;
     }
 }
