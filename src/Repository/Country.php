@@ -43,10 +43,6 @@ class Country extends EntityRepository
             $direction = \strtoupper($filter['direction']);
         }
 
-        if (!\array_key_exists('order', $filter)) {
-            $filter['order'] = 'id';
-        }
-
         switch ($filter['order']) {
             case 'id':
                 $queryBuilder->addOrderBy('general_entity_country.id', $direction);

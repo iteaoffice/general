@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-general-challenge-type-%s")|format(type)) %}
 
-<h1 class="display-4">{{ translate("txt-challenge-type-%s")|format(type) }} {{ challengeTypeLink(type,'edit','button') }}</h1>
+<h1>{{ translate("txt-challenge-type-%s")|format(type) }} {{ challengeTypeLink(type,'edit','button') }}</h1>
 
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-type-id") }}</dt>

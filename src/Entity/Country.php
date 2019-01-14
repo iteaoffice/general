@@ -42,6 +42,7 @@ class Country extends AbstractEntity
      * @ORM\Column(name="country_cd",type="string",length=2, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-cd-label","help-block":"txt-country-cd-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-country-cd-placeholder"})
      *
      * @var string
      */
@@ -50,6 +51,7 @@ class Country extends AbstractEntity
      * @ORM\Column(name="country",type="string",length=80, unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-name-label","help-block":"txt-country-name-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-country-name-placeholder"})
      *
      * @var string
      */
@@ -66,6 +68,7 @@ class Country extends AbstractEntity
      * @ORM\Column(name="iso3",type="string",length=20, nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-iso3-label","help-block":"txt-country-iso3-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-country-iso3-placeholder"})
      *
      * @var string
      */
@@ -74,16 +77,18 @@ class Country extends AbstractEntity
      * @ORM\Column(name="numcode",type="integer",length=6)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-numcode-label","help-block":"txt-country-numcode-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-country-numcode-placeholder"})
      *
      * @var int
      */
     private $numcode;
     /**
-     * @ORM\Column(name="country_vat",type="string",length=2,nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @ORM\Column(name="country_vat",type="string",nullable=true)
+     * @Annotation\Type("\Zend\Form\Element\Number")
      * @Annotation\Options({"label":"txt-country-vat-label","help-block":"txt-country-vat-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-country-vat-placeholder"})
      *
-     * @var int
+     * @var string
      */
     private $countryVat;
     /**

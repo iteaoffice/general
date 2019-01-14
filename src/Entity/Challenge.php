@@ -266,21 +266,11 @@ class Challenge extends AbstractEntity
         return isset($this->$property);
     }
 
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
-        return $this->challenge;
+        return (string)$this->challenge;
     }
 
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $callCollection
-     */
     public function addCall(Collections\Collection $callCollection): void
     {
         foreach ($callCollection as $call) {
@@ -288,11 +278,6 @@ class Challenge extends AbstractEntity
         }
     }
 
-    /**
-     * New function needed to make the hydrator happy.
-     *
-     * @param Collections\Collection $callCollection
-     */
     public function removeCall(Collections\Collection $callCollection): void
     {
         foreach ($callCollection as $call) {
@@ -305,11 +290,6 @@ class Challenge extends AbstractEntity
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Challenge
-     */
     public function setId(int $id): Challenge
     {
         $this->id = $id;

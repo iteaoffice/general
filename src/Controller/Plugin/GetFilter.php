@@ -48,23 +48,12 @@ final class GetFilter extends AbstractPlugin
      */
     protected $query;
 
-    /**
-     * GetFilter constructor.
-     *
-     * @param Application $application
-     */
     public function __construct(Application $application)
     {
         $this->routeMatch = $application->getMvcEvent()->getRouteMatch();
         $this->request = $application->getMvcEvent()->getRequest();
     }
 
-
-    /**
-     * Instantiate the filter
-     *
-     * @return GetFilter
-     */
     public function __invoke(): self
     {
         $encodedFilter = urldecode((string)$this->routeMatch->getParam('encodedFilter'));

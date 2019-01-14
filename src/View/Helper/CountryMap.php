@@ -27,9 +27,12 @@ if (!\defined('ITEAOFFICE_HOST')) {
  */
 class CountryMap extends AbstractViewHelper
 {
-    public function __invoke(array $countries, Country $selectedCountry = null, array $options = [], bool $world = false
-    )
-    {
+    public function __invoke(
+        array $countries,
+        Country $selectedCountry = null,
+        array $options = [],
+        bool $world = false
+    ) {
         $clickable = array_key_exists('clickable', $options) ? $options['clickable'] : true;
         $pointer = $clickable ? 'pointer' : 'default';
         $clickable = $clickable ? 'true' : 'false';

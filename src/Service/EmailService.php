@@ -424,7 +424,7 @@ class EmailService
 
     private function renderEmailContent(): void
     {
-        $message = $this->createTwigTemplate($this->emailContent);
+        $message = $this->createTwigTemplate((string) $this->emailContent);
 
         try {
             $htmlPart = $this->renderer->render(

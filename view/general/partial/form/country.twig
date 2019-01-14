@@ -10,11 +10,12 @@
 {{ ztbformelement(country.get('cd')) }}
 {{ ztbformelement(country.get('iso3')) }}
 {{ ztbformelement(country.get('numcode')) }}
+{{ ztbformelement(country.get('countryVat')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="form-group row">
-    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+    <div class="offset-sm-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}
     </div>

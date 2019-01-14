@@ -20,7 +20,7 @@
 
 {% if challenge.icon %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-icon") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-icon") }}</label>
 
         <div class="col-sm-9">
             <p class="form-control-static form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
@@ -32,7 +32,7 @@
 
 {% if challenge.image %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-image") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-image") }}</label>
 
         <div class="col-sm-9">
             <p class="form-control-static form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
@@ -45,7 +45,7 @@
 
 {% if challenge.pdf %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-pdf") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
             <p class="form-control-static form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
@@ -55,7 +55,7 @@
 
 {% if challenge.backgroundImage %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-background-image") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-background-image") }}</label>
 
         <div class="col-sm-9">
             <p class="form-control-static form-control-plaintext">{{ image(challenge.image,100) }}</p>
@@ -68,7 +68,7 @@
 {{ formelement(form.get('csrf')) }}
 
 <div class="form-group row">
-    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+    <div class="offset-sm-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}
     </div>

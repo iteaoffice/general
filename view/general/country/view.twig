@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-country-%s")|format(country)) %}
 
-<h1 class="display-4">{{ translate("txt-country-%s")|format(country) }} {{ countryLink(country,'edit','button') }}</h1>
+<h1>{{ translate("txt-country-%s")|format(country) }} {{ countryLink(country,'edit','button') }}</h1>
 
 <h2>{{ translate("txt-country-information") }}</h2>
 <dl class="dl-horizontal">

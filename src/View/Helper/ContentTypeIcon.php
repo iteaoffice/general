@@ -35,12 +35,8 @@ final class ContentTypeIcon extends AbstractViewHelper
 
     public function __invoke(ContentType $contentType = null, string $contentTypeName = null)
     {
-        if (null === $contentType && null !== $contentType) {
-            $contentType = $this->generalSerivce->findContentTypeByContentTypeName($contentTypeName);
-        }
-
         if (null === $contentType && null !== $contentTypeName) {
-            $contentType = $this->generalSerivce->findContentTypeByContentTypeDescription($contentTypeName);
+            $contentType = $this->generalSerivce->findContentTypeByContentTypeName($contentTypeName);
         }
 
         if (null === $contentType) {
@@ -87,9 +83,9 @@ final class ContentTypeIcon extends AbstractViewHelper
                 $class = 'fa-file-video-o';
                 break;
             default:
-                return sprintf('%s not found', $contentType->getContentType());
+                return \sprintf('%s not found', $contentType->getContentType());
         }
 
-        return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
+        return \sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
     }
 }
