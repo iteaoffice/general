@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class TitleLabel extends AbstractNavigationInvokable
+final class TitleLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Title navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(Title::class)) {
             /** @var Title $title */
             $title = $this->getEntities()->get(Title::class);
@@ -48,8 +43,6 @@ class TitleLabel extends AbstractNavigationInvokable
                 )
             );
             $label = $title->getName();
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

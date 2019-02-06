@@ -26,15 +26,8 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class LogLabel extends AbstractNavigationInvokable
+final class LogLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the EmailMessage navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
         $label = $this->translate('txt-nav-view');
@@ -49,7 +42,7 @@ class LogLabel extends AbstractNavigationInvokable
                     ['id' => $log->getId()]
                 )
             );
-            $label = (string) \substr($log->getEvent(), 0, 25);
+            $label = (string)\substr($log->getEvent(), 0, 125);
         }
         $page->set('label', $label);
     }

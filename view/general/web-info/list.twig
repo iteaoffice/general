@@ -29,10 +29,10 @@
     <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'subject', 'text': translate('txt-subject')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'sender', 'text': translate('txt-sender')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'template', 'text': translate('txt-template')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'subject', 'text': translate('txt-subject')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'sender', 'text': translate('txt-sender')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'template', 'text': translate('txt-template')} %}</th>
         </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@
         {% endfor %}
         </tbody>
     </table>
-    {% include 'general/partial/pagination-control' %}
+    {% include 'application/partial/pagination-control' %}
 {% else %}
     {{ ztbalert().info(translate("txt-no-web-info-could-be-found"))|raw }}
 {% endif %}

@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class CurrencyLabel extends AbstractNavigationInvokable
+final class CurrencyLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Currency navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(Currency::class)) {
             /** @var Currency $currency */
             $currency = $this->getEntities()->get(Currency::class);
@@ -48,8 +43,6 @@ class CurrencyLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$currency;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

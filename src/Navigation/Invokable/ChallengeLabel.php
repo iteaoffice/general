@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class ChallengeLabel extends AbstractNavigationInvokable
+final class ChallengeLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Challenge navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(Challenge::class)) {
             /** @var Challenge $challenge */
             $challenge = $this->getEntities()->get(Challenge::class);
@@ -48,8 +43,6 @@ class ChallengeLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$challenge;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

@@ -26,15 +26,8 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class EmailMessageLabel extends AbstractNavigationInvokable
+final class EmailMessageLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the EmailMessage navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
         $label = $this->translate('txt-nav-view');

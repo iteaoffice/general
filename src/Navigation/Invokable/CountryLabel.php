@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class CountryLabel extends AbstractNavigationInvokable
+final class CountryLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Country navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(Country::class)) {
             /** @var Country $country */
             $country = $this->getEntities()->get(Country::class);
@@ -48,8 +43,6 @@ class CountryLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$country;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

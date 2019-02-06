@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class PasswordLabel extends AbstractNavigationInvokable
+final class PasswordLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Password navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(Password::class)) {
             /** @var Password $password */
             $password = $this->getEntities()->get(Password::class);
@@ -48,8 +43,6 @@ class PasswordLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$password;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

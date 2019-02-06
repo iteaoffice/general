@@ -31,11 +31,11 @@
             <table class="table table-hover table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'iso3', 'text': translate('txt-iso3')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'cd', 'text': translate('txt-cd')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'numcode', 'text': translate('txt-numcode')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'iso3', 'text': translate('txt-iso3')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'cd', 'text': translate('txt-cd')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'numcode', 'text': translate('txt-numcode')} %}</th>
                     <th>{{ translate("txt-eu") }}</th>
                     <th>{{ translate("txt-eureka") }}</th>
                     <th>{{ translate("txt-itac") }}</th>
@@ -63,7 +63,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% include 'general/partial/pagination-control' %}
+            {% include 'application/partial/pagination-control' %}
         {% else %}
             {{ ztbalert().info(translate("txt-no-countries-could-be-found"))|raw }}
         {% endif %}

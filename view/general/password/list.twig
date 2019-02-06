@@ -31,11 +31,11 @@
             <table class="table table-hover table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'name', 'text': translate('txt-description')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'website', 'text': translate('txt-website')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'account', 'text': translate('txt-account')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'username', 'text': translate('txt-username')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'password', 'text': translate('txt-password')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'name', 'text': translate('txt-description')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'website', 'text': translate('txt-website')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'account', 'text': translate('txt-account')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'username', 'text': translate('txt-username')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/password/list', 'criteria': 'password', 'text': translate('txt-password')} %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% include 'general/partial/pagination-control' %}
+            {% include 'application/partial/pagination-control' %}
         {% else %}
             {{ ztbalert().info(translate("txt-no-countries-could-be-found"))|raw }}
         {% endif %}

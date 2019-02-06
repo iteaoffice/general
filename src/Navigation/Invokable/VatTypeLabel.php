@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class VatTypeLabel extends AbstractNavigationInvokable
+final class VatTypeLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the VatType navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(VatType::class)) {
             /** @var VatType $type */
             $type = $this->getEntities()->get(VatType::class);
@@ -48,8 +43,6 @@ class VatTypeLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$type;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

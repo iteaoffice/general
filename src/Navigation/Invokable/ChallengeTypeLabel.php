@@ -26,15 +26,8 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package Project\Navigation\Invokable
  */
-class ChallengeTypeLabel extends AbstractNavigationInvokable
+final class ChallengeTypeLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the Project navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void;
-     */
     public function __invoke(Mvc $page): void
     {
         $label = $this->translate('txt-nav-view');

@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class ContentTypeLabel extends AbstractNavigationInvokable
+final class ContentTypeLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the ContentType navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(ContentType::class)) {
             /** @var ContentType $type */
             $type = $this->getEntities()->get(ContentType::class);
@@ -48,8 +43,6 @@ class ContentTypeLabel extends AbstractNavigationInvokable
                 )
             );
             $label = $type->getDescription();
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }

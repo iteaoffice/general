@@ -26,17 +26,12 @@ use Zend\Navigation\Page\Mvc;
  *
  * @package General\Navigation\Invokable
  */
-class WebInfoLabel extends AbstractNavigationInvokable
+final class WebInfoLabel extends AbstractNavigationInvokable
 {
-    /**
-     * Set the WebInfo navigation label
-     *
-     * @param Mvc $page
-     *
-     * @return void
-     */
     public function __invoke(Mvc $page): void
     {
+        $label = $this->translate('txt-nav-view');
+
         if ($this->getEntities()->containsKey(WebInfo::class)) {
             /** @var WebInfo $webInfo */
             $webInfo = $this->getEntities()->get(WebInfo::class);
@@ -48,8 +43,6 @@ class WebInfoLabel extends AbstractNavigationInvokable
                 )
             );
             $label = (string)$webInfo;
-        } else {
-            $label = $this->translate('txt-nav-view');
         }
         $page->set('label', $label);
     }
