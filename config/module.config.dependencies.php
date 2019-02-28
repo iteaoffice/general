@@ -58,6 +58,7 @@ return [
         ],
         Controller\CountryController::class        => [
             CountryService::class,
+            CountrySearchService::class,
             FormService::class,
             TranslatorInterface::class
         ],

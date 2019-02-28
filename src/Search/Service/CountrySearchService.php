@@ -46,8 +46,32 @@ final class CountrySearchService extends AbstractSearchService
 
         if ($hasSort) {
             switch ($order) {
+                case 'id':
+                    $this->getQuery()->addSort('country_id', $direction);
+                    break;
+                case 'name':
+                    $this->getQuery()->addSort('country_sort', $direction);
+                    break;
+                case 'cd':
+                    $this->getQuery()->addSort('country_cd', $direction);
+                    break;
+                case 'iso3':
+                    $this->getQuery()->addSort('country_iso3', $direction);
+                    break;
+                case 'is_itac':
+                    $this->getQuery()->addSort('is_itac_text', $direction);
+                    break;
+                case 'is_eu':
+                    $this->getQuery()->addSort('is_eu_text', $direction);
+                    break;
+                case 'is_eureka':
+                    $this->getQuery()->addSort('is_eureka_text', $direction);
+                    break;
+                case 'funders':
+                    $this->getQuery()->addSort('funders', $direction);
+                    break;
                 default:
-                    $this->getQuery()->addSort('date_published', Query::SORT_DESC);
+                    $this->getQuery()->addSort('country_sort', Query::SORT_ASC);
                     break;
             }
         }
@@ -55,12 +79,20 @@ final class CountrySearchService extends AbstractSearchService
         if ($hasTerm) {
             $this->getQuery()->addSort('country_sort', Query::SORT_DESC);
         } else {
-            $this->getQuery()->addSort('country_sort', Query::SORT_DESC);
+            $this->getQuery()->addSort('country_sort', Query::SORT_ASC);
         }
 
         $facetSet = $this->getQuery()->getFacetSet();
-        $facetSet->createFacetField('is_itac_text')->setField('is_itac_text')->setSort('is_itac_text')->setMinCount(1)
+        $facetSet->createFacetField('Eu')->setField('is_eu_text')->setSort('index')->setMinCount(1)
+            ->setExcludes(['is_eu_text']);
+        $facetSet->createFacetField('itac')->setField('is_itac_text')->setSort('index')->setMinCount(1)
             ->setExcludes(['is_itac_text']);
+        $facetSet->createFacetField('has_projects')->setField('has_projects_text')->setSort('index')->setMinCount(1)
+            ->setExcludes(['has_projects_text']);
+        $facetSet->createFacetField('has_partners')->setField('has_affiliations_text')->setSort('index')->setMinCount(1)
+            ->setExcludes(['has_affiliations_text']);
+        $facetSet->createFacetField('has_public_authorities')->setField('has_funders_text')->setSort('index')->setMinCount(1)
+            ->setExcludes(['has_funders_text']);
 
         return $this;
     }
@@ -77,6 +109,20 @@ final class CountrySearchService extends AbstractSearchService
         $this->query->setRows(20000);
 
         return $this->getSolrClient()->execute($this->query);
+    }
+
+    public function findAmountOfActiveCountries(): int
+    {
+        $this->setQuery($this->getSolrClient()->createSelect());
+
+        //Add the 'on_website' constraint
+        $query = '(has_projects:true)';
+        $this->getQuery()->setQuery($query);
+
+
+        $result = $this->getSolrClient()->execute($this->query);
+
+        return (int)($result->getData()['response']['numFound'] ?? 0);
     }
 
     public function findItacCountries(): ResultInterface

@@ -171,11 +171,11 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         $countryDocument->setField('docref', $country->getDocRef());
 
         $countryDocument->setField('is_itac', $country->isItac());
-        $countryDocument->setField('is_itac_text', $country->isItac() ? 'YES' : 'NO');
+        $countryDocument->setField('is_itac_text', $country->isItac() ? 'Yes' : 'No');
         $countryDocument->setField('is_eu', $country->isEu());
-        $countryDocument->setField('is_eu_text', $country->isEu() ? 'YES' : 'NO');
+        $countryDocument->setField('is_eu_text', $country->isEu() ? 'Yes' : 'No');
         $countryDocument->setField('is_eureka', $country->isEureka());
-        $countryDocument->setField('is_eureka_text', $country->isEureka() ? 'YES' : 'NO');
+        $countryDocument->setField('is_eureka_text', $country->isEureka() ? 'Yes' : 'No');
 
         //Find all the projects and partners
         $projects = [];
@@ -200,19 +200,21 @@ class CountryService extends AbstractService implements SearchUpdateInterface
             }
         }
 
+        $amountOfFunders = $country->getFunder()->filter(
+            function (Funder $funder) {
+                return $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE;
+            }
+        )->count();
 
         $countryDocument->setField('projects', \count($projects));
         $countryDocument->setField('has_projects', \count($projects) > 0);
+        $countryDocument->setField('has_projects_text', \count($projects) > 0 ? 'Yes' : 'No');
         $countryDocument->setField('affiliations', \count($affiliations));
         $countryDocument->setField('has_affiliations', \count($affiliations) > 0);
-        $countryDocument->setField(
-            'funders',
-            $country->getFunder()->filter(
-                function (Funder $funder) {
-                    return $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE;
-                }
-            )->count()
-        );
+        $countryDocument->setField('has_affiliations_text', \count($affiliations) > 0 ? 'Yes' : 'No');
+        $countryDocument->setField('funders', $amountOfFunders);
+        $countryDocument->setField('has_funders', $amountOfFunders > 0);
+        $countryDocument->setField('has_funders_text', $amountOfFunders> 0 ? 'Yes' : 'No');
 
         $update->addDocument($countryDocument);
         $update->addCommit();

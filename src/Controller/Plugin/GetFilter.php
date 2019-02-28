@@ -19,34 +19,28 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Router\Http\RouteMatch;
 
 /**
- * @category    Application
+ * Class GetFilter
+ *
+ * @package Program\Controller\Plugin
  */
 final class GetFilter extends AbstractPlugin
 {
     /**
      * @var Request
      */
-    protected $request;
+    private $request;
     /**
      * @var RouteMatch
      */
-    protected $routeMatch;
+    private $routeMatch;
     /**
      * @var array
      */
-    protected $filter = [];
+    private $filter = [];
     /**
      * @var string|null
      */
-    protected $order = 'name';
-    /**
-     * @var string|null
-     */
-    protected $direction = 'asc';
-    /**
-     * @var string|null
-     */
-    protected $query;
+    private $query;
 
     public function __construct(Application $application)
     {
@@ -62,7 +56,7 @@ final class GetFilter extends AbstractPlugin
         $direction = $this->request->getQuery('direction');
 
         //Take the filter from the URL
-        $filter = (array)\json_decode(base64_decode($encodedFilter));
+        $filter = (array)\json_decode(\base64_decode($encodedFilter));
 
 
         //If the form is submitted, refresh the URL
@@ -108,12 +102,12 @@ final class GetFilter extends AbstractPlugin
 
     public function getOrder(): ?string
     {
-        return $this->order;
+        return $this->filter['order'];
     }
 
     public function getDirection(): ?string
     {
-        return $this->direction;
+        return $this->filter['direction'];
     }
 
     public function getQuery(): ?string

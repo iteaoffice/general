@@ -37,7 +37,11 @@
     <field name="is_eureka" type="boolean" indexed="boolean" stored="true"/>
     <field name="is_eureka_text" type="string" indexed="true" stored="true"/>
     <field name="has_projects" type="boolean" indexed="true" stored="true"/>
+    <field name="has_projects_text" type="string" indexed="true" stored="true"/>
     <field name="has_affiliations" type="boolean" indexed="true" stored="true"/>
+    <field name="has_affiliations_text" type="string" indexed="true" stored="true"/>
+    <field name="has_funders" type="boolean" indexed="true" stored="true"/>
+    <field name="has_funders_text" type="string" indexed="true" stored="true"/>
 
     <dynamicField name="attr_*" type="text_en_splitting" indexed="true" stored="true" multiValued="true"/>
 
