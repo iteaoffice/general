@@ -30,7 +30,7 @@ use General\Entity\AbstractEntity;
 class Image extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="image_id", type="integer", nullable=false)
+     * @ORM\Column(name="image_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
@@ -65,31 +65,11 @@ class Image extends AbstractEntity
      */
     private $challenge;
 
-    /**
-     * Image constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;

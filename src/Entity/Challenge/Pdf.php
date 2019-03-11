@@ -29,7 +29,7 @@ use General\Entity\AbstractEntity;
 class Pdf extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="pdf_id", type="integer", nullable=false)
+     * @ORM\Column(name="pdf_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *

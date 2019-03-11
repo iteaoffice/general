@@ -28,7 +28,7 @@ use Zend\Form\Annotation;
 class Eureka extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="eureka_id",type="integer",nullable=false)
+     * @ORM\Column(name="eureka_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

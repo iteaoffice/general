@@ -29,7 +29,7 @@ use Zend\Form\Annotation;
 class Currency extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="currency_id",type="integer",nullable=false)
+     * @ORM\Column(name="currency_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

@@ -26,7 +26,7 @@ use Zend\Form\Annotation;
 class EmailMessageEvent extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="email_message_event_id",type="integer",nullable=false)
+     * @ORM\Column(name="email_message_event_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *

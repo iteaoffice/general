@@ -31,9 +31,9 @@ class Gender extends AbstractEntity
     /**
      * Constant for the default gender.
      */
-    public const GENDER_UNKNOWN = 0;
+    public const GENDER_UNKNOWN = 3;
     /**
-     * @ORM\Column(name="gender_id",type="integer",nullable=false)
+     * @ORM\Column(name="gender_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Type("\Zend\Form\Element\Hidden")
@@ -42,7 +42,7 @@ class Gender extends AbstractEntity
      */
     private $id;
     /**
-     * @ORM\Column(name="gender",type="string",length=20,unique=true)
+     * @ORM\Column(name="gender",type="string",unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-gender"})
      *
@@ -50,7 +50,7 @@ class Gender extends AbstractEntity
      */
     private $name;
     /**
-     * @ORM\Column(name="attention",type="string",length=20)
+     * @ORM\Column(name="attention",type="string")
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
      *
@@ -58,7 +58,7 @@ class Gender extends AbstractEntity
      */
     private $attention;
     /**
-     * @ORM\Column(name="salutation",type="string",length=20)
+     * @ORM\Column(name="salutation",type="string")
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-salutation"})
      *
@@ -73,68 +73,36 @@ class Gender extends AbstractEntity
      */
     private $contacts;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->contacts = new Collections\ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->attention;
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Gender
-     */
     public function setId($id)
     {
         $this->id = $id;
@@ -142,19 +110,11 @@ class Gender extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Gender
-     */
     public function setName($name)
     {
         $this->name = $name;
@@ -162,19 +122,11 @@ class Gender extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAttention()
     {
         return $this->attention;
     }
 
-    /**
-     * @param string $attention
-     *
-     * @return Gender
-     */
     public function setAttention($attention)
     {
         $this->attention = $attention;
@@ -182,19 +134,11 @@ class Gender extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSalutation()
     {
         return $this->salutation;
     }
 
-    /**
-     * @param string $salutation
-     *
-     * @return Gender
-     */
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
@@ -202,19 +146,11 @@ class Gender extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return \Contact\Entity\Contact[]
-     */
     public function getContacts()
     {
         return $this->contacts;
     }
 
-    /**
-     * @param \Contact\Entity\Contact[] $contacts
-     *
-     * @return Gender
-     */
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;

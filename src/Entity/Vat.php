@@ -30,7 +30,7 @@ class Vat extends AbstractEntity
 {
     public const VAT_VH = 7;
     /**
-     * @ORM\Column(name="vat_id",type="integer",nullable=false)
+     * @ORM\Column(name="vat_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -39,7 +39,7 @@ class Vat extends AbstractEntity
      */
     private $id;
     /**
-     * @ORM\Column(name="vat_code",type="string",length=45,nullable=false)
+     * @ORM\Column(name="vat_code",type="string",nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-code"})
      *
@@ -47,7 +47,7 @@ class Vat extends AbstractEntity
      */
     private $code;
     /**
-     * @ORM\Column(name="vat_percentage",type="decimal",nullable=false)
+     * @ORM\Column(name="vat_percentage",type="decimal", precision=10, scale=2,nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-percentage"})
      *

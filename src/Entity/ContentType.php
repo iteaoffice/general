@@ -32,8 +32,9 @@ class ContentType extends AbstractEntity
     public const TYPE_EXCEL = 13;
     public const TYPE_EXCEL_2007 = 19;
     public const TYPE_EXCEL_MACRO = 143;
+
     /**
-     * @ORM\Column(name="contenttype_id", type="integer", nullable=false)
+     * @ORM\Column(name="contenttype_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -56,7 +57,7 @@ class ContentType extends AbstractEntity
      */
     private $contentType;
     /**
-     * @ORM\Column(name="extension", type="string", unique=true, nullable=true)
+     * @ORM\Column(name="extension", type="string", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-extension-label","help-block":"txt-content-type-extension-help-block"})
      * @var string

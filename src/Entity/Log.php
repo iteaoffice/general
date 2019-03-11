@@ -61,7 +61,7 @@ class Log extends AbstractEntity
      */
     private $line;
     /**
-     * @ORM\Column(name="error_type", type="string", length=255, nullable=false)
+     * @ORM\Column(name="error_type", type="string", nullable=false)
      * @var string
      */
     private $errorType;

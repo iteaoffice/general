@@ -21,9 +21,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 abstract class AbstractEntity implements EntityInterface, ResourceInterface
 {
-    /**
-     * @return string
-     */
     public function getResourceId(): string
     {
         return sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());
@@ -77,9 +74,6 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
         return sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return null === $this->getId();

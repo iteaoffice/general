@@ -34,7 +34,7 @@ class VatType extends AbstractEntity
     public const VAT_TYPE_NON_EU = 4;
 
     /**
-     * @ORM\Column(name="type_id",type="integer",nullable=false)
+     * @ORM\Column(name="type_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

@@ -18,8 +18,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="challenge")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
@@ -30,7 +28,7 @@ use Zend\Form\Annotation;
 class Challenge extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="challenge_id",type="integer",nullable=false)
+     * @ORM\Column(name="challenge_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Type("\Zend\Form\Element\Hidden")
@@ -48,7 +46,7 @@ class Challenge extends AbstractEntity
      */
     private $challenge;
     /**
-     * @ORM\Column(name="docref", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="docref", type="string", nullable=false, unique=true)
      * @Gedmo\Slug(fields={"challenge"})
      * @Annotation\Exclude()
      *
@@ -56,7 +54,7 @@ class Challenge extends AbstractEntity
      */
     private $docRef;
     /**
-     * @ORM\Column(name="sequence", type="integer", nullable=false)
+     * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
      * @Annotation\Type("\Zend\Form\Element\Number")
      * @Annotation\Options({"label":"txt-challenge-sequence-label","help-block":"txt-challenge-sequence-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-sequence-placeholder"})
@@ -90,7 +88,7 @@ class Challenge extends AbstractEntity
      */
     private $type;
     /**
-     * @ORM\Column(name="description",type="string")
+     * @ORM\Column(name="description",type="text")
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-description-label","help-block":"txt-challenge-description-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-description-placeholder"})
@@ -146,7 +144,7 @@ class Challenge extends AbstractEntity
      */
     private $backgroundImage;
     /**
-     * @ORM\Column(name="backcolor",type="string",length=20,unique=false)
+     * @ORM\Column(name="backcolor",type="string",unique=false)
      * @Annotation\Type("\Zend\Form\Element\Color")
      * @Annotation\Options({"label":"txt-challenge-background-color-label","help-block":"txt-challenge-background-color-help-block"})
      *
@@ -154,7 +152,7 @@ class Challenge extends AbstractEntity
      */
     private $backgroundColor;
     /**
-     * @ORM\Column(name="frontcolor",type="string",length=20,unique=false)
+     * @ORM\Column(name="frontcolor",type="string",unique=false)
      * @Annotation\Type("\Zend\Form\Element\Color")
      * @Annotation\Options({"label":"txt-challenge-front-color-label","help-block":"txt-challenge-front-color-help-block"})
      *

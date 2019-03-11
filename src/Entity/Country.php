@@ -30,7 +30,7 @@ use Zend\Form\Annotation;
 class Country extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="country_id",type="integer",nullable=false)
+     * @ORM\Column(name="country_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Type("\Zend\Form\Element\Hidden")
@@ -48,7 +48,7 @@ class Country extends AbstractEntity
      */
     private $cd;
     /**
-     * @ORM\Column(name="country",type="string",length=80, unique=true)
+     * @ORM\Column(name="country",type="string",unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-name-label","help-block":"txt-country-name-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-country-name-placeholder"})
@@ -57,7 +57,7 @@ class Country extends AbstractEntity
      */
     private $country;
     /**
-     * @ORM\Column(name="docRef",type="string",length=80, unique=true)
+     * @ORM\Column(name="docRef",type="string",unique=true)
      * @Gedmo\Slug(fields={"country"})
      * @Annotation\Exclude()
      *
@@ -65,7 +65,7 @@ class Country extends AbstractEntity
      */
     private $docRef;
     /**
-     * @ORM\Column(name="iso3",type="string",length=20, nullable=true)
+     * @ORM\Column(name="iso3",type="string",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-country-iso3-label","help-block":"txt-country-iso3-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-country-iso3-placeholder"})
@@ -126,13 +126,6 @@ class Country extends AbstractEntity
      * @var \Organisation\Entity\Organisation[]|Collections\ArrayCollection
      */
     private $organisation;
-    /**
-     * @ORM\OneToMany(targetEntity="Organisation\Entity\IctOrganisation", cascade={"persist"}, mappedBy="country")
-     * @Annotation\Exclude()
-     *
-     * @var \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
-     */
-    private $ictOrganisation;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Vat", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
@@ -201,7 +194,6 @@ class Country extends AbstractEntity
     {
         $this->address = new Collections\ArrayCollection();
         $this->organisation = new Collections\ArrayCollection();
-        $this->ictOrganisation = new Collections\ArrayCollection();
         $this->rationale = new Collections\ArrayCollection();
         $this->vat = new Collections\ArrayCollection();
         $this->funder = new Collections\ArrayCollection();
@@ -247,379 +239,248 @@ class Country extends AbstractEntity
         return (string)$this->country;
     }
 
-    public function addVat(Collections\Collection $vatCollection)
+    public function addVat(Collections\Collection $vatCollection): void
     {
         foreach ($vatCollection as $vat) {
             $this->vat->add($vat);
         }
     }
 
-    public function removeVat(Collections\Collection $vatCollection)
+    public function removeVat(Collections\Collection $vatCollection): void
     {
         foreach ($vatCollection as $vat) {
             $this->vat->removeElement($vat);
         }
     }
 
-    public function getCd(): ?string
-    {
-        return $this->cd;
-    }
-
-    public function setCd($cd)
-    {
-        $this->cd = $cd;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param string $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return \General\Entity\Eu
-     */
-    public function getEu()
-    {
-        return $this->eu;
-    }
-
-    /**
-     * @param \General\Entity\Eu $eu
-     */
-    public function setEu($eu)
-    {
-        $this->eu = $eu;
-    }
-
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): Country
     {
         $this->id = $id;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIso3()
+    public function getCd()
     {
-        return $this->iso3;
+        return $this->cd;
     }
 
-    /**
-     * @param string $iso3
-     */
-    public function setIso3($iso3)
+    public function setCd(?string $cd): Country
     {
-        $this->iso3 = $iso3;
+        $this->cd = $cd;
+        return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumcode()
+    public function getCountry()
     {
-        return $this->numcode;
+        return $this->country;
     }
 
-    /**
-     * @param int $numcode
-     */
-    public function setNumcode($numcode)
+    public function setCountry(?string $country): Country
     {
-        $this->numcode = $numcode;
+        $this->country = $country;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Vat[]
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param $vat
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return \Contact\Entity\Address[]|Collections\ArrayCollection
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param \Contact\Entity\Address[]|Collections\ArrayCollection $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    }
-
-    /**
-     * @return \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection
-     */
-    public function getIctOrganisation()
-    {
-        return $this->ictOrganisation;
-    }
-
-    /**
-     * @param \Organisation\Entity\IctOrganisation[]|Collections\ArrayCollection $ictOrganisation
-     */
-    public function setIctOrganisation($ictOrganisation)
-    {
-        $this->ictOrganisation = $ictOrganisation;
-    }
-
-    /**
-     * @return \Organisation\Entity\Organisation[]|Collections\ArrayCollection
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    /**
-     * @param \Organisation\Entity\Organisation[]|Collections\ArrayCollection $organisation
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCountryVat()
-    {
-        return $this->countryVat;
-    }
-
-    /**
-     * @param int $countryVat
-     */
-    public function setCountryVat($countryVat)
-    {
-        $this->countryVat = $countryVat;
-    }
-
-    /**
-     * @return \Program\Entity\Funder[]|Collections\ArrayCollection
-     */
-    public function getFunder()
-    {
-        return $this->funder;
-    }
-
-    /**
-     * @param \Program\Entity\Funder[]|Collections\ArrayCollection $funder
-     */
-    public function setFunder($funder)
-    {
-        $this->funder = $funder;
-    }
-
-    /**
-     * @return \General\Entity\Eureka
-     */
-    public function getEureka()
-    {
-        return $this->eureka;
-    }
-
-    /**
-     * @param \General\Entity\Eureka $eureka
-     */
-    public function setEureka($eureka)
-    {
-        $this->eureka = $eureka;
-    }
-
-    /**
-     * @return \General\Entity\Flag
-     */
-    public function getFlag()
-    {
-        return $this->flag;
-    }
-
-    /**
-     * @param \General\Entity\Flag $flag
-     */
-    public function setFlag($flag)
-    {
-        $this->flag = $flag;
-    }
-
-    /**
-     * @return \General\Entity\Eureka
-     */
-    public function getItac()
-    {
-        return $this->itac;
-    }
-
-    /**
-     * @param \General\Entity\Eureka $itac
-     */
-    public function setItac($itac)
-    {
-        $this->itac = $itac;
-    }
-
-    /**
-     * @return string
-     */
     public function getDocRef()
     {
         return $this->docRef;
     }
 
-    /**
-     * @param string $docRef
-     */
-    public function setDocRef($docRef)
+    public function setDocRef(?string $docRef): Country
     {
         $this->docRef = $docRef;
+        return $this;
     }
 
-    /**
-     * @return \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
-     */
+    public function getIso3()
+    {
+        return $this->iso3;
+    }
+
+    public function setIso3(?string $iso3): Country
+    {
+        $this->iso3 = $iso3;
+        return $this;
+    }
+
+    public function getNumcode()
+    {
+        return $this->numcode;
+    }
+
+    public function setNumcode($numcode): Country
+    {
+        $this->numcode = $numcode;
+        return $this;
+    }
+
+    public function getCountryVat():?string
+    {
+        return $this->countryVat;
+    }
+
+    public function setCountryVat(?string $countryVat): Country
+    {
+        $this->countryVat = $countryVat;
+        return $this;
+    }
+
+    public function getEu():?Eu
+    {
+        return $this->eu;
+    }
+
+    public function setEu(Eu $eu): Country
+    {
+        $this->eu = $eu;
+        return $this;
+    }
+
+    public function getEureka()
+    {
+        return $this->eureka;
+    }
+
+    public function setEureka(Eureka $eureka): Country
+    {
+        $this->eureka = $eureka;
+        return $this;
+    }
+
+    public function getItac()
+    {
+        return $this->itac;
+    }
+
+    public function setItac(Itac $itac): Country
+    {
+        $this->itac = $itac;
+        return $this;
+    }
+
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    public function setAddress($address): Country
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    public function setOrganisation($organisation): Country
+    {
+        $this->organisation = $organisation;
+        return $this;
+    }
+
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    public function setVat($vat): Country
+    {
+        $this->vat = $vat;
+        return $this;
+    }
+
+    public function getFunder()
+    {
+        return $this->funder;
+    }
+
+    public function setFunder($funder): Country
+    {
+        $this->funder = $funder;
+        return $this;
+    }
+
+    public function getFlag()
+    {
+        return $this->flag;
+    }
+
+    public function setFlag(Flag $flag): Country
+    {
+        $this->flag = $flag;
+        return $this;
+    }
+
     public function getEvaluation()
     {
         return $this->evaluation;
     }
 
-    /**
-     * @param \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection $evaluation
-     */
-    public function setEvaluation($evaluation)
+    public function setEvaluation($evaluation): Country
     {
         $this->evaluation = $evaluation;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Rationale[]
-     */
     public function getRationale()
     {
         return $this->rationale;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Rationale[] $rationale
-     */
-    public function setRationale($rationale)
+    public function setRationale($rationale): Country
     {
         $this->rationale = $rationale;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[]
-     */
     public function getChangeRequestCountry()
     {
         return $this->changeRequestCountry;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\ChangeRequest\Country[] $changeRequestCountry
-     *
-     * @return Country
-     */
     public function setChangeRequestCountry($changeRequestCountry): Country
     {
         $this->changeRequestCountry = $changeRequestCountry;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Log[]
-     */
     public function getProjectLog()
     {
         return $this->projectLog;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Log[] $projectLog
-     *
-     * @return Country
-     */
-    public function setProjectLog($projectLog)
+    public function setProjectLog($projectLog): Country
     {
         $this->projectLog = $projectLog;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Program\Entity\Call\Country[]
-     */
     public function getCallCountry()
     {
         return $this->callCountry;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Program\Entity\Call\Country[] $callCountry
-     *
-     * @return Country
-     */
-    public function setCallCountry($callCountry)
+    public function setCallCountry($callCountry): Country
     {
         $this->callCountry = $callCountry;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Contract[]
-     */
     public function getContract()
     {
         return $this->contract;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Contract[] $contract
-     *
-     * @return Country
-     */
-    public function setContract($contract)
+    public function setContract($contract): Country
     {
         $this->contract = $contract;
-
         return $this;
     }
 }

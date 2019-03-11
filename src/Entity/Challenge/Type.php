@@ -33,7 +33,7 @@ use Zend\Form\Annotation;
 class Type extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="type_id", type="integer", nullable=false)
+     * @ORM\Column(name="type_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @Annotation\Type("\Zend\Form\Element\Hidden")
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -58,7 +58,7 @@ class Type extends AbstractEntity
      */
     private $description;
     /**
-     * @ORM\Column(name="sequence", type="integer", nullable=false)
+     * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-sequence-label", "help-block":"txt-challenge-type-sequence-help-block"})
      *

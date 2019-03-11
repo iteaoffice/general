@@ -28,7 +28,7 @@ use Zend\Form\Annotation;
 class Eu extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="eu_id",type="integer",nullable=false)
+     * @ORM\Column(name="eu_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

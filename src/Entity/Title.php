@@ -31,9 +31,9 @@ class Title extends AbstractEntity
     /**
      * Constant for the default title.
      */
-    public const TITLE_UNKNOWN = 0;
+    public const TITLE_UNKNOWN = 18;
     /**
-     * @ORM\Column(name="title_id",type="integer",nullable=false)
+     * @ORM\Column(name="title_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Type("\Zend\Form\Element\Hidden")
@@ -42,7 +42,7 @@ class Title extends AbstractEntity
      */
     private $id;
     /**
-     * @ORM\Column(name="title",type="string",length=20,nullable=true)
+     * @ORM\Column(name="title",type="string",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-title"})
      *
@@ -50,7 +50,7 @@ class Title extends AbstractEntity
      */
     private $name;
     /**
-     * @ORM\Column(name="attention",type="string",length=20,nullable=true)
+     * @ORM\Column(name="attention",type="string",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
      *
@@ -58,7 +58,7 @@ class Title extends AbstractEntity
      */
     private $attention;
     /**
-     * @ORM\Column(name="salutation",type="string",length=20,nullable=true)
+     * @ORM\Column(name="salutation",type="string",nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-salutation"})
      *
@@ -73,71 +73,36 @@ class Title extends AbstractEntity
      */
     private $contacts;
 
-
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->contacts = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Title
-     */
     public function setId($id)
     {
         $this->id = $id;
@@ -145,19 +110,11 @@ class Title extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Title
-     */
     public function setName($name)
     {
         $this->name = $name;
@@ -165,19 +122,11 @@ class Title extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAttention()
     {
         return $this->attention;
     }
 
-    /**
-     * @param string $attention
-     *
-     * @return Title
-     */
     public function setAttention($attention)
     {
         $this->attention = $attention;
@@ -185,19 +134,11 @@ class Title extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSalutation()
     {
         return $this->salutation;
     }
 
-    /**
-     * @param string $salutation
-     *
-     * @return Title
-     */
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
@@ -205,19 +146,11 @@ class Title extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return \Contact\Entity\Contact[]
-     */
     public function getContacts()
     {
         return $this->contacts;
     }
 
-    /**
-     * @param \Contact\Entity\Contact[] $contacts
-     *
-     * @return Title
-     */
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;

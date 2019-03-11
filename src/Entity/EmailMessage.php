@@ -29,7 +29,7 @@ use Zend\Math\Rand;
 class EmailMessage extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="email_message_id",type="integer",nullable=false)
+     * @ORM\Column(name="email_message_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()

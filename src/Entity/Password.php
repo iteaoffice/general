@@ -26,7 +26,7 @@ use Zend\Form\Annotation;
 class Password extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="password_id", type="integer", nullable=false)
+     * @ORM\Column(name="password_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @var integer

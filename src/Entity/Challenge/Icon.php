@@ -30,7 +30,7 @@ use General\Entity\AbstractEntity;
 class Icon extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="icon_id", type="integer", nullable=false)
+     * @ORM\Column(name="icon_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
@@ -65,49 +65,21 @@ class Icon extends AbstractEntity
      */
     private $challenge;
 
-    /**
-     * Icon constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;

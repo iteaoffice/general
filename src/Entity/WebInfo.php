@@ -39,7 +39,7 @@ class WebInfo extends AbstractEntity
         ];
 
     /**
-     * @ORM\Column(name="info_id", type="integer", nullable=false)
+     * @ORM\Column(name="info_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Type("\Zend\Form\Element\Hidden")
@@ -62,7 +62,7 @@ class WebInfo extends AbstractEntity
      */
     private $plain;
     /**
-     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     * @ORM\Column(name="subject", type="string", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-web-info-subject-label","help-block":"txt-web-info-subject-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-web-info-subject-placeholder"})

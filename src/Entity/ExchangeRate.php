@@ -30,7 +30,7 @@ use Zend\Form\Annotation;
 class ExchangeRate extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="exchange_rate_id", type="integer", nullable=false)
+     * @ORM\Column(name="exchange_rate_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -39,7 +39,7 @@ class ExchangeRate extends AbstractEntity
      */
     private $id;
     /**
-     * @ORM\Column(name="rate", type="decimal", nullable=false)
+     * @ORM\Column(name="rate", type="decimal", precision=10, scale=6, nullable=false)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-exchange-rate-rate-label","help-block":"txt-exchange-rate-rate-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-exchange-rate-rate-placeholder"})
@@ -71,50 +71,26 @@ class ExchangeRate extends AbstractEntity
      */
     private $affiliationInvoice;
 
-    /**
-     * ExchangeRate constructor.
-     */
     public function __construct()
     {
         $this->affiliationInvoice = new ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
