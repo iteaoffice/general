@@ -134,6 +134,7 @@ final class CountrySearchService extends AbstractSearchService
 
         $this->query->setQuery($query);
         $this->query->addSort('country_sort', Query::SORT_ASC);
+        $this->query->setRows(25);
 
         return $this->getSolrClient()->execute($this->query);
     }
