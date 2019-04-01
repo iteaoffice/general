@@ -89,7 +89,7 @@ class EmailMessageEvent extends AbstractEntity
      */
     private $ip;
     /**
-     * @ORM\Column(name="agent",type="string",nullable=true)
+     * @ORM\Column(name="agent",type="string",length=1000,nullable=true)
      *
      * @var string
      */

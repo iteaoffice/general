@@ -16,23 +16,16 @@ namespace General\View\Helper;
 use General\Entity\Country;
 
 /**
- * Create a link to an project.
+ * Class CountryFlag
  *
- * @category   General
+ * @package General\View\Helper
  */
-class CountryFlag extends ImageAbstract
+final class CountryFlag extends ImageAbstract
 {
-    /**
-     * @param Country $country
-     * @param int $width
-     * @return string
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
     public function __invoke(Country $country, $width = 20): string
     {
         $flag = $country->getFlag();
-        if (\is_null($flag)) {
+        if (null === $flag) {
             return '';
         }
 

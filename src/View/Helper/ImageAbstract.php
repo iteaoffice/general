@@ -53,11 +53,11 @@ abstract class ImageAbstract extends AbstractViewHelper
         /**
          * @var $url Url
          */
-        $url = $this->getHelperPluginManager()->get('url');
+        $url = $this->getHelperPluginManager()->get(Url::class);
         /**
          * @var $serverUrl ServerUrl
          */
-        $serverUrl = $this->getHelperPluginManager()->get('serverUrl');
+        $serverUrl = $this->getHelperPluginManager()->get(ServerUrl::class);
         /**
          * Get the thumber config
          */
@@ -85,24 +85,9 @@ abstract class ImageAbstract extends AbstractViewHelper
             return (string)$thumberLink;
         }
 
-        $thumberLinkFull = Builder::construct(
-            $config['image']['server'],
-            $config['image']['secret'],
-            $serverUrl() . $url($this->router, $this->routerParams)
-        );
-
-
-        return '<a href="' . $thumberLinkFull . '" class="thumbnail fancybox-thumbs" data-fancybox-group="album-6">'
-            . $image . '</a>';
+        return $image;
     }
 
-    /**
-     * Add a parameter to the list of parameters for the router.
-     *
-     * @param string $key
-     * @param        $value
-     * @param bool   $allowNull
-     */
     public function addRouterParam($key, $value, $allowNull = true): void
     {
         if (!$allowNull && null === $value) {
@@ -113,51 +98,31 @@ abstract class ImageAbstract extends AbstractViewHelper
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getRouter()
+    public function getRouter(): ?string
     {
         return $this->router;
     }
 
-    /**
-     * @param string $router
-     */
-    public function setRouter($router): void
+    public function setRouter(string $router): void
     {
         $this->router = $router;
     }
 
-    /**
-     * @return array
-     */
-    public function getRouterParams()
+    public function getRouterParams(): array
     {
         return $this->routerParams;
     }
 
-    /**
-     * @return string
-     */
     public function getImageId()
     {
         return $this->imageId;
     }
 
-    /**
-     * @param string $imageId
-     */
     public function setImageId($imageId): void
     {
         $this->imageId = $imageId;
     }
 
-    /**
-     * @param string $classes
-     *
-     * @return $this
-     */
     public function addClasses($classes): ImageAbstract
     {
         foreach ((array)$classes as $class) {
@@ -167,35 +132,21 @@ abstract class ImageAbstract extends AbstractViewHelper
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getClasses(): array
     {
         return $this->classes;
     }
 
-    /**
-     * @param array $classes
-     */
     public function setClasses($classes): void
     {
         $this->classes = $classes;
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): int
     {
         return $this->width;
     }
 
-    /**
-     * @param int $width
-     *
-     * @return ImageAbstract
-     */
     public function setWidth($width): ImageAbstract
     {
         $this->width = $width;
