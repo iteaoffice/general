@@ -20,11 +20,9 @@ return [
             'general_country' => [
                 'endpoint' => [
                     'server' => [
-                        'host'     => '10.213.157.15',
+                        'host'     => 'search',
                         'port'     => '8983',
-                        'path'     => '/solr/general_country',
-                        'username' => 'jvdheide',
-                        'password' => 'jvdheide1',
+                        'path'     => '/solr/general_country'
                     ],
                 ],
             ],

@@ -173,15 +173,6 @@ final class ImpactStreamHandler extends AbstractHandler
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        // Remove order and direction from the GET params to prevent duplication
-        $filteredData = \array_filter(
-            $data,
-            function ($key) {
-                return !\in_array($key, ['order', 'direction'], true);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-
         return $this->renderer->render(
             'cms/result/impact-stream',
             [
@@ -189,7 +180,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 'order'              => $data['order'],
                 'direction'          => $data['direction'],
                 'query'              => $data['query'],
-                'arguments'          => http_build_query($filteredData),
+                'arguments'          => http_build_query($form->getFilteredData()),
                 'paginator'          => $paginator,
                 'allChallenges'      => $this->generalService->findAllChallenges(),
                 'projectService'     => $this->projectService,
