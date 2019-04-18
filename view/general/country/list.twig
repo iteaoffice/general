@@ -4,27 +4,25 @@
 {% do form.prepare() %}
 {{ form().openTag(form)|raw }}
 
-
 <h1>{{ translate("txt-country-list") }} {{ countryLink(null, 'new','button') }}</h1>
 
 {{ filterbarelement(form) }}
 {% include('application/partial/form-badges') %}
 <p class="text-muted">{{ translate("txt-%s-items-on-%s-pages")|format(paginator.adapter.count,paginator.pageRange) }}</p>
 
-
 {% if paginator.pageRange > 0 %}
     <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'iso3', 'text': translate('txt-iso3')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'cd', 'text': translate('txt-cd')} %}</th>
-            <th>{{ translate('txt-numcode') }}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_eu', 'text': translate('txt-eu')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_eureka', 'text': translate('txt-eureka')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_itac', 'text': translate('txt-itac')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'funders', 'text': translate('txt-funders')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'name', 'text': translate("txt-name")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'iso3', 'text': translate("txt-iso3")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'cd', 'text': translate("txt-cd")} %}</th>
+            <th>{{ translate("txt-numcode") }}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_eu', 'text': translate("txt-eu")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_eureka', 'text': translate("txt-eureka")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'is_itac', 'text': translate("txt-itac")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/country/list', 'criteria': 'funders', 'text': translate("txt-funders")} %}</th>
         </tr>
         </thead>
         <tfoot>
@@ -43,10 +41,10 @@
                 <td>{{ country.iso3 }}</td>
                 <td>{{ country.cd }}</td>
                 <td>{{ country.numcode }}</td>
-                <td>{% if country.eu %}YES{% endif %}</td>
-                <td>{% if country.eureka %}YES{% endif %}</td>
-                <td>{% if country.itac %}YES{% endif %}</td>
-                <td>{{ country.funder.count }}</td>
+                <td>{% if country.eu %}{{ translate("txt-yes") }}{% endif %}</td>
+                <td>{% if country.eureka %}{{ translate("txt-yes") }}{% endif %}</td>
+                <td>{% if country.itac %}{{ translate("txt-yes") }}{% endif %}</td>
+                <td>{{ countryResult.fields.funders }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -57,4 +55,3 @@
 {% endif %}
 
 {{ form().closeTag()|raw }}
-
