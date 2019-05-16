@@ -1,5 +1,4 @@
 {% do form.prepare() %}
-
 {{ form().openTag(form)|raw }}
 
 {% set country = form.get('general_entity_challenge') %}
@@ -23,7 +22,7 @@
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-icon") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
+            <p class="form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
         </div>
     </div>
 {% endif %}
@@ -35,7 +34,7 @@
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-image") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
+            <p class="form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
         </div>
     </div>
 {% endif %}
@@ -48,7 +47,7 @@
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
+            <p class="form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
         </div>
     </div>
 {% endif %}
@@ -58,7 +57,7 @@
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-background-image") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ image(challenge.image,100) }}</p>
+            <p class="form-control-plaintext">{{ image(challenge.image,100) }}</p>
         </div>
     </div>
 {% endif %}

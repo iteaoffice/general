@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace General\Controller\Plugin;
 
+use function base64_decode;
+use function base64_encode;
+use function json_encode;
 use Zend\Http\Request;
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Router\Http\RouteMatch;
+use Zend\Json\Json;
 
 /**
  * Class GetFilter
@@ -56,17 +60,14 @@ final class GetFilter extends AbstractPlugin
         $direction = $this->request->getQuery('direction');
 
         //Take the filter from the URL
-        $filter = (array)\json_decode(\base64_decode($encodedFilter));
-
+        $filter = [];
+        if (!empty($base64decodedFilter = base64_decode($encodedFilter))) {
+            $filter = (array)Json::decode($base64decodedFilter);
+        }
 
         //If the form is submitted, refresh the URL
         if ($this->request->isGet() && null !== $this->request->getQuery('submit')) {
             $filter = $this->request->getQuery()->toArray()['filter'];
-        }
-
-        //Create a new filter if not set already
-        if (!$filter) {
-            $filter = [];
         }
 
         //Add a default order and direction if not known in the filter
@@ -92,7 +93,7 @@ final class GetFilter extends AbstractPlugin
 
     public function getHash(): string
     {
-        return \base64_encode(\json_encode($this->filter));
+        return base64_encode(Json::encode($this->filter));
     }
 
     public function getFilter(): array

@@ -14,11 +14,10 @@ namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mailing\Entity\Sender;
+use Mailing\Entity\Template;
 use Zend\Form\Annotation;
 
 /**
- * WebInfo.
- *
  * @ORM\Table(name="web_info")
  * @ORM\Entity(repositoryClass="General\Repository\WebInfo")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
@@ -29,13 +28,10 @@ class WebInfo extends AbstractEntity
     public const PLAIN = 1;
     public const NOT_PLAIN = 0;
 
-    /**
-     * @var array
-     */
     protected static $plainTemplates
         = [
-            self::PLAIN     => "txt-plain",
-            self::NOT_PLAIN => "txt-not-plain",
+            self::PLAIN     => 'txt-plain',
+            self::NOT_PLAIN => 'txt-not-plain',
         ];
 
     /**
@@ -81,9 +77,7 @@ class WebInfo extends AbstractEntity
     private $content;
     /**
      * @ORM\ManyToOne(targetEntity="Mailing\Entity\Sender", cascade={"persist"}, inversedBy="webInfo")
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="sender_id")
-     * })
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"Mailing\Entity\Sender",
@@ -103,9 +97,7 @@ class WebInfo extends AbstractEntity
     private $sender;
     /**
      * @ORM\ManyToOne(targetEntity="Mailing\Entity\Template", cascade={"persist"}, inversedBy="webInfo")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mailtemplate_id", referencedColumnName="mailtemplate_id", nullable=false)
-     * })
+     * @ORM\JoinColumn(name="mailtemplate_id", referencedColumnName="mailtemplate_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"Mailing\Entity\Template",
@@ -120,108 +112,41 @@ class WebInfo extends AbstractEntity
      *      }
      * )
      * @Annotation\Options({"label":"txt-web-info-template-label", "help-block":"txt-web-info-template-help-block"})
-     * @var \Mailing\Entity\Template
+     * @var Template
      */
     private $template;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->plain = self::NOT_PLAIN;
     }
 
-    /**
-     * @return array
-     */
     public static function getPlainTemplates(): array
     {
         return self::$plainTemplates;
     }
 
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->info;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
-    /**
-     * @param int $id
-     *
-     * @return WebInfo
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInfo()
-    {
-        return $this->info;
-    }
-
-    /**
-     * @param string $info
-     *
-     * @return WebInfo
-     */
-    public function setInfo($info)
-    {
-        $this->info = $info;
-
-        return $this;
-    }
-
-    /**
-     * @param bool $textual
-     *
-     * @return int|string
-     */
     public function getPlain(bool $textual = false)
     {
         if ($textual) {
@@ -231,11 +156,6 @@ class WebInfo extends AbstractEntity
         return $this->plain;
     }
 
-    /**
-     * @param int $plain
-     *
-     * @return WebInfo
-     */
     public function setPlain($plain)
     {
         $this->plain = $plain;
@@ -243,83 +163,69 @@ class WebInfo extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubject()
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): WebInfo
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getInfo(): ?string
+    {
+        return $this->info;
+    }
+
+    public function setInfo(string $info): WebInfo
+    {
+        $this->info = $info;
+        return $this;
+    }
+
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     *
-     * @return WebInfo
-     */
-    public function setSubject($subject)
+    public function setSubject(string $subject): WebInfo
     {
         $this->subject = $subject;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return WebInfo
-     */
-    public function setContent($content)
+    public function setContent(string $content): WebInfo
     {
         $this->content = $content;
-
         return $this;
     }
 
-    /**
-     * @return Sender
-     */
     public function getSender(): ?Sender
     {
         return $this->sender;
     }
 
-    /**
-     * @param Sender $sender
-     *
-     * @return WebInfo
-     */
     public function setSender(Sender $sender): WebInfo
     {
         $this->sender = $sender;
-
         return $this;
     }
 
-    /**
-     * @return \Mailing\Entity\Template
-     */
-    public function getTemplate(): ?\Mailing\Entity\Template
+    public function getTemplate(): ?Template
     {
         return $this->template;
     }
 
-    /**
-     * @param \Mailing\Entity\Template $template
-     *
-     * @return WebInfo
-     */
-    public function setTemplate(\Mailing\Entity\Template $template): WebInfo
+    public function setTemplate(Template $template): WebInfo
     {
         $this->template = $template;
-
         return $this;
     }
 }

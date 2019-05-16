@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="email_message_event")
  * @ORM\Entity
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
@@ -77,7 +75,7 @@ class EmailMessageEvent extends AbstractEntity
      */
     private $smtp_reply;
     /**
-     * @ORM\Column(name="url",type="string",nullable=true)
+     * @ORM\Column(name="url",type="string",length=1000, nullable=true)
      *
      * @var string
      */

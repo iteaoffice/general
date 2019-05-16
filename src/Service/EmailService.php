@@ -18,21 +18,41 @@ namespace General\Service;
 
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
+use DateTime;
 use Deeplink\Entity\Target;
 use Deeplink\Service\DeeplinkService;
+use Exception;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
 use General\ValueObject;
+use InvalidArgumentException;
 use Mailing\Entity\Mailing;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Publication\Entity\Publication;
+use Twig_Environment;
+use Twig_Loader_Array;
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Helper\Url;
 use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
+use function array_merge;
+use function array_unique;
+use function base64_encode;
+use function count;
+use function defined;
+use function file_exists;
+use function file_get_contents;
+use function is_bool;
+use function preg_match_all;
+use function preg_replace;
+use function sprintf;
+use function str_replace;
+use function stream_get_contents;
+use function strip_tags;
+use function substr;
 
 /**
  * Class FormService
@@ -138,6 +158,8 @@ class EmailService
         $this->emailContent = $mailing->getMailHtml();
         $this->emailSubject = $mailing->getMailSubject();
         $this->emailCampaign = $mailing->getMailing();
+
+        $this->templateVariables['subject'] = $mailing->getMailSubject();
     }
 
     private function resetEmailContent(): void
@@ -162,10 +184,10 @@ class EmailService
                 if ($this->authenticationService->hasIdentity()) {
                     $owner = $this->authenticationService->getIdentity();
                 }
-                // no break
+            // no break
             case '_owner':
                 if (null === $owner) {
-                    throw new \InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
+                    throw new InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
                 }
 
                 $this->from = new ValueObject\Recipient($owner->parseFullName(), $owner->getEmail());
@@ -190,7 +212,7 @@ class EmailService
         $webInfo = $this->generalService->findWebInfoByInfo($webInfoName);
 
         if (null === $webInfo) {
-            throw new \InvalidArgumentException(sprintf('The requested template %s cannot be found', $webInfoName));
+            throw new InvalidArgumentException(sprintf('The requested template %s cannot be found', $webInfoName));
         }
 
         $this->setSender($webInfo->getSender(), $this->authenticationService->getIdentity());
@@ -225,7 +247,7 @@ class EmailService
                 ['content' => $message]
             );
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
@@ -253,7 +275,7 @@ class EmailService
             $content
         );
 
-        $content = \preg_replace(
+        $content = preg_replace(
             [
                 '~\[(.*?)\]~',
             ],
@@ -263,7 +285,7 @@ class EmailService
             $content
         );
 
-        $twigRenderer = new \Twig_Environment(new \Twig_Loader_Array(['email_template' => $content]));
+        $twigRenderer = new Twig_Environment(new Twig_Loader_Array(['email_template' => $content]));
 
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
@@ -345,7 +367,7 @@ class EmailService
         $emailMessage->setEmailAddress($this->to[0]->toArray()['Email']);
         $emailMessage->setSubject($this->emailSubject);
         $emailMessage->setMessage($this->htmlPart);
-        $emailMessage->setAmountOfAttachments(\count($this->attachments));
+        $emailMessage->setAmountOfAttachments(count($this->attachments));
 
         //Inject the mailing contact
         if (null !== $this->mailingContact) {
@@ -385,17 +407,17 @@ class EmailService
         if (!$response->success()) {
             //Update the email message
             $emailMessage->setLatestEvent('not_sent');
-            $emailMessage->setDateLatestEvent(new \DateTime());
+            $emailMessage->setDateLatestEvent(new DateTime());
 
             //Update the mailingContact
             if (null !== $this->mailingContact) {
-                $this->mailingContact->setDateSent(new \DateTime());
+                $this->mailingContact->setDateSent(new DateTime());
             }
 
             $emailEvent = new EmailMessageEvent();
             $emailEvent->setEmailMessage($emailMessage);
             $emailEvent->setEvent('not_sent');
-            $emailEvent->setTime(new \DateTime());
+            $emailEvent->setTime(new DateTime());
             $emailEvent->setMessageId(0);
             $emailEvent->setEmail('');
             $emailEvent->setCampaign('');
@@ -407,12 +429,12 @@ class EmailService
 
         //Update the email message
         $emailMessage->setLatestEvent('sent_to_mailjet');
-        $emailMessage->setDateLatestEvent(new \DateTime());
+        $emailMessage->setDateLatestEvent(new DateTime());
 
         $emailEvent = new EmailMessageEvent();
         $emailEvent->setEmailMessage($emailMessage);
         $emailEvent->setEvent('sent_to_mailjet');
-        $emailEvent->setTime(new \DateTime());
+        $emailEvent->setTime(new DateTime());
         $emailEvent->setMessageId(0);
         $emailEvent->setEmail('');
         $emailEvent->setCampaign('');
@@ -424,18 +446,18 @@ class EmailService
 
     private function renderEmailContent(): void
     {
-        $message = $this->createTwigTemplate((string) $this->emailContent);
+        $message = $this->createTwigTemplate((string)$this->emailContent);
 
         try {
             $htmlPart = $this->renderer->render(
                 $this->template->getTemplate(),
-                \array_merge(['content' => $message], $this->templateVariables)
+                array_merge(['content' => $message], $this->templateVariables)
             );
             $textPart = $this->renderer->render(
                 'plain',
-                ['content' => \strip_tags($message)]
+                ['content' => strip_tags($message)]
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $htmlPart = $textPart = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
         }
 
@@ -446,33 +468,33 @@ class EmailService
 
         foreach ($this->templateVariables as $key => $replace) {
             //Do not replace booleans or \DateTime instances
-            if (\is_bool($replace) || $replace instanceof \DateTime) {
+            if (is_bool($replace) || $replace instanceof DateTime) {
                 continue;
             }
-            $this->emailSubject = \str_replace(\sprintf('[%s]', $key), $replace, $this->emailSubject);
+            $this->emailSubject = str_replace(sprintf('[%s]', $key), $replace, $this->emailSubject);
         }
     }
 
     private function embedImagesAsAttachment(string &$htmlPart): void
     {
         $matches = [];
-        \preg_match_all("#src=['\"]([^'\"]+)#i", $htmlPart, $matches);
+        preg_match_all("#src=['\"]([^'\"]+)#i", $htmlPart, $matches);
 
-        $matches = \array_unique($matches[1]);
+        $matches = array_unique($matches[1]);
 
-        if (\count($matches) > 0) {
+        if (count($matches) > 0) {
             foreach ($matches as $key => $filename) {
-                if ($filename && \file_exists($filename)) {
+                if ($filename && file_exists($filename)) {
                     $id = md5_file($filename);
 
                     $this->inlinedAttachments = new ValueObject\Attachment(
                         $this->mimeByExtension($filename),
-                        \substr($id, 0, 10),
-                        \file_get_contents($filename),
+                        substr($id, 0, 10),
+                        file_get_contents($filename),
                         $id
                     );
 
-                    $htmlPart = \str_replace($filename, 'cid:' . $id, $htmlPart);
+                    $htmlPart = str_replace($filename, 'cid:' . $id, $htmlPart);
                 }
             }
         }
@@ -506,7 +528,7 @@ class EmailService
 
         foreach ($this->to as $singleTo) {
             $toValue = $singleTo->toArray();
-            if (!\defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
+            if (!defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
                 $toValue['Email'] = 'info@jield.nl';
             }
             $to[] = $toValue;
@@ -575,7 +597,7 @@ class EmailService
         $this->attachments[] = new ValueObject\Attachment(
             $publication->getContentType()->getContentType(),
             $publication->getOriginal(),
-            \base64_encode(\stream_get_contents($publication->getObject()->first()->getObject()))
+            base64_encode(stream_get_contents($publication->getObject()->first()->getObject()))
         );
     }
 
@@ -593,7 +615,7 @@ class EmailService
 
     public function setTemplateVariable(string $variable, $value): void
     {
-        if (!\is_bool($value) && !$value instanceof \DateTime) {
+        if (!is_bool($value) && !$value instanceof DateTime) {
             $value = (string)$value;
         }
 

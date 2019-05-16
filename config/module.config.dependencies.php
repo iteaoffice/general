@@ -144,9 +144,6 @@ return [
         InputFilter\Challenge\TypeFilter::class    => [
             EntityManager::class
         ],
-        InputFilter\Challenge\TypeFilter::class    => [
-            EntityManager::class
-        ],
         InputFilter\CountryFilter::class           => [
             EntityManager::class
         ],
