@@ -25,7 +25,7 @@ use Project\Entity\Project;
  *
  * @package General\Repository
  */
-final class Country extends EntityRepository
+class Country extends EntityRepository
 {
     public function findCountryByCall(Call $call, int $which): array
     {

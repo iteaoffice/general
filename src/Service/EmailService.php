@@ -141,8 +141,8 @@ class EmailService
         $this->viewHelperManager = $viewHelperManager;
 
         $this->client = new Client(
-            $config['email']['relay']['username'],
-            $config['email']['relay']['password'],
+            $config['email']['relay']['username'] ?? '',
+            $config['email']['relay']['password'] ?? '',
             true,
             ['version' => 'v3.1']
         );

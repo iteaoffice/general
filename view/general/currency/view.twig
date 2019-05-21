@@ -31,7 +31,7 @@
         </thead>
         <tbody>
         {% for exchangeRate in currency.exchangeRate %}
-            <tr {% if currentExchangeRate.id == exchangeRate.id %}class="success"{% endif %}>
+            <tr {% if currentExchangeRate.id == exchangeRate.id %}class="table-success"{% endif %}>
                 <td>{{ exchangeRate.date|date('d-m-Y') }} {{ exchangeRateLink(exchangeRate,'edit','icon') }}</td>
                 <td>{{ currency.symbol }} {{ exchangeRate.rate }} {% if currentExchangeRate.id == exchangeRate.id %}
                         <div class="label label-success">{{ translate("txt-active") }}</div>{% endif %}</td>

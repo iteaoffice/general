@@ -15,28 +15,29 @@ namespace General\View\Helper;
 
 use General\Entity\ContentType;
 use General\Service\GeneralService;
+use function sprintf;
 
 /**
- * Create a link to an project.
+ * Class ContentTypeIcon
  *
- * @category   General
+ * @package General\View\Helper
  */
 final class ContentTypeIcon extends AbstractViewHelper
 {
     /**
      * @var GeneralService
      */
-    private $generalSerivce;
+    private $generalService;
 
-    public function __construct(GeneralService $generalSerivce)
+    public function __construct(GeneralService $generalService)
     {
-        $this->generalSerivce = $generalSerivce;
+        $this->generalService = $generalService;
     }
 
-    public function __invoke(ContentType $contentType = null, string $contentTypeName = null)
+    public function __invoke(ContentType $contentType = null, string $contentTypeName = null): ?string
     {
         if (null === $contentType && null !== $contentTypeName) {
-            $contentType = $this->generalSerivce->findContentTypeByContentTypeName($contentTypeName);
+            $contentType = $this->generalService->findContentTypeByContentTypeName($contentTypeName);
         }
 
         if (null === $contentType) {
@@ -74,6 +75,7 @@ final class ContentTypeIcon extends AbstractViewHelper
             case 'application/msword':
                 $class = 'fa-file-word-o';
                 break;
+            default:
             case 'application/octet-stream':
             case 'application/csv':
             case 'text/xml':
@@ -82,10 +84,8 @@ final class ContentTypeIcon extends AbstractViewHelper
             case 'video/mp4':
                 $class = 'fa-file-video-o';
                 break;
-            default:
-                return \sprintf('%s not found', $contentType->getContentType());
         }
 
-        return \sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
+        return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
     }
 }

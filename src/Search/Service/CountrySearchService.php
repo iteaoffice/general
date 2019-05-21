@@ -28,7 +28,7 @@ use Solarium\QueryType\Select\Query\Query;
  *
  * @package General\Search\Service
  */
-final class CountrySearchService extends AbstractSearchService
+class CountrySearchService extends AbstractSearchService
 {
     public const SOLR_CONNECTION = 'general_country';
 
@@ -91,7 +91,8 @@ final class CountrySearchService extends AbstractSearchService
             ->setExcludes(['has_projects_text']);
         $facetSet->createFacetField('has_partners')->setField('has_affiliations_text')->setSort('index')->setMinCount(1)
             ->setExcludes(['has_affiliations_text']);
-        $facetSet->createFacetField('has_public_authorities')->setField('has_funders_text')->setSort('index')->setMinCount(1)
+        $facetSet->createFacetField('has_public_authorities')->setField('has_funders_text')->setSort('index')
+            ->setMinCount(1)
             ->setExcludes(['has_funders_text']);
 
         return $this;
