@@ -131,7 +131,7 @@ final class ImpactStreamHandler extends AbstractHandler
             'html'
         ];
 
-        if ($this->request->isGet()) {
+        if ($this->request->isGet() || $this->request->isHead()) {
             $dateInterval = $this->resultSearchService->parseDateInterval($data);
 
             $this->resultSearchService->setSearchImpactStream(
