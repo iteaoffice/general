@@ -87,8 +87,8 @@ class EntityTest extends TestCase
                         }
                     }
 
-                    $this->assertInternalType('array', ($element->getAttributes()));
-                    $this->assertInternalType('array', ($element->getOptions()));
+                    $this->assertIsArray($element->getAttributes());
+                    $this->assertIsArray($element->getOptions());
 
                 }
 

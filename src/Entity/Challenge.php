@@ -15,6 +15,12 @@ namespace General\Entity;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use General\Entity\Challenge\Icon;
+use General\Entity\Challenge\Image;
+use General\Entity\Challenge\Pdf;
+use General\Entity\Challenge\Type;
+use Program\Entity\Call\Call;
+use Project\Entity\Result\Result;
 use Zend\Form\Annotation;
 
 /**
@@ -84,7 +90,7 @@ class Challenge extends AbstractEntity
      * @Annotation\Attributes({"label":"txt-type"})
      * @Annotation\Options({"help-block":"txt-challenge-type-help-block"})
      *
-     * @var \General\Entity\Challenge\Type
+     * @var Type
      */
     private $type;
     /**
@@ -170,7 +176,7 @@ class Challenge extends AbstractEntity
      * @ORM\ManyToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Result\Result[]|Collections\ArrayCollection
+     * @var Result[]|Collections\ArrayCollection
      */
     private $result;
     /**
@@ -192,7 +198,7 @@ class Challenge extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-image-label","help-block":"txt-challenge-image-help-block"})
      *
-     * @var \General\Entity\Challenge\Image
+     * @var Image
      */
     private $image;
     /**
@@ -200,7 +206,7 @@ class Challenge extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-icon-label","help-block":"txt-challenge-icon-help-block"})
      *
-     * @var \General\Entity\Challenge\Icon
+     * @var Icon
      */
     private $icon;
     /**
@@ -208,7 +214,7 @@ class Challenge extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-pdf-label","help-block":"txt-challenge-pdf-help-block"})
      *
-     * @var \General\Entity\Challenge\Pdf
+     * @var Pdf
      */
     private $pdf;
     /**
@@ -234,7 +240,7 @@ class Challenge extends AbstractEntity
      * )
      * @Annotation\Attributes({"label":"txt-challenge-program-call-label"})
      *
-     * @var \Program\Entity\Call\Call[]|Collections\ArrayCollection
+     * @var Call[]|Collections\ArrayCollection
      */
     private $call;
 
@@ -413,7 +419,7 @@ class Challenge extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\Program\Entity\Call\Call[]
+     * @return Collections\ArrayCollection|Call[]
      */
     public function getCall()
     {
@@ -421,7 +427,7 @@ class Challenge extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\Program\Entity\Call\Call[] $call
+     * @param Collections\ArrayCollection|Call[] $call
      *
      * @return Challenge
      */
@@ -493,7 +499,7 @@ class Challenge extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\Project\Entity\Result\Result[]|iterable
+     * @return Collections\ArrayCollection|Result[]|iterable
      */
     public function getResult(): iterable
     {
@@ -501,7 +507,7 @@ class Challenge extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\Project\Entity\Result\Result[] $result
+     * @param Collections\ArrayCollection|Result[] $result
      *
      * @return Challenge
      */

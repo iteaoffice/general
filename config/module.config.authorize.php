@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office copyright message placeholder
  *
@@ -10,6 +11,8 @@
 
 declare(strict_types=1);
 
+use BjyAuthorize\Guard\Route;
+
 return [
     'bjyauthorize' => [
         /* Currently, only controller and route guards exist
@@ -18,7 +21,7 @@ return [
             /* If this guard is specified here (i.e. it is enabled], it will block
              * access to all routes unless they are specified here.
              */
-            'BjyAuthorize\Guard\Route' => [
+            Route::class => [
                 ['route' => 'image/country-flag', 'roles' => []],
                 ['route' => 'image/challenge-icon', 'roles' => []],
                 ['route' => 'image/challenge-image', 'roles' => []],

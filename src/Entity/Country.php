@@ -12,20 +12,23 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Contact\Entity\Address;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use News\Entity\Magazine\Article;
+use Organisation\Entity\Organisation;
+use Program\Entity\Funder;
+use Project\Entity\Contract;
+use Evaluation\Entity\Evaluation;
+use Project\Entity\Rationale;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the Country.
- *
  * @ORM\Table(name="country")
  * @ORM\Entity(repositoryClass="General\Repository\Country")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
- *
- * @category General
  */
 class Country extends AbstractEntity
 {
@@ -116,14 +119,14 @@ class Country extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Contact\Entity\Address", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \Contact\Entity\Address[]|Collections\ArrayCollection
+     * @var Address[]|Collections\ArrayCollection
      */
     private $address;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Organisation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \Organisation\Entity\Organisation[]|Collections\ArrayCollection
+     * @var Organisation[]|Collections\ArrayCollection
      */
     private $organisation;
     /**
@@ -137,7 +140,7 @@ class Country extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Program\Entity\Funder", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \Program\Entity\Funder[]|Collections\ArrayCollection
+     * @var Funder[]|Collections\ArrayCollection
      */
     private $funder;
     /**
@@ -148,17 +151,17 @@ class Country extends AbstractEntity
      */
     private $flag;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Evaluation\Evaluation", cascade={"persist"}, mappedBy="country")
+     * @ORM\OneToMany(targetEntity="Evaluation\Entity\Evaluation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Evaluation\Evaluation[]|Collections\ArrayCollection
+     * @var Evaluation[]|Collections\ArrayCollection
      */
     private $evaluation;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Rationale", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Rationale[]|Collections\ArrayCollection
+     * @var Rationale[]|Collections\ArrayCollection
      */
     private $rationale;
     /**
@@ -186,9 +189,16 @@ class Country extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Contract[]|Collections\ArrayCollection
+     * @var Contract[]|Collections\ArrayCollection
      */
     private $contract;
+    /**
+     * @ORM\ManyToMany(targetEntity="News\Entity\Magazine\Article", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var Article[]|Collections\ArrayCollection
+     */
+    private $magazineArticle;
 
     public function __construct()
     {
@@ -202,6 +212,7 @@ class Country extends AbstractEntity
         $this->projectLog = new Collections\ArrayCollection();
         $this->callCountry = new Collections\ArrayCollection();
         $this->contract = new Collections\ArrayCollection();
+        $this->magazineArticle = new Collections\ArrayCollection();
     }
 
     public function __get($property)
@@ -319,7 +330,7 @@ class Country extends AbstractEntity
         return $this;
     }
 
-    public function getCountryVat():?string
+    public function getCountryVat(): ?string
     {
         return $this->countryVat;
     }
@@ -330,7 +341,7 @@ class Country extends AbstractEntity
         return $this;
     }
 
-    public function getEu():?Eu
+    public function getEu(): ?Eu
     {
         return $this->eu;
     }
@@ -481,6 +492,17 @@ class Country extends AbstractEntity
     public function setContract($contract): Country
     {
         $this->contract = $contract;
+        return $this;
+    }
+
+    public function getMagazineArticle()
+    {
+        return $this->magazineArticle;
+    }
+
+    public function setMagazineArticle($magazineArticle): Country
+    {
+        $this->magazineArticle = $magazineArticle;
         return $this;
     }
 }
