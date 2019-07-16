@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="currency")
  * @ORM\Entity(repositoryClass="General\Repository\Currency")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
