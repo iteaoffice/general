@@ -77,7 +77,7 @@ final class ChallengeHandler extends AbstractHandler
                     return 'The selected challenge cannot be found';
                 }
 
-                $this->getHeadTitle()->append($this->translate("txt-challenge"));
+                $this->getHeadTitle()->append($this->translate('txt-challenge'));
                 $this->getHeadTitle()->append($challenge->getChallenge());
 
                 if (!empty($challenge->getCss())) {
@@ -90,7 +90,7 @@ final class ChallengeHandler extends AbstractHandler
                 return $this->parseChallengeList();
             default:
                 return sprintf(
-                    "No handler available for <code>%s</code> in class <code>%s</code>",
+                    'No handler available for <code>%s</code> in class <code>%s</code>',
                     $content->getHandler()->getHandler(),
                     __CLASS__
                 );
