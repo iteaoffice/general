@@ -21,7 +21,7 @@ use Zend\Form\Annotation;
  * @ORM\Table(name="web_info")
  * @ORM\Entity(repositoryClass="General\Repository\WebInfo")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
- * @Annotation\Name("content_stylesheet")
+ * @Annotation\Name("web_info")
  */
 class WebInfo extends AbstractEntity
 {

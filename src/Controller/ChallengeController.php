@@ -195,7 +195,7 @@ final class ChallengeController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-challenge-%s-has-successfully-been-created"),
+                        $this->translator->translate('txt-challenge-%s-has-successfully-been-created'),
                         $challenge
                     )
                 );
@@ -337,7 +337,7 @@ final class ChallengeController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-challenge-%s-has-successfully-been-updated"),
+                        $this->translator->translate('txt-challenge-%s-has-successfully-been-updated'),
                         $challenge
                     )
                 );

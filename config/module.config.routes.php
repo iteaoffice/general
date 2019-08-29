@@ -114,6 +114,28 @@ return [
                     ],
                 ],
             ],
+            'challenge'     => [
+                'type'          => 'Segment',
+                'options'       => [
+                    'route'    => '/challenge',
+                    'defaults' => [
+                        'controller' => Controller\ChallengeController::class,
+                        'action'     => 'list',
+                    ],
+                ],
+                'may_terminate' => false,
+                'child_routes'  => [
+                    'download-pdf' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/download/[:id].pdf',
+                            'defaults' => [
+                                'action' => 'download-pdf',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'email'         => [
                 'type'          => 'Literal',
                 'priority'      => 1000,
