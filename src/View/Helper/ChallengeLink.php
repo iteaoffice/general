@@ -56,7 +56,7 @@ class ChallengeLink extends LinkAbstract
                 $this->setText($this->translate('txt-new-challenge'));
                 break;
             case 'download-pdf':
-                $this->setRouter('zfcadmin/challenge/download-pdf');
+                $this->setRouter('challenge/download-pdf');
                 $this->setText($this->translate('txt-download-pdf'));
                 break;
             case 'edit':

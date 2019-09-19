@@ -38,7 +38,7 @@ class Type extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\Hidden")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer
+     * @var int
      */
     private $id;
     /**
@@ -62,7 +62,7 @@ class Type extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-sequence-label", "help-block":"txt-challenge-type-sequence-help-block"})
      *
-     * @var integer
+     * @var int
      */
     private $sequence;
     /**

@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use InvalidArgumentException;
 use Thumbor\Url\Builder;
 use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
@@ -91,7 +92,7 @@ abstract class ImageAbstract extends AbstractViewHelper
     public function addRouterParam($key, $value, $allowNull = true): void
     {
         if (!$allowNull && null === $value) {
-            throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
+            throw new InvalidArgumentException(sprintf('null is not allowed for %s', $key));
         }
         if (null !== $value) {
             $this->routerParams[$key] = $value;

@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
+use DateInterval;
+use DateTime;
 use General\Service\GeneralService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
@@ -25,6 +27,8 @@ use Zend\Mvc\Application;
 use Zend\Paginator\Paginator;
 use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
+use function array_merge;
+use function sprintf;
 
 /**
  * Class ImpactStreamHandler
@@ -79,7 +83,7 @@ final class ImpactStreamHandler extends AbstractHandler
     {
         switch ($content->getHandler()->getHandler()) {
             case 'impactstream_index':
-                $this->getHeadTitle()->append($this->translate("txt-impact-stream"));
+                $this->getHeadTitle()->append($this->translate('txt-impact-stream'));
 
                 return $this->parseIndex();
 
@@ -95,14 +99,14 @@ final class ImpactStreamHandler extends AbstractHandler
     public function parseIndex(): string
     {
         //Set the default date on now
-        $today = new \DateTime();
+        $today = new DateTime();
 
-        $lastYear = new \DateTime();
-        $lastYear->sub(new \DateInterval('P12M'));
+        $lastYear = new DateTime();
+        $lastYear->sub(new DateInterval('P12M'));
 
         $page = $this->request->getQuery('page', 1);
         $form = new SearchResult();
-        $data = \array_merge(
+        $data = array_merge(
             [
                 'order'     => '',
                 'toDate'    => [
@@ -146,7 +150,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
                     foreach ($values as $value) {
-                        $quotedValues[] = \sprintf('"%s"', $value);
+                        $quotedValues[] = sprintf('"%s"', $value);
                     }
 
                     $this->resultSearchService->addFilterQuery(

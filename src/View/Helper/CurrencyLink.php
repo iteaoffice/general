@@ -22,16 +22,6 @@ use General\Entity\Currency;
  */
 class CurrencyLink extends LinkAbstract
 {
-    /**
-     * @param Currency $currency
-     * @param string $action
-     * @param string $show
-     * @param string $alternativeShow
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         Currency $currency = null,
         $action = 'view',
@@ -55,9 +45,6 @@ class CurrencyLink extends LinkAbstract
         return $this->createLink();
     }
 
-    /**
-     * @return string|void
-     */
     public function parseAction(): void
     {
         switch ($this->getAction()) {
@@ -77,14 +64,6 @@ class CurrencyLink extends LinkAbstract
                 $this->setRouter('zfcadmin/currency/edit');
                 $this->setText(sprintf($this->translate('txt-edit-currency-%s'), $this->getCurrency()));
                 break;
-            default:
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        "%s is an incorrect action for %s",
-                        $this->getAction(),
-                        __CLASS__
-                    )
-                );
         }
     }
 }

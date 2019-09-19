@@ -19,10 +19,7 @@ namespace General;
 
 use Zend\ModuleManager\Feature;
 
-/**
- *
- */
-class Module implements Feature\ConfigProviderInterface
+final class Module implements Feature\ConfigProviderInterface
 {
     public function getConfig(): array
     {

@@ -69,9 +69,7 @@ class Challenge extends AbstractEntity
     private $sequence;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Challenge\Type", inversedBy="challenge", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="type_id", referencedColumnName="type_id", nullable=true)
-     * })
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"General\Entity\Challenge\Type",
@@ -233,7 +231,7 @@ class Challenge extends AbstractEntity
      *          "params": {
      *              "criteria":{},
      *              "orderBy":{
-     *                  "call":"DESC"}
+     *                  "id":"DESC"}
      *              }
      *          }
      *      }

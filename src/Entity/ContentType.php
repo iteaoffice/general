@@ -12,17 +12,29 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Affiliation\Entity\Loi;
+use Contact\Entity\Dnd;
+use Contact\Entity\Photo;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Event\Entity\Exhibition\Floorplan;
+use General\Entity\Challenge\Icon;
+use Invoice\Entity\Reminder;
+use Organisation\Entity\Logo;
+use Organisation\Entity\Parent\Doa;
+use Program\Entity\Nda;
+use Project\Entity\Contract\Document;
+use Project\Entity\Contract\VersionDocument;
+use Project\Entity\Pca;
+use Project\Entity\Poster\Poster;
+use Project\Entity\Report\Item;
+use Project\Entity\Result\Result;
+use Publication\Entity\Publication;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the Country.
- *
  * @ORM\Table(name="contenttype")
  * @ORM\Entity(repositoryClass="General\Repository\ContentType")
- *
- * @category General
  */
 class ContentType extends AbstractEntity
 {
@@ -90,7 +102,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Nda", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Program\Entity\Nda[]|Collections\ArrayCollection
+     * @var Nda[]|Collections\ArrayCollection
      */
     private $programNna;
     /**
@@ -102,7 +114,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Parent\Doa", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Organisation\Entity\Parent\Doa[]|Collections\ArrayCollection
+     * @var Doa[]|Collections\ArrayCollection
      */
     private $parentDoa;
     /**
@@ -114,37 +126,37 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Contact\Entity\Dnd[]|Collections\ArrayCollection
+     * @var Dnd[]|Collections\ArrayCollection
      */
     private $contactDnd;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Contact\Entity\Photo[]|Collections\ArrayCollection
+     * @var Photo[]|Collections\ArrayCollection
      */
     private $contactPhoto;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Organisation\Entity\Logo[]|Collections\ArrayCollection
+     * @var Logo[]|Collections\ArrayCollection
      */
     private $organisationLogo;
     /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
+     * @var Publication[]|Collections\ArrayCollection
      */
     private $publication;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Publication\Entity\Publication[]|Collections\ArrayCollection
+     * @var Publication[]|Collections\ArrayCollection
      */
     private $badgeAttachment;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Result\Result[]|Collections\ArrayCollection
+     * @var Result[]|Collections\ArrayCollection
      */
     private $result;
     /**
@@ -156,7 +168,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Poster\Poster[]|Collections\ArrayCollection
+     * @var Poster[]|Collections\ArrayCollection
      */
     private $poster;
     /**
@@ -172,21 +184,15 @@ class ContentType extends AbstractEntity
      */
     private $ideaImage;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Description\Image", cascade={"persist"}, mappedBy="contentType")
-     * @Annotation\Exclude()
-     * @var \Project\Entity\Description\Image[]|Collections\ArrayCollection
-     */
-    private $projectDescriptionImage;
-    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Pca[]|Collections\ArrayCollection
+     * @var Pca[]|Collections\ArrayCollection
      */
     private $pca;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Report\Item[]|Collections\ArrayCollection
+     * @var Item[]|Collections\ArrayCollection
      */
     private $projectReportItem;
     /**
@@ -204,25 +210,25 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Contract\Document[]|Collections\ArrayCollection
+     * @var Document[]|Collections\ArrayCollection
      */
     private $contractDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract\VersionDocument", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Contract\VersionDocument[]|Collections\ArrayCollection
+     * @var VersionDocument[]|Collections\ArrayCollection
      */
     private $contractVersionDocument;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Image", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \General\Entity\Challenge\Image[]|Collections\ArrayCollection
+     * @var Challenge\Image[]|Collections\ArrayCollection
      */
     private $challengeImage;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Icon", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \General\Entity\Challenge\Icon[]|Collections\ArrayCollection
+     * @var Icon[]|Collections\ArrayCollection
      */
     private $challengeIcon;
     /**
@@ -234,7 +240,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Affiliation\Entity\Loi[]|Collections\ArrayCollection
+     * @var Loi[]|Collections\ArrayCollection
      */
     private $loi;
     /**
@@ -246,19 +252,16 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Exhibition\Floorplan", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Event\Entity\Exhibition\Floorplan[]|Collections\ArrayCollection
+     * @var Floorplan[]|Collections\ArrayCollection
      */
     private $exhibitionFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Reminder", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Invoice\Entity\Reminder[]|Collections\ArrayCollection()
+     * @var Reminder[]|Collections\ArrayCollection()
      */
     private $reminder;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->projectLogo = new Collections\ArrayCollection();
@@ -278,7 +281,6 @@ class ContentType extends AbstractEntity
         $this->pca = new Collections\ArrayCollection();
         $this->ideaDocument = new Collections\ArrayCollection();
         $this->ideaImage = new Collections\ArrayCollection();
-        $this->projectDescriptionImage = new Collections\ArrayCollection();
         $this->projectReportItem = new Collections\ArrayCollection();
         $this->projectDocument = new Collections\ArrayCollection();
         $this->versionDocument = new Collections\ArrayCollection();
@@ -293,767 +295,409 @@ class ContentType extends AbstractEntity
         $this->reminder = new Collections\ArrayCollection();
     }
 
-    /**
-     * Return the name of the content type.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->contentType;
     }
 
-
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
     public function __get($property)
     {
         return $this->$property;
     }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
     public function __set($property, $value)
     {
         $this->$property = $value;
     }
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
     public function __isset($property)
     {
         return isset($this->$property);
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ContentType
-     */
-    public function setId($id)
+    public function setId($id): ContentType
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return ContentType
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): ContentType
     {
         $this->description = $description;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContentType()
+    public function getContentType(): ?string
     {
         return $this->contentType;
     }
 
-    /**
-     * @param string $contentType
-     *
-     * @return ContentType
-     */
-    public function setContentType($contentType)
+    public function setContentType(?string $contentType): ContentType
     {
         $this->contentType = $contentType;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getExtension()
+    public function getExtension(): ?string
     {
         return $this->extension;
     }
 
-    /**
-     * @param string $extension
-     *
-     * @return ContentType
-     */
-    public function setExtension($extension)
+    public function setExtension(?string $extension): ContentType
     {
         $this->extension = $extension;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Logo[]
-     */
     public function getProjectLogo()
     {
         return $this->projectLogo;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Logo[] $projectLogo
-     *
-     * @return ContentType
-     */
-    public function setProjectLogo($projectLogo)
+    public function setProjectLogo($projectLogo): ContentType
     {
         $this->projectLogo = $projectLogo;
-
         return $this;
     }
 
-    /**
-     * @return resource
-     */
     public function getImage()
     {
         return $this->image;
     }
 
-    /**
-     * @param resource $image
-     *
-     * @return ContentType
-     */
-    public function setImage($image)
+    public function setImage($image): ContentType
     {
         $this->image = $image;
-
         return $this;
     }
 
-    /**
-     * @return \Content\Entity\Image[]|Collections\ArrayCollection
-     */
     public function getContentImage()
     {
         return $this->contentImage;
     }
 
-    /**
-     * @param \Content\Entity\Image[]|Collections\ArrayCollection $contentImage
-     *
-     * @return ContentType
-     */
-    public function setContentImage($contentImage)
+    public function setContentImage($contentImage): ContentType
     {
         $this->contentImage = $contentImage;
-
         return $this;
     }
 
-    /**
-     * @return \Content\Entity\Image[]|Collections\ArrayCollection
-     */
     public function getPressArticle()
     {
         return $this->pressArticle;
     }
 
-    /**
-     * @param \Content\Entity\Image[]|Collections\ArrayCollection $pressArticle
-     *
-     * @return ContentType
-     */
-    public function setPressArticle($pressArticle)
+    public function setPressArticle($pressArticle): ContentType
     {
         $this->pressArticle = $pressArticle;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Program\Entity\Nda[]
-     */
     public function getProgramNna()
     {
         return $this->programNna;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Program\Entity\Nda[] $programNna
-     *
-     * @return ContentType
-     */
-    public function setProgramNna($programNna)
+    public function setProgramNna($programNna): ContentType
     {
         $this->programNna = $programNna;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Program\Entity\Doa[]
-     */
     public function getProgramDoa()
     {
         return $this->programDoa;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Program\Entity\Doa[] $programDoa
-     *
-     * @return ContentType
-     */
-    public function setProgramDoa($programDoa)
+    public function setProgramDoa($programDoa): ContentType
     {
         $this->programDoa = $programDoa;
-
         return $this;
     }
 
-    /**
-     * @return \Affiliation\Entity\Doa[]|Collections\ArrayCollection
-     */
-    public function getAffiliationDoa()
-    {
-        return $this->affiliationDoa;
-    }
-
-    /**
-     * @param \Affiliation\Entity\Doa[]|Collections\ArrayCollection $affiliationDoa
-     *
-     * @return ContentType
-     */
-    public function setAffiliationDoa($affiliationDoa)
-    {
-        $this->affiliationDoa = $affiliationDoa;
-
-        return $this;
-    }
-
-    /**
-     * @return \Contact\Entity\Dnd[]|Collections\ArrayCollection
-     */
-    public function getContactDnd()
-    {
-        return $this->contactDnd;
-    }
-
-    /**
-     * @param \Contact\Entity\Dnd[]|Collections\ArrayCollection $contactDnd
-     *
-     * @return ContentType
-     */
-    public function setContactDnd($contactDnd)
-    {
-        $this->contactDnd = $contactDnd;
-
-        return $this;
-    }
-
-    /**
-     * @return \Contact\Entity\Photo[]|Collections\ArrayCollection
-     */
-    public function getContactPhoto()
-    {
-        return $this->contactPhoto;
-    }
-
-    /**
-     * @param \Contact\Entity\Photo[]|Collections\ArrayCollection $contactPhoto
-     *
-     * @return ContentType
-     */
-    public function setContactPhoto($contactPhoto)
-    {
-        $this->contactPhoto = $contactPhoto;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Organisation\Entity\Logo[]
-     */
-    public function getOrganisationLogo()
-    {
-        return $this->organisationLogo;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Organisation\Entity\Logo[] $organisationLogo
-     *
-     * @return ContentType
-     */
-    public function setOrganisationLogo($organisationLogo)
-    {
-        $this->organisationLogo = $organisationLogo;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Publication\Entity\Publication[]
-     */
-    public function getPublication()
-    {
-        return $this->publication;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Publication\Entity\Publication[] $publication
-     *
-     * @return ContentType
-     */
-    public function setPublication($publication)
-    {
-        $this->publication = $publication;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Publication\Entity\Publication[]
-     */
-    public function getBadgeAttachment()
-    {
-        return $this->badgeAttachment;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Publication\Entity\Publication[] $badgeAttachment
-     *
-     * @return ContentType
-     */
-    public function setBadgeAttachment($badgeAttachment)
-    {
-        $this->badgeAttachment = $badgeAttachment;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Result\Result[]
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Result\Result[] $result
-     *
-     * @return ContentType
-     */
-    public function setResult($result)
-    {
-        $this->result = $result;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Workpackage\Document[]
-     */
-    public function getWorkpackageDocument()
-    {
-        return $this->workpackageDocument;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Workpackage\Document[] $workpackageDocument
-     *
-     * @return ContentType
-     */
-    public function setWorkpackageDocument($workpackageDocument)
-    {
-        $this->workpackageDocument = $workpackageDocument;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Poster\Poster[]
-     */
-    public function getPoster()
-    {
-        return $this->poster;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Poster\Poster[] $poster
-     *
-     * @return ContentType
-     */
-    public function setPoster($poster)
-    {
-        $this->poster = $poster;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Idea\Document[]
-     */
-    public function getIdeaDocument()
-    {
-        return $this->ideaDocument;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Idea\Document[] $ideaDocument
-     *
-     * @return ContentType
-     */
-    public function setIdeaDocument($ideaDocument)
-    {
-        $this->ideaDocument = $ideaDocument;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Idea\Image[]
-     */
-    public function getIdeaImage()
-    {
-        return $this->ideaImage;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Idea\Image[] $ideaImage
-     *
-     * @return ContentType
-     */
-    public function setIdeaImage($ideaImage)
-    {
-        $this->ideaImage = $ideaImage;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Description\Image[]
-     */
-    public function getProjectDescriptionImage()
-    {
-        return $this->projectDescriptionImage;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Description\Image[] $projectDescriptionImage
-     *
-     * @return ContentType
-     */
-    public function setProjectDescriptionImage($projectDescriptionImage)
-    {
-        $this->projectDescriptionImage = $projectDescriptionImage;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Report\Item[]
-     */
-    public function getProjectReportItem()
-    {
-        return $this->projectReportItem;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Report\Item[] $projectReportItem
-     *
-     * @return ContentType
-     */
-    public function setProjectReportItem($projectReportItem)
-    {
-        $this->projectReportItem = $projectReportItem;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Document\Document[]
-     */
-    public function getProjectDocument()
-    {
-        return $this->projectDocument;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Document\Document[] $projectDocument
-     *
-     * @return ContentType
-     */
-    public function setProjectDocument($projectDocument)
-    {
-        $this->projectDocument = $projectDocument;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Version\Document[]
-     */
-    public function getVersionDocument()
-    {
-        return $this->versionDocument;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Version\Document[] $versionDocument
-     *
-     * @return ContentType
-     */
-    public function setVersionDocument($versionDocument)
-    {
-        $this->versionDocument = $versionDocument;
-
-        return $this;
-    }
-
-    /**
-     * @return \Calendar\Entity\Document[]|Collections\ArrayCollection
-     */
-    public function getCalendarDocument()
-    {
-        return $this->calendarDocument;
-    }
-
-    /**
-     * @param \Calendar\Entity\Document[]|Collections\ArrayCollection $calendarDocument
-     *
-     * @return ContentType
-     */
-    public function setCalendarDocument($calendarDocument)
-    {
-        $this->calendarDocument = $calendarDocument;
-
-        return $this;
-    }
-
-    /**
-     * @return \Affiliation\Entity\Loi[]|Collections\ArrayCollection
-     */
-    public function getLoi()
-    {
-        return $this->loi;
-    }
-
-    /**
-     * @param \Affiliation\Entity\Loi[]|Collections\ArrayCollection $loi
-     *
-     * @return ContentType
-     */
-    public function setLoi($loi)
-    {
-        $this->loi = $loi;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Event\Entity\Meeting\Floorplan[]
-     */
-    public function getMeetingFloorplan()
-    {
-        return $this->meetingFloorplan;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Event\Entity\Meeting\Floorplan[] $meetingFloorplan
-     *
-     * @return ContentType
-     */
-    public function setMeetingFloorplan($meetingFloorplan)
-    {
-        $this->meetingFloorplan = $meetingFloorplan;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Event\Entity\Exhibition\Floorplan[]
-     */
-    public function getExhibitionFloorplan()
-    {
-        return $this->exhibitionFloorplan;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Event\Entity\Exhibition\Floorplan[] $exhibitionFloorplan
-     *
-     * @return ContentType
-     */
-    public function setExhibitionFloorplan($exhibitionFloorplan)
-    {
-        $this->exhibitionFloorplan = $exhibitionFloorplan;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Invoice\Entity\Reminder[]
-     */
-    public function getReminder()
-    {
-        return $this->reminder;
-    }
-
-    /**
-     * @param Collections\ArrayCollection|\Invoice\Entity\Reminder[] $reminder
-     *
-     * @return ContentType
-     */
-    public function setReminder($reminder)
-    {
-        $this->reminder = $reminder;
-
-        return $this;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Organisation\Entity\Parent\Doa[]
-     */
     public function getParentDoa()
     {
         return $this->parentDoa;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Organisation\Entity\Parent\Doa[] $parentDoa
-     *
-     * @return ContentType
-     */
-    public function setParentDoa($parentDoa)
+    public function setParentDoa($parentDoa): ContentType
     {
         $this->parentDoa = $parentDoa;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Contract\Document[]
-     */
-    public function getContractDocument()
+    public function getAffiliationDoa()
     {
-        return $this->contractDocument;
+        return $this->affiliationDoa;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Contract\Document[] $contractDocument
-     *
-     * @return ContentType
-     */
-    public function setContractDocument($contractDocument): ContentType
+    public function setAffiliationDoa($affiliationDoa): ContentType
     {
-        $this->contractDocument = $contractDocument;
-
+        $this->affiliationDoa = $affiliationDoa;
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[]
-     */
-    public function getContractVersionDocument()
+    public function getContactDnd()
     {
-        return $this->contractVersionDocument;
+        return $this->contactDnd;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Contract\VersionDocument[] $contractVersionDocument
-     *
-     * @return ContentType
-     */
-    public function setContractVersionDocument($contractVersionDocument): ContentType
+    public function setContactDnd($contactDnd): ContentType
     {
-        $this->contractVersionDocument = $contractVersionDocument;
-
+        $this->contactDnd = $contactDnd;
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Challenge\Image[]
-     */
-    public function getChallengeImage()
+    public function getContactPhoto()
     {
-        return $this->challengeImage;
+        return $this->contactPhoto;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge\Image[] $challengeImage
-     *
-     * @return ContentType
-     */
-    public function setChallengeImage($challengeImage): ContentType
+    public function setContactPhoto($contactPhoto): ContentType
     {
-        $this->challengeImage = $challengeImage;
-
+        $this->contactPhoto = $contactPhoto;
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Challenge\Icon[]
-     */
-    public function getChallengeIcon()
+    public function getOrganisationLogo()
     {
-        return $this->challengeIcon;
+        return $this->organisationLogo;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge\Icon[] $challengeIcon
-     *
-     * @return ContentType
-     */
-    public function setChallengeIcon($challengeIcon): ContentType
+    public function setOrganisationLogo($organisationLogo): ContentType
     {
-        $this->challengeIcon = $challengeIcon;
-
+        $this->organisationLogo = $organisationLogo;
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Pca[]
-     */
+    public function getPublication()
+    {
+        return $this->publication;
+    }
+
+    public function setPublication($publication): ContentType
+    {
+        $this->publication = $publication;
+        return $this;
+    }
+
+    public function getBadgeAttachment()
+    {
+        return $this->badgeAttachment;
+    }
+
+    public function setBadgeAttachment($badgeAttachment): ContentType
+    {
+        $this->badgeAttachment = $badgeAttachment;
+        return $this;
+    }
+
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    public function setResult($result): ContentType
+    {
+        $this->result = $result;
+        return $this;
+    }
+
+    public function getWorkpackageDocument()
+    {
+        return $this->workpackageDocument;
+    }
+
+    public function setWorkpackageDocument($workpackageDocument): ContentType
+    {
+        $this->workpackageDocument = $workpackageDocument;
+        return $this;
+    }
+
+    public function getPoster()
+    {
+        return $this->poster;
+    }
+
+    public function setPoster($poster): ContentType
+    {
+        $this->poster = $poster;
+        return $this;
+    }
+
+    public function getIdeaDocument()
+    {
+        return $this->ideaDocument;
+    }
+
+    public function setIdeaDocument($ideaDocument): ContentType
+    {
+        $this->ideaDocument = $ideaDocument;
+        return $this;
+    }
+
+    public function getIdeaImage()
+    {
+        return $this->ideaImage;
+    }
+
+    public function setIdeaImage($ideaImage): ContentType
+    {
+        $this->ideaImage = $ideaImage;
+        return $this;
+    }
+
     public function getPca()
     {
         return $this->pca;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Pca[] $pca
-     *
-     * @return ContentType
-     */
-    public function setPca($pca)
+    public function setPca($pca): ContentType
     {
         $this->pca = $pca;
+        return $this;
+    }
 
+    public function getProjectReportItem()
+    {
+        return $this->projectReportItem;
+    }
+
+    public function setProjectReportItem($projectReportItem): ContentType
+    {
+        $this->projectReportItem = $projectReportItem;
+        return $this;
+    }
+
+    public function getProjectDocument()
+    {
+        return $this->projectDocument;
+    }
+
+    public function setProjectDocument($projectDocument): ContentType
+    {
+        $this->projectDocument = $projectDocument;
+        return $this;
+    }
+
+    public function getVersionDocument()
+    {
+        return $this->versionDocument;
+    }
+
+    public function setVersionDocument($versionDocument): ContentType
+    {
+        $this->versionDocument = $versionDocument;
+        return $this;
+    }
+
+    public function getContractDocument()
+    {
+        return $this->contractDocument;
+    }
+
+    public function setContractDocument($contractDocument): ContentType
+    {
+        $this->contractDocument = $contractDocument;
+        return $this;
+    }
+
+    public function getContractVersionDocument()
+    {
+        return $this->contractVersionDocument;
+    }
+
+    public function setContractVersionDocument($contractVersionDocument): ContentType
+    {
+        $this->contractVersionDocument = $contractVersionDocument;
+        return $this;
+    }
+
+    public function getChallengeImage()
+    {
+        return $this->challengeImage;
+    }
+
+    public function setChallengeImage($challengeImage): ContentType
+    {
+        $this->challengeImage = $challengeImage;
+        return $this;
+    }
+
+    public function getChallengeIcon()
+    {
+        return $this->challengeIcon;
+    }
+
+    public function setChallengeIcon($challengeIcon): ContentType
+    {
+        $this->challengeIcon = $challengeIcon;
+        return $this;
+    }
+
+    public function getCalendarDocument()
+    {
+        return $this->calendarDocument;
+    }
+
+    public function setCalendarDocument($calendarDocument): ContentType
+    {
+        $this->calendarDocument = $calendarDocument;
+        return $this;
+    }
+
+    public function getLoi()
+    {
+        return $this->loi;
+    }
+
+    public function setLoi($loi): ContentType
+    {
+        $this->loi = $loi;
+        return $this;
+    }
+
+    public function getMeetingFloorplan()
+    {
+        return $this->meetingFloorplan;
+    }
+
+    public function setMeetingFloorplan($meetingFloorplan): ContentType
+    {
+        $this->meetingFloorplan = $meetingFloorplan;
+        return $this;
+    }
+
+    public function getExhibitionFloorplan()
+    {
+        return $this->exhibitionFloorplan;
+    }
+
+    public function setExhibitionFloorplan($exhibitionFloorplan): ContentType
+    {
+        $this->exhibitionFloorplan = $exhibitionFloorplan;
+        return $this;
+    }
+
+    public function getReminder()
+    {
+        return $this->reminder;
+    }
+
+    public function setReminder($reminder): ContentType
+    {
+        $this->reminder = $reminder;
         return $this;
     }
 }

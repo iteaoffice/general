@@ -20,19 +20,11 @@ use General\Entity\Challenge;
 
 /**
  * Class ChallengeImage
+ *
  * @package Challenge\View\Helper
  */
 class ChallengeImage extends ImageAbstract
 {
-    /**
-     * @param Challenge $challenge
-     * @param null $width
-     * @param bool $responsive
-     * @param array $classes
-     * @return string
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
     public function __invoke(
         Challenge $challenge,
         $width = null,
@@ -41,7 +33,7 @@ class ChallengeImage extends ImageAbstract
     ): string {
         $image = $challenge->getImage();
 
-        if (\is_null($image)) {
+        if ($image === null) {
             return '';
         }
 
