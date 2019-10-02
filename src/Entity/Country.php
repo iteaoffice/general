@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -15,12 +15,12 @@ namespace General\Entity;
 use Contact\Entity\Address;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Evaluation\Entity\Evaluation;
 use Gedmo\Mapping\Annotation as Gedmo;
 use News\Entity\Magazine\Article;
 use Organisation\Entity\Organisation;
 use Program\Entity\Funder;
 use Project\Entity\Contract;
-use Evaluation\Entity\Evaluation;
 use Project\Entity\Rationale;
 use Zend\Form\Annotation;
 
@@ -98,21 +98,21 @@ class Country extends AbstractEntity
      * @ORM\OneToOne(targetEntity="General\Entity\Eu", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Eu
+     * @var Eu
      */
     private $eu;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Eureka", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Eureka
+     * @var Eureka
      */
     private $eureka;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Itac", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Itac
+     * @var Itac
      */
     private $itac;
     /**
@@ -133,7 +133,7 @@ class Country extends AbstractEntity
      * @ORM\OneToMany(targetEntity="General\Entity\Vat", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Vat[]|Collections\ArrayCollection
+     * @var Vat[]|Collections\ArrayCollection
      */
     private $vat;
     /**
@@ -147,7 +147,7 @@ class Country extends AbstractEntity
      * @ORM\OneToOne(targetEntity="General\Entity\Flag", cascade={"persist"}, mappedBy="country", fetch="EXTRA_LAZY")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Flag
+     * @var Flag
      */
     private $flag;
     /**

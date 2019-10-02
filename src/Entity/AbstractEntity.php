@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use InvalidArgumentException;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
+use function array_slice;
 
 /**
  * Class AbstractEntity
@@ -38,7 +40,7 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
             case 'full_entity_name':
                 return str_replace('DoctrineORMModule\Proxy\__CG__\\', '', static::class);
             case 'entity_name':
-                return implode('', \array_slice(explode('\\', $this->get('class_name')), -1));
+                return implode('', array_slice(explode('\\', $this->get('class_name')), -1));
             case 'underscore_entity_name':
                 return strtolower(implode('_', explode('\\', $this->get('class_name'))));
             case 'entity_fieldset_name':
@@ -62,7 +64,7 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
                     str_replace('Entity', 'Acl\\Assertion', $this->get('class_name'))
                 ); //Run\Acl\Assertion\Run
             default:
-                throw new \InvalidArgumentException(sprintf("Unknown option %s for get entity name", $switch));
+                throw new InvalidArgumentException(sprintf("Unknown option %s for get entity name", $switch));
         }
     }
 

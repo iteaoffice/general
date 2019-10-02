@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -17,9 +12,11 @@ declare(strict_types=1);
 
 namespace General\Repository;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
+use function in_array;
 
 /**
  * Class Log
@@ -52,7 +49,7 @@ class Log extends EntityRepository
 
         $direction = 'DESC';
         if (isset($filter['direction'])
-            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -75,7 +72,7 @@ class Log extends EntityRepository
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function truncateLog(): void
     {

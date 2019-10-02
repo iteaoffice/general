@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -33,8 +28,8 @@ final class ViewHelperFactory implements FactoryInterface
      * Create an instance of the requested class name.
      *
      * @param ContainerInterface|HelperPluginManager $container
-     * @param string $requestedName
-     * @param null|array $options
+     * @param string                                 $requestedName
+     * @param null|array                             $options
      *
      * @return object
      */

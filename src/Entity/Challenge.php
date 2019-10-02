@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -92,21 +92,11 @@ class Challenge extends AbstractEntity
      */
     private $type;
     /**
-     * @ORM\Column(name="description",type="text")
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
-     * @Annotation\Options({"label":"txt-challenge-description-label","help-block":"txt-challenge-description-help-block"})
-     * @Annotation\Attributes({"placeholder":"txt-challenge-description-placeholder"})
-     * @Annotation\Attributes({"rows":30})
-     *
-     * @var string
-     */
-    private $description;
-    /**
      * @ORM\Column(name="html", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-html-label","help-block": "txt-challenge-html-explanation"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-html-placeholder"})
-     * @Annotation\Attributes({"rows":"25"})
+     * @Annotation\Attributes({"id":"html_challenge"})
      *
      * @var string
      */
@@ -116,7 +106,7 @@ class Challenge extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-css-label","help-block": "txt-challenge-css-explanation"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-css-placeholder"})
-     * @Annotation\Attributes({"rows":"25"})
+     * @Annotation\Attributes({"id":"css_challenge"})
      *
      * @var string
      */
@@ -134,7 +124,7 @@ class Challenge extends AbstractEntity
      * @ORM\Column(name="abstract", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-abstract-label","help-block": "txt-challenge-abstract-explanation"})
-     * @Annotation\Attributes({"placeholder":"txt-challenge-abstract-placeholder"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-abstract-placeholder","rows":6})
      *
      * @var string
      */
@@ -299,19 +289,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getChallenge(): ?string
     {
         return $this->challenge;
     }
 
-    /**
-     * @param string $challenge
-     *
-     * @return Challenge
-     */
     public function setChallenge(string $challenge): Challenge
     {
         $this->challenge = $challenge;
@@ -319,19 +301,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDocRef(): ?string
     {
         return $this->docRef;
     }
 
-    /**
-     * @param string $docRef
-     *
-     * @return Challenge
-     */
     public function setDocRef(string $docRef): Challenge
     {
         $this->docRef = $docRef;
@@ -339,39 +313,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     *
-     * @return Challenge
-     */
-    public function setDescription(string $description): Challenge
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getSources(): ?string
     {
         return $this->sources;
     }
 
-    /**
-     * @param string $sources
-     *
-     * @return Challenge
-     */
     public function setSources(string $sources): Challenge
     {
         $this->sources = $sources;
@@ -384,11 +330,6 @@ class Challenge extends AbstractEntity
         return $this->sequence;
     }
 
-    /**
-     * @param int $sequence
-     *
-     * @return Challenge
-     */
     public function setSequence($sequence): Challenge
     {
         $this->sequence = $sequence;
@@ -396,19 +337,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Challenge\Type|null
-     */
     public function getType(): ?Challenge\Type
     {
         return $this->type;
     }
 
-    /**
-     * @param Challenge\Type $type
-     *
-     * @return Challenge
-     */
     public function setType(Challenge\Type $type): Challenge
     {
         $this->type = $type;
@@ -416,19 +349,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Call[]
-     */
     public function getCall()
     {
         return $this->call;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Call[] $call
-     *
-     * @return Challenge
-     */
     public function setCall($call): Challenge
     {
         $this->call = $call;
@@ -436,19 +361,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBackgroundColor(): ?string
     {
         return $this->backgroundColor;
     }
 
-    /**
-     * @param string $backgroundColor
-     *
-     * @return Challenge
-     */
     public function setBackgroundColor(string $backgroundColor): Challenge
     {
         $this->backgroundColor = $backgroundColor;
@@ -456,19 +373,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFrontColor(): ?string
     {
         return $this->frontColor;
     }
 
-    /**
-     * @param string $frontColor
-     *
-     * @return Challenge
-     */
     public function setFrontColor(string $frontColor): Challenge
     {
         $this->frontColor = $frontColor;
@@ -476,19 +385,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Challenge[]
-     */
     public function getProjectChallenge()
     {
         return $this->projectChallenge;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Challenge[] $projectChallenge
-     *
-     * @return Challenge
-     */
     public function setProjectChallenge($projectChallenge): Challenge
     {
         $this->projectChallenge = $projectChallenge;
@@ -496,19 +397,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Result[]|iterable
-     */
     public function getResult(): iterable
     {
         return $this->result;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Result[] $result
-     *
-     * @return Challenge
-     */
     public function setResult($result): Challenge
     {
         $this->result = $result;
@@ -516,19 +409,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Project\Entity\Idea\Challenge[]
-     */
     public function getIdeaChallenge()
     {
         return $this->ideaChallenge;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Project\Entity\Idea\Challenge[] $ideaChallenge
-     *
-     * @return Challenge
-     */
     public function setIdeaChallenge($ideaChallenge): Challenge
     {
         $this->ideaChallenge = $ideaChallenge;
@@ -536,19 +421,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Event\Entity\Booth\Challenge[]
-     */
     public function getBoothChallenge()
     {
         return $this->boothChallenge;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Event\Entity\Booth\Challenge[] $boothChallenge
-     *
-     * @return Challenge
-     */
     public function setBoothChallenge($boothChallenge): Challenge
     {
         $this->boothChallenge = $boothChallenge;
@@ -556,19 +433,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Challenge\Image
-     */
     public function getImage(): ?Challenge\Image
     {
         return $this->image;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge\Image $image
-     *
-     * @return Challenge
-     */
     public function setImage($image): Challenge
     {
         $this->image = $image;
@@ -576,19 +445,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Challenge\Icon
-     */
     public function getIcon(): ?Challenge\Icon
     {
         return $this->icon;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge\Icon $icon
-     *
-     * @return Challenge
-     */
     public function setIcon($icon): Challenge
     {
         $this->icon = $icon;
@@ -596,19 +457,11 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Challenge\Pdf
-     */
     public function getPdf(): ?Challenge\Pdf
     {
         return $this->pdf;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge\Pdf $pdf
-     *
-     * @return Challenge
-     */
     public function setPdf($pdf): Challenge
     {
         $this->pdf = $pdf;
@@ -616,9 +469,6 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAbstract(): ?string
     {
         return $this->abstract;

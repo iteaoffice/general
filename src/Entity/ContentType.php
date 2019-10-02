@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ use Organisation\Entity\Parent\Doa;
 use Program\Entity\Nda;
 use Project\Entity\Contract\Document;
 use Project\Entity\Contract\VersionDocument;
+use Project\Entity\Idea\Image;
 use Project\Entity\Pca;
 use Project\Entity\Poster\Poster;
 use Project\Entity\Report\Item;
@@ -180,7 +181,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
-     * @var \Project\Entity\Idea\Image[]|Collections\ArrayCollection
+     * @var Image[]|Collections\ArrayCollection
      */
     private $ideaImage;
     /**

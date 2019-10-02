@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -18,6 +13,8 @@ declare(strict_types=1);
 
 namespace General\Form;
 
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
@@ -26,11 +23,8 @@ use Zend\Form\Form;
  *
  * @package General\Form
  */
-class GenderFilter extends Form
+final class GenderFilter extends Form
 {
-    /**
-     * GenderFilter constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -41,7 +35,7 @@ class GenderFilter extends Form
 
         $filterFieldset->add(
             [
-                'type'       => 'Zend\Form\Element\Text',
+                'type'       => Text::class,
                 'name'       => 'search',
                 'attributes' => [
                     'class'       => 'form-control',
@@ -54,7 +48,7 @@ class GenderFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'submit',
                 'attributes' => [
                     'id'    => 'submit',
@@ -66,7 +60,7 @@ class GenderFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'clear',
                 'attributes' => [
                     'id'    => 'cancel',

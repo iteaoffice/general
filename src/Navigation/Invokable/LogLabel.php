@@ -7,7 +7,7 @@
  * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/invoice for the canonical source repository
@@ -20,6 +20,7 @@ namespace General\Navigation\Invokable;
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
 use General\Entity\Log;
 use Zend\Navigation\Page\Mvc;
+use function substr;
 
 /**
  * Class EmailMessageLabel
@@ -42,7 +43,7 @@ final class LogLabel extends AbstractNavigationInvokable
                     ['id' => $log->getId()]
                 )
             );
-            $label = (string)\substr($log->getEvent(), 0, 125);
+            $label = (string)substr($log->getEvent(), 0, 125);
         }
         $page->set('label', $label);
     }

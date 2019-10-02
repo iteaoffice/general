@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -22,19 +17,18 @@ use Doctrine\ORM\EntityManager;
 use DoctrineORMModule\Form\Element\EntityMultiCheckbox;
 use General\Entity;
 use Program\Entity\Call\Call;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
 /**
  * Class ChallengeFilter
+ *
  * @package General\Form
  */
-class ChallengeFilter extends Form
+final class ChallengeFilter extends Form
 {
-    /**
-     * ChallengeFilter constructor.
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         parent::__construct();
@@ -45,7 +39,7 @@ class ChallengeFilter extends Form
 
         $filterFieldset->add(
             [
-                'type'       => 'Zend\Form\Element\Text',
+                'type'       => Text::class,
                 'name'       => 'search',
                 'attributes' => [
                     'class'       => 'form-control',
@@ -62,7 +56,7 @@ class ChallengeFilter extends Form
                     'target_class'   => Entity\Challenge\Type::class,
                     'inline'         => true,
                     'object_manager' => $entityManager,
-                    'label'          => _("txt-challenge-type"),
+                    'label'          => _('txt-challenge-type'),
                     'allow_empty'    => true,
                     'find_method'    => [
                         'name'   => 'findAll',
@@ -83,7 +77,7 @@ class ChallengeFilter extends Form
                     'target_class'   => Call::class,
                     'inline'         => true,
                     'object_manager' => $entityManager,
-                    'label'          => _("txt-program-call"),
+                    'label'          => _('txt-program-call'),
                     'allow_empty'    => true,
                     'find_method'    => [
                         'name'   => 'findAll',
@@ -100,7 +94,7 @@ class ChallengeFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'submit',
                 'attributes' => [
                     'id'    => 'submit',
@@ -112,7 +106,7 @@ class ChallengeFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'clear',
                 'attributes' => [
                     'id'    => 'cancel',

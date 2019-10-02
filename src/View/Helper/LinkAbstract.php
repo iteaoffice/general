@@ -6,13 +6,14 @@
  * @category   Project
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Acl\Assertion\AssertionAbstract;
 use General\Entity\Challenge;
 use General\Entity\ContentType;
@@ -22,8 +23,11 @@ use General\Entity\EntityAbstract;
 use General\Entity\ExchangeRate;
 use General\Entity\Password;
 use General\Entity\WebInfo;
+use InvalidArgumentException;
 use Zend\View\Helper\ServerUrl;
 use Zend\View\Helper\Url;
+use function in_array;
+use function is_null;
 
 /**
  * Class LinkAbstract.
@@ -124,7 +128,7 @@ abstract class LinkAbstract extends AbstractViewHelper
             $serverUrl() . $url($this->router, $this->routerParams),
             htmlentities((string)$this->text),
             implode(' ', $this->classes),
-            \in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
+            in_array($this->getShow(), ['icon', 'button', 'flag', 'alternativeShow']) ? implode('', $this->linkContent)
                 : htmlentities(implode('', $this->linkContent))
         );
     }
@@ -138,7 +142,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseShow(): void
     {
@@ -184,7 +188,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                 break;
             case 'paginator':
                 if (null === $this->getAlternativeShow()) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf("this->alternativeShow cannot be null for a paginator link")
                     );
                 }
@@ -198,7 +202,7 @@ abstract class LinkAbstract extends AbstractViewHelper
                 return;
             default:
                 if (!array_key_exists($this->getShow(), $this->showOptions)) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf(
                             "The option \"%s\" should be available in the showOptions array, only \"%s\" are available",
                             $this->getShow(),
@@ -334,7 +338,7 @@ abstract class LinkAbstract extends AbstractViewHelper
     public function addRouterParam($key, $value, $allowNull = true)
     {
         if (!$allowNull && null === $value) {
-            throw new \InvalidArgumentException(sprintf("null is not allowed for %s", $key));
+            throw new InvalidArgumentException(sprintf("null is not allowed for %s", $key));
         }
         if (null !== $value) {
             $this->routerParams[$key] = $value;
@@ -370,7 +374,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getWebInfo(): WebInfo
     {
-        if (\is_null($this->webInfo)) {
+        if (is_null($this->webInfo)) {
             $this->webInfo = new WebInfo();
         }
 
@@ -394,7 +398,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getCountry(): Country
     {
-        if (\is_null($this->country)) {
+        if (is_null($this->country)) {
             $this->country = new Country();
         }
 
@@ -418,7 +422,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getContentType(): ContentType
     {
-        if (\is_null($this->contentType)) {
+        if (is_null($this->contentType)) {
             $this->contentType = new ContentType();
         }
 
@@ -442,7 +446,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getCurrency(): Currency
     {
-        if (\is_null($this->currency)) {
+        if (is_null($this->currency)) {
             $this->currency = new Currency();
         }
 
@@ -467,7 +471,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getExchangeRate(): ExchangeRate
     {
-        if (\is_null($this->exchangeRate)) {
+        if (is_null($this->exchangeRate)) {
             $this->exchangeRate = new ExchangeRate();
         }
 
@@ -491,7 +495,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getChallenge(): Challenge
     {
-        if (\is_null($this->challenge)) {
+        if (is_null($this->challenge)) {
             $this->challenge = new Challenge();
         }
 
@@ -515,7 +519,7 @@ abstract class LinkAbstract extends AbstractViewHelper
      */
     public function getPassword(): Password
     {
-        if (\is_null($this->password)) {
+        if (is_null($this->password)) {
             $this->password = new Password();
         }
 

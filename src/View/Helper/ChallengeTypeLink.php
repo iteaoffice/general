@@ -8,7 +8,7 @@
  * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/general for the canonical source repository
@@ -18,7 +18,9 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\Challenge\Type;
+use function is_null;
 
 /**
  * Create a link to an type.
@@ -34,10 +36,11 @@ class ChallengeTypeLink extends LinkAbstract
 
     /**
      * @param Type|null $type
-     * @param string $action
-     * @param string $show
+     * @param string    $action
+     * @param string    $show
+     *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         Type $type = null,
@@ -59,7 +62,7 @@ class ChallengeTypeLink extends LinkAbstract
      */
     public function getType(): Type
     {
-        if (\is_null($this->type)) {
+        if (is_null($this->type)) {
             $this->type = new Type();
         }
 
@@ -75,7 +78,7 @@ class ChallengeTypeLink extends LinkAbstract
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseAction(): void
     {
@@ -97,7 +100,7 @@ class ChallengeTypeLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-edit-challenge-type-%s"), $this->getType()));
                 break;
             default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+                throw new Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 }

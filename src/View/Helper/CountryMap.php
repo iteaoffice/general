@@ -6,7 +6,7 @@
  * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -15,9 +15,15 @@ namespace General\View\Helper;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
+use function array_key_exists;
+use function define;
+use function defined;
+use function is_array;
+use function is_null;
+use function json_encode;
 
-if (!\defined('ITEAOFFICE_HOST')) {
-    \define('ITEAOFFICE_HOST', 'test');
+if (!defined('ITEAOFFICE_HOST')) {
+    define('ITEAOFFICE_HOST', 'test');
 }
 
 /**
@@ -42,22 +48,22 @@ class CountryMap extends AbstractViewHelper
         $height = $options['height'] ?? '400px';
         $tipData = $options['tipData'] ?? null;
         $focusOn = $options['focusOn'] ?? ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = \is_array($focusOn) ? \json_encode($focusOn) : "'" . $focusOn . "'";
-        $zoomOnScroll = \array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
+        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
+        $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
 
         $js = $countryList = [];
         $js[] = "var data = {";
         foreach ($countries as $country) {
             $countryList[] = '"' . $country->getCd() . '": ';
-            $countryList[] = (!\is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
+            $countryList[] = (!is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
                 : 1;
             $countryList[] = ",";
         }
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "},\n";
         if (is_array($tipData)) {
-            $js[] = "            tipData = " . \json_encode($tipData) . ",\n";
+            $js[] = "            tipData = " . json_encode($tipData) . ",\n";
         }
         $js[] = "            clickable = " . $clickable . ",\n";
         $js[] = "            countries = [";

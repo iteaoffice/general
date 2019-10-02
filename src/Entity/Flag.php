@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ class Flag extends AbstractEntity
      * @Annotation\Options({"target_class":"General\Entity\Flag"})
      * @Annotation\Attributes({"label":"txt-country"})
      *
-     * @var \General\Entity\Country
+     * @var Country
      */
     private $country;
     /**

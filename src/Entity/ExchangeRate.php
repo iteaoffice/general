@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -17,6 +12,8 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Affiliation\Entity\Invoice;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
@@ -52,7 +49,7 @@ class ExchangeRate extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\Date")
      * @Annotation\Options({"label":"txt-exchange-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $date;
     /**
@@ -60,14 +57,14 @@ class ExchangeRate extends AbstractEntity
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="currency_id")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Currency
+     * @var Currency
      */
     private $currency;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Invoice", cascade={"persist","remove"}, mappedBy="exchangeRate")
      * @Annotation\Exclude()
      *
-     * @var \Affiliation\Entity\Invoice[]|ArrayCollection
+     * @var Invoice[]|ArrayCollection
      */
     private $affiliationInvoice;
 
@@ -129,19 +126,19 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDate(): ?\DateTime
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      *
      * @return ExchangeRate
      */
-    public function setDate(\DateTime $date): ExchangeRate
+    public function setDate(DateTime $date): ExchangeRate
     {
         $this->date = $date;
 
@@ -169,7 +166,7 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @return \Affiliation\Entity\Invoice[]|ArrayCollection
+     * @return Invoice[]|ArrayCollection
      */
     public function getAffiliationInvoice()
     {
@@ -177,7 +174,7 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @param \Affiliation\Entity\Invoice[]|ArrayCollection $affiliationInvoice
+     * @param Invoice[]|ArrayCollection $affiliationInvoice
      *
      * @return ExchangeRate
      */

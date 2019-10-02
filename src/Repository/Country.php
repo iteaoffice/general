@@ -5,7 +5,7 @@
  * @category  Contact
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -17,8 +17,10 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
+use InvalidArgumentException;
 use Program\Entity\Call\Call;
 use Project\Entity\Project;
+use function array_merge;
 
 /**
  * Class Country
@@ -60,7 +62,7 @@ class Country extends EntityRepository
 
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Incorrect value (%s) for which', $which));
+                throw new InvalidArgumentException(sprintf('Incorrect value (%s) for which', $which));
         }
 
         return $queryBuilder;
@@ -102,7 +104,7 @@ class Country extends EntityRepository
         }
 
 
-        return \array_merge($euCountries, $restOfWorld);
+        return array_merge($euCountries, $restOfWorld);
     }
 
     public function findForFormNoEmptyOption(): array
@@ -125,7 +127,7 @@ class Country extends EntityRepository
             }
         }
 
-        return \array_merge($euCountries, $restOfWorld);
+        return array_merge($euCountries, $restOfWorld);
     }
 
     public function findCountryInProjectLog(): array

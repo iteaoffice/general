@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace General\Controller\Plugin;
 
-use function base64_decode;
-use function base64_encode;
-use function json_encode;
 use Zend\Http\Request;
+use Zend\Json\Json;
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Router\Http\RouteMatch;
-use Zend\Json\Json;
+use function base64_decode;
+use function base64_encode;
 
 /**
  * Class GetFilter

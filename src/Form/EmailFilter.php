@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -21,6 +16,8 @@ namespace General\Form;
 use Doctrine\ORM\EntityManager;
 use General\Entity\EmailMessage;
 use Zend\Form\Element\MultiCheckbox;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 
@@ -29,13 +26,8 @@ use Zend\Form\Form;
  *
  * @package General\Form
  */
-class EmailFilter extends Form
+final class EmailFilter extends Form
 {
-    /**
-     * EmailFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         parent::__construct();
@@ -46,7 +38,7 @@ class EmailFilter extends Form
 
         $filterFieldset->add(
             [
-                'type'       => 'Zend\Form\Element\Text',
+                'type'       => Text::class,
                 'name'       => 'search',
                 'attributes' => [
                     'class'       => 'form-control',
@@ -71,7 +63,7 @@ class EmailFilter extends Form
                 'options' => [
                     'value_options' => $latestEvents,
                     'inline'        => true,
-                    'label'         => _("txt-latest-event"),
+                    'label'         => _('txt-latest-event'),
                 ],
             ]
         );
@@ -80,7 +72,7 @@ class EmailFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'submit',
                 'attributes' => [
                     'id'    => 'submit',
@@ -92,7 +84,7 @@ class EmailFilter extends Form
 
         $this->add(
             [
-                'type'       => 'Zend\Form\Element\Submit',
+                'type'       => Submit::class,
                 'name'       => 'clear',
                 'attributes' => [
                     'id'    => 'cancel',

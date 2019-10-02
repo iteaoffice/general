@@ -5,7 +5,7 @@
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ class WebInfo extends AbstractEntity
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-web-info-content-label","help-block":"txt-web-info-content-help-block"})
-     * @Annotation\Attributes({"placeholder":"txt-web-info-content-placeholder","rows":"20"})
+     * @Annotation\Attributes({"placeholder":"txt-web-info-content-placeholder","id":"html_content"})
      *
      * @var string
      */
@@ -92,7 +92,7 @@ class WebInfo extends AbstractEntity
      *      }
      * )
      * @Annotation\Options({"label":"txt-web-info-sender-label", "help-block":"txt-web-info-sender-help-block"})
-     * @var \Mailing\Entity\Sender
+     * @var Sender
      */
     private $sender;
     /**

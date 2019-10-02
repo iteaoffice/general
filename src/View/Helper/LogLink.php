@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -18,7 +13,10 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\Log;
+use function is_null;
+use function substr;
 
 /**
  * Create a link to an log.
@@ -39,7 +37,7 @@ class LogLink extends LinkAbstract
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         Log $log = null,
@@ -53,7 +51,7 @@ class LogLink extends LinkAbstract
         $this->addRouterParam('id', $this->getLog()->getId());
         $this->setShowOptions(
             [
-                'event' => \substr($this->getLog()->getEvent(), 0, 50),
+                'event' => substr($this->getLog()->getEvent(), 0, 50),
             ]
         );
 
@@ -66,7 +64,7 @@ class LogLink extends LinkAbstract
      */
     public function getLog(): Log
     {
-        if (\is_null($this->log)) {
+        if (is_null($this->log)) {
             $this->log = new Log();
         }
 
@@ -84,7 +82,7 @@ class LogLink extends LinkAbstract
     /**
      * Parse the action.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseAction(): void
     {
@@ -98,7 +96,7 @@ class LogLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-log-message-%s"), $this->getLog()));
                 break;
             default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+                throw new Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 }

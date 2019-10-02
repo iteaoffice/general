@@ -5,15 +5,20 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Event\Entity\DeskCosts;
+use Event\Entity\Meeting\OptionCost;
+use Invoice\Entity\Row;
+use Invoice\Entity\Vat\Dimension;
 use Zend\Form\Annotation;
 
 /**
@@ -59,14 +64,14 @@ class Vat extends AbstractEntity
      * @Annotation\Type("\Zend\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-date-start"})
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateStart;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\VatType", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\VatType[]
+     * @var VatType[]
      */
     private $type;
     /**
@@ -89,35 +94,35 @@ class Vat extends AbstractEntity
      * )
      * @Annotation\Attributes({"label":"txt-country"})
      *
-     * @var \General\Entity\Country
+     * @var Country
      */
     private $country;
     /**
      * @ORM\OneToMany(targetEntity="\Invoice\Entity\Row", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Row[]
+     * @var Row[]
      */
     private $invoiceRow;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Event\Entity\DeskCosts[]
+     * @var DeskCosts[]
      */
     private $deskCosts;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\OptionCost", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Event\Entity\Meeting\OptionCost[]
+     * @var OptionCost[]
      */
     private $optionCost;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Vat\Dimension[]|Collections\ArrayCollection
+     * @var Dimension[]|Collections\ArrayCollection
      */
     private $dimension;
 
@@ -193,7 +198,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -201,7 +206,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \General\Entity\Country $country
+     * @param Country $country
      */
     public function setCountry($country)
     {
@@ -209,7 +214,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateStart()
     {
@@ -217,7 +222,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \DateTime $dateStart
+     * @param DateTime $dateStart
      */
     public function setDateStart($dateStart)
     {
@@ -257,7 +262,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\VatType[]
+     * @return VatType[]
      */
     public function getType()
     {
@@ -265,7 +270,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \General\Entity\VatType[] $type
+     * @param VatType[] $type
      */
     public function setType($type)
     {
@@ -273,7 +278,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \Invoice\Entity\Row[]
+     * @return Row[]
      */
     public function getInvoiceRow()
     {
@@ -281,7 +286,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \Invoice\Entity\Row[] $invoiceRow
+     * @param Row[] $invoiceRow
      */
     public function setInvoiceRow($invoiceRow)
     {
@@ -289,7 +294,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \Event\Entity\DeskCosts[]
+     * @return DeskCosts[]
      */
     public function getDeskCosts()
     {
@@ -297,7 +302,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \Event\Entity\DeskCosts[] $deskCosts
+     * @param DeskCosts[] $deskCosts
      */
     public function setDeskCosts($deskCosts)
     {
@@ -305,7 +310,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return \Event\Entity\Meeting\OptionCost[]
+     * @return OptionCost[]
      */
     public function getOptionCost()
     {
@@ -313,7 +318,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param \Event\Entity\Meeting\OptionCost[] $optionCost
+     * @param OptionCost[] $optionCost
      */
     public function setOptionCost($optionCost)
     {
@@ -321,7 +326,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[]
+     * @return Collections\ArrayCollection|Dimension[]
      */
     public function getDimension()
     {
@@ -329,7 +334,7 @@ class Vat extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[] $dimension
+     * @param Collections\ArrayCollection|Dimension[] $dimension
      */
     public function setDimension($dimension)
     {

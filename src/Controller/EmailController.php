@@ -5,13 +5,14 @@
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
@@ -111,7 +112,7 @@ final class EmailController extends AbstractActionController
             $emailMessageEvent = new EmailMessageEvent();
             $emailMessageEvent->setEmail($data->email);
 
-            $dateTime = new \DateTime();
+            $dateTime = new DateTime();
             $emailMessageEvent->setTime($dateTime->setTimestamp($data->time));
             $emailMessageEvent->setEmailMessage($emailMessage);
             $emailMessageEvent->setEvent($data->event);
@@ -145,7 +146,7 @@ final class EmailController extends AbstractActionController
 
             //Store the latest status in the emailMessage
             $emailMessage->setLatestEvent($data->event);
-            $emailMessage->setDateLatestEvent(new \DateTime());
+            $emailMessage->setDateLatestEvent(new DateTime());
             $this->generalService->save($emailMessage);
         }
 

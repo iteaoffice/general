@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -18,7 +13,9 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\Title;
+use function is_null;
 
 /**
  * Create a link to an title.
@@ -33,13 +30,13 @@ class TitleLink extends LinkAbstract
     protected $title;
 
     /**
-     * @param Title $title
+     * @param Title  $title
      * @param string $action
      * @param string $show
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         Title $title = null,
@@ -50,7 +47,7 @@ class TitleLink extends LinkAbstract
         $this->setAction($action);
         $this->setShow($show);
 
-        if (!\is_null($title)) {
+        if (!is_null($title)) {
             $this->addRouterParam('id', $title->getId());
             $this->setShowOptions(
                 [
@@ -65,7 +62,7 @@ class TitleLink extends LinkAbstract
     /**
      * Parse the action.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseAction(): void
     {
@@ -87,7 +84,7 @@ class TitleLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-title-%s"), $this->getTitle()));
                 break;
             default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+                throw new Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 

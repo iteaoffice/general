@@ -5,13 +5,14 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
@@ -35,7 +36,7 @@ class EmailMessageEvent extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="General\Entity\EmailMessage", inversedBy="event", cascade={"persist"})
      * @ORM\JoinColumn(name="email_message_id", referencedColumnName="email_message_id")
      *
-     * @var \General\Entity\EmailMessage
+     * @var EmailMessage
      */
     private $emailMessage;
     /**
@@ -47,7 +48,7 @@ class EmailMessageEvent extends AbstractEntity
     /**
      * @ORM\Column(name="time",type="datetime",nullable=false)
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $time;
     /**
@@ -203,19 +204,19 @@ class EmailMessageEvent extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getTime(): \DateTime
+    public function getTime(): DateTime
     {
         return $this->time;
     }
 
     /**
-     * @param \DateTime $time
+     * @param DateTime $time
      *
      * @return EmailMessageEvent
      */
-    public function setTime(\DateTime $time): EmailMessageEvent
+    public function setTime(DateTime $time): EmailMessageEvent
     {
         $this->time = $time;
 

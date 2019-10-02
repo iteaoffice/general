@@ -5,7 +5,7 @@
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -28,6 +28,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use function http_build_query;
+use function implode;
+use function sprintf;
 
 /**
  * Class CountryController
@@ -95,12 +98,12 @@ final class CountryController extends AbstractActionController
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
                     foreach ($values as $value) {
-                        $quotedValues[] = \sprintf('"%s"', $value);
+                        $quotedValues[] = sprintf('"%s"', $value);
                     }
 
                     $this->countrySearchService->addFilterQuery(
                         $facetField,
-                        \implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
+                        implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
                     );
                 }
             }
@@ -127,7 +130,7 @@ final class CountryController extends AbstractActionController
                 'direction'      => $data['direction'],
                 'query'          => $data['query'],
                 'badges'         => $form->getBadges(),
-                'arguments'      => \http_build_query($form->getFilteredData()),
+                'arguments'      => http_build_query($form->getFilteredData()),
                 'paginator'      => $paginator,
                 'countryService' => $this->countryService
             ]
@@ -154,7 +157,7 @@ final class CountryController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/country/list');
+                return $this->redirect()->toRoute('zfcadmin/country/list');
             }
 
             if ($form->isValid()) {

@@ -6,13 +6,14 @@
  * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\ContentType;
 
 /**
@@ -29,7 +30,7 @@ class ContentTypeLink extends LinkAbstract
      *
      * @return null|string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         ContentType $contentType = null,
@@ -55,7 +56,7 @@ class ContentTypeLink extends LinkAbstract
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseAction(): void
     {
@@ -87,7 +88,7 @@ class ContentTypeLink extends LinkAbstract
                 );
                 break;
             default:
-                throw new \Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));
+                throw new Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));
         }
     }
 }

@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -14,6 +14,9 @@ namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use Invoice\Entity\Invoice;
+use Invoice\Entity\Vat\Dimension;
+use Organisation\Entity\Financial;
 use Zend\Form\Annotation;
 
 /**
@@ -78,28 +81,28 @@ class VatType extends AbstractEntity
      * )
      * @Annotation\Attributes({"label":"txt-vat"})
      *
-     * @var \General\Entity\Vat
+     * @var Vat
      */
     private $vat;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Invoice", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Invoice[]
+     * @var Invoice[]
      */
     private $invoice;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Vat\Dimension[]|Collections\ArrayCollection
+     * @var Dimension[]|Collections\ArrayCollection
      */
     private $dimension;
     /**
      * @ORM\ManyToMany(targetEntity="Organisation\Entity\Financial", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Organisation\Entity\Financial[]|Collections\ArrayCollection
+     * @var Financial[]|Collections\ArrayCollection
      */
     private $organisationFinancial;
 
@@ -189,7 +192,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @return \Invoice\Entity\Invoice[]
+     * @return Invoice[]
      */
     public function getInvoice()
     {
@@ -197,7 +200,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @param \Invoice\Entity\Invoice[] $invoice
+     * @param Invoice[] $invoice
      */
     public function setInvoice($invoice)
     {
@@ -221,7 +224,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\Vat
+     * @return Vat
      */
     public function getVat()
     {
@@ -229,7 +232,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @param \General\Entity\Vat $vat
+     * @param Vat $vat
      */
     public function setVat($vat)
     {
@@ -237,7 +240,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[]
+     * @return Collections\ArrayCollection|Dimension[]
      */
     public function getDimension()
     {
@@ -245,7 +248,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[] $dimension
+     * @param Collections\ArrayCollection|Dimension[] $dimension
      */
     public function setDimension($dimension)
     {
@@ -253,7 +256,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\Organisation\Entity\Financial[]
+     * @return Collections\ArrayCollection|Financial[]
      */
     public function getOrganisationFinancial()
     {
@@ -261,7 +264,7 @@ class VatType extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\Organisation\Entity\Financial[] $organisationFinancial
+     * @param Collections\ArrayCollection|Financial[] $organisationFinancial
      */
     public function setOrganisationFinancial($organisationFinancial)
     {

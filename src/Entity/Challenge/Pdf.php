@@ -7,7 +7,7 @@
  * @category    Invoice
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/invoice for the canonical source repository
@@ -16,9 +16,11 @@ declare(strict_types=1);
 
 namespace General\Entity\Challenge;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use General\Entity\AbstractEntity;
+use General\Entity\Challenge;
 
 /**
  * InvoicePdf.
@@ -46,13 +48,13 @@ class Pdf extends AbstractEntity
      * @ORM\Column(name="date_created", type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="create")
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateCreated;
     /**
      * @ORM\Column(name="date_end", type="datetime", nullable=true)
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateEnd;
     /**
@@ -61,7 +63,7 @@ class Pdf extends AbstractEntity
      * @ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id", nullable=false)
      * })
      *
-     * @var \General\Entity\Challenge
+     * @var Challenge
      */
     private $challenge;
 
@@ -139,19 +141,19 @@ class Pdf extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDateCreated(): \DateTime
+    public function getDateCreated(): DateTime
     {
         return $this->dateCreated;
     }
 
     /**
-     * @param \DateTime $dateCreated
+     * @param DateTime $dateCreated
      *
      * @return Pdf
      */
-    public function setDateCreated(\DateTime $dateCreated): Pdf
+    public function setDateCreated(DateTime $dateCreated): Pdf
     {
         $this->dateCreated = $dateCreated;
 
@@ -159,19 +161,19 @@ class Pdf extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDateEnd(): \DateTime
+    public function getDateEnd(): DateTime
     {
         return $this->dateEnd;
     }
 
     /**
-     * @param \DateTime $dateEnd
+     * @param DateTime $dateEnd
      *
      * @return Pdf
      */
-    public function setDateEnd(\DateTime $dateEnd): Pdf
+    public function setDateEnd(DateTime $dateEnd): Pdf
     {
         $this->dateEnd = $dateEnd;
 
@@ -179,19 +181,19 @@ class Pdf extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\Challenge
+     * @return Challenge
      */
-    public function getChallenge(): \General\Entity\Challenge
+    public function getChallenge(): Challenge
     {
         return $this->challenge;
     }
 
     /**
-     * @param \General\Entity\Challenge $challenge
+     * @param Challenge $challenge
      *
      * @return Pdf
      */
-    public function setChallenge(\General\Entity\Challenge $challenge): Pdf
+    public function setChallenge(Challenge $challenge): Pdf
     {
         $this->challenge = $challenge;
 

@@ -9,7 +9,6 @@
 {{ ztbformelement(country.get('sequence')) }}
 {{ ztbformelement(country.get('sources')) }}
 {{ ztbformelement(country.get('abstract')) }}
-{{ ztbformelement(country.get('description')) }}
 {{ ztbformelement(country.get('html')) }}
 {{ ztbformelement(country.get('backgroundImage')) }}
 {{ ztbformelement(country.get('css')) }}
@@ -75,8 +74,30 @@
 
 {{ form().closeTag()|raw }}
 
-<style type="text/css">
-    textarea {
-        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    }
-</style>
+{% do headScript().appendFile('assets/js/codemirror.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/css.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/htmlmixed.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/javascript.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/xml.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/selection-pointer.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/matchbrackets.js', 'text/javascript') %}
+{% do headLink().appendStylesheet('assets/css/codemirror.css') %}
+
+<script type="text/javascript">
+    var htmlEditor = CodeMirror.fromTextArea(document.getElementById("html_challenge"), {
+        mode: "text/html",
+        lineNumbers: true,
+        selectionPointer: true,
+        lineWrapping: true,
+        matchBrackets: true
+    });
+    htmlEditor.setSize(null, 600);
+    var cssEditor = CodeMirror.fromTextArea(document.getElementById("css_challenge"), {
+        mode: "css",
+        lineNumbers: true,
+        selectionPointer: true,
+        lineWrapping: true,
+        matchBrackets: true
+    });
+    cssEditor.setSize(null, 600);
+</script>

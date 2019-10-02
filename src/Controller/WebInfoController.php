@@ -5,7 +5,7 @@
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Mvc\Plugin\Identity\Identity;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use function defined;
 
 /**
  * Class WebInfoController
@@ -104,7 +105,7 @@ final class WebInfoController extends AbstractActionController
             $this->emailService->setWebInfo($webInfo->getInfo());
             $this->emailService->addTo($this->identity());
             $this->emailService->setFrom($this->identity()->parseFullName(), $this->identity()->getEmail());
-            $this->emailService->setTemplateVariable('site', \defined('ITEAOFFICE_HOST') ? ITEAOFFICE_HOST : 'test');
+            $this->emailService->setTemplateVariable('site', defined('ITEAOFFICE_HOST') ? ITEAOFFICE_HOST : 'test');
 
             if ($this->emailService->send()) {
                 $this->flashMessenger()->addSuccessMessage(
@@ -136,7 +137,7 @@ final class WebInfoController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/web-info/list');
+                return $this->redirect()->toRoute('zfcadmin/web-info/list');
             }
 
             if ($form->isValid()) {

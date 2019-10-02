@@ -5,7 +5,7 @@
  * @category  Content
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ use Search\Service\SearchUpdateInterface;
 use Solarium\Client;
 use Solarium\Core\Query\AbstractQuery;
 use Solarium\QueryType\Update\Query\Document;
+use function count;
 
 /**
  * Class CountryService
@@ -206,15 +207,15 @@ class CountryService extends AbstractService implements SearchUpdateInterface
             }
         )->count();
 
-        $countryDocument->setField('projects', \count($projects));
-        $countryDocument->setField('has_projects', \count($projects) > 0);
-        $countryDocument->setField('has_projects_text', \count($projects) > 0 ? 'Yes' : 'No');
-        $countryDocument->setField('affiliations', \count($affiliations));
-        $countryDocument->setField('has_affiliations', \count($affiliations) > 0);
-        $countryDocument->setField('has_affiliations_text', \count($affiliations) > 0 ? 'Yes' : 'No');
+        $countryDocument->setField('projects', count($projects));
+        $countryDocument->setField('has_projects', count($projects) > 0);
+        $countryDocument->setField('has_projects_text', count($projects) > 0 ? 'Yes' : 'No');
+        $countryDocument->setField('affiliations', count($affiliations));
+        $countryDocument->setField('has_affiliations', count($affiliations) > 0);
+        $countryDocument->setField('has_affiliations_text', count($affiliations) > 0 ? 'Yes' : 'No');
         $countryDocument->setField('funders', $amountOfFunders);
         $countryDocument->setField('has_funders', $amountOfFunders > 0);
-        $countryDocument->setField('has_funders_text', $amountOfFunders> 0 ? 'Yes' : 'No');
+        $countryDocument->setField('has_funders_text', $amountOfFunders > 0 ? 'Yes' : 'No');
 
         $update->addDocument($countryDocument);
         $update->addCommit();

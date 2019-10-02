@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
@@ -20,6 +15,7 @@ namespace General\Entity\Challenge;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use General\Entity\AbstractEntity;
+use General\Entity\Challenge;
 use Zend\Form\Annotation;
 
 /**
@@ -69,7 +65,7 @@ class Type extends AbstractEntity
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge", cascade={"persist"}, mappedBy="type")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Challenge[]|Collections\ArrayCollection
+     * @var Challenge[]|Collections\ArrayCollection
      */
     private $challenge;
 
@@ -205,7 +201,7 @@ class Type extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\General\Entity\Challenge[]
+     * @return Collections\ArrayCollection|Challenge[]
      */
     public function getChallenge()
     {
@@ -213,7 +209,7 @@ class Type extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\General\Entity\Challenge[] $challenge
+     * @param Collections\ArrayCollection|Challenge[] $challenge
      *
      * @return Type
      */

@@ -5,7 +5,7 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Project\Entity\Contract;
 use Zend\Form\Annotation;
 
 /**
@@ -74,7 +75,7 @@ class Currency extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract", cascade={"persist"}, mappedBy="currency")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Contract[]|ArrayCollection
+     * @var Contract[]|ArrayCollection
      */
     private $contract;
 
@@ -182,7 +183,7 @@ class Currency extends AbstractEntity
     }
 
     /**
-     * @return ArrayCollection|\Project\Entity\Contract[]
+     * @return ArrayCollection|Contract[]
      */
     public function getContract()
     {
@@ -190,7 +191,7 @@ class Currency extends AbstractEntity
     }
 
     /**
-     * @param ArrayCollection|\Project\Entity\Contract[] $contract
+     * @param ArrayCollection|Contract[] $contract
      *
      * @return Currency
      */

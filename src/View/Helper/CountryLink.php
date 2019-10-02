@@ -6,7 +6,7 @@
  * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -37,8 +37,8 @@ final class CountryLink extends LinkAbstract
         $this->addRouterParam('docRef', $this->getCountry()->getDocRef());
         $this->setShowOptions(
             [
-                'name'   => $this->getCountry(),
-                'iso3'   => $this->getCountry()->getIso3(),
+                'name' => $this->getCountry(),
+                'iso3' => $this->getCountry()->getIso3(),
             ]
         );
 

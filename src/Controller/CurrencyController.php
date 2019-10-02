@@ -5,7 +5,7 @@
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -21,9 +21,9 @@ use General\Service\FormService;
 use General\Service\GeneralService;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 /**
  * Class CurrencyController
@@ -109,7 +109,7 @@ final class CurrencyController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/currency/list');
+                return $this->redirect()->toRoute('zfcadmin/currency/list');
             }
 
             if ($form->isValid()) {

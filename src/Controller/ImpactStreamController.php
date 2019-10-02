@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -27,7 +22,9 @@ use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use function count;
+use function explode;
+use function sprintf;
 
 /**
  * Class ImpactStreamController
@@ -72,7 +69,7 @@ final class ImpactStreamController extends AbstractActionController
         /** @var Result $result */
         $result = $this->resultService->findResultByDocRef((string)$this->params('docRef'));
 
-        if (null === $result || \count($result->getObject()) === 0) {
+        if (null === $result || count($result->getObject()) === 0) {
             return $this->notFoundAction();
         }
 
@@ -245,7 +242,7 @@ final class ImpactStreamController extends AbstractActionController
             foreach ($data['facet'] as $facetField => $values) {
                 $quotedValues = [];
                 foreach ($values as $value) {
-                    $quotedValues[] = \sprintf('"%s"', $value);
+                    $quotedValues[] = sprintf('"%s"', $value);
                 }
 
                 $this->resultSearchService->addFilterQuery(
@@ -267,7 +264,7 @@ final class ImpactStreamController extends AbstractActionController
 
         foreach ($paginator->getCurrentItems() as $result) {
             /** @var Result $result */
-            $result = $this->resultService->findResultById((int) $result['result_id']);
+            $result = $this->resultService->findResultById((int)$result['result_id']);
 
             $this->parsePDFsByResult($result);
         }
@@ -280,15 +277,15 @@ final class ImpactStreamController extends AbstractActionController
 
     public function downloadSelectedAction()
     {
-        $resultIds = \explode(',', $this->getRequest()->getQuery('result'));
+        $resultIds = explode(',', $this->getRequest()->getQuery('result'));
 
-        if ('' === $this->getRequest()->getQuery('result') || \count($resultIds) === 0) {
+        if ('' === $this->getRequest()->getQuery('result') || count($resultIds) === 0) {
             return $this->notFoundAction();
         }
 
         foreach ($resultIds as $resultId) {
             /** @var Result $result */
-            $result = $this->resultService->findResultById((int) $resultId);
+            $result = $this->resultService->findResultById((int)$resultId);
 
             $this->parsePDFsByResult($result);
         }

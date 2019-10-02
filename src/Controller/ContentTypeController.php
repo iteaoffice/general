@@ -5,7 +5,7 @@
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -104,7 +104,7 @@ final class ContentTypeController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/content-type/list');
+                return $this->redirect()->toRoute('zfcadmin/content-type/list');
             }
 
             if ($form->isValid()) {

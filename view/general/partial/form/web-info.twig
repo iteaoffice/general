@@ -25,10 +25,20 @@
 
 {{ form().closeTag()|raw }}
 
+{% do headScript().appendFile('assets/js/codemirror.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/htmlmixed.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/javascript.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/xml.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/selection-pointer.js', 'text/javascript') %}
+{% do headLink().appendStylesheet('assets/css/codemirror.css') %}
 
-<style type="text/css">
-    textarea {
-        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    }
-
-</style>
+<script type="text/javascript">
+    var htmlEditor = CodeMirror.fromTextArea(document.getElementById("html_content"), {
+        mode: "text/html",
+        lineNumbers: true,
+        selectionPointer: true,
+        lineWrapping: true,
+        matchBrackets: true
+    });
+    htmlEditor.setSize(null, 600);
+</script>

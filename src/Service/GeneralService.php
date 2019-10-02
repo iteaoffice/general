@@ -5,13 +5,14 @@
  * @category  Content
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Service;
 
+use DateTime;
 use General\Entity;
 use General\Repository;
 use Program\Entity\Call\Call;
@@ -46,10 +47,10 @@ class GeneralService extends AbstractService
             ->findBy([], ['challenge' => 'ASC']);
     }
 
-    public function findActiveExchangeRate(Entity\Currency $currency, \DateTime $dateTime = null): ?Entity\ExchangeRate
+    public function findActiveExchangeRate(Entity\Currency $currency, DateTime $dateTime = null): ?Entity\ExchangeRate
     {
         if (null === $dateTime) {
-            $dateTime = new \DateTime();
+            $dateTime = new DateTime();
         }
 
         /**

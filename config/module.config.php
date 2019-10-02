@@ -5,7 +5,7 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ $config = [
         'template_map' => include __DIR__ . '/../template_map.php',
     ],
     'view_helpers'       => [
-        'aliases'   => [
+        'aliases'    => [
             'challengeHandler'  => View\Handler\ChallengeHandler::class,
             'challengeIcon'     => View\Helper\ChallengeIcon::class,
             'challengeImage'    => View\Helper\ChallengeImage::class,
@@ -75,8 +75,13 @@ $config = [
             'webInfoLink'       => View\Helper\WebInfoLink::class,
             'contentTypeLink'   => View\Helper\ContentTypeLink::class,
             'contentTypeIcon'   => View\Helper\ContentTypeIcon::class,
+
+            'countryselect' => Form\View\Helper\CountrySelect::class
         ],
-        'factories' => [
+        'invokables' => [
+            Form\View\Helper\CountrySelect::class
+        ],
+        'factories'  => [
             View\Handler\CountryHandler::class      => ConfigAbstractFactory::class,
             View\Handler\ImpactStreamHandler::class => ConfigAbstractFactory::class,
             View\Handler\ChallengeHandler::class    => ConfigAbstractFactory::class,

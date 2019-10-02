@@ -1,13 +1,8 @@
 <?php
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
@@ -17,9 +12,12 @@ declare(strict_types=1);
 
 namespace General\Entity\Challenge;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use General\Entity\AbstractEntity;
+use General\Entity\Challenge;
+use General\Entity\ContentType;
 
 /**
  * ProjectIcon.
@@ -41,7 +39,7 @@ class Icon extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="General\Entity\ContentType", cascade={"persist"}, inversedBy="challengeIcon")
      * @ORM\JoinColumn(name="contenttype_id", referencedColumnName="contenttype_id", nullable=false)
      *
-     * @var \General\Entity\ContentType
+     * @var ContentType
      */
     private $contentType;
     /**
@@ -54,14 +52,14 @@ class Icon extends AbstractEntity
      * @ORM\Column(name="date_updated", type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="update")
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateUpdated;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge", cascade={"persist"}, inversedBy="icon")
      * @ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id", nullable=false)
      *
-     * @var \General\Entity\Challenge
+     * @var Challenge
      */
     private $challenge;
 
@@ -98,19 +96,19 @@ class Icon extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\ContentType
+     * @return ContentType
      */
-    public function getContentType(): \General\Entity\ContentType
+    public function getContentType(): ContentType
     {
         return $this->contentType;
     }
 
     /**
-     * @param \General\Entity\ContentType $contentType
+     * @param ContentType $contentType
      *
      * @return Icon
      */
-    public function setContentType(\General\Entity\ContentType $contentType): Icon
+    public function setContentType(ContentType $contentType): Icon
     {
         $this->contentType = $contentType;
 
@@ -138,19 +136,19 @@ class Icon extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDateUpdated(): \DateTime
+    public function getDateUpdated(): DateTime
     {
         return $this->dateUpdated;
     }
 
     /**
-     * @param \DateTime $dateUpdated
+     * @param DateTime $dateUpdated
      *
      * @return Icon
      */
-    public function setDateUpdated(\DateTime $dateUpdated): Icon
+    public function setDateUpdated(DateTime $dateUpdated): Icon
     {
         $this->dateUpdated = $dateUpdated;
 
@@ -158,19 +156,19 @@ class Icon extends AbstractEntity
     }
 
     /**
-     * @return \General\Entity\Challenge
+     * @return Challenge
      */
-    public function getChallenge(): \General\Entity\Challenge
+    public function getChallenge(): Challenge
     {
         return $this->challenge;
     }
 
     /**
-     * @param \General\Entity\Challenge $challenge
+     * @param Challenge $challenge
      *
      * @return Icon
      */
-    public function setChallenge(\General\Entity\Challenge $challenge): Icon
+    public function setChallenge(Challenge $challenge): Icon
     {
         $this->challenge = $challenge;
 

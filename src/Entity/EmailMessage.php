@@ -5,16 +5,18 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Mailing\Entity\Contact;
 use Zend\Form\Annotation;
 use Zend\Math\Rand;
 
@@ -47,7 +49,7 @@ class EmailMessage extends AbstractEntity
      * @ORM\Column(name="date_created", type="datetime",nullable=false)
      * @Gedmo\Timestampable(on="create")
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateCreated;
     /**
@@ -63,7 +65,7 @@ class EmailMessage extends AbstractEntity
      * @ORM\JoinColumn(name="mailing_contact_id", referencedColumnName="mailing_contact_id", nullable=true)
      * @Annotation\Exclude()
      *
-     * @var \Mailing\Entity\Contact|null
+     * @var Contact|null
      */
     private $mailingContact;
     /**
@@ -115,7 +117,7 @@ class EmailMessage extends AbstractEntity
     /**
      * @ORM\Column(name="date_latest_event",type="datetime", nullable=true)
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateLatestEvent;
 
@@ -229,7 +231,7 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @return \Mailing\Entity\Contact|null
+     * @return Contact|null
      */
     public function getMailingContact()
     {
@@ -237,7 +239,7 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @param \Mailing\Entity\Contact|null $mailingContact
+     * @param Contact|null $mailingContact
      *
      * @return EmailMessage
      */
@@ -369,7 +371,7 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateCreated()
     {
@@ -377,11 +379,11 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @param \DateTime $dateCreated
+     * @param DateTime $dateCreated
      *
      * @return EmailMessage
      */
-    public function setDateCreated(\DateTime $dateCreated): EmailMessage
+    public function setDateCreated(DateTime $dateCreated): EmailMessage
     {
         $this->dateCreated = $dateCreated;
 
@@ -389,7 +391,7 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateLatestEvent()
     {
@@ -397,11 +399,11 @@ class EmailMessage extends AbstractEntity
     }
 
     /**
-     * @param \DateTime $dateLatestEvent
+     * @param DateTime $dateLatestEvent
      *
      * @return EmailMessage
      */
-    public function setDateLatestEvent(\DateTime $dateLatestEvent): EmailMessage
+    public function setDateLatestEvent(DateTime $dateLatestEvent): EmailMessage
     {
         $this->dateLatestEvent = $dateLatestEvent;
 

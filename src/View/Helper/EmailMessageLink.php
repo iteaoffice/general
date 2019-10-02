@@ -1,14 +1,9 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -18,7 +13,9 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\EmailMessage;
+use function is_null;
 
 /**
  * Create a link to an emailMessage.
@@ -34,12 +31,12 @@ class EmailMessageLink extends LinkAbstract
 
     /**
      * @param EmailMessage $emailMessage
-     * @param string $action
-     * @param string $show
+     * @param string       $action
+     * @param string       $show
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         EmailMessage $emailMessage = null,
@@ -51,10 +48,12 @@ class EmailMessageLink extends LinkAbstract
         $this->setShow($show);
 
         $this->addRouterParam('id', $this->getEmailMessage()->getId());
-        $this->setShowOptions([
-            'subject'      => $this->getEmailMessage()->getSubject(),
-            'emailAddress' => $this->getEmailMessage()->getEmailAddress(),
-        ]);
+        $this->setShowOptions(
+            [
+                'subject'      => $this->getEmailMessage()->getSubject(),
+                'emailAddress' => $this->getEmailMessage()->getEmailAddress(),
+            ]
+        );
 
 
         return $this->createLink();
@@ -65,7 +64,7 @@ class EmailMessageLink extends LinkAbstract
      */
     public function getEmailMessage(): EmailMessage
     {
-        if (\is_null($this->emailMessage)) {
+        if (is_null($this->emailMessage)) {
             $this->emailMessage = new EmailMessage();
         }
 
@@ -83,7 +82,7 @@ class EmailMessageLink extends LinkAbstract
     /**
      * Parse the action.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseAction(): void
     {
@@ -97,7 +96,7 @@ class EmailMessageLink extends LinkAbstract
                 $this->setText(sprintf($this->translate("txt-view-email-message-%s"), $this->getEmailMessage()));
                 break;
             default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
+                throw new Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
     }
 }

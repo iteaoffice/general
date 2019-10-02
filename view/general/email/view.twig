@@ -1,3 +1,7 @@
+{% do headScript().appendFile("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js",'text/javascript') %}
+{% do headLink().appendStylesheet("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github-gist.min.css") %}
+{% do inlineScript().appendScript("hljs.initHighlightingOnLoad();",'text/javascript') %}
+
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-email-message-%s")|format(emailMessage)) %}
 
@@ -33,11 +37,6 @@
 
     <dt>{{ translate("txt-email-message-subject") }}</dt>
     <dd>{{ emailMessage.subject }}</dd>
-
-    <dt>{{ translate("txt-email-message-message") }}</dt>
-    <dd>
-        <pre style="height: 350px">{{ emailMessage.message }}</pre>
-    </dd>
 
     {% if emailMessage.latestEvent %}
         <dt>{{ translate("txt-email-latest-event") }}</dt>
@@ -88,3 +87,7 @@
         </tbody>
     </table>
 {% endif %}
+
+<h2>{{ translate("txt-email-message-message") }}</h2>
+
+<pre>            <code class="html">{{ emailMessage.message }}</code>        </pre>

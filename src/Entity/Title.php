@@ -5,13 +5,14 @@
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Entity;
 
+use Contact\Entity\Contact;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
@@ -69,7 +70,7 @@ class Title extends AbstractEntity
      * @ORM\OneToMany(targetEntity="Contact\Entity\Contact", cascade={"persist"}, mappedBy="title")
      * @Annotation\Exclude()
      *
-     * @var \Contact\Entity\Contact[]
+     * @var Contact[]
      */
     private $contacts;
 

@@ -5,7 +5,7 @@
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -111,7 +111,7 @@ final class PasswordController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-password-for-%s-has-been-created-successfully"),
+                        $this->translator->translate('txt-password-for-%s-has-been-created-successfully'),
                         $password->getDescription()
                     )
                 );
@@ -149,7 +149,7 @@ final class PasswordController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-password-for-%s-has-been-deleted-successfully"),
+                        $this->translator->translate('txt-password-for-%s-has-been-deleted-successfully'),
                         $password->getDescription()
                     )
                 );
@@ -164,14 +164,14 @@ final class PasswordController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-password-for-%s-has-been-updated-successfully"),
+                        $this->translator->translate('txt-password-for-%s-has-been-updated-successfully'),
                         $password->getDescription()
                     )
                 );
 
 
-                $password = $this->generalService->save($password);
-                $this->redirect()->toRoute(
+                $this->generalService->save($password);
+                return $this->redirect()->toRoute(
                     'zfcadmin/password/view',
                     [
                         'id' => $password->getId(),

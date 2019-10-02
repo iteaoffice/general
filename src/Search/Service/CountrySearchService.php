@@ -7,7 +7,7 @@
  * @category    News
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/news for the canonical source repository
@@ -22,6 +22,7 @@ use Search\Service\AbstractSearchService;
 use Search\Service\SearchServiceInterface;
 use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
+use function in_array;
 
 /**
  * Class CountrySearchService
@@ -41,7 +42,7 @@ class CountrySearchService extends AbstractSearchService
         $this->setQuery($this->getSolrClient()->createSelect());
         $this->getQuery()->setQuery(static::parseQuery($searchTerm, $searchFields));
 
-        $hasTerm = !\in_array($searchTerm, ['*', ''], true);
+        $hasTerm = !in_array($searchTerm, ['*', ''], true);
         $hasSort = ($order !== '');
 
         if ($hasSort) {

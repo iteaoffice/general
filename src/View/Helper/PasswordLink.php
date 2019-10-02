@@ -6,14 +6,16 @@
  * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use Exception;
 use General\Entity\Password;
+use InvalidArgumentException;
 
 /**
  * Create a link to an password.
@@ -24,13 +26,13 @@ class PasswordLink extends LinkAbstract
 {
     /**
      * @param Password $password
-     * @param string $action
-     * @param string $show
-     * @param string $alternativeShow
+     * @param string   $action
+     * @param string   $show
+     * @param string   $alternativeShow
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(
         Password $password = null,
@@ -76,7 +78,7 @@ class PasswordLink extends LinkAbstract
                 $this->setText(sprintf($this->translate('txt-edit-password-%s'), $this->getPassword()));
                 break;
             default:
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf(
                         "%s is an incorrect action for %s",
                         $this->getAction(),
