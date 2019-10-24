@@ -22,6 +22,7 @@ use General\Entity\Challenge\Icon;
 use Invoice\Entity\Reminder;
 use Organisation\Entity\Logo;
 use Organisation\Entity\Parent\Doa;
+use Organisation\Entity\UpdateLogo;
 use Program\Entity\Nda;
 use Project\Entity\Contract\Document;
 use Project\Entity\Contract\VersionDocument;
@@ -51,6 +52,7 @@ class ContentType extends AbstractEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
+     *
      * @var int
      */
     private $id;
@@ -58,6 +60,7 @@ class ContentType extends AbstractEntity
      * @ORM\Column(name="description", type="string", unique=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-description-label","help-block":"txt-content-type-description-help-block"})
+     *
      * @var string
      */
     private $description;
@@ -73,6 +76,7 @@ class ContentType extends AbstractEntity
      * @ORM\Column(name="extension", type="string", nullable=true)
      * @Annotation\Type("\Zend\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-extension-label","help-block":"txt-content-type-extension-help-block"})
+     *
      * @var string
      */
     private $extension;
@@ -85,6 +89,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\Column(name="gifimage",  type="blob", nullable=true)
      * @Annotation\Exclude()
+     *
      * @var resource
      */
     private $image;
@@ -97,6 +102,7 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Press\Entity\Article", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Content\Entity\Image[]|Collections\ArrayCollection
      */
     private $pressArticle;
@@ -109,156 +115,189 @@ class ContentType extends AbstractEntity
     /**
      * @ORM\OneToMany(targetEntity="Program\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Program\Entity\Doa[]|Collections\ArrayCollection
      */
     private $programDoa;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Parent\Doa", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Doa[]|Collections\ArrayCollection
      */
     private $parentDoa;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Doa", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Affiliation\Entity\Doa[]|Collections\ArrayCollection
      */
     private $affiliationDoa;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Dnd", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Dnd[]|Collections\ArrayCollection
      */
     private $contactDnd;
     /**
      * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Photo[]|Collections\ArrayCollection
      */
     private $contactPhoto;
     /**
      * @ORM\OneToMany(targetEntity="Organisation\Entity\Logo", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Logo[]|Collections\ArrayCollection
      */
     private $organisationLogo;
     /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\UpdateLogo", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var UpdateLogo[]|Collections\Collection
+     */
+    private $organisationUpdateLogos;
+    /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Publication[]|Collections\ArrayCollection
      */
     private $publication;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Badge\Attachment", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Publication[]|Collections\ArrayCollection
      */
     private $badgeAttachment;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Result\Result", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Result[]|Collections\ArrayCollection
      */
     private $result;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Workpackage\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Workpackage\Document[]|Collections\ArrayCollection
      */
     private $workpackageDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Poster\Poster", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Poster[]|Collections\ArrayCollection
      */
     private $poster;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Idea\Document[]|Collections\ArrayCollection
      */
     private $ideaDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Image", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Image[]|Collections\ArrayCollection
      */
     private $ideaImage;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Pca[]|Collections\ArrayCollection
      */
     private $pca;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Report\Item", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Item[]|Collections\ArrayCollection
      */
     private $projectReportItem;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Document\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Document\Document[]|Collections\ArrayCollection
      */
     private $projectDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Version\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Project\Entity\Version\Document[]|Collections\ArrayCollection
      */
     private $versionDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Document[]|Collections\ArrayCollection
      */
     private $contractDocument;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract\VersionDocument", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var VersionDocument[]|Collections\ArrayCollection
      */
     private $contractVersionDocument;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Image", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Challenge\Image[]|Collections\ArrayCollection
      */
     private $challengeImage;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Icon", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Icon[]|Collections\ArrayCollection
      */
     private $challengeIcon;
     /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Calendar\Entity\Document[]|Collections\ArrayCollection
      */
     private $calendarDocument;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Loi", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Loi[]|Collections\ArrayCollection
      */
     private $loi;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Floorplan", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var \Event\Entity\Meeting\Floorplan[]|Collections\ArrayCollection
      */
     private $meetingFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Event\Entity\Exhibition\Floorplan", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Floorplan[]|Collections\ArrayCollection
      */
     private $exhibitionFloorplan;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Reminder", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
+     *
      * @var Reminder[]|Collections\ArrayCollection()
      */
     private $reminder;
@@ -272,6 +311,7 @@ class ContentType extends AbstractEntity
         $this->programDoa = new Collections\ArrayCollection();
         $this->parentDoa = new Collections\ArrayCollection();
         $this->organisationLogo = new Collections\ArrayCollection();
+        $this->organisationUpdateLogos = new Collections\ArrayCollection();
         $this->contactDnd = new Collections\ArrayCollection();
         $this->contactPhoto = new Collections\ArrayCollection();
         $this->publication = new Collections\ArrayCollection();
@@ -479,6 +519,17 @@ class ContentType extends AbstractEntity
     public function setOrganisationLogo($organisationLogo): ContentType
     {
         $this->organisationLogo = $organisationLogo;
+        return $this;
+    }
+
+    public function getOrganisationUpdateLogos(): Collections\Collection
+    {
+        return $this->organisationUpdateLogos;
+    }
+
+    public function setOrganisationUpdateLogos(Collections\Collection $organisationUpdateLogos)
+    {
+        $this->organisationUpdateLogos = $organisationUpdateLogos;
         return $this;
     }
 
