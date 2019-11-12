@@ -36,8 +36,8 @@
             {% set country = countryService.findCountryById(countryResult.fields.country_id) %}
 
             <tr>
-                <td>{{ country.id }} {{ countryLink(country,'edit', 'icon') }}</td>
-                <td>{{ countryLink(country,'view-admin','name') }} {{ countryLink(country,'view','icon') }}</td>
+                <td><small class="text-muted">{{ country.id }}</small></td>
+                <td>{{ countryLink(country,'view-admin','name') }} {{ countryLink(country,'edit', 'icon') }} {{ countryLink(country,'view','icon') }}</td>
                 <td>{{ country.iso3 }}</td>
                 <td>{{ country.cd }}</td>
                 <td>{{ country.numcode }}</td>
