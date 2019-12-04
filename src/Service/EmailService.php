@@ -32,6 +32,8 @@ use Mailing\Entity\Template;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Publication\Entity\Publication;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Twig_Environment;
 use Twig_Loader_Array;
 use Zend\Authentication\AuthenticationService;
@@ -285,7 +287,7 @@ class EmailService
             $content
         );
 
-        $twigRenderer = new Twig_Environment(new Twig_Loader_Array(['email_template' => $content]));
+        $twigRenderer = new Environment(new ArrayLoader(['email_template' => $content]));
 
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
