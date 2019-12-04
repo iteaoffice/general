@@ -24,7 +24,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * Class LinkFactory
  * @package General\View\Factory
  */
-final class LinkFactory implements FactoryInterface
+final class LinkHelperFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractLink
     {
