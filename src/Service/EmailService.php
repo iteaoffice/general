@@ -32,8 +32,8 @@ use Mailing\Entity\Template;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Publication\Entity\Publication;
-use Twig_Environment;
-use Twig_Loader_Array;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Helper\Url;
 use Zend\View\HelperPluginManager;
@@ -254,39 +254,7 @@ class EmailService
 
     private function createTwigTemplate(string $content): string
     {
-        /*
-        * Replace first the content of the mailing with the required (new) short tags
-        */
-        $content = preg_replace(
-            [
-                '~\[parent::getContact\(\)::firstname\]~',
-                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~',
-            ],
-            [
-                "[firstname]",
-                "[lastname]",
-                "[fullname]",
-                "[organisation]",
-                "[country]",
-            ],
-            $content
-        );
-
-        $content = preg_replace(
-            [
-                '~\[(.*?)\]~',
-            ],
-            [
-                '{{ $1|raw }}',
-            ],
-            $content
-        );
-
-        $twigRenderer = new Twig_Environment(new Twig_Loader_Array(['email_template' => $content]));
-
+        $twigRenderer = new Environment(new ArrayLoader(['email_template' => $content]));
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
 
@@ -624,6 +592,6 @@ class EmailService
 
     private function underscore(string $name): string
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));
     }
 }

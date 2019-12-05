@@ -6,7 +6,6 @@
 {% set filter = form.get('filter') %}
 
 
-
 <div class="row">
 
     <div class="col-md-10">
@@ -40,12 +39,17 @@
                     <th>{{ translate("txt-pdf") }}</th>
                 </tr>
                 </thead>
+                <tfoot>
+                <tr>
+                    <td colspan="8"></td>
+                </tr>
+                </tfoot>
                 <tbody>
                 {% for challenge in paginator.getCurrentItems() %}
                     <tr>
-                        <td>{{ challenge.id }} {{ challengeLink(challenge,'edit', 'icon') }}</td>
-                        <td>{{ challengeLink(challenge,'view-admin','name') }}
-                            <div class="pull-right">{{ challengeLink(challenge,'view','icon') }}</div>
+                        <td><small class="text-muted">{{ challenge.id }}</small></td>
+                        <td>{{ challengeLink(challenge,'view-admin','name') }} {{ challengeLink(challenge,'edit', 'icon') }}
+                            <span class="pull-right">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
                         <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>
@@ -69,8 +73,8 @@
                 {{ ztbformelement(filter.get('type'), true) }}
                 {{ ztbformelement(filter.get('call'), true) }}
 
-                                   {{ ztbformelement(form.get('submit')) }}
-                    {{ ztbformelement(form.get('clear')) }}
+                {{ ztbformelement(form.get('submit')) }}
+                {{ ztbformelement(form.get('clear')) }}
             </fieldset>
         </div>
     </div>

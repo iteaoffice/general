@@ -25,6 +25,7 @@
     <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
+            <th></th>
             <th>{{ translate("txt-date") }}</th>
             <th>{{ translate("txt-rate") }}</th>
         </tr>
@@ -32,9 +33,10 @@
         <tbody>
         {% for exchangeRate in currency.exchangeRate %}
             <tr {% if currentExchangeRate.id == exchangeRate.id %}class="table-success"{% endif %}>
+                <td><small class="text-muted">{{ loop.index }}</small></td>
                 <td>{{ exchangeRate.date|date('d-m-Y') }} {{ exchangeRateLink(exchangeRate,'edit','icon') }}</td>
                 <td>{{ currency.symbol }} {{ exchangeRate.rate }} {% if currentExchangeRate.id == exchangeRate.id %}
-                        <div class="label label-success">{{ translate("txt-active") }}</div>{% endif %}</td>
+                        <span class="badge badge-success">{{ translate("txt-active") }}</span>{% endif %}</td>
 
                 {% set newRow = "[new Date(%s, %s, %s), %s]"|format(exchangeRate.date|date('Y'),exchangeRate.date|date('m')-1,exchangeRate.date|date('j'), exchangeRate.rate ) %}
             </tr>

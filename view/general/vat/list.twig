@@ -39,8 +39,8 @@
         <tbody>
         {% for vat in paginator.getCurrentItems() %}
             <tr>
-                <td>{{ vat.id }} {{ vatLink(vat,'edit', 'icon') }}</td>
-                <td>{{ vatLink(vat,'view','code') }}</td>
+                <td><small class="text-muted">{{ vat.id }} </small></td>
+                <td>{{ vatLink(vat,'view','code') }} {{ vatLink(vat,'edit', 'icon') }}</td>
                 <td>{{ vat.percentage }} %</td>
                 <td>{{ vat.dateStart|string_date }}</td>
                 <td>{{ countryLink(vat.country,'view-admin','name') }}</td>

@@ -34,8 +34,8 @@
         <tbody>
         {% for title in paginator.getCurrentItems() %}
             <tr>
-                <td>{{ title.id }} {{ titleLink(title,'edit', 'icon') }}</td>
-                <td>{{ titleLink(title,'view','name') }}</td>
+                <td><small class="text-muted">{{ title.id }}</small></td>
+                <td>{{ titleLink(title,'view','name') }} {{ titleLink(title,'edit', 'icon') }}</td>
                 <td>{{ title.attention }}</td>
                 <td>{{ title.salutation }}</td>
             </tr>

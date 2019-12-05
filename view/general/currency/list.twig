@@ -26,21 +26,26 @@
     <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'name', 'text': translate('txt-name')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'iso4217', 'text': translate('txt-iso4217')} %}</th>
-            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'symbol', 'text': translate('txt-symbol')} %}</th>
-            <th>{{ translate("txt-exchange-rate") }}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'name', 'text': translate("txt-name")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'iso4217', 'text': translate("txt-iso4217")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'symbol', 'text': translate("txt-symbol")} %}</th>
+            <th class="text-right">{{ translate("txt-exchange-rate") }}</th>
         </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <td colspan="5"></td
+        </tr>
+        </tfoot>
         <tbody>
         {% for currency in paginator.getCurrentItems() %}
             <tr>
-                <td>{{ currency.id }} {{ currencyLink(currency,'edit', 'icon') }}</td>
-                <td>{{ currencyLink(currency,'view','name') }}</td>
+                <td><small class="text-muted">{{ currency.id }}</small></td>
+                <td>{{ currencyLink(currency,'view','name') }} {{ currencyLink(currency,'edit', 'icon') }}</td>
                 <td>{{ currency.iso4217 }}</td>
                 <td>{{ currency.symbol }}</td>
-                <td>{{ generalService.findActiveExchangeRate(currency).rate }}</td>
+                <td class="text-monospace text-right">{{ generalService.findActiveExchangeRate(currency).rate }}</td>
             </tr>
         {% endfor %}
         </tbody>

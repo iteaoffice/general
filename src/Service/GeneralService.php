@@ -99,7 +99,7 @@ class GeneralService extends AbstractService
 
     public function findContentTypeByContentTypeName(string $contentTypeName): Entity\ContentType
     {
-        /** @var Entity\ContentType $entity */
+        /** @var Entity\ContentType $contentType */
         $contentType = $this->entityManager->getRepository(Entity\ContentType::class)
             ->findOneBy(['contentType' => $contentTypeName]);
 
@@ -116,7 +116,7 @@ class GeneralService extends AbstractService
 
     public function findContentTypeByContentTypeDescription(string $description): Entity\ContentType
     {
-        /** @var Entity\ContentType $entity */
+        /** @var Entity\ContentType $contentType */
         $contentType = $this->entityManager->getRepository(Entity\ContentType::class)
             ->findOneBy(['description' => $description]);
 

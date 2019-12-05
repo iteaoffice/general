@@ -17,6 +17,7 @@
             {{ formelement(filter.get('search')) }}
             <div class="input-group-append input-group-btn">
                 {{ formelement(form.get('submit')) }}
+                {{ formelement(form.get('clear')) }}
             </div>
         </div>
     </div>
@@ -35,8 +36,8 @@
         <tbody>
         {% for gender in paginator.getCurrentItems() %}
             <tr>
-                <td>{{ gender.id }} {{ genderLink(gender,'edit', 'icon') }}</td>
-                <td>{{ genderLink(gender,'view','name') }}</td>
+                <td><small class="text-muted">{{ gender.id }}</small></td>
+                <td>{{ genderLink(gender,'view','name') }} {{ genderLink(gender,'edit', 'icon') }}</td>
                 <td>{{ gender.attention }}</td>
                 <td>{{ gender.salutation }}</td>
             </tr>

@@ -45,7 +45,7 @@
 
     {% if emailMessage.dateLatestEvent %}
         <dt>{{ translate("txt-email-latest-event-date") }}</dt>
-        <dd>{{ emailMessage.dateLatestEvent|time_diff }}</dd>
+        <dd>{{ emailMessage.dateLatestEvent|string_date }}</dd>
     {% endif %}
 </dl>
 
