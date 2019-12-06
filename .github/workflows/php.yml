@@ -1,4 +1,4 @@
-name: General PHP 7.4 suite
+name: General PHP 7.4 suite (no test)
 
 on: [push]
 
@@ -42,6 +42,3 @@ jobs:
 
       - name: Run check suite
         run: composer check
-
-      - name: Run test suite
-        run: composer test
