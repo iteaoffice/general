@@ -19,7 +19,8 @@ namespace General\Service;
 use Doctrine\ORM\EntityManager;
 use General\Entity\AbstractEntity;
 use General\Form\CreateObject;
-use Interop\Container\ContainerInterface;use Zend\Form\Form;
+use Interop\Container\ContainerInterface;
+use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

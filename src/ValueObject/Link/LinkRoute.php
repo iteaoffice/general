@@ -18,8 +18,7 @@ final class LinkRoute
         array   $routeParams = [],
         ?array  $queryParams = null,
         ?string $fragment = null
-    )
-    {
+    ) {
         $this->route       = $route;
         $this->routeParams = $routeParams;
         $this->queryParams = $queryParams;

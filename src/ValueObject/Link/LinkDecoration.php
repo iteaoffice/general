@@ -36,8 +36,7 @@ final class LinkDecoration
         ?LinkText $linkText = null,
         ?string   $action = null,
         ?string   $icon = null
-    )
-    {
+    ) {
         $this->show     = $show;
         $this->linkText = $linkText ?? new LinkText();
         $this->icon     = $icon ?? self::$defaultIcons[(string) $action] ?? null;

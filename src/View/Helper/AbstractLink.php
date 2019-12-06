@@ -12,11 +12,11 @@ use Zend\Router\RouteStackInterface;
 
 abstract class AbstractLink
 {
-    private   AssertionService    $assertionService;
-    private   Authorize           $authorizeService;
-    private   RouteStackInterface $router;
+    private AssertionService    $assertionService;
+    private Authorize           $authorizeService;
+    private RouteStackInterface $router;
     protected TranslatorInterface $translator;
-    private   string              $serverUrl;
+    private string              $serverUrl;
 
     public function __construct(
         AssertionService    $assertionService,
@@ -24,8 +24,7 @@ abstract class AbstractLink
         RouteStackInterface $router,
         TranslatorInterface $translator,
         array               $config = []
-    )
-    {
+    ) {
         $this->assertionService = $assertionService;
         $this->authorizeService = $authorizeService;
         $this->router           = $router;
