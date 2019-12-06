@@ -24,17 +24,11 @@ use function in_array;
  */
 class Gender extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_gender');
         $queryBuilder->from(Entity\Gender::class, 'general_entity_gender');
-
 
         $direction = 'DESC';
         if (isset($filter['direction'])

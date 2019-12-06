@@ -22,13 +22,8 @@ use Zend\InputFilter\InputFilter;
  *
  * @package General\InputFilter
  */
-class CountryFilter extends InputFilter
+final class CountryFilter extends InputFilter
 {
-    /**
-     * PartnerFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();

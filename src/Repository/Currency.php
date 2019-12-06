@@ -24,11 +24,6 @@ use function in_array;
  */
 class Currency extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -70,21 +65,13 @@ class Currency extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyFilter(
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
         if (!empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_currency.name', ':like'));
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         return $queryBuilder;

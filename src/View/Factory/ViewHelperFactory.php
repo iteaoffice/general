@@ -24,15 +24,6 @@ use Zend\View\HelperPluginManager;
  */
 final class ViewHelperFactory implements FactoryInterface
 {
-    /**
-     * Create an instance of the requested class name.
-     *
-     * @param ContainerInterface|HelperPluginManager $container
-     * @param string                                 $requestedName
-     * @param null|array                             $options
-     *
-     * @return object
-     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractViewHelper
     {
         /** @var AbstractViewHelper $viewHelper */

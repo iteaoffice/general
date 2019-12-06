@@ -23,13 +23,8 @@ use Zend\Validator\File\Extension;
  *
  * @package General\InputFilter
  */
-class ChallengeFilter extends InputFilter
+final class ChallengeFilter extends InputFilter
 {
-    /**
-     * ChallengeFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();

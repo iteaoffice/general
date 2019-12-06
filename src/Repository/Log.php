@@ -25,11 +25,6 @@ use function in_array;
  */
 class Log extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -44,7 +39,7 @@ class Log extends EntityRepository
                     $queryBuilder->expr()->like('general_entity_log.file', ':like')
                 )
             );
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         $direction = 'DESC';
@@ -71,12 +66,9 @@ class Log extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @throws DBALException
-     */
     public function truncateLog(): void
     {
-        $truncateQuery = "TRUNCATE TABLE log";
+        $truncateQuery = 'TRUNCATE TABLE log';
         $this->getEntityManager()->getConnection()->executeQuery($truncateQuery);
     }
 }

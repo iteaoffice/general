@@ -22,13 +22,8 @@ use Zend\InputFilter\InputFilter;
  *
  * @package General\InputFilterF
  */
-class WebInfoFilter extends InputFilter
+final class WebInfoFilter extends InputFilter
 {
-    /**
-     * PartnerFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();

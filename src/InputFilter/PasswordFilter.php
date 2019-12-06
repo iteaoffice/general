@@ -19,11 +19,8 @@ use Zend\InputFilter\InputFilter;
  *
  * @package General\InputFilter
  */
-class PasswordFilter extends InputFilter
+final class PasswordFilter extends InputFilter
 {
-    /**
-     * PasswordFilter constructor.
-     */
     public function __construct()
     {
         $inputFilter = new InputFilter();

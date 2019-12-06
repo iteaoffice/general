@@ -36,18 +36,9 @@ use function count;
  */
 class CountryService extends AbstractService implements SearchUpdateInterface
 {
-    /**
-     * @var CountrySearchService
-     */
-    private $countrySearchService;
-    /**
-     * @var ProjectService
-     */
-    private $projectService;
-    /**
-     * @var AffiliationService
-     */
-    private $affiliationService;
+    private CountrySearchService $countrySearchService;
+    private ProjectService $projectService;
+    private AffiliationService $affiliationService;
 
     public function __construct(
         EntityManager $entityManager,
@@ -201,11 +192,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
             }
         }
 
-        $amountOfFunders = $country->getFunder()->filter(
-            function (Funder $funder) {
-                return $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE;
-            }
-        )->count();
+        $amountOfFunders = $country->getFunder()->filter(fn (Funder $funder) => $funder->getShowOnWebsite() === Funder::SHOW_ON_WEBSITE)->count();
 
         $countryDocument->setField('projects', count($projects));
         $countryDocument->setField('has_projects', count($projects) > 0);

@@ -9,8 +9,8 @@ namespace General\ValueObject;
 
 final class Header
 {
-    private $name;
-    private $value;
+    private string $name;
+    private string $value;
 
     public function __construct(string $name, string $value)
     {

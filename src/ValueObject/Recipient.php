@@ -13,8 +13,8 @@ use function sprintf;
 
 final class Recipient
 {
-    private $name;
-    private $email;
+    private string $name;
+    private string $email;
 
     public function __construct(string $name, string $email)
     {

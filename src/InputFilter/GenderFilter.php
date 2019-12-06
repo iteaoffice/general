@@ -22,13 +22,8 @@ use Zend\InputFilter\InputFilter;
  *
  * @package General\InputFilter
  */
-class GenderFilter extends InputFilter
+final class GenderFilter extends InputFilter
 {
-    /**
-     * PartnerFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();

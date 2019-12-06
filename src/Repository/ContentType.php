@@ -24,11 +24,6 @@ use function in_array;
  */
 class ContentType extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -63,9 +58,6 @@ class ContentType extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @return array
-     */
     public function findContentTypeByImage(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

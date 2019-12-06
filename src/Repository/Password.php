@@ -26,11 +26,6 @@ use function in_array;
  */
 class Password extends EntityRepository
 {
-    /**
-     * @param $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter = null): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -38,11 +33,6 @@ class Password extends EntityRepository
         $queryBuilder->from(Entity\Password::class, 'general_entity_password');
 
         if (null !== $filter) {
-            /**
-             * Get the webInfo repository
-             *
-             * @var  $webInfoRepository WebInfo
-             */
             $queryBuilder = $this->applyWebInfoFilter($queryBuilder, $filter);
         }
 
@@ -72,14 +62,6 @@ class Password extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
         if (!empty($filter['search'])) {
@@ -92,7 +74,7 @@ class Password extends EntityRepository
             );
 
 
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         return $queryBuilder;

@@ -18,15 +18,11 @@ use General\Entity;
 use function in_array;
 
 /**
- * @category    General
+ * Class VatType
+ * @package General\Repository
  */
 class VatType extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();

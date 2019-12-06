@@ -7,7 +7,7 @@
  * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2018 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/general for the canonical source repository
@@ -34,6 +34,7 @@ use Mailjet\Resources;
 use Publication\Entity\Publication;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Helper\Url;
 use Zend\View\HelperPluginManager;
@@ -61,67 +62,35 @@ use function substr;
  */
 class EmailService
 {
-    private $config;
-    /**
-     * @var ContactService
-     */
-    private $contactService;
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var DeeplinkService
-     */
-    private $deeplinkService;
-    /**
-     * @var AuthenticationService
-     */
-    private $authenticationService;
-    /**
-     * @var TwigRenderer
-     */
-    private $renderer;
-    /**
-     * @var HelperPluginManager
-     */
-    private $viewHelperManager;
-
-    /** @var Client */
-    private $client;
-
-    /** @var Template */
-    private $template;
-
-    /** @var \Mailing\Entity\Contact */
-    private $mailingContact;
-
-    private $templateVariables = [];
+    private array $config;
+    private ContactService $contactService;
+    private GeneralService $generalService;
+    private DeeplinkService $deeplinkService;
+    private AuthenticationService $authenticationService;
+    private TwigRenderer $renderer;
+    private HelperPluginManager $viewHelperManager;
+    private Client $client;
+    private Template $template;
+    private ?\Mailing\Entity\Contact $mailingContact = null;
+    private array $templateVariables = [];
     /** @var ValueObject\Attachment[] */
-    private $attachments = [];
+    private array $attachments = [];
     /** @var ValueObject\Attachment[] */
-    private $inlinedAttachments = [];
-    /** @var ValueObject\Recipient */
-    private $from;
+    private array $inlinedAttachments = [];
+    private ?ValueObject\Recipient $from;
     /** @var ValueObject\Recipient[] */
-    private $to = [];
+    private array $to = [];
     /** @var ValueObject\Recipient[] */
-    private $cc = [];
+    private array $cc = [];
     /** @var ValueObject\Recipient[] */
-    private $bcc = [];
+    private array $bcc = [];
     /** @var ValueObject\Header[] */
-    private $headers = [];
-
-    /** @var string */
-    private $emailContent;
-    /** @var string */
-    private $textPart;
-    /** @var string */
-    private $htmlPart;
-    /** @var string */
-    private $emailSubject;
-    /** @var string */
-    private $emailCampaign;
+    private array $headers = [];
+    private string $emailContent;
+    private string $textPart;
+    private string $htmlPart;
+    private string $emailSubject;
+    private string $emailCampaign;
 
     public function __construct(
         array $config,
@@ -255,6 +224,7 @@ class EmailService
     private function createTwigTemplate(string $content): string
     {
         $twigRenderer = new Environment(new ArrayLoader(['email_template' => $content]));
+
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
 
@@ -455,7 +425,7 @@ class EmailService
                 if ($filename && file_exists($filename)) {
                     $id = md5_file($filename);
 
-                    $this->inlinedAttachments = new ValueObject\Attachment(
+                    $this->inlinedAttachments[] = new ValueObject\Attachment(
                         $this->mimeByExtension($filename),
                         substr($id, 0, 10),
                         file_get_contents($filename),

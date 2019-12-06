@@ -11,25 +11,25 @@ use function count;
 
 final class Email
 {
-    private $from;
-    private $to;
-    private $cc;
-    private $bcc;
+    private array $from;
+    private array $to;
+    private array $cc;
+    private array $bcc;
 
-    private $subject;
-    private $textPart;
+    private string $subject;
+    private string $textPart;
 
-    private $htmlPart;
+    private string $htmlPart;
 
-    private $customID;
-    private $eventPayload;
-    private $trackOpens;
-    private $trackClicks;
-    private $customCampaign;
+    private string $customID;
+    private string $eventPayload;
+    private string $trackOpens;
+    private string $trackClicks;
+    private string $customCampaign;
 
-    private $attachments;
-    private $inlinedAttachments;
-    private $headers;
+    private array $attachments;
+    private array $inlinedAttachments;
+    private array $headers;
 
     public function __construct(
         array $from,

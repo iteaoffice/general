@@ -18,15 +18,11 @@ use General\Entity;
 use function in_array;
 
 /**
- * @category    General
+* Class Challenge
+ * @package General\Repository
  */
 class Challenge extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -66,21 +62,13 @@ class Challenge extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyFilter(
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
         if (!empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_challenge.challenge', ':like'));
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         if (isset($filter['type'])) {
