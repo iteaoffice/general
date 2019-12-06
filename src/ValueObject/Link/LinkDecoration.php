@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace General\ValueObject\Link;
 
-use Assert\Assertion;
+use function implode;
+use function sprintf;
 
 final class LinkDecoration
 {
-    public  const TYPE_TEXT          = 'text';
-    public  const TYPE_ICON          = 'icon';
-    public  const TYPE_ICON_AND_TEXT = 'icon-and-text';
-    public  const TYPE_BUTTON        = 'button';
-    public  const TYPE_RAW           = 'raw';
+    public const SHOW_TEXT          = 'text';
+    public const SHOW_ICON          = 'icon';
+    public const SHOW_ICON_AND_TEXT = 'icon-and-text';
+    public const SHOW_BUTTON        = 'button';
+    public const SHOW_RAW           = 'raw';
+
     private const ACTION_NEW         = 'new';
     private const ACTION_EDIT        = 'edit';
     private const ACTION_DELETE      = 'delete';
@@ -25,37 +27,27 @@ final class LinkDecoration
         self::ACTION_DELETE => 'fa-trash'
     ];
 
-    private string  $type;
-    private ?string $text;
-    private ?string $title;
-    private ?string $action;
-    private ?string $icon;
+    private string   $show;
+    private LinkText $linkText;
+    private ?string  $icon;
 
     public function __construct(
-        string  $type = self::TYPE_TEXT,
-        ?string $text = null,
-        ?string $title = null,
-        ?string $action = null,
-        ?string $icon = null
+        string    $show = self::SHOW_TEXT,
+        ?LinkText $linkText = null,
+        ?string   $action = null,
+        ?string   $icon = null
     )
     {
-        Assertion::inArray(
-            $type,
-            [self::TYPE_TEXT, self::TYPE_BUTTON, self::TYPE_ICON, self::TYPE_ICON_AND_TEXT, self::TYPE_RAW]
-        );
-        $this->type   = $type;
-        $this->text   = $text;
-        $this->title  = $title ?? $text;
-        $this->action = $action;
-        $this->icon   = $icon ?? self::$defaultIcons[(string) $action] ?? null;
+        $this->show     = $show;
+        $this->linkText = $linkText ?? new LinkText();
+        $this->icon     = $icon ?? self::$defaultIcons[(string) $action] ?? null;
     }
 
     public static function fromArray(array $params): LinkDecoration
     {
         return new self(
-            ($params['type'] ?? self::TYPE_TEXT),
-            ($params['text'] ?? null),
-            ($params['title'] ?? null),
+            ($params['show'] ?? self::SHOW_TEXT),
+            LinkText::fromArray($params),
             ($params['action'] ?? null),
             ($params['icon'] ?? null)
         );
@@ -63,42 +55,40 @@ final class LinkDecoration
 
     public function parse(): string
     {
-        if ($this->type === self::TYPE_RAW) {
+        if ($this->show === self::SHOW_RAW) {
             return '%s';
         }
 
         $content      = [];
         $classes      = [];
-        switch ($this->type) {
-            case self::TYPE_ICON:
+        switch ($this->show) {
+            case self::SHOW_ICON:
                 if ($this->icon !== null) {
                     $content[] = sprintf(self::$iconTemplate, $this->icon);
                 }
                 break;
-            case self::TYPE_ICON_AND_TEXT:
-            case self::TYPE_BUTTON:
+            case self::SHOW_ICON_AND_TEXT:
+            case self::SHOW_BUTTON:
                 if ($this->icon !== null) {
                     $content[] = sprintf(self::$iconTemplate, $this->icon);
                 }
-                if ($this->text !== null) {
-                    $content[] = sprintf(' %s', $this->text);
+                $text = $this->linkText->parse();
+                if (!empty($text)) {
+                    $content[] = sprintf(' %s', $text);
                 }
-                if ($this->type === self::TYPE_BUTTON) {
+                if ($this->show === self::SHOW_BUTTON) {
                     $classes = ['btn', 'btn-primary'];
                 }
                 break;
-            case self::TYPE_TEXT:
-                if ($this->text !== null) {
-                    $content[] = $this->text;
-                }
-                break;
+            case self::SHOW_TEXT:
             default:
-                return '%s';
+                $content[] = $this->linkText->parse();
+                break;
         }
 
         return sprintf(
             self::$linkTemplate,
-            (($this->title === null) ? '' : sprintf(' title="%s"', $this->title)),
+            ((empty($this->linkText->getTitle())) ? '' : sprintf(' title="%s"', $this->linkText->getTitle())),
             ((empty($classes)) ? '' : sprintf(' class="%s"', implode(' ', $classes))),
             implode($content)
         );
