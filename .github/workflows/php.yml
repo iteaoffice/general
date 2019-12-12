@@ -1,4 +1,4 @@
-name: General PHP 7.4 suite (no test)
+name: main
 
 on: [push]
 

@@ -28,9 +28,9 @@ class WebInfo extends AbstractEntity
     public const PLAIN = 1;
     public const NOT_PLAIN = 0;
 
-    protected static $plainTemplates
+    protected static array $plainTemplates
         = [
-            self::PLAIN     => 'txt-plain',
+            self::PLAIN => 'txt-plain',
             self::NOT_PLAIN => 'txt-not-plain',
         ];
 

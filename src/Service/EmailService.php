@@ -71,13 +71,13 @@ class EmailService
     private HelperPluginManager $viewHelperManager;
     private Client $client;
     private Template $template;
-    private ?\Mailing\Entity\Contact $mailingContact = null;
+    private ? \Mailing\Entity\Contact $mailingContact = null;
     private array $templateVariables = [];
     /** @var ValueObject\Attachment[] */
     private array $attachments = [];
     /** @var ValueObject\Attachment[] */
     private array $inlinedAttachments = [];
-    private ?ValueObject\Recipient $from;
+    private ? ValueObject\Recipient $from;
     /** @var ValueObject\Recipient[] */
     private array $to = [];
     /** @var ValueObject\Recipient[] */
@@ -117,7 +117,7 @@ class EmailService
         );
     }
 
-    public function setMailing(Mailing $mailing): void
+    public function setMailing(Mailing $mailing) : void
     {
         $this->resetEmailContent();
 
@@ -131,7 +131,7 @@ class EmailService
         $this->templateVariables['subject'] = $mailing->getMailSubject();
     }
 
-    private function resetEmailContent(): void
+    private function resetEmailContent() : void
     {
         $this->from = null;
         $this->attachments = [];

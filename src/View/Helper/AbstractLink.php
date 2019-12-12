@@ -12,24 +12,24 @@ use Zend\Router\RouteStackInterface;
 
 abstract class AbstractLink
 {
+    protected TranslatorInterface $translator;
     private AssertionService    $assertionService;
     private Authorize           $authorizeService;
     private RouteStackInterface $router;
-    protected TranslatorInterface $translator;
     private string              $serverUrl;
 
     public function __construct(
-        AssertionService    $assertionService,
-        Authorize           $authorizeService,
+        AssertionService $assertionService,
+        Authorize $authorizeService,
         RouteStackInterface $router,
         TranslatorInterface $translator,
-        array               $config = []
+        array $config = []
     ) {
         $this->assertionService = $assertionService;
         $this->authorizeService = $authorizeService;
-        $this->router           = $router;
-        $this->translator       = $translator;
-        $this->serverUrl        = $config['deeplink']['serverUrl'] ?? '';
+        $this->router = $router;
+        $this->translator = $translator;
+        $this->serverUrl = $config['deeplink']['serverUrl'] ?? '';
     }
 
     protected function parse(?Link $link): string

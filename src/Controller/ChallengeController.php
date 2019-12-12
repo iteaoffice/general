@@ -29,30 +29,15 @@ use Zend\Validator\File\MimeType;
 use Zend\View\Model\ViewModel;
 
 /**
- * Class ChallengeController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class ChallengeController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
+    private EntityManager $entityManager;
 
     public function __construct(
         GeneralService $generalService,
@@ -101,7 +86,7 @@ final class ChallengeController extends AbstractActionController
         return new ViewModel(['challenge' => $challenge]);
     }
 
-    public function newAction(): ViewModel
+    public function newAction()
     {
         $data = array_merge_recursive(
             $this->getRequest()->getPost()->toArray(),
