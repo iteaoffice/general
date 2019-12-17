@@ -20,14 +20,10 @@ use Organisation\Entity\Financial;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="vat_type")
  * @ORM\Entity(repositoryClass="General\Repository\VatType")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("vat_type")
- *
- * @category General
  */
 class VatType extends AbstractEntity
 {
@@ -63,9 +59,7 @@ class VatType extends AbstractEntity
     private $description;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Vat", inversedBy="type", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="vat_id", referencedColumnName="vat_id", nullable=false)
-     * })
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"General\Entity\Vat",
@@ -105,10 +99,6 @@ class VatType extends AbstractEntity
      * @var Financial[]|Collections\ArrayCollection
      */
     private $organisationFinancial;
-
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->invoice = new Collections\ArrayCollection();
@@ -116,158 +106,85 @@ class VatType extends AbstractEntity
         $this->organisationFinancial = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(?int $id): VatType
     {
         $this->id = $id;
+        return $this;
     }
 
-    /**
-     * @return Invoice[]
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param Invoice[] $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(?string $type): VatType
     {
         $this->type = $type;
+        return $this;
     }
 
-    /**
-     * @return Vat
-     */
-    public function getVat()
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): VatType
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getVat(): ?Vat
     {
         return $this->vat;
     }
 
-    /**
-     * @param Vat $vat
-     */
-    public function setVat($vat)
+    public function setVat(?Vat $vat): VatType
     {
         $this->vat = $vat;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Dimension[]
-     */
+    public function getInvoice(): ?array
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(?array $invoice): VatType
+    {
+        $this->invoice = $invoice;
+        return $this;
+    }
+
     public function getDimension()
     {
         return $this->dimension;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Dimension[] $dimension
-     */
-    public function setDimension($dimension)
+    public function setDimension($dimension): VatType
     {
         $this->dimension = $dimension;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Financial[]
-     */
     public function getOrganisationFinancial()
     {
         return $this->organisationFinancial;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Financial[] $organisationFinancial
-     */
-    public function setOrganisationFinancial($organisationFinancial)
+    public function setOrganisationFinancial($organisationFinancial): VatType
     {
         $this->organisationFinancial = $organisationFinancial;
+        return $this;
     }
 }

@@ -76,9 +76,7 @@ class Vat extends AbstractEntity
     private $type;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Country", inversedBy="vat", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=true)
-     * })
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"General\Entity\Country",
@@ -126,9 +124,6 @@ class Vat extends AbstractEntity
      */
     private $dimension;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->type = new Collections\ArrayCollection();
@@ -138,206 +133,118 @@ class Vat extends AbstractEntity
         $this->dimension = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
-        return (string)sprintf("%s (%s %%)", $this->code, $this->percentage);
+        return (string)sprintf('%s (%s %%)', $this->code, $this->percentage);
     }
 
-    /**
-     * @return string
-     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): Vat
+    {
+        $this->id = $id;
+        return $this;
+    }
+
     public function getCode()
     {
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     */
-    public function setCode($code)
+    public function setCode($code): Vat
     {
         $this->code = $code;
+        return $this;
     }
 
-    /**
-     * @return Country
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param Country $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDateStart()
-    {
-        return $this->dateStart;
-    }
-
-    /**
-     * @param DateTime $dateStart
-     */
-    public function setDateStart($dateStart)
-    {
-        $this->dateStart = $dateStart;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return float
-     */
     public function getPercentage()
     {
         return $this->percentage;
     }
 
-    /**
-     * @param float $percentage
-     */
-    public function setPercentage($percentage)
+    public function setPercentage($percentage): Vat
     {
         $this->percentage = $percentage;
+        return $this;
     }
 
-    /**
-     * @return VatType[]
-     */
+    public function getDateStart(): ?DateTime
+    {
+        return $this->dateStart;
+    }
+
+    public function setDateStart(?DateTime $dateStart): Vat
+    {
+        $this->dateStart = $dateStart;
+        return $this;
+    }
+
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * @param VatType[] $type
-     */
-    public function setType($type)
+    public function setType($type): Vat
     {
         $this->type = $type;
+        return $this;
     }
 
-    /**
-     * @return Row[]
-     */
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): Vat
+    {
+        $this->country = $country;
+        return $this;
+    }
+
     public function getInvoiceRow()
     {
         return $this->invoiceRow;
     }
 
-    /**
-     * @param Row[] $invoiceRow
-     */
-    public function setInvoiceRow($invoiceRow)
+    public function setInvoiceRow($invoiceRow): Vat
     {
         $this->invoiceRow = $invoiceRow;
+        return $this;
     }
 
-    /**
-     * @return DeskCosts[]
-     */
     public function getDeskCosts()
     {
         return $this->deskCosts;
     }
 
-    /**
-     * @param DeskCosts[] $deskCosts
-     */
-    public function setDeskCosts($deskCosts)
+    public function setDeskCosts($deskCosts): Vat
     {
         $this->deskCosts = $deskCosts;
+        return $this;
     }
 
-    /**
-     * @return OptionCost[]
-     */
     public function getOptionCost()
     {
         return $this->optionCost;
     }
 
-    /**
-     * @param OptionCost[] $optionCost
-     */
-    public function setOptionCost($optionCost)
+    public function setOptionCost($optionCost): Vat
     {
         $this->optionCost = $optionCost;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Dimension[]
-     */
     public function getDimension()
     {
         return $this->dimension;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Dimension[] $dimension
-     */
-    public function setDimension($dimension)
+    public function setDimension($dimension): Vat
     {
         $this->dimension = $dimension;
+        return $this;
     }
 }

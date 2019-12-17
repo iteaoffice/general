@@ -57,7 +57,7 @@ class EmailMessage extends AbstractEntity
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="contact_id", nullable=true)
      * @Annotation\Exclude()
      *
-     * @var \Contact\Entity\Contact|null
+     * @var \Contact\Entity\Contact
      */
     private $contact;
     /**
@@ -65,7 +65,7 @@ class EmailMessage extends AbstractEntity
      * @ORM\JoinColumn(name="mailing_contact_id", referencedColumnName="mailing_contact_id", nullable=true)
      * @Annotation\Exclude()
      *
-     * @var Contact|null
+     * @var Contact
      */
     private $mailingContact;
     /**
@@ -121,9 +121,6 @@ class EmailMessage extends AbstractEntity
      */
     private $dateLatestEvent;
 
-    /**
-     * EmailMessage constructor.
-     */
     public function __construct()
     {
         $this->identifier = sha1(Rand::getString(30));
@@ -131,322 +128,162 @@ class EmailMessage extends AbstractEntity
         $this->amountOfAttachments = 0;
     }
 
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     *
-     * @return void;
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->subject;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return EmailMessage
-     */
-    public function setId(int $id): EmailMessage
+    public function setId(?int $id): EmailMessage
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): ?int
     {
         return $this->identifier;
     }
 
-    /**
-     * @param int $identifier
-     *
-     * @return EmailMessage
-     */
-    public function setIdentifier($identifier): EmailMessage
+    public function setIdentifier(?int $identifier): EmailMessage
     {
         $this->identifier = $identifier;
-
         return $this;
     }
 
-    /**
-     * @return \Contact\Entity\Contact|null
-     */
-    public function getContact()
-    {
-        return $this->contact;
-    }
-
-    /**
-     * @param \Contact\Entity\Contact|null $contact
-     *
-     * @return EmailMessage
-     */
-    public function setContact($contact)
-    {
-        $this->contact = $contact;
-
-        return $this;
-    }
-
-    /**
-     * @return Contact|null
-     */
-    public function getMailingContact()
-    {
-        return $this->mailingContact;
-    }
-
-    /**
-     * @param Contact|null $mailingContact
-     *
-     * @return EmailMessage
-     */
-    public function setMailingContact($mailingContact)
-    {
-        $this->mailingContact = $mailingContact;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmailAddress(): string
-    {
-        return $this->emailAddress;
-    }
-
-    /**
-     * @param string $emailAddress
-     *
-     * @return EmailMessage
-     */
-    public function setEmailAddress(string $emailAddress): EmailMessage
-    {
-        $this->emailAddress = $emailAddress;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubject(): string
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @param string $subject
-     *
-     * @return EmailMessage
-     */
-    public function setSubject(string $subject): EmailMessage
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return EmailMessage
-     */
-    public function setMessage(string $message): EmailMessage
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAmountOfAttachments(): int
-    {
-        return $this->amountOfAttachments;
-    }
-
-    /**
-     * @param int $amountOfAttachments
-     *
-     * @return EmailMessage
-     */
-    public function setAmountOfAttachments(int $amountOfAttachments): EmailMessage
-    {
-        $this->amountOfAttachments = $amountOfAttachments;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     * @param mixed $event
-     *
-     * @return EmailMessage
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLatestEvent()
-    {
-        return $this->latestEvent;
-    }
-
-    /**
-     * @param string $latestEvent
-     *
-     * @return EmailMessage
-     */
-    public function setLatestEvent(string $latestEvent): EmailMessage
-    {
-        $this->latestEvent = $latestEvent;
-
-        return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDateCreated()
+    public function getDateCreated(): ?DateTime
     {
         return $this->dateCreated;
     }
 
-    /**
-     * @param DateTime $dateCreated
-     *
-     * @return EmailMessage
-     */
-    public function setDateCreated(DateTime $dateCreated): EmailMessage
+    public function setDateCreated(?DateTime $dateCreated): EmailMessage
     {
         $this->dateCreated = $dateCreated;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateLatestEvent()
+    public function getContact(): ?\Contact\Entity\Contact
     {
-        return $this->dateLatestEvent;
+        return $this->contact;
     }
 
-    /**
-     * @param DateTime $dateLatestEvent
-     *
-     * @return EmailMessage
-     */
-    public function setDateLatestEvent(DateTime $dateLatestEvent): EmailMessage
+    public function setContact(?\Contact\Entity\Contact $contact): EmailMessage
     {
-        $this->dateLatestEvent = $dateLatestEvent;
-
+        $this->contact = $contact;
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    public function getMailingContact(): ?Contact
+    {
+        return $this->mailingContact;
+    }
+
+    public function setMailingContact(?Contact $mailingContact): EmailMessage
+    {
+        $this->mailingContact = $mailingContact;
+        return $this;
+    }
+
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
+
+    public function setEmailAddress(?string $emailAddress): EmailMessage
+    {
+        $this->emailAddress = $emailAddress;
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): EmailMessage
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
     public function getCc(): ?string
     {
         return $this->cc;
     }
 
-    /**
-     * @param string $cc
-     *
-     * @return EmailMessage
-     */
-    public function setCc(string $cc = null): EmailMessage
+    public function setCc(?string $cc): EmailMessage
     {
         $this->cc = $cc;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBcc(): ?string
     {
         return $this->bcc;
     }
 
-    /**
-     * @param string $bcc
-     *
-     * @return EmailMessage
-     */
-    public function setBcc(string $bcc = null): EmailMessage
+    public function setBcc(?string $bcc): EmailMessage
     {
         $this->bcc = $bcc;
+        return $this;
+    }
 
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): EmailMessage
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function getAmountOfAttachments(): ?int
+    {
+        return $this->amountOfAttachments;
+    }
+
+    public function setAmountOfAttachments(?int $amountOfAttachments): EmailMessage
+    {
+        $this->amountOfAttachments = $amountOfAttachments;
+        return $this;
+    }
+
+    public function getEvent(): ?ArrayCollection
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?ArrayCollection $event): EmailMessage
+    {
+        $this->event = $event;
+        return $this;
+    }
+
+    public function getLatestEvent(): ?string
+    {
+        return $this->latestEvent;
+    }
+
+    public function setLatestEvent(?string $latestEvent): EmailMessage
+    {
+        $this->latestEvent = $latestEvent;
+        return $this;
+    }
+
+    public function getDateLatestEvent(): ?DateTime
+    {
+        return $this->dateLatestEvent;
+    }
+
+    public function setDateLatestEvent(?DateTime $dateLatestEvent): EmailMessage
+    {
+        $this->dateLatestEvent = $dateLatestEvent;
         return $this;
     }
 }

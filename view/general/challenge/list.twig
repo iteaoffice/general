@@ -51,7 +51,7 @@
                         <td>{{ challengeLink(challenge,'view-admin','name') }} {{ challengeLink(challenge,'edit', 'icon') }}
                             <span class="pull-right">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
-                        <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</td>
+                        <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>
                         <td>{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }} {% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}</td>
                         <td>{{ challenge.projectChallenge.count() }}</td>

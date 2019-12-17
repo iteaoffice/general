@@ -40,7 +40,7 @@
                 <tbody>
                 {% for password in paginator.getCurrentItems() %}
                     <tr>
-                        <td>{{ passwordLink(password,'view','description') }} {{ passwordLink(password,'edit', 'icon') }}</td>
+                        <td>{{ passwordLink(password,'view','name') }} {{ passwordLink(password,'edit', 'icon') }}</td>
                         <td>{{ password.website }}</td>
                         <td>{{ password.account }}</td>
                         <td>{{ password.username }}</td>

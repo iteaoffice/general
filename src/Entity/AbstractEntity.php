@@ -28,11 +28,6 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
         return sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());
     }
 
-    /**
-     * @param $switch
-     *
-     * @return string
-     */
     public function get($switch): string
     {
         switch ($switch) {
@@ -68,9 +63,6 @@ abstract class AbstractEntity implements EntityInterface, ResourceInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     public function __toString(): string
     {
         return sprintf('%s:%s', $this->get('full_entity_name'), $this->getId());

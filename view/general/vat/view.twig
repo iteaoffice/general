@@ -17,7 +17,7 @@
 
     <dt>{{ translate('txt-vat-types') }}</dt>
     {% for vatType in vat.type %}
-        <dd>{{ vatTypeLink(vatType,'view','type') }}</dd>
+        <dd>{{ vatTypeLink(vatType,'view','name') }}</dd>
     {% else %}
         <dd>{{ translate("txt-types-for-this-vat") }}</dd>
     {% endfor %}

@@ -6,6 +6,7 @@ namespace General\View\Helper;
 
 use Application\Service\AssertionService;
 use BjyAuthorize\Service\Authorize;
+use General\Options\ModuleOptions;
 use General\ValueObject\Link\Link;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Router\RouteStackInterface;
@@ -16,25 +17,25 @@ abstract class AbstractLink
     private AssertionService    $assertionService;
     private Authorize           $authorizeService;
     private RouteStackInterface $router;
-    private string              $serverUrl;
+    private ModuleOptions $generalModuleOptions;
 
     public function __construct(
         AssertionService $assertionService,
         Authorize $authorizeService,
         RouteStackInterface $router,
         TranslatorInterface $translator,
-        array $config = []
+        ModuleOptions $generalModuleOptions
     ) {
         $this->assertionService = $assertionService;
         $this->authorizeService = $authorizeService;
         $this->router = $router;
         $this->translator = $translator;
-        $this->serverUrl = $config['deeplink']['serverUrl'] ?? '';
+        $this->generalModuleOptions = $generalModuleOptions;
     }
 
     protected function parse(?Link $link): string
     {
-        return ($link === null) ? '' : $link->parse($this->router, $this->serverUrl);
+        return ($link === null) ? '' : $link->parse($this->router, $this->generalModuleOptions->getServerUrl());
     }
 
     protected function hasAccess(/*AbstractEntity*/ $entity, string $assertionName, string $action): bool

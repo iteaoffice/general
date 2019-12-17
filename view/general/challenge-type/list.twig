@@ -39,7 +39,7 @@
         {% for challengeType in paginator.getCurrentItems() %}
             <tr>
                 <td><small>{{ challengeType.id }}</small></td>
-                <td>{{ challengeTypeLink(challengeType,'view-admin','name') }} {{ challengeTypeLink(challengeType,'edit','icon') }}</td>
+                <td>{{ challengeTypeLink(challengeType,'view','name') }} {{ challengeTypeLink(challengeType,'edit','icon') }}</td>
                 <td>{{ challengeType.sequence }}</td>
                 <td>{{ challengeType.challenge.count() }}</td>
             </tr>

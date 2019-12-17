@@ -16,8 +16,8 @@ use Content\Entity\Content;
 use General\Entity\Country;
 use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
-use General\View\Helper\CountryLink;
-use General\View\Helper\CountryMap;
+use General\View\Helper\Country\CountryLink;
+use General\View\Helper\Country\CountryMap;
 use Program\Service\ProgramService;
 use Zend\Authentication\AuthenticationService;
 use Zend\Http\Response;
@@ -33,22 +33,10 @@ use ZfcTwig\View\TwigRenderer;
  */
 final class CountryHandler extends AbstractHandler
 {
-    /**
-     * @var CountryService
-     */
-    private $countryService;
-    /**
-     * @var CountrySearchService
-     */
-    private $countrySearchService;
-    /**
-     * @var ContactService
-     */
-    private $contactService;
-    /**
-     * @var ProgramService
-     */
-    private $programService;
+    private CountryService $countryService;
+    private CountrySearchService $countrySearchService;
+    private ContactService $contactService;
+    private ProgramService $programService;
 
     public function __construct(
         Application $application,
@@ -89,22 +77,24 @@ final class CountryHandler extends AbstractHandler
                     return 'The selected country cannot be found';
                 }
 
-                $this->getHeadTitle()->append($this->translate("txt-country"));
+                $this->getHeadTitle()->append($this->translate('txt-country'));
                 $this->getHeadTitle()->append($country->getCountry());
 
                 $countryLink = $this->helperPluginManager->get(CountryLink::class);
-                $this->getHeadMeta()->setProperty('og:type', $this->translate("txt-country"));
+                $this->getHeadMeta()->setProperty('og:type', $this->translate('txt-country'));
                 $this->getHeadMeta()->setProperty('og:title', $country->getCountry());
-                $this->getHeadMeta()->setProperty('og:url', $countryLink($country, 'view', 'social'));
+                $this->getHeadMeta()->setProperty('og:url', $countryLink($country, 'view', 'raw'));
 
                 return $this->parseCountry($country);
             case 'country_list':
                 return $this->parseCountryList();
             case 'country_list_itac':
-                $this->getHeadTitle()->append($this->translate("txt-itac-countries-in-itea"));
+                $this->getHeadTitle()->append($this->translate('txt-itac-countries-in-itea'));
 
                 return $this->parseCountryListItac();
         }
+
+        return null;
     }
 
     private function getCountryByParams(array $params): ?Country
@@ -130,11 +120,11 @@ final class CountryHandler extends AbstractHandler
             'cms/country/country',
             [
                 'countrySearchResult' => $this->countrySearchService->findCountry($country),
-                'country'             => $country,
-                'countryService'      => $this->countryService,
-                'contactService'      => $this->contactService,
-                'map'                 => $this->parseMap($country),
-                'funder'              => $this->programService->findFunderByCountry($country),
+                'country' => $country,
+                'countryService' => $this->countryService,
+                'contactService' => $this->contactService,
+                'map' => $this->parseMap($country),
+                'funder' => $this->programService->findFunderByCountry($country),
             ]
         );
     }
@@ -143,10 +133,10 @@ final class CountryHandler extends AbstractHandler
     {
         $mapOptions = [
             'clickable' => true,
-            'colorMin'  => '#005C00',
-            'colorMax'  => '#00a651',
-            'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
-            'height'    => '600px',
+            'colorMin' => '#005C00',
+            'colorMax' => '#00a651',
+            'focusOn' => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
+            'height' => '600px',
         ];
 
         $countryMap = $this->helperPluginManager->get(CountryMap::class);
@@ -159,7 +149,7 @@ final class CountryHandler extends AbstractHandler
         return $this->renderer->render(
             'cms/country/list',
             [
-                'countries'      => $this->countrySearchService->findCountriesOnWebsite(),
+                'countries' => $this->countrySearchService->findCountriesOnWebsite(),
                 'countryService' => $this->countryService,
             ]
         );
@@ -170,7 +160,7 @@ final class CountryHandler extends AbstractHandler
         return $this->renderer->render(
             'cms/country/list-itac',
             [
-                'countries'      => $this->countrySearchService->findItacCountries(),
+                'countries' => $this->countrySearchService->findItacCountries(),
                 'countryService' => $this->countryService,
             ]
         );

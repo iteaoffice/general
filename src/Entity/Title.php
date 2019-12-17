@@ -18,20 +18,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="title")
  * @ORM\Entity(repositoryClass="General\Repository\Title")
  * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
- *
- * @category General
  */
 class Title extends AbstractEntity
 {
-    /**
-     * Constant for the default title.
-     */
     public const TITLE_UNKNOWN = 18;
     /**
      * @ORM\Column(name="title_id",type="integer",options={"unsigned":true})
@@ -79,21 +72,6 @@ class Title extends AbstractEntity
         $this->contacts = new Collections\ArrayCollection();
     }
 
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
     public function __toString(): string
     {
         return (string)$this->name;
@@ -104,46 +82,42 @@ class Title extends AbstractEntity
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($id): Title
     {
         $this->id = $id;
-
         return $this;
     }
 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName(?string $name): Title
     {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getAttention()
+    public function getAttention(): ?string
     {
         return $this->attention;
     }
 
-    public function setAttention($attention)
+    public function setAttention(?string $attention): Title
     {
         $this->attention = $attention;
-
         return $this;
     }
 
-    public function getSalutation()
+    public function getSalutation(): ?string
     {
         return $this->salutation;
     }
 
-    public function setSalutation($salutation)
+    public function setSalutation(?string $salutation): Title
     {
         $this->salutation = $salutation;
-
         return $this;
     }
 
@@ -152,10 +126,9 @@ class Title extends AbstractEntity
         return $this->contacts;
     }
 
-    public function setContacts($contacts)
+    public function setContacts($contacts): Title
     {
         $this->contacts = $contacts;
-
         return $this;
     }
 }

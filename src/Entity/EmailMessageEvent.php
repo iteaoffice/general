@@ -112,314 +112,157 @@ class EmailMessageEvent extends AbstractEntity
      */
     private $source;
 
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     *
-     * @return void;
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return EmailMessageEvent
-     */
-    public function setId(int $id): EmailMessageEvent
+    public function setId($id): EmailMessageEvent
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return EmailMessage
-     */
-    public function getEmailMessage(): EmailMessage
+    public function getEmailMessage(): ?EmailMessage
     {
         return $this->emailMessage;
     }
 
-    /**
-     * @param EmailMessage $emailMessage
-     *
-     * @return EmailMessageEvent
-     */
-    public function setEmailMessage(EmailMessage $emailMessage): EmailMessageEvent
+    public function setEmailMessage(?EmailMessage $emailMessage): EmailMessageEvent
     {
         $this->emailMessage = $emailMessage;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEvent()
+    public function getEvent(): ?string
     {
         return $this->event;
     }
 
-    /**
-     * @param string $event
-     *
-     * @return EmailMessageEvent
-     */
-    public function setEvent(string $event): EmailMessageEvent
+    public function setEvent(?string $event): EmailMessageEvent
     {
         $this->event = $event;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getTime(): DateTime
+    public function getTime(): ?DateTime
     {
         return $this->time;
     }
 
-    /**
-     * @param DateTime $time
-     *
-     * @return EmailMessageEvent
-     */
-    public function setTime(DateTime $time): EmailMessageEvent
+    public function setTime(?DateTime $time): EmailMessageEvent
     {
         $this->time = $time;
-
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getMessageId()
+    public function getMessageId(): ?int
     {
         return $this->messageId;
     }
 
-    /**
-     * @param int $messageId
-     *
-     * @return EmailMessageEvent
-     */
-    public function setMessageId(int $messageId): EmailMessageEvent
+    public function setMessageId(?int $messageId): EmailMessageEvent
     {
         $this->messageId = $messageId;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return EmailMessageEvent
-     */
-    public function setEmail(string $email): EmailMessageEvent
+    public function setEmail(?string $email): EmailMessageEvent
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCampaign()
+    public function getCampaign(): ?string
     {
         return $this->campaign;
     }
 
-    /**
-     * @param string $campaign
-     *
-     * @return EmailMessageEvent
-     */
-    public function setCampaign(string $campaign): EmailMessageEvent
+    public function setCampaign(?string $campaign): EmailMessageEvent
     {
         $this->campaign = $campaign;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSmtpReply()
+    public function getSmtpReply(): ?string
     {
         return $this->smtp_reply;
     }
 
-    /**
-     * @param string $smtp_reply
-     *
-     * @return EmailMessageEvent
-     */
-    public function setSmtpReply(string $smtp_reply): EmailMessageEvent
+    public function setSmtpReply(?string $smtp_reply): EmailMessageEvent
     {
         $this->smtp_reply = $smtp_reply;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return EmailMessageEvent
-     */
-    public function setUrl(string $url): EmailMessageEvent
+    public function setUrl(?string $url): EmailMessageEvent
     {
         $this->url = $url;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }
 
-    /**
-     * @param string $ip
-     *
-     * @return EmailMessageEvent
-     */
-    public function setIp(string $ip): EmailMessageEvent
+    public function setIp(?string $ip): EmailMessageEvent
     {
         $this->ip = $ip;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAgent()
+    public function getAgent(): ?string
     {
         return $this->agent;
     }
 
-    /**
-     * @param string $agent
-     *
-     * @return EmailMessageEvent
-     */
-    public function setAgent(string $agent): EmailMessageEvent
+    public function setAgent(?string $agent): EmailMessageEvent
     {
         $this->agent = $agent;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getError()
+    public function getError(): ?string
     {
         return $this->error;
     }
 
-    /**
-     * @param string $error
-     *
-     * @return EmailMessageEvent
-     */
-    public function setError(string $error): EmailMessageEvent
+    public function setError(?string $error): EmailMessageEvent
     {
         $this->error = $error;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getErrorRelatedTo()
+    public function getErrorRelatedTo(): ?string
     {
         return $this->errorRelatedTo;
     }
 
-    /**
-     * @param string $errorRelatedTo
-     *
-     * @return EmailMessageEvent
-     */
-    public function setErrorRelatedTo(string $errorRelatedTo): EmailMessageEvent
+    public function setErrorRelatedTo(?string $errorRelatedTo): EmailMessageEvent
     {
         $this->errorRelatedTo = $errorRelatedTo;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSource()
+    public function getSource(): ?string
     {
         return $this->source;
     }
 
-    /**
-     * @param string $source
-     *
-     * @return EmailMessageEvent
-     */
-    public function setSource(string $source): EmailMessageEvent
+    public function setSource(?string $source): EmailMessageEvent
     {
         $this->source = $source;
-
         return $this;
     }
 }

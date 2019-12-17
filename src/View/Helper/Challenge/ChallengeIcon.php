@@ -14,23 +14,24 @@
  * @link        http://github.com/iteaoffice/challenge for the canonical source repository
  */
 
-namespace General\View\Helper;
+namespace General\View\Helper\Challenge;
 
 use General\Entity\Challenge;
+use General\ValueObject\Image\Image;
+use General\ValueObject\Image\ImageDecoration;
+use General\View\Helper\AbstractImage;
 
 /**
  * Class ChallengeIcon
  *
  * @package Challenge\View\Helper
  */
-final class ChallengeIcon extends ImageAbstract
+final class ChallengeIcon extends AbstractImage
 {
     public function __invoke(
         Challenge $challenge,
         int $width = null,
-        bool $responsive = true,
-        array $classes = [],
-        bool $onlyUrl = false
+        string $show = ImageDecoration::SHOW_IMAGE
     ): string {
         $icon = $challenge->getIcon();
 
@@ -38,14 +39,18 @@ final class ChallengeIcon extends ImageAbstract
             return '';
         }
 
-        $this->setRouter('image/challenge-icon');
-        $this->addRouterParam('id', $icon->getId());
-        $this->addRouterParam('ext', $icon->getContentType()->getExtension());
-        $this->addRouterParam('last-update', $icon->getDateUpdated()->getTimestamp());
-        $this->setImageId('challenge_icon_' . $icon->getId());
+        $linkParams = [];
+        $linkParams['route'] = 'image/challenge-icon';
+        $linkParams['show'] = $show;
 
-        $this->setWidth($width);
+        $routeParams = [
+            'id' => $icon->getId(),
+            'ext' => $icon->getContentType()->getExtension(),
+            'last-update' => $icon->getDateUpdated()->getTimestamp(),
+        ];
 
-        return $this->createImageUrl($onlyUrl);
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Image::fromArray($linkParams));
     }
 }

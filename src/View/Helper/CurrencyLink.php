@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
  *
- * @category   General
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
  *
- * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -14,56 +14,58 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\Currency;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an currency.
- *
- * @category   General
+ * Class CurrencyLink
+ * @package General\View\Helper
  */
-class CurrencyLink extends LinkAbstract
+final class CurrencyLink extends AbstractLink
 {
     public function __invoke(
         Currency $currency = null,
-        $action = 'view',
-        $show = 'name',
-        $alternativeShow = null
+        string $action = 'view',
+        string $show = 'name'
     ): string {
-        $this->setCurrency($currency);
-        $this->setAction($action);
-        $this->setShow($show);
-        $this->setAlternativeShow($alternativeShow);
-        $this->addRouterParam('id', $this->getCurrency()->getId());
+        $currency ??= new Currency();
 
-        $this->setShowOptions(
-            [
-                'name'    => $this->getCurrency()->getName(),
-                'symbol'  => $this->getCurrency()->getSymbol(),
-                'iso4217' => $this->getCurrency()->getIso4217(),
-            ]
-        );
+        $routeParams = [];
+        $showOptions = [];
+        if (!$currency->isEmpty()) {
+            $routeParams['id'] = $currency->getId();
+            $showOptions['name'] = $currency->getIso4217();
+        }
 
-        return $this->createLink();
-    }
-
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/currency/list');
-                $this->setText(sprintf($this->translate('txt-currency-list')));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/currency/new');
-                $this->setText(sprintf($this->translate('txt-create-new-currency')));
-                break;
-            case 'view':
-                $this->setRouter('zfcadmin/currency/view');
-                $this->setText(sprintf($this->translate('txt-view-currency-%s'), $this->getCurrency()));
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/currency/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-currency')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/currency/edit');
-                $this->setText(sprintf($this->translate('txt-edit-currency-%s'), $this->getCurrency()));
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/currency/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-currency')
+                ];
+                break;
+            case 'view':
+                $linkParams = [
+                    'icon' => 'fa-link',
+                    'route' => 'zfcadmin/currency/view',
+                    'text' => $showOptions[$show] ?? $currency->getIso4217()
+                ];
                 break;
         }
+
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

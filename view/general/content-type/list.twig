@@ -41,7 +41,7 @@
                 {% for contentType in paginator.getCurrentItems() %}
                     <tr>
                         <td>{{ contentType.id }} {{ contentTypeLink(contentType,'edit', 'icon') }}</td>
-                        <td>{{ contentTypeLink(contentType,'view','description') }} </td>
+                        <td>{{ contentTypeLink(contentType,'view','name') }} </td>
                         <td>{{ contentTypeLink(contentType,'view','content-type') }} </td>
                         <td>{{ contentTypeLink(contentType,'view','extension') }} </td>
                     </tr>

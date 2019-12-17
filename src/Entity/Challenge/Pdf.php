@@ -2,15 +2,9 @@
 /**
  * ITEA Office all rights reserved
  *
- * PHP Version 7
- *
- * @category    Invoice
- *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
- *
- * @link        http://github.com/iteaoffice/invoice for the canonical source repository
  */
 declare(strict_types=1);
 
@@ -23,8 +17,6 @@ use General\Entity\AbstractEntity;
 use General\Entity\Challenge;
 
 /**
- * InvoicePdf.
- *
  * @ORM\Table(name="challenge_pdf")
  * @ORM\Entity
  */
@@ -59,144 +51,64 @@ class Pdf extends AbstractEntity
     private $dateEnd;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge", inversedBy="pdf", cascade="persist")
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id", nullable=false)
-     * })
      *
      * @var Challenge
      */
     private $challenge;
 
-    public function __construct()
-    {
-    }
-
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Pdf
-     */
-    public function setId(int $id): Pdf
+    public function setId(?int $id): Pdf
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return resource
-     */
     public function getPdf()
     {
         return $this->pdf;
     }
 
-    /**
-     * @param string $pdf
-     *
-     * @return Pdf
-     */
-    public function setPdf(string $pdf): Pdf
+    public function setPdf($pdf): Pdf
     {
         $this->pdf = $pdf;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateCreated(): DateTime
+    public function getDateCreated(): ?DateTime
     {
         return $this->dateCreated;
     }
 
-    /**
-     * @param DateTime $dateCreated
-     *
-     * @return Pdf
-     */
-    public function setDateCreated(DateTime $dateCreated): Pdf
+    public function setDateCreated(?DateTime $dateCreated): Pdf
     {
         $this->dateCreated = $dateCreated;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateEnd(): DateTime
+    public function getDateEnd(): ?DateTime
     {
         return $this->dateEnd;
     }
 
-    /**
-     * @param DateTime $dateEnd
-     *
-     * @return Pdf
-     */
-    public function setDateEnd(DateTime $dateEnd): Pdf
+    public function setDateEnd(?DateTime $dateEnd): Pdf
     {
         $this->dateEnd = $dateEnd;
-
         return $this;
     }
 
-    /**
-     * @return Challenge
-     */
-    public function getChallenge(): Challenge
+    public function getChallenge(): ?Challenge
     {
         return $this->challenge;
     }
 
-    /**
-     * @param Challenge $challenge
-     *
-     * @return Pdf
-     */
-    public function setChallenge(Challenge $challenge): Pdf
+    public function setChallenge(?Challenge $challenge): Pdf
     {
         $this->challenge = $challenge;
-
         return $this;
     }
 }

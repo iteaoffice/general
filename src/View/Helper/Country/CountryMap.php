@@ -11,28 +11,32 @@
 
 declare(strict_types=1);
 
-namespace General\View\Helper;
+namespace General\View\Helper\Country;
 
 use General\Entity\Country;
 use General\Service\GeneralService;
+use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
 use function array_key_exists;
-use function define;
-use function defined;
 use function is_array;
-use function is_null;
 use function json_encode;
-
-if (!defined('ITEAOFFICE_HOST')) {
-    define('ITEAOFFICE_HOST', 'test');
-}
 
 /**
  * Create a country map based on a list of countries.
  *
  * @category   General
  */
-class CountryMap extends AbstractViewHelper
+final class CountryMap extends AbstractHelper
 {
+    private GeneralService $generalService;
+    private HelperPluginManager $viewHelperManager;
+
+    public function __construct(GeneralService $generalService, HelperPluginManager $viewHelperManager)
+    {
+        $this->generalService = $generalService;
+        $this->viewHelperManager = $viewHelperManager;
+    }
+
     public function __invoke(
         array $countries,
         Country $selectedCountry = null,
@@ -48,31 +52,31 @@ class CountryMap extends AbstractViewHelper
         $height = $options['height'] ?? '400px';
         $tipData = $options['tipData'] ?? null;
         $focusOn = $options['focusOn'] ?? ['x' => 0.5, 'y' => 0.5, 'scale' => 1];
-        $focusOn = is_array($focusOn) ? json_encode($focusOn) : "'" . $focusOn . "'";
+        $focusOn = is_array($focusOn) ? json_encode($focusOn, JSON_THROW_ON_ERROR, 512) : "'" . $focusOn . "'";
         $zoomOnScroll = array_key_exists('zoomOnScroll', $options) ? $options['zoomOnScroll'] : false;
         $zoomOnScroll = $zoomOnScroll ? 'true' : 'false';
 
         $js = $countryList = [];
-        $js[] = "var data = {";
+        $js[] = 'var data = {';
         foreach ($countries as $country) {
             $countryList[] = '"' . $country->getCd() . '": ';
-            $countryList[] = (!is_null($selectedCountry) && ($country->getId() === $selectedCountry->getId())) ? 2
+            $countryList[] = ($selectedCountry !== null && ($country->getId() === $selectedCountry->getId())) ? 2
                 : 1;
-            $countryList[] = ",";
+            $countryList[] = ',';
         }
         $js[] = substr(implode('', $countryList), 0, -1);
         $js[] = "},\n";
         if (is_array($tipData)) {
-            $js[] = "            tipData = " . json_encode($tipData) . ",\n";
+            $js[] = '            tipData = ' . json_encode($tipData, JSON_THROW_ON_ERROR, 512) . ",\n";
         }
-        $js[] = "            clickable = " . $clickable . ",\n";
-        $js[] = "            countries = [";
+        $js[] = '            clickable = ' . $clickable . ",\n";
+        $js[] = '            countries = [';
         $countryList = [];
-        foreach ($this->getGeneralService()->findAll(Country::class) as $country) {
+        foreach ($this->generalService->findAll(Country::class) as $country) {
             $countryList[] = '"' . $country->getCd() . '",';
         }
         $js[] = substr(implode('', $countryList), 0, -1);
-        $js[] = "];";
+        $js[] = '];';
         $data = implode('', $js);
 
 
@@ -123,25 +127,17 @@ $(function () {
         });
     });
 EOT;
-        $this->getHelperPluginManager()->get('headlink')->prependStylesheet(
+        $this->viewHelperManager->get('headlink')->prependStylesheet(
             'assets/' . ITEAOFFICE_HOST
             . '/css/jvectormap.css',
             'screen'
         );
-        $this->getHelperPluginManager()->get('headscript')->appendFile(
+        $this->viewHelperManager->get('headscript')->appendFile(
             'assets/' . ITEAOFFICE_HOST . '/js/jvectormap.js',
             'text/javascript'
         );
-        $this->getHelperPluginManager()->get('headscript')->appendScript($jQuery);
+        $this->viewHelperManager->get('headscript')->appendScript($jQuery);
 
         return '<div id="country-map" style="height: ' . $height . ';"></div>';
-    }
-
-    /**
-     * @return GeneralService
-     */
-    public function getGeneralService()
-    {
-        return $this->getServiceManager()->get(GeneralService::class);
     }
 }

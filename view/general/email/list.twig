@@ -42,7 +42,7 @@
                 {% for emailMessage in paginator.getCurrentItems() %}
                     <tr>
                         <td class="ellipsis"
-                            title="{{ emailMessage.identifier }}">{{ emailMessageLink(emailMessage,'view', 'subject') }}</td>
+                            title="{{ emailMessage.identifier }}">{{ emailMessageLink(emailMessage) }}</td>
                         <td>{{ emailMessage.dateCreated|string_date }}</td>
                         <td>{% if emailMessage.contact %}{{ contactLink(emailMessage.contact,'view-admin','name') }}{% else %}{{ emailMessage.emailAddress }}{% endif %}</td>
                         <td>{% if emailMessage.mailingContact %}{{ mailingLink(emailMessage.mailingContact.mailing,'view','name') }} {{ mailingContactLink(emailMessage.mailingContact,'view','icon') }}{% endif %}</td>

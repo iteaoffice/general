@@ -215,21 +215,6 @@ class Country extends AbstractEntity
         $this->magazineArticle = new Collections\ArrayCollection();
     }
 
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
     public function isItac(): bool
     {
         return null !== $this->itac;

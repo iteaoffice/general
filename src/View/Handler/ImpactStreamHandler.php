@@ -37,22 +37,10 @@ use function sprintf;
  */
 final class ImpactStreamHandler extends AbstractHandler
 {
-    /**
-     * @var ResultService
-     */
-    private $resultService;
-    /**
-     * @var ResultSearchService
-     */
-    private $resultSearchService;
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var ProjectService
-     */
-    private $projectService;
+    private ResultService $resultService;
+    private ResultSearchService $resultSearchService;
+    private GeneralService $generalService;
+    private ProjectService $projectService;
 
     public function __construct(
         Application $application,

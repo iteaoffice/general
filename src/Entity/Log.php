@@ -15,8 +15,6 @@ namespace General\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="log")
  * @ORM\Entity(repositoryClass="General\Repository\Log")
  */
@@ -67,239 +65,124 @@ class Log extends AbstractEntity
     private $errorType;
     /**
      * @ORM\Column(name="trace", type="text",nullable=true)
-     * @var string|null
+     * @var string
      */
     private $trace;
     /**
      * @ORM\Column(name="request_data", type="text",nullable=true)
-     * @var string|null
+     * @var string
      */
     private $requestData;
 
-
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     *
-     * @return void;
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->event;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Log
-     */
-    public function setId(int $id): Log
+    public function setId(?int $id): Log
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getDate(): int
+    public function getDate(): ?int
     {
         return $this->date;
     }
 
-    /**
-     * @param int $date
-     *
-     * @return Log
-     */
-    public function setDate(int $date): Log
+    public function setDate(?int $date): Log
     {
         $this->date = $date;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type;
     }
 
-    /**
-     * @param int $type
-     *
-     * @return Log
-     */
-    public function setType(int $type): Log
+    public function setType(?int $type): Log
     {
         $this->type = $type;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEvent(): string
+    public function getEvent(): ?string
     {
         return $this->event;
     }
 
-    /**
-     * @param string $event
-     *
-     * @return Log
-     */
-    public function setEvent(string $event): Log
+    public function setEvent(?string $event): Log
     {
         $this->event = $event;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return Log
-     */
-    public function setUrl(string $url): Log
+    public function setUrl(?string $url): Log
     {
         $this->url = $url;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getFile(): string
+    public function getFile(): ?string
     {
         return $this->file;
     }
 
-    /**
-     * @param string $file
-     *
-     * @return Log
-     */
-    public function setFile(string $file): Log
+    public function setFile(?string $file): Log
     {
         $this->file = $file;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLine(): int
+    public function getLine(): ?int
     {
         return $this->line;
     }
 
-    /**
-     * @param int $line
-     *
-     * @return Log
-     */
-    public function setLine(int $line): Log
+    public function setLine(?int $line): Log
     {
         $this->line = $line;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getErrorType(): string
+    public function getErrorType(): ?string
     {
         return $this->errorType;
     }
 
-    /**
-     * @param string $errorType
-     *
-     * @return Log
-     */
-    public function setErrorType(string $errorType): Log
+    public function setErrorType(?string $errorType): Log
     {
         $this->errorType = $errorType;
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getTrace(): ?string
     {
         return $this->trace;
     }
 
-    /**
-     * @param null|string $trace
-     *
-     * @return Log
-     */
     public function setTrace(?string $trace): Log
     {
         $this->trace = $trace;
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getRequestData(): ?string
     {
         return $this->requestData;
     }
 
-    /**
-     * @param null|string $requestData
-     *
-     * @return Log
-     */
     public function setRequestData(?string $requestData): Log
     {
         $this->requestData = $requestData;

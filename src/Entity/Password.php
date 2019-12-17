@@ -78,168 +78,74 @@ class Password extends AbstractEntity
      */
     private $password;
 
-
-    /**
-     * Class constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->description;
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Password
-     */
-    public function setId(int $id): Password
+    public function setId($id): Password
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return Password
-     */
-    public function setDescription(string $description): Password
+    public function setDescription(?string $description): Password
     {
         $this->description = $description;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getWebsite(): ?string
     {
         return $this->website;
     }
 
-    /**
-     * @param string $website
-     *
-     * @return Password
-     */
-    public function setWebsite(string $website): Password
+    public function setWebsite(?string $website): Password
     {
         $this->website = $website;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAccount(): ?string
     {
         return $this->account;
     }
 
-    /**
-     * @param string $account
-     *
-     * @return Password
-     */
-    public function setAccount(string $account): Password
+    public function setAccount(?string $account): Password
     {
         $this->account = $account;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return Password
-     */
-    public function setUsername(string $username): Password
+    public function setUsername(?string $username): Password
     {
         $this->username = $username;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return Password
-     */
-    public function setPassword(string $password): Password
+    public function setPassword(?string $password): Password
     {
         $this->password = $password;
-
         return $this;
     }
 }

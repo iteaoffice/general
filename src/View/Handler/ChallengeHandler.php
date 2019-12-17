@@ -29,14 +29,8 @@ use ZfcTwig\View\TwigRenderer;
  */
 final class ChallengeHandler extends AbstractHandler
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var ProjectService
-     */
-    private $projectService;
+    private GeneralService $generalService;
+    private ProjectService $projectService;
 
     public function __construct(
         Application $application,

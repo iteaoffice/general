@@ -64,21 +64,6 @@ class Itac extends AbstractEntity
      */
     private $since;
 
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
     public function getId(): ?int
     {
         return $this->id;

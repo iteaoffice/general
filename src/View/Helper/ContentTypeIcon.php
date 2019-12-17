@@ -22,12 +22,9 @@ use function sprintf;
  *
  * @package General\View\Helper
  */
-final class ContentTypeIcon extends AbstractViewHelper
+final class ContentTypeIcon
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
+    private GeneralService $generalService;
 
     public function __construct(GeneralService $generalService)
     {

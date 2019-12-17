@@ -14,6 +14,7 @@ namespace General\View\Factory;
 
 use Application\Service\AssertionService;
 use BjyAuthorize\Service\Authorize;
+use General\Options\ModuleOptions;
 use General\View\Helper\AbstractLink;
 use Interop\Container\ContainerInterface;
 use Zend\I18n\Translator\TranslatorInterface;
@@ -21,7 +22,7 @@ use Zend\Router\RouteStackInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Class LinkFactory
+ * Class LinkHelperFactory
  * @package General\View\Factory
  */
 final class LinkHelperFactory implements FactoryInterface
@@ -33,7 +34,7 @@ final class LinkHelperFactory implements FactoryInterface
             $container->get(Authorize::class),
             $container->get(RouteStackInterface::class),
             $container->get(TranslatorInterface::class),
-            $container->get('config')
+            $container->get(ModuleOptions::class)
         ];
 
         return new $requestedName(...$dependencies);

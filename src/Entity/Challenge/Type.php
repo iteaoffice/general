@@ -68,47 +68,12 @@ class Type extends AbstractEntity
      * @var Challenge[]|Collections\ArrayCollection
      */
     private $challenge;
-
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->challenge = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
 
     /**
      * Force the Type to a string.

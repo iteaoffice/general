@@ -1,84 +1,64 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
  *
- * @category   General
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
  *
- * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
 
 namespace General\View\Helper;
 
-use General\Entity\Currency;
 use General\Entity\ExchangeRate;
-use InvalidArgumentException;
+use General\ValueObject\Link\Link;
 
 /**
  * Class ExchangeRateLink
- *
  * @package General\View\Helper
  */
-class ExchangeRateLink extends LinkAbstract
+final class ExchangeRateLink extends AbstractLink
 {
-    /**
-     * @param ExchangeRate|null $exchangeRate
-     * @param string            $action
-     * @param string            $show
-     * @param null              $alternativeShow
-     * @param Currency|null     $currency
-     *
-     * @return string
-     */
     public function __invoke(
         ExchangeRate $exchangeRate = null,
-        $action = 'view',
-        $show = 'name',
-        Currency $currency = null
+        string $action = 'view',
+        string $show = 'name'
     ): string {
-        $this->setCurrency($currency);
-        $this->setExchangeRate($exchangeRate);
-        $this->setAction($action);
-        $this->setShow($show);
+        $exchangeRate ??= new ExchangeRate();
 
-        $this->addRouterParam('id', $this->getExchangeRate()->getId());
-        $this->addRouterParam('currencyId', $this->getCurrency()->getId());
+        $routeParams = [];
+        $showOptions = [];
+        if (!$exchangeRate->isEmpty()) {
+            $routeParams['id'] = $exchangeRate->getId();
+            $showOptions['name'] = $exchangeRate->getRate();
+        }
 
-        return $this->createLink();
-    }
-
-    /**
-     * @return string|void
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/currency/exchange-rate/new');
-                $this->setText(
-                    sprintf($this->translate('txt-add-new-exchange-rate-for-%s'), $this->getCurrency()->getName())
-                );
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/currency/exchange-rate/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-exchangeRate')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/currency/exchange-rate/edit');
-                $this->setText(
-                    sprintf(
-                        $this->translate('txt-exchange-rate-for-currency-%s'),
-                        $this->getExchangeRate()->getCurrency()
-                    )
-                );
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/currency/exchange-rate/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-exchange-rate')
+                ];
                 break;
-            default:
-                throw new InvalidArgumentException(
-                    sprintf(
-                        "%s is an incorrect action for %s",
-                        $this->getAction(),
-                        __CLASS__
-                    )
-                );
         }
+
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Link::fromArray($linkParams));
     }
 }
