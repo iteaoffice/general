@@ -26,6 +26,9 @@ class LinkDecorationTest extends TestCase
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_TEXT, $linkText);
         $this->assertEquals('<a href="%s" title="test">test</a>', $linkDecoration->parse());
 
+        $linkDecoration = new LinkDecoration('something', $linkText);
+        $this->assertEquals('<a href="%s" title="test">test</a>', $linkDecoration->parse());
+
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_ICON, $linkText, null, 'fa-plus');
         $this->assertEquals(
             '<a href="%s" title="test"><i class="fa fa-plus fa-fw"></i></a>',

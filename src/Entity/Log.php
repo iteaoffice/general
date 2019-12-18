@@ -30,7 +30,7 @@ class Log extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="date", type="string",nullable=false)
-     * @var int
+     * @var string
      */
     private $date;
     /**
@@ -90,12 +90,12 @@ class Log extends AbstractEntity
         return $this;
     }
 
-    public function getDate(): ?int
+    public function getDate(): ?string
     {
         return $this->date;
     }
 
-    public function setDate(?int $date): Log
+    public function setDate(?string $date): Log
     {
         $this->date = $date;
         return $this;
