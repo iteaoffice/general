@@ -19,8 +19,7 @@ final class LinkText
         ?string $text = null,
         ?string $title = null,
         ?int $maxLength = null
-    )
-    {
+    ) {
         $this->text = $text ?? '';
         $this->title = $title ?? $this->text;
         if (null !== $maxLength) {

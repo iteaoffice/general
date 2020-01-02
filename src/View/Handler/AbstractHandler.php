@@ -50,8 +50,7 @@ abstract class AbstractHandler extends AbstractHelper
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->helperPluginManager = $helperPluginManager;
         $this->renderer = $renderer;
         $this->authenticationService = $authenticationService;

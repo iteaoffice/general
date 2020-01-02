@@ -14,6 +14,7 @@ final class LinkDecoration
     public const SHOW_ICON_AND_TEXT = 'icon-and-text';
     public const SHOW_BUTTON = 'button';
     public const SHOW_DANGER_BUTTON = 'danger-button';
+    public const SHOW_HELP_BUTTON = 'help-button';
     public const SHOW_RAW = 'raw';
     public const SHOW_SOCIAL = 'social'; //Legacy constant;
 
@@ -76,6 +77,7 @@ final class LinkDecoration
             case self::SHOW_ICON_AND_TEXT:
             case self::SHOW_BUTTON:
             case self::SHOW_DANGER_BUTTON:
+            case self::SHOW_HELP_BUTTON:
                 if ($this->icon !== null) {
                     $content[] = sprintf(self::$iconTemplate, $this->icon);
                 }
@@ -88,6 +90,9 @@ final class LinkDecoration
                 }
                 if ($this->show === self::SHOW_DANGER_BUTTON) {
                     $classes = ['btn', 'btn-danger'];
+                }
+                if ($this->show === self::SHOW_HELP_BUTTON) {
+                    $classes = ['btn', 'btn-info'];
                 }
                 break;
             case self::SHOW_TEXT:

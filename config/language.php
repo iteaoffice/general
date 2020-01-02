@@ -1,5 +1,5 @@
 <?php
-_("txt-country');
+_('txt-country');
 _('txt-since');
 _('txt-vat-code');
 _('txt-percentage');
@@ -116,4 +116,4 @@ _('txt-web-info-content-help-block');
 _('txt-web-info-sender-label');
 _('txt-web-info-sender-help-block');
 _('txt-web-info-template-label');
-_('txt-web-info-template-help-block");
+_('txt-web-info-template-help-block');
