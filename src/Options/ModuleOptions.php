@@ -18,7 +18,7 @@ use Zend\Stdlib\AbstractOptions;
  * Class ModuleOptions
  * @package General\Options
  */
-class ModuleOptions extends AbstractOptions implements ImageOptionsInterface
+class ModuleOptions extends AbstractOptions implements ImageOptionsInterface, ServerOptionsInterface
 {
     protected string $thumborServer = 'https://image.itea3.org';
     protected string $thumborSecret = 'mKiWlumnpbX1YWpW6lbm';

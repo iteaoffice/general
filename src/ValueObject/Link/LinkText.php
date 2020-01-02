@@ -18,13 +18,23 @@ final class LinkText
     public function __construct(
         ?string $text = null,
         ?string $title = null,
-        ?int    $maxLength = null
-    ) {
-        $this->text      = $text ?? '';
-        $this->title     = $title ?? $this->text;
+        ?int $maxLength = null
+    )
+    {
+        $this->text = $text ?? '';
+        $this->title = $title ?? $this->text;
         if (null !== $maxLength) {
             $this->maxLength = $maxLength;
         }
+    }
+
+    public static function fromArray(array $params): LinkText
+    {
+        return new self(
+            $params['text'] ?? null,
+            $params['title'] ?? null,
+            $params['maxLength'] ?? null
+        );
     }
 
     public function getText(): string
@@ -42,14 +52,5 @@ final class LinkText
         return (mb_strlen($this->text) > $this->maxLength)
             ? trim(mb_substr($this->text, 0, $this->maxLength)) . '&hellip;'
             : $this->text;
-    }
-
-    public static function fromArray(array $params): LinkText
-    {
-        return new self(
-            ($params['text'] ?? null),
-            ($params['title'] ?? null),
-            ($params['maxLength'] ?? null)
-        );
     }
 }

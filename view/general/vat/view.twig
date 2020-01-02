@@ -15,7 +15,7 @@
     <dd>{{ vat.dateStart|string_date }}</dd>
 
 
-    <dt>{{ translate('txt-vat-types') }}</dt>
+    <dt>{{ translate("txt-vat-types") }}</dt>
     {% for vatType in vat.type %}
         <dd>{{ vatTypeLink(vatType,'view','name') }}</dd>
     {% else %}

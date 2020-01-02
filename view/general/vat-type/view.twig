@@ -14,7 +14,7 @@
     <dt>{{ translate("txt-vat-type-vat") }}</dt>
     <dd>{{ vatLink(vatType.vat,'view','name') }}</dd>
 
-    <dt>{{ translate('txt-invoice-dimension') }}</dt>
+    <dt>{{ translate("txt-invoice-dimension") }}</dt>
     {% for dimension in vatType.dimension %}
         <dd>{{ dimensionLink(dimension,'view','name') }}</dd>
     {% else %}

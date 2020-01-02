@@ -24,27 +24,13 @@ use General\Entity\AbstractEntity;
  */
 abstract class AbstractService
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    protected EntityManager $entityManager;
 
-    /**
-     * AbstractService constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param string $entity
-     * @param array  $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(string $entity, array $filter): QueryBuilder
     {
         return $this->entityManager->getRepository($entity)->findFiltered(
@@ -53,22 +39,11 @@ abstract class AbstractService
         );
     }
 
-    /**
-     * @param string $entity
-     *
-     * @return array|AbstractEntity[]
-     */
     public function findAll(string $entity): array
     {
         return $this->entityManager->getRepository($entity)->findAll();
     }
 
-    /**
-     * @param string $entity
-     * @param int    $id
-     *
-     * @return null|AbstractEntity
-     */
     public function find(string $entity, int $id): ?AbstractEntity
     {
         return $this->entityManager->getRepository($entity)->find($id);

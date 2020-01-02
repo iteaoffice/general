@@ -25,7 +25,7 @@ use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\HeadMeta;
 use Zend\View\Helper\HeadStyle;
 use Zend\View\Helper\HeadTitle;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
+use Zend\View\Helper\Placeholder\Container;
 use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
@@ -37,19 +37,10 @@ use ZfcTwig\View\TwigRenderer;
 abstract class AbstractHandler extends AbstractHelper
 {
     protected HelperPluginManager $helperPluginManager;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch;
+    protected RouteMatch $routeMatch;
     protected TwigRenderer $renderer;
-    /**
-     * @var Response
-     */
-    protected $response;
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Response $response;
+    protected Request $request;
     protected AuthenticationService $authenticationService;
     protected TranslatorInterface $translator;
 
@@ -59,7 +50,8 @@ abstract class AbstractHandler extends AbstractHelper
         TwigRenderer $renderer,
         AuthenticationService $authenticationService,
         TranslatorInterface $translator
-    ) {
+    )
+    {
         $this->helperPluginManager = $helperPluginManager;
         $this->renderer = $renderer;
         $this->authenticationService = $authenticationService;
@@ -74,11 +66,11 @@ abstract class AbstractHandler extends AbstractHelper
     public function extractContentParam(Content $content): array
     {
         $params = [
-            'id'     => null,
+            'id' => null,
             'docRef' => null,
-            'year'   => null,
-            'page'   => 1,
-            'limit'  => null,
+            'year' => null,
+            'page' => 1,
+            'limit' => null,
         ];
 
         foreach ($content->getContentParam() as $contentParam) {
@@ -113,6 +105,9 @@ abstract class AbstractHandler extends AbstractHelper
         return $this->routeMatch->getParam('routeMatch');
     }
 
+    /**
+     * @return HeadTitle|Container
+     */
     public function getHeadTitle(): HeadTitle
     {
         return $this->helperPluginManager->get('headTitle');

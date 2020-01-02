@@ -13,25 +13,25 @@
     <dd>{{ emailMessage.identifier }}</dd>
 
     {% if emailMessage.contact %}
-        <dt>{{ translate('txt-contact') }}</dt>
+        <dt>{{ translate("txt-contact") }}</dt>
         <dd>{{ contactLink(emailMessage.contact,'view-admin','name') }}</dd>
     {% endif %}
 
     {% if emailMessage.emailAddress %}
-        <dt>{{ translate('txt-email-address') }}</dt>
+        <dt>{{ translate("txt-email-address") }}</dt>
         <dd>{{ emailMessage.emailAddress }}</dd>
     {% endif %}
     {% if emailMessage.cc %}
-        <dt>{{ translate('txt-cc') }}</dt>
+        <dt>{{ translate("txt-cc") }}</dt>
         <dd>{{ emailMessage.cc }}</dd>
     {% endif %}
     {% if emailMessage.bcc %}
-        <dt>{{ translate('txt-bcc') }}</dt>
+        <dt>{{ translate("txt-bcc") }}</dt>
         <dd>{{ emailMessage.bcc }}</dd>
     {% endif %}
 
     {% if emailMessage.mailingContact %}
-        <dt>{{ translate('txt-mailing') }}</dt>
+        <dt>{{ translate("txt-mailing") }}</dt>
         <dd>{{ mailingLink(emailMessage.mailingContact.mailing,'view','name') }} {{ mailingContactLink(emailMessage.mailingContact,'view','icon') }}</dd>
     {% endif %}
 

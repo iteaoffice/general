@@ -21,13 +21,13 @@
     <dd>{% if country.eureka %}YES{% else %}NO{% endif %}</dd>
     <dt>{{ translate("txt-itac") }}</dt>
     <dd>{% if country.itac %}YES{% else %}NO{% endif %}</dd>
-    <dt>{{ translate('txt-vat') }}</dt>
+    <dt>{{ translate("txt-vat") }}</dt>
     {% for vat in country.vat %}
         <dd>{{ vat }}</dd>
     {% else %}
         <dd>{{ translate("txt-no-vat-known") }}</dd>
     {% endfor %}
-    <dt>{{ translate('txt-funder') }}</dt>
+    <dt>{{ translate("txt-funder") }}</dt>
     {% for funder in country.funder %}
         <dd>{{ contactLink(funder.contact,'view-admin','name') }}</dd>
     {% else %}
