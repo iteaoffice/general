@@ -13,10 +13,10 @@ final class LinkDecoration
     public const SHOW_ICON = 'icon';
     public const SHOW_ICON_AND_TEXT = 'icon-and-text';
     public const SHOW_BUTTON = 'button';
+    public const SHOW_BUTTON_SMALL = 'button-small';
     public const SHOW_DANGER_BUTTON = 'danger-button';
     public const SHOW_HELP_BUTTON = 'help-button';
     public const SHOW_RAW = 'raw';
-    public const SHOW_SOCIAL = 'social'; //Legacy constant;
 
     private const ACTION_NEW = 'new';
     private const ACTION_EDIT = 'edit';
@@ -61,11 +61,6 @@ final class LinkDecoration
             return '%s';
         }
 
-        /** @todo legacy statement we keep it as long as we have too many 'social' links */
-        if ($this->show === self::SHOW_SOCIAL) {
-            return '%s';
-        }
-
         $content = [];
         $classes = [];
         switch ($this->show) {
@@ -76,13 +71,14 @@ final class LinkDecoration
                 break;
             case self::SHOW_ICON_AND_TEXT:
             case self::SHOW_BUTTON:
+            case self::SHOW_BUTTON_SMALL:
             case self::SHOW_DANGER_BUTTON:
             case self::SHOW_HELP_BUTTON:
                 if ($this->icon !== null) {
                     $content[] = sprintf(self::$iconTemplate, $this->icon);
                 }
                 $text = $this->linkText->parse();
-                if (!empty($text)) {
+                if (! empty($text)) {
                     $content[] = sprintf(' %s', $text);
                 }
                 if ($this->show === self::SHOW_BUTTON) {
@@ -93,6 +89,10 @@ final class LinkDecoration
                 }
                 if ($this->show === self::SHOW_HELP_BUTTON) {
                     $classes = ['btn', 'btn-info'];
+                }
+
+                if ($this->show === self::SHOW_BUTTON_SMALL) {
+                    $classes = ['btn', 'btn-primary', 'btn-sm'];
                 }
                 break;
             case self::SHOW_TEXT:

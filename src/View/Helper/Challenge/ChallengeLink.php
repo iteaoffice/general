@@ -33,7 +33,7 @@ final class ChallengeLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$challenge->isEmpty()) {
+        if (! $challenge->isEmpty()) {
             $routeParams['id'] = $challenge->getId();
             $routeParams['docRef'] = $challenge->getDocRef();
             $showOptions['name'] = $challenge->getChallenge();

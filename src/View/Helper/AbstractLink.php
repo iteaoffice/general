@@ -8,8 +8,8 @@ use Application\Service\AssertionService;
 use BjyAuthorize\Service\Authorize;
 use General\Options\ModuleOptions;
 use General\ValueObject\Link\Link;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Router\RouteStackInterface;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Router\RouteStackInterface;
 
 abstract class AbstractLink
 {

@@ -14,18 +14,19 @@ namespace General\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Laminas\Form\Annotation;
+use Laminas\Math\Rand;
 use Mailing\Entity\Contact;
-use Zend\Form\Annotation;
-use Zend\Math\Rand;
 
 /**
  * Entity for the General.
  *
  * @ORM\Table(name="email_message")
  * @ORM\Entity(repositoryClass="General\Repository\EmailMessage")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message")
  */
 class EmailMessage extends AbstractEntity
@@ -42,7 +43,7 @@ class EmailMessage extends AbstractEntity
     /**
      * @ORM\Column(name="identifier",type="string",nullable=false, unique=true)
      *
-     * @var int
+     * @var string
      */
     private $identifier;
     /**
@@ -144,12 +145,12 @@ class EmailMessage extends AbstractEntity
         return $this;
     }
 
-    public function getIdentifier(): ?int
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
 
-    public function setIdentifier(?int $identifier): EmailMessage
+    public function setIdentifier(?string $identifier): EmailMessage
     {
         $this->identifier = $identifier;
         return $this;
@@ -254,12 +255,12 @@ class EmailMessage extends AbstractEntity
         return $this;
     }
 
-    public function getEvent(): ?ArrayCollection
+    public function getEvent(): ?Collection
     {
         return $this->event;
     }
 
-    public function setEvent(?ArrayCollection $event): EmailMessage
+    public function setEvent(?Collection $event): EmailMessage
     {
         $this->event = $event;
         return $this;

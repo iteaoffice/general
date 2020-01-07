@@ -15,11 +15,11 @@ use Content\Entity\Content;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
-use Zend\Authentication\AuthenticationService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -74,7 +74,7 @@ final class ChallengeHandler extends AbstractHandler
                 $this->getHeadTitle()->append($this->translate('txt-challenge'));
                 $this->getHeadTitle()->append($challenge->getChallenge());
 
-                if (!empty($challenge->getCss())) {
+                if (! empty($challenge->getCss())) {
                     $this->getHeadStyle()->appendStyle($challenge->getCss());
                 }
 

@@ -31,7 +31,7 @@ final class CurrencyLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$currency->isEmpty()) {
+        if (! $currency->isEmpty()) {
             $routeParams['id'] = $currency->getId();
             $showOptions['name'] = $currency->getIso4217();
         }

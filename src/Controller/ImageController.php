@@ -19,10 +19,11 @@ use General\Controller\Plugin\GetFilter;
 use General\Entity\Challenge\Icon;
 use General\Entity\Challenge\Image;
 use General\Entity\Country;
+use General\Options\ModuleOptions;
 use General\Service\GeneralService;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 /**
  * The index of the system.
@@ -33,11 +34,37 @@ use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
  */
 final class ImageController extends AbstractActionController
 {
-    protected $generalService;
+    private GeneralService $generalService;
+    private ModuleOptions $options;
 
-    public function __construct(GeneralService $generalService)
+    public function __construct(GeneralService $generalService, ModuleOptions $options)
     {
         $this->generalService = $generalService;
+        $this->options = $options;
+    }
+
+    public function assetAction(): Response
+    {
+        /** @var Response $response */
+        $response = $this->getResponse();
+
+        $requestedFile = $this->options->getAssets() .
+            DIRECTORY_SEPARATOR .
+            $this->params('name');
+
+        if (file_exists($requestedFile)) {
+            $response->getHeaders()
+                ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+                ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+                ->addHeaderLine('Pragma: public')
+                ->addHeaderLine('Content-Type: image/png');
+
+            $response->setContent(file_get_contents($requestedFile));
+
+            return $response;
+        }
+
+        return $response;
     }
 
     public function flagAction(): Response

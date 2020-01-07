@@ -35,6 +35,7 @@ final class CountryFlag extends AbstractImage
         $linkParams = [];
         $linkParams['route'] = 'image/country-flag';
         $linkParams['show'] = $show;
+        $linkParams['width'] = $width;
 
         $routeParams = [
             'id' => $country->getId(),

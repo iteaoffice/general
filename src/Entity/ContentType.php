@@ -32,7 +32,7 @@ use Project\Entity\Poster\Poster;
 use Project\Entity\Report\Item;
 use Project\Entity\Result\Result;
 use Publication\Entity\Publication;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="contenttype")
@@ -58,7 +58,7 @@ class ContentType extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="description", type="string", unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-description-label","help-block":"txt-content-type-description-help-block"})
      *
      * @var string
@@ -66,7 +66,7 @@ class ContentType extends AbstractEntity
     private $description;
     /**
      * @ORM\Column(name="contenttype", type="string", unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-label","help-block":"txt-content-type-help-block"})
      *
      * @var string
@@ -74,7 +74,7 @@ class ContentType extends AbstractEntity
     private $contentType;
     /**
      * @ORM\Column(name="extension", type="string", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-content-type-extension-label","help-block":"txt-content-type-extension-help-block"})
      *
      * @var string

@@ -41,7 +41,7 @@ class Currency extends EntityRepository
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'name';
         }
 
@@ -69,7 +69,7 @@ class Currency extends EntityRepository
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_currency.name', ':like'));
             $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }

@@ -42,7 +42,7 @@ class CountrySearchService extends AbstractSearchService
         $this->setQuery($this->getSolrClient()->createSelect());
         $this->getQuery()->setQuery(static::parseQuery($searchTerm, $searchFields));
 
-        $hasTerm = !in_array($searchTerm, ['*', ''], true);
+        $hasTerm = ! in_array($searchTerm, ['*', ''], true);
         $hasSort = ($order !== '');
 
         if ($hasSort) {

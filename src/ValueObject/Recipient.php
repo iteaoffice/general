@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace General\ValueObject;
 
-use Zend\Validator\EmailAddress;
+use Laminas\Validator\EmailAddress;
 use function count;
 use function sprintf;
 
@@ -33,7 +33,7 @@ final class Recipient
 
         $emailValidator = new EmailAddress();
 
-        if (!$emailValidator->isValid($this->email)) {
+        if (! $emailValidator->isValid($this->email)) {
             $invalidReasons[] = sprintf('Email address (%s) is invalid', $this->email);
         }
 

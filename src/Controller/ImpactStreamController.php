@@ -20,8 +20,8 @@ use Project\Service\ResultService;
 use Search\Paginator\Adapter\SolariumPaginator;
 use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Paginator\Paginator;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Paginator\Paginator;
 use function count;
 use function explode;
 use function sprintf;
@@ -33,26 +33,11 @@ use function sprintf;
  */
 final class ImpactStreamController extends AbstractActionController
 {
-    /**
-     * @var array
-     */
-    private $challenge = [];
-    /**
-     * @var array
-     */
-    private $result = [];
-    /**
-     * @var ResultService
-     */
-    private $resultService;
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var ResultSearchService
-     */
-    private $resultSearchService;
+    private array $challenge = [];
+    private array $result = [];
+    private ResultService $resultService;
+    private GeneralService $generalService;
+    private ResultSearchService $resultSearchService;
 
     public function __construct(
         ResultService $resultService,
@@ -85,7 +70,7 @@ final class ImpactStreamController extends AbstractActionController
     {
         /** @var Challenge $challenge */
         foreach ($this->generalService->parseChallengesByResult($result) as $challenge) {
-            if (!array_key_exists(
+            if (! array_key_exists(
                 'challenge_' . $challenge->getSequence(),
                 $this->challenge
             )
@@ -104,7 +89,7 @@ final class ImpactStreamController extends AbstractActionController
 
         $ordering = sprintf(
             'result_%s_%s',
-            !$result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()
+            ! $result->getProject()->getProjectChallenge()->isEmpty() ? $result->getProject()->getProjectChallenge()
                 ->first()->getChallenge()->getSequence() : 1000,
             $result->getResult()
         );

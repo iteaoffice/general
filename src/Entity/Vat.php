@@ -19,14 +19,14 @@ use Event\Entity\DeskCosts;
 use Event\Entity\Meeting\OptionCost;
 use Invoice\Entity\Row;
 use Invoice\Entity\Vat\Dimension;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * Entity for the General.
  *
  * @ORM\Table(name="vat")
  * @ORM\Entity(repositoryClass="General\Repository\Vat")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("vat")
  *
  * @category General
@@ -45,7 +45,7 @@ class Vat extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="vat_code",type="string",nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-code"})
      *
      * @var string
@@ -53,7 +53,7 @@ class Vat extends AbstractEntity
     private $code;
     /**
      * @ORM\Column(name="vat_percentage",type="decimal", precision=10, scale=2,nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-percentage"})
      *
      * @var float
@@ -61,7 +61,7 @@ class Vat extends AbstractEntity
     private $percentage;
     /**
      * @ORM\Column(name="vat_date_start",type="datetime",nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\DateTime")
+     * @Annotation\Type("\Laminas\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-date-start"})
      *
      * @var DateTime

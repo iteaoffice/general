@@ -18,7 +18,7 @@ namespace General\Factory;
 use Doctrine\ORM\EntityManager;
 use General\Service\FormService;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class FormServiceFactory

@@ -14,7 +14,7 @@ namespace General\Navigation\Invokable;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
 use General\Entity\Challenge;
-use Zend\Navigation\Page\Mvc;
+use Laminas\Navigation\Page\Mvc;
 
 /**
  * Class ChallengeTypeLabel

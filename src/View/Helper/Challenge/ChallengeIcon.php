@@ -41,6 +41,7 @@ final class ChallengeIcon extends AbstractImage
 
         $linkParams = [];
         $linkParams['route'] = 'image/challenge-icon';
+        $linkParams['width'] = $width;
         $linkParams['show'] = $show;
 
         $routeParams = [

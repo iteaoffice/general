@@ -31,7 +31,7 @@ class Log extends EntityRepository
         $queryBuilder->select('general_entity_log');
         $queryBuilder->from(Entity\Log::class, 'general_entity_log');
 
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_log.event', ':like'),

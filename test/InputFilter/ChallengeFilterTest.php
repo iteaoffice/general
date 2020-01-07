@@ -16,7 +16,7 @@ use General\Entity;
 use General\InputFilter\ChallengeFilter;
 use General\Repository;
 use Testing\Util\AbstractServiceTest;
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class GeneralTest

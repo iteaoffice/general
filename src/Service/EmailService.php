@@ -1,16 +1,8 @@
 <?php
 /**
  * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    General
- *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
- * @license     https://itea3.org/license.txt proprietary
- *
- * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 declare(strict_types=1);
 
@@ -24,8 +16,12 @@ use Deeplink\Service\DeeplinkService;
 use Exception;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
+use General\Options\ModuleOptions;
 use General\ValueObject;
 use InvalidArgumentException;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\View\Helper\Url;
+use Laminas\View\HelperPluginManager;
 use Mailing\Entity\Mailing;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
@@ -34,10 +30,6 @@ use Mailjet\Resources;
 use Publication\Entity\Publication;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
-
-use Zend\Authentication\AuthenticationService;
-use Zend\View\Helper\Url;
-use Zend\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 use function array_merge;
 use function array_unique;
@@ -69,6 +61,7 @@ class EmailService
     private AuthenticationService $authenticationService;
     private TwigRenderer $renderer;
     private HelperPluginManager $viewHelperManager;
+    private ModuleOptions $moduleOptions;
     private Client $client;
     private Template $template;
     private ? \Mailing\Entity\Contact $mailingContact = null;
@@ -99,15 +92,16 @@ class EmailService
         DeeplinkService $deeplinkService,
         AuthenticationService $authenticationService,
         TwigRenderer $renderer,
-        HelperPluginManager $viewHelperManager
+        HelperPluginManager $viewHelperManager,
+        ModuleOptions $moduleOptions
     ) {
-        $this->config = $config;
         $this->contactService = $contactService;
         $this->generalService = $generalService;
         $this->deeplinkService = $deeplinkService;
         $this->authenticationService = $authenticationService;
         $this->renderer = $renderer;
         $this->viewHelperManager = $viewHelperManager;
+        $this->moduleOptions = $moduleOptions;
 
         $this->client = new Client(
             $config['email']['relay']['username'] ?? '',
@@ -287,7 +281,7 @@ class EmailService
             $key
         );
 
-        $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink, 'link');
+        $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink);
     }
 
     public function setUnsubscribe(string $unsubscribe): void
@@ -328,7 +322,7 @@ class EmailService
             $this->textPart,
             $this->htmlPart,
             $emailMessage->getIdentifier(),
-            $this->config['deeplink']['serverUrl'] . $link,
+            $this->moduleOptions->getServerUrl() . $link,
             'enabled',
             'enabled',
             $this->emailCampaign,
@@ -342,7 +336,7 @@ class EmailService
 
         $response = $this->client->post(Resources::$Email, ['body' => $body->toArray()]);
 
-        if (!$response->success()) {
+        if (! $response->success()) {
             //Update the email message
             $emailMessage->setLatestEvent('not_sent');
             $emailMessage->setDateLatestEvent(new DateTime());
@@ -466,7 +460,7 @@ class EmailService
 
         foreach ($this->to as $singleTo) {
             $toValue = $singleTo->toArray();
-            if (!defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
+            if (! defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
                 $toValue['Email'] = 'info@jield.nl';
             }
             $to[] = $toValue;
@@ -553,7 +547,7 @@ class EmailService
 
     public function setTemplateVariable(string $variable, $value): void
     {
-        if (!is_bool($value) && !$value instanceof DateTime) {
+        if (! is_bool($value) && ! $value instanceof DateTime) {
             $value = (string)$value;
         }
 

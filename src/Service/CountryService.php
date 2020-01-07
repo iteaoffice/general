@@ -175,12 +175,12 @@ class CountryService extends AbstractService implements SearchUpdateInterface
 
         foreach ($country->getOrganisation() as $organisation) {
             foreach ($organisation->getAffiliation() as $affiliation) {
-                if (!$affiliation->isActive()) {
+                if (! $affiliation->isActive()) {
                     continue;
                 }
 
                 $project = $affiliation->getProject();
-                if (!$this->projectService->onWebsite($project)) {
+                if (! $this->projectService->onWebsite($project)) {
                     continue;
                 }
 

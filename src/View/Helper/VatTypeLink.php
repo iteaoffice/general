@@ -31,7 +31,7 @@ final class VatTypeLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$vatType->isEmpty()) {
+        if (! $vatType->isEmpty()) {
             $routeParams['id'] = $vatType->getId();
             $showOptions['name'] = $vatType->getType();
         }

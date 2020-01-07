@@ -9,7 +9,7 @@ use General\ValueObject\Link\LinkRoute;
 use General\ValueObject\Link\LinkText;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 /**
  * Class LinkTest

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace General\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class ChallengeFilter

@@ -20,13 +20,13 @@ use General\Entity\Challenge;
 use General\Form\ChallengeFilter;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\Validator\File\MimeType;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\Validator\File\MimeType;
+use Laminas\View\Model\ViewModel;
 
 /**
  * @method GetFilter getFilter()
@@ -110,7 +110,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['icon']['tmp_name'])) {
+                if (! empty($fileData['icon']['tmp_name'])) {
                     $icon = $challenge->getIcon();
                     if (null === $icon) {
                         $icon = new Challenge\Icon();
@@ -133,7 +133,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['image']['tmp_name'])) {
+                if (! empty($fileData['image']['tmp_name'])) {
                     $image = $challenge->getImage();
                     if (null === $image) {
                         $image = new Challenge\Image();
@@ -157,7 +157,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['pdf']['tmp_name'])) {
+                if (! empty($fileData['pdf']['tmp_name'])) {
                     $pdf = $challenge->getPdf();
                     if (null === $pdf) {
                         $pdf = new Challenge\Pdf();
@@ -233,7 +233,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['icon']['tmp_name'])) {
+                if (! empty($fileData['icon']['tmp_name'])) {
                     if (null === $icon) {
                         $icon = new Challenge\Icon();
                     }
@@ -260,7 +260,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['image']['tmp_name'])) {
+                if (! empty($fileData['image']['tmp_name'])) {
                     if (null === $image) {
                         $image = new Challenge\Image();
                     }
@@ -288,7 +288,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['pdf']['tmp_name'])) {
+                if (! empty($fileData['pdf']['tmp_name'])) {
                     if (null === $pdf) {
                         $pdf = new Challenge\Pdf();
                     }

@@ -31,7 +31,7 @@ final class ExchangeRateLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$exchangeRate->isEmpty()) {
+        if (! $exchangeRate->isEmpty()) {
             $routeParams['id'] = $exchangeRate->getId();
             $showOptions['name'] = $exchangeRate->getRate();
         }
@@ -42,7 +42,7 @@ final class ExchangeRateLink extends AbstractLink
                     'icon' => 'fa-plus',
                     'route' => 'zfcadmin/currency/exchange-rate/new',
                     'text' => $showOptions[$show]
-                        ?? $this->translator->translate('txt-new-exchangeRate')
+                        ?? $this->translator->translate('txt-new-exchange-rate')
                 ];
                 break;
             case 'edit':

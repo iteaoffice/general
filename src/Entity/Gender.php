@@ -15,14 +15,14 @@ namespace General\Entity;
 use Contact\Entity\Contact;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * Entity for the General.
  *
  * @ORM\Table(name="gender")
  * @ORM\Entity(repositoryClass="General\Repository\Gender")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("general_gender")
  *
  * @category General
@@ -37,14 +37,14 @@ class Gender extends AbstractEntity
      * @ORM\Column(name="gender_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Type("\Zend\Form\Element\Hidden")
+     * @Annotation\Type("\Laminas\Form\Element\Hidden")
      *
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="gender",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-gender"})
      *
      * @var string
@@ -52,7 +52,7 @@ class Gender extends AbstractEntity
     private $name;
     /**
      * @ORM\Column(name="attention",type="string")
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-attention"})
      *
      * @var string
@@ -60,7 +60,7 @@ class Gender extends AbstractEntity
     private $attention;
     /**
      * @ORM\Column(name="salutation",type="string")
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-salutation"})
      *
      * @var string

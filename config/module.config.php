@@ -22,8 +22,8 @@ use General\Navigation;
 use General\Options;
 use General\Service;
 use General\View;
-use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
-use Zend\Stdlib;
+use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
+use Laminas\Stdlib;
 
 $config = [
     'controllers' => [

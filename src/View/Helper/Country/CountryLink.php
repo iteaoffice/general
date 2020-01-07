@@ -33,10 +33,11 @@ final class CountryLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$country->isEmpty()) {
+        if (! $country->isEmpty()) {
             $routeParams['id'] = $country->getId();
+            $routeParams['docRef'] = $country->getDocRef();
             $showOptions['name'] = $country->getCountry();
-            $showOptions['iso3'] = $country->getId();
+            $showOptions['iso3'] = $country->getIso3();
         }
 
         switch ($action) {
@@ -63,7 +64,7 @@ final class CountryLink extends AbstractLink
                     'text' => $showOptions[$show] ?? $country->getCountry()
                 ];
                 break;
-            case 'view-country':
+            case 'view':
                 $linkParams = [
                     'icon' => 'fa-globe',
                     'route' => Route::parseRouteName(Route::DEFAULT_ROUTE_COUNTRY),

@@ -41,6 +41,7 @@ final class ChallengeImage extends AbstractImage
         $linkParams = [];
         $linkParams['route'] = 'image/challenge-image';
         $linkParams['show'] = $show;
+        $linkParams['width'] = $width;
 
         $routeParams = [
             'id' => $image->getId(),

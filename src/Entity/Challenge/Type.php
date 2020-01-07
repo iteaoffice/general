@@ -16,14 +16,14 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use General\Entity\AbstractEntity;
 use General\Entity\Challenge;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * Project.
  *
  * @ORM\Table(name="challenge_type")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge\Type")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("challenge_type")
  */
 class Type extends AbstractEntity
@@ -31,7 +31,7 @@ class Type extends AbstractEntity
     /**
      * @ORM\Column(name="type_id", type="integer", options={"unsigned":true})
      * @ORM\Id
-     * @Annotation\Type("\Zend\Form\Element\Hidden")
+     * @Annotation\Type("\Laminas\Form\Element\Hidden")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int
@@ -39,7 +39,7 @@ class Type extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="type", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-type-label", "help-block":"txt-challenge-type-type-help-block"})
      *
      * @var string
@@ -47,7 +47,7 @@ class Type extends AbstractEntity
     private $type;
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-type-description-label", "help-block":"txt-challenge-type-description-help-block"})
      *
      * @var string
@@ -55,7 +55,7 @@ class Type extends AbstractEntity
     private $description;
     /**
      * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-sequence-label", "help-block":"txt-challenge-type-sequence-help-block"})
      *
      * @var int

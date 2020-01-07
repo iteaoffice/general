@@ -15,8 +15,8 @@ namespace General\View\Factory;
 use General\Options\ModuleOptions;
 use General\View\Helper\AbstractImage;
 use Interop\Container\ContainerInterface;
-use Zend\Router\RouteStackInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Router\RouteStackInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class ImageHelperFactory

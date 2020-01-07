@@ -16,7 +16,7 @@ use Affiliation\Entity\Invoice;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * CostsVersion.
@@ -37,7 +37,7 @@ class ExchangeRate extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="rate", type="decimal", precision=10, scale=6, nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-exchange-rate-rate-label","help-block":"txt-exchange-rate-rate-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-exchange-rate-rate-placeholder"})
      *
@@ -46,7 +46,7 @@ class ExchangeRate extends AbstractEntity
     private $rate;
     /**
      * @ORM\Column(name="date", type="date", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Date")
+     * @Annotation\Type("\Laminas\Form\Element\Date")
      * @Annotation\Options({"label":"txt-exchange-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
      *
      * @var DateTime

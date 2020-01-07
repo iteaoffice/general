@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * Entity for the General.
  *
  * @ORM\Table(name="country_eu")
  * @ORM\Entity
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("country_eu")
  *
  * @category General
@@ -57,7 +57,7 @@ class Eu extends AbstractEntity
     private $country;
     /**
      * @ORM\Column(name="date_since",type="date",nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\DateTime")
+     * @Annotation\Type("\Laminas\Form\Element\DateTime")
      * @Annotation\Options({"label":"txt-since"})
      *
      * @var string

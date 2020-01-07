@@ -15,12 +15,12 @@ namespace General\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="web_info")
  * @ORM\Entity(repositoryClass="General\Repository\WebInfo")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("web_info")
  */
 class WebInfo extends AbstractEntity
@@ -38,13 +38,13 @@ class WebInfo extends AbstractEntity
      * @ORM\Column(name="info_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Type("\Zend\Form\Element\Hidden")
+     * @Annotation\Type("\Laminas\Form\Element\Hidden")
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="info", type="string", length=64, nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-web-info-info-label","placeholder":"txt-web-info-info-placeholder"})
      * @Annotation\Options({"help-block":"txt-web-info-info-help-block"})
      *
@@ -59,7 +59,7 @@ class WebInfo extends AbstractEntity
     private $plain;
     /**
      * @ORM\Column(name="subject", type="string", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-web-info-subject-label","help-block":"txt-web-info-subject-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-web-info-subject-placeholder"})
      *
@@ -68,7 +68,7 @@ class WebInfo extends AbstractEntity
     private $subject;
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-web-info-content-label","help-block":"txt-web-info-content-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-web-info-content-placeholder","id":"html_content"})
      *

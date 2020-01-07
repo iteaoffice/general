@@ -47,7 +47,7 @@ class WebInfo extends EntityRepository
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'info';
         }
 
@@ -70,7 +70,7 @@ class WebInfo extends EntityRepository
 
     public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_web_info.info', ':like'),

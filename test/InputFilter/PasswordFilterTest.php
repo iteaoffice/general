@@ -14,7 +14,7 @@ namespace GeneralTest\InputFilter;
 
 use General\InputFilter\PasswordFilter;
 use PHPUnit\Framework\TestCase;
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class GeneralTest

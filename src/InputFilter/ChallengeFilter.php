@@ -15,8 +15,8 @@ namespace General\InputFilter;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Validator\UniqueObject;
 use General\Entity\Challenge;
-use Zend\InputFilter\InputFilter;
-use Zend\Validator\File\Extension;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\File\Extension;
 
 /**
  * Class ChallengeFilter

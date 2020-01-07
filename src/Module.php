@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace General;
 
-use Zend\ModuleManager\Feature;
+use Laminas\ModuleManager\Feature;
 
 final class Module implements Feature\ConfigProviderInterface
 {

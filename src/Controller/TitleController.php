@@ -19,33 +19,21 @@ use General\Entity\Title;
 use General\Form\TitleFilter;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class TitleController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class TitleController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         GeneralService $generalService,
@@ -115,7 +103,7 @@ final class TitleController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-title-%s-has-been-created-successfully"),
+                            $this->translator->translate('txt-title-%s-has-been-created-successfully'),
                             $title->getName()
                         )
                     );
@@ -156,7 +144,7 @@ final class TitleController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-title-%s-has-been-updated-successfully"),
+                            $this->translator->translate('txt-title-%s-has-been-updated-successfully'),
                             $title->getName()
                         )
                     );

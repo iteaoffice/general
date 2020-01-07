@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace General\Options;
 
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Class ModuleOptions

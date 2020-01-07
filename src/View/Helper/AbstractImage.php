@@ -6,7 +6,7 @@ namespace General\View\Helper;
 
 use General\Options\ModuleOptions;
 use General\ValueObject\Image\Image;
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 abstract class AbstractImage
 {

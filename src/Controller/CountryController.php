@@ -21,42 +21,27 @@ use General\Service\FormService;
 use Search\Form\SearchResult;
 use Search\Paginator\Adapter\SolariumPaginator;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 use function http_build_query;
 use function implode;
 use function sprintf;
 
 /**
- * Class CountryController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class CountryController extends AbstractActionController
 {
-    /**
-     * @var CountryService
-     */
-    private $countryService;
-    /**
-     * @var CountrySearchService
-     */
-    private $countrySearchService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private CountryService $countryService;
+    private CountrySearchService $countrySearchService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         CountryService $countryService,

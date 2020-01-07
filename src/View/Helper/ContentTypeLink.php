@@ -31,7 +31,7 @@ final class ContentTypeLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$contentType->isEmpty()) {
+        if (! $contentType->isEmpty()) {
             $routeParams['id'] = $contentType->getId();
             $showOptions['name'] = $contentType->getContentType();
             $showOptions['extension'] = $contentType->getExtension();
@@ -44,7 +44,7 @@ final class ContentTypeLink extends AbstractLink
                     'icon' => 'fa-plus',
                     'route' => 'zfcadmin/content-type/new',
                     'text' => $showOptions[$show]
-                        ?? $this->translator->translate('txt-new-contentType')
+                        ?? $this->translator->translate('txt-new-content-type')
                 ];
                 break;
             case 'edit':
@@ -52,7 +52,7 @@ final class ContentTypeLink extends AbstractLink
                     'icon' => 'fa-pencil-square-o',
                     'route' => 'zfcadmin/content-type/edit',
                     'text' => $showOptions[$show]
-                        ?? $this->translator->translate('txt-edit-contentType')
+                        ?? $this->translator->translate('txt-edit-content-type')
                 ];
                 break;
             case 'view':

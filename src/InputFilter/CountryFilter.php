@@ -15,7 +15,7 @@ namespace General\InputFilter;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Validator\UniqueObject;
 use General\Entity\Country;
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class CountryFilter

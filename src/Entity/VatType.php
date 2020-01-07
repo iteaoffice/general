@@ -16,13 +16,13 @@ use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Invoice\Entity\Invoice;
 use Invoice\Entity\Vat\Dimension;
+use Laminas\Form\Annotation;
 use Organisation\Entity\Financial;
-use Zend\Form\Annotation;
 
 /**
  * @ORM\Table(name="vat_type")
  * @ORM\Entity(repositoryClass="General\Repository\VatType")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("vat_type")
  */
 class VatType extends AbstractEntity
@@ -43,7 +43,7 @@ class VatType extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="type",type="string",length=30, unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-type"})
      *
      * @var string
@@ -51,7 +51,7 @@ class VatType extends AbstractEntity
     private $type;
     /**
      * @ORM\Column(name="description",type="string",length=64)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-description"})
      *
      * @var string
@@ -99,6 +99,7 @@ class VatType extends AbstractEntity
      * @var Financial[]|Collections\ArrayCollection
      */
     private $organisationFinancial;
+
     public function __construct()
     {
         $this->invoice = new Collections\ArrayCollection();
@@ -155,12 +156,12 @@ class VatType extends AbstractEntity
         return $this;
     }
 
-    public function getInvoice(): ?array
+    public function getInvoice()
     {
         return $this->invoice;
     }
 
-    public function setInvoice(?array $invoice): VatType
+    public function setInvoice($invoice): VatType
     {
         $this->invoice = $invoice;
         return $this;

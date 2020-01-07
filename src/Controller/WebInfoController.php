@@ -21,40 +21,25 @@ use General\Form\WebInfoFilter;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Mvc\Plugin\Identity\Identity;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Mvc\Plugin\Identity\Identity;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 use function defined;
 
 /**
- * Class WebInfoController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  * @method Identity|Contact identity()
  */
 final class WebInfoController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
-     * @var EmailService
-     */
-    private $emailService;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
+    private EmailService $emailService;
 
     public function __construct(
         GeneralService $generalService,
@@ -110,14 +95,14 @@ final class WebInfoController extends AbstractActionController
             if ($this->emailService->send()) {
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-test-mail-of-web-info-%s-has-been-send-successfully"),
+                        $this->translator->translate('txt-test-mail-of-web-info-%s-has-been-send-successfully'),
                         $webInfo->getInfo()
                     )
                 );
             } else {
                 $this->flashMessenger()->addErrorMessage(
                     sprintf(
-                        $this->translator->translate("txt-test-mail-of-web-info-%s-has-not-been-sent"),
+                        $this->translator->translate('txt-test-mail-of-web-info-%s-has-not-been-sent'),
                         $webInfo->getInfo()
                     )
                 );
@@ -149,7 +134,7 @@ final class WebInfoController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-web-info-%s-has-been-created-successfully"),
+                            $this->translator->translate('txt-web-info-%s-has-been-created-successfully'),
                             $webInfo->getInfo()
                         )
                     );
@@ -181,13 +166,12 @@ final class WebInfoController extends AbstractActionController
             }
 
             if (isset($data['delete'])) {
-                $this->flashMessenger()->setNamespace('info')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-web-info-%s-has-been-removed-successfully"),
-                            $webInfo->getInfo()
-                        )
-                    );
+                $this->flashMessenger()->addInfoMessage(
+                    sprintf(
+                        $this->translator->translate('txt-web-info-%s-has-been-removed-successfully'),
+                        $webInfo->getInfo()
+                    )
+                );
 
                 $this->generalService->delete($webInfo);
 
@@ -199,13 +183,12 @@ final class WebInfoController extends AbstractActionController
                 $webInfo = $form->getData();
                 $result = $this->generalService->save($webInfo);
 
-                $this->flashMessenger()->setNamespace('info')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-web-info-%s-has-been-updated-successfully"),
-                            $webInfo->getInfo()
-                        )
-                    );
+                $this->flashMessenger()->addSuccessMessage(
+                    sprintf(
+                        $this->translator->translate('txt-web-info-%s-has-been-updated-successfully'),
+                        $webInfo->getInfo()
+                    )
+                );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/web-info/view',

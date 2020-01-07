@@ -31,7 +31,7 @@ final class VatLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$vat->isEmpty()) {
+        if (! $vat->isEmpty()) {
             $routeParams['id'] = $vat->getId();
             $showOptions['name'] = $vat->getCode();
         }

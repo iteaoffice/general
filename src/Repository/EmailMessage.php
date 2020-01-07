@@ -29,7 +29,7 @@ class EmailMessage extends EntityRepository
         $queryBuilder->from(Entity\EmailMessage::class, 'general_entity_email_message');
         $queryBuilder->leftJoin('general_entity_email_message.contact', 'contact_entity_contact');
 
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('contact_entity_contact.firstName', ':like'),
@@ -41,7 +41,7 @@ class EmailMessage extends EntityRepository
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
-        if (!empty($filter['latestEvent'])) {
+        if (! empty($filter['latestEvent'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()
                     ->in('general_entity_email_message.latestEvent', $filter['latestEvent'])

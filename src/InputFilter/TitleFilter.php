@@ -15,7 +15,7 @@ namespace General\InputFilter;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Validator\UniqueObject;
 use General\Entity\Title;
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class TitleFilter

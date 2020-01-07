@@ -19,7 +19,7 @@ namespace General\Navigation\Invokable;
 
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
 use General\Entity\ContentType;
-use Zend\Navigation\Page\Mvc;
+use Laminas\Navigation\Page\Mvc;
 
 /**
  * Class ContentTypeLabel

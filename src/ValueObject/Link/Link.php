@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace General\ValueObject\Link;
 
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 final class Link
 {

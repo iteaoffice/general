@@ -31,7 +31,7 @@ final class PasswordLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$password->isEmpty()) {
+        if (! $password->isEmpty()) {
             $routeParams['id'] = $password->getId();
             $showOptions['name'] = $password->getDescription();
         }

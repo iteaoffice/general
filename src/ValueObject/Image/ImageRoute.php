@@ -6,7 +6,7 @@ namespace General\ValueObject\Image;
 
 use General\Options\ModuleOptions;
 use Thumbor\Url\Builder;
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 final class ImageRoute
 {

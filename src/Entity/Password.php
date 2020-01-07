@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace General\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * WebInfo.
  *
  * @ORM\Table(name="password")
  * @ORM\Entity(repositoryClass="General\Repository\Password")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("password")
  */
 class Password extends AbstractEntity
@@ -34,7 +34,7 @@ class Password extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="description", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-password-description-label","placeholder":"txt-password-description-placeholder"})
      * @Annotation\Options({"help-block":"txt-password-description-help-block"})
      *
@@ -43,7 +43,7 @@ class Password extends AbstractEntity
     private $description;
     /**
      * @ORM\Column(name="website", type="string", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Url")
+     * @Annotation\Type("\Laminas\Form\Element\Url")
      * @Annotation\Attributes({"label":"txt-password-website-label","placeholder":"txt-password-website-placeholder"})
      * @Annotation\Options({"help-block":"txt-password-website-help-block"})
      *
@@ -52,7 +52,7 @@ class Password extends AbstractEntity
     private $website;
     /**
      * @ORM\Column(name="accountname", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-password-account-label","placeholder":"txt-password-account-placeholder"})
      * @Annotation\Options({"help-block":"txt-password-account-help-block"})
      *
@@ -61,7 +61,7 @@ class Password extends AbstractEntity
     private $account;
     /**
      * @ORM\Column(name="username", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-password-username-label","placeholder":"txt-password-username-placeholder"})
      * @Annotation\Options({"help-block":"txt-password-username-help-block"})
      *
@@ -70,7 +70,7 @@ class Password extends AbstractEntity
     private $username;
     /**
      * @ORM\Column(name="password", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-password-password-label","placeholder":"txt-password-password-placeholder"})
      * @Annotation\Options({"help-block":"txt-password-password-help-block"})
      *

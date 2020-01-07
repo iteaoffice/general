@@ -16,14 +16,15 @@ use Content\Entity\Content;
 use General\Entity\Country;
 use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
+use General\ValueObject\Link\LinkDecoration;
 use General\View\Helper\Country\CountryLink;
 use General\View\Helper\Country\CountryMap;
 use Program\Service\ProgramService;
-use Zend\Authentication\AuthenticationService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -83,7 +84,7 @@ final class CountryHandler extends AbstractHandler
                 $countryLink = $this->helperPluginManager->get(CountryLink::class);
                 $this->getHeadMeta()->setProperty('og:type', $this->translate('txt-country'));
                 $this->getHeadMeta()->setProperty('og:title', $country->getCountry());
-                $this->getHeadMeta()->setProperty('og:url', $countryLink($country, 'view', 'raw'));
+                $this->getHeadMeta()->setProperty('og:url', $countryLink($country, 'view', LinkDecoration::SHOW_RAW));
 
                 return $this->parseCountry($country);
             case 'country_list':

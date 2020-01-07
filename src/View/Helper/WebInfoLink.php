@@ -31,7 +31,7 @@ final class WebInfoLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$webInfo->isEmpty()) {
+        if (! $webInfo->isEmpty()) {
             $routeParams['id'] = $webInfo->getId();
             $showOptions['name'] = $webInfo->getInfo();
         }

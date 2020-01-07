@@ -17,9 +17,9 @@ use BjyAuthorize\Service\Authorize;
 use General\Options\ModuleOptions;
 use General\View\Helper\AbstractLink;
 use Interop\Container\ContainerInterface;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Router\RouteStackInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Router\RouteStackInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class LinkHelperFactory

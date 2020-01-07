@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace General\ValueObject\Image;
 
 use General\Options\ModuleOptions;
-use Zend\Router\RouteStackInterface;
+use Laminas\Router\RouteStackInterface;
 
 final class Image
 {

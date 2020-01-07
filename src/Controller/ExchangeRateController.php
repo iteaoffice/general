@@ -17,32 +17,20 @@ use General\Entity\Currency;
 use General\Entity\ExchangeRate;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\View\Model\ViewModel;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class CurrencyController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class ExchangeRateController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         GeneralService $generalService,
@@ -89,7 +77,7 @@ final class ExchangeRateController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-exchangerate-for-%s-has-been-created-successfully"),
+                            $this->translator->translate('txt-exchangerate-for-%s-has-been-created-successfully'),
                             $exchangeRate->getCurrency()->getName()
                         )
                     );
@@ -139,7 +127,7 @@ final class ExchangeRateController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-exchangerate-for-%s-has-been-deleted-successfully"),
+                            $this->translator->translate('txt-exchangerate-for-%s-has-been-deleted-successfully'),
                             $exchangeRate->getCurrency()->getName()
                         )
                     );
@@ -161,7 +149,7 @@ final class ExchangeRateController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-exchangerate-for-%s-has-been-updated-successfully"),
+                            $this->translator->translate('txt-exchangerate-for-%s-has-been-updated-successfully'),
                             $exchangeRate->getCurrency()->getName()
                         )
                     );

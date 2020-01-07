@@ -21,18 +21,19 @@ use Affiliation\Service\AffiliationService;
 use Contact\Service\ContactService;
 use Deeplink\Service\DeeplinkService;
 use Doctrine\ORM\EntityManager;
+use General\Options\ModuleOptions;
 use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
 use General\Service\EmailService;
 use General\Service\FormService;
 use General\Service\GeneralService;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use Program\Service\ProgramService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
 use Project\Service\ResultService;
-use Zend\Authentication\AuthenticationService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use ZfcTwig\View\TwigRenderer;
 
 return [
@@ -83,6 +84,7 @@ return [
         ],
         Controller\ImageController::class => [
             GeneralService::class,
+            ModuleOptions::class
         ],
         Controller\ImpactStreamController::class => [
             ResultService::class,
@@ -127,7 +129,8 @@ return [
             DeeplinkService::class,
             AuthenticationService::class,
             TwigRenderer::class,
-            'ViewHelperManager'
+            'ViewHelperManager',
+            ModuleOptions::class
         ],
         Service\GeneralService::class => [
             EntityManager::class

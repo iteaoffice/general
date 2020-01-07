@@ -31,7 +31,7 @@ final class GenderLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$gender->isEmpty()) {
+        if (! $gender->isEmpty()) {
             $routeParams['id'] = $gender->getId();
             $showOptions['name'] = $gender->getName();
             $showOptions['attention'] = $gender->getAttention();

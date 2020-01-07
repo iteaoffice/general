@@ -14,12 +14,12 @@ namespace General\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="email_message_event")
  * @ORM\Entity
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("email_message_event")
  */
 class EmailMessageEvent extends AbstractEntity
@@ -156,12 +156,12 @@ class EmailMessageEvent extends AbstractEntity
         return $this;
     }
 
-    public function getMessageId(): ?int
+    public function getMessageId()
     {
         return $this->messageId;
     }
 
-    public function setMessageId(?int $messageId): EmailMessageEvent
+    public function setMessageId($messageId): EmailMessageEvent
     {
         $this->messageId = $messageId;
         return $this;

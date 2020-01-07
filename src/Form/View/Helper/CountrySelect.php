@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace General\Form\View\Helper;
 
-use Zend\Form\ElementInterface;
-use Zend\Form\View\Helper\FormSelect;
+use Laminas\Form\ElementInterface;
+use Laminas\Form\View\Helper\FormSelect;
 
 /**
  * Class CountrySelect

@@ -31,7 +31,7 @@ final class TitleLink extends AbstractLink
 
         $routeParams = [];
         $showOptions = [];
-        if (!$title->isEmpty()) {
+        if (! $title->isEmpty()) {
             $routeParams['id'] = $title->getId();
             $showOptions['name'] = $title->getName();
             $showOptions['attention'] = $title->getAttention();

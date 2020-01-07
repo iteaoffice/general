@@ -15,18 +15,18 @@ declare(strict_types=1);
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Zend\Authentication\AuthenticationService;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\Router\Http\RouteMatch;
-use Zend\View\Helper\AbstractHelper;
-use Zend\View\Helper\HeadMeta;
-use Zend\View\Helper\HeadStyle;
-use Zend\View\Helper\HeadTitle;
-use Zend\View\Helper\Placeholder\Container;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\Router\Http\RouteMatch;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Helper\HeadMeta;
+use Laminas\View\Helper\HeadStyle;
+use Laminas\View\Helper\HeadTitle;
+use Laminas\View\Helper\Placeholder\Container;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -73,7 +73,7 @@ abstract class AbstractHandler extends AbstractHelper
         ];
 
         foreach ($content->getContentParam() as $contentParam) {
-            if (!empty($contentParam->getParameterId())) {
+            if (! empty($contentParam->getParameterId())) {
                 $params[$contentParam->getParameter()->getParam()] = $contentParam->getParameterId();
             }
         }

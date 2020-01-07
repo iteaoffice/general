@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace General\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 final class InvokableFactory implements FactoryInterface
 {

@@ -15,12 +15,12 @@ namespace General\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Project\Entity\Contract;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="currency")
  * @ORM\Entity(repositoryClass="General\Repository\Currency")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("currency")
  *
  * @category General
@@ -38,7 +38,7 @@ class Currency extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="name",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-name-label","help-block":"txt-currency-name-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-name-placeholder"})
      *
@@ -47,7 +47,7 @@ class Currency extends AbstractEntity
     private $name;
     /**
      * @ORM\Column(name="iso4217",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-iso4217-label","help-block":"txt-currency-iso4217-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-iso4217-placeholder"})
      *
@@ -56,7 +56,7 @@ class Currency extends AbstractEntity
     private $iso4217;
     /**
      * @ORM\Column(name="symbol",type="string")
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-symbol-label","help-block":"txt-currency-symbol-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-symbol-placeholder"})
      *

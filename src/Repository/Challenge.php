@@ -66,7 +66,7 @@ class Challenge extends EntityRepository
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_challenge.challenge', ':like'));
             $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }

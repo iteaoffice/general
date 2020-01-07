@@ -41,7 +41,7 @@ class Password extends EntityRepository
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'info';
         }
 
@@ -64,7 +64,7 @@ class Password extends EntityRepository
 
     public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_password.description', ':like'),

@@ -21,12 +21,12 @@ use General\Entity\Challenge\Pdf;
 use General\Entity\Challenge\Type;
 use Program\Entity\Call\Call;
 use Project\Entity\Result\Result;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="challenge")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("general_challenge")
  *
  * @category General
@@ -37,14 +37,14 @@ class Challenge extends AbstractEntity
      * @ORM\Column(name="challenge_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Annotation\Type("\Zend\Form\Element\Hidden")
+     * @Annotation\Type("\Laminas\Form\Element\Hidden")
      *
      * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="challenge",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-challenge-label","help-block":"txt-challenge-challenge-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-challenge-placeholder"})
      *
@@ -61,7 +61,7 @@ class Challenge extends AbstractEntity
     private $docRef;
     /**
      * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
-     * @Annotation\Type("\Zend\Form\Element\Number")
+     * @Annotation\Type("\Laminas\Form\Element\Number")
      * @Annotation\Options({"label":"txt-challenge-sequence-label","help-block":"txt-challenge-sequence-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-sequence-placeholder"})
      * @var int
@@ -93,7 +93,7 @@ class Challenge extends AbstractEntity
     private $type;
     /**
      * @ORM\Column(name="html", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-html-label","help-block": "txt-challenge-html-explanation"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-html-placeholder"})
      * @Annotation\Attributes({"id":"html_challenge"})
@@ -103,7 +103,7 @@ class Challenge extends AbstractEntity
     private $html;
     /**
      * @ORM\Column(name="css", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-css-label","help-block": "txt-challenge-css-explanation"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-css-placeholder"})
      * @Annotation\Attributes({"id":"css_challenge"})
@@ -113,7 +113,7 @@ class Challenge extends AbstractEntity
     private $css;
     /**
      * @ORM\Column(name="sources",type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-sources-label","help-block":"txt-challenge-sources-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-sources-placeholder"})
      *
@@ -122,7 +122,7 @@ class Challenge extends AbstractEntity
     private $sources;
     /**
      * @ORM\Column(name="abstract", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-abstract-label","help-block": "txt-challenge-abstract-explanation"})
      * @Annotation\Attributes({"placeholder":"txt-challenge-abstract-placeholder","rows":6})
      *
@@ -131,7 +131,7 @@ class Challenge extends AbstractEntity
     private $abstract;
     /**
      * @ORM\Column(name="background_image", type="smallint", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Number")
+     * @Annotation\Type("\Laminas\Form\Element\Number")
      * @Annotation\Options({"label":"txt-challenge-background-image-label","help-block": "txt-challenge-backgrond-image-explanation"})
      *
      * @var int
@@ -139,7 +139,7 @@ class Challenge extends AbstractEntity
     private $backgroundImage;
     /**
      * @ORM\Column(name="backcolor",type="string",unique=false)
-     * @Annotation\Type("\Zend\Form\Element\Color")
+     * @Annotation\Type("\Laminas\Form\Element\Color")
      * @Annotation\Options({"label":"txt-challenge-background-color-label","help-block":"txt-challenge-background-color-help-block"})
      *
      * @var string
@@ -147,7 +147,7 @@ class Challenge extends AbstractEntity
     private $backgroundColor;
     /**
      * @ORM\Column(name="frontcolor",type="string",unique=false)
-     * @Annotation\Type("\Zend\Form\Element\Color")
+     * @Annotation\Type("\Laminas\Form\Element\Color")
      * @Annotation\Options({"label":"txt-challenge-front-color-label","help-block":"txt-challenge-front-color-help-block"})
      *
      * @var string
@@ -183,7 +183,7 @@ class Challenge extends AbstractEntity
     private $boothChallenge;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Image", cascade={"persist","remove"}, mappedBy="challenge")
-     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Type("\Laminas\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-image-label","help-block":"txt-challenge-image-help-block"})
      *
      * @var Image
@@ -191,7 +191,7 @@ class Challenge extends AbstractEntity
     private $image;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Icon", cascade={"persist","remove"}, mappedBy="challenge")
-     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Type("\Laminas\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-icon-label","help-block":"txt-challenge-icon-help-block"})
      *
      * @var Icon
@@ -199,7 +199,7 @@ class Challenge extends AbstractEntity
     private $icon;
     /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Pdf", cascade={"persist","remove"}, mappedBy="challenge")
-     * @Annotation\Type("\Zend\Form\Element\File")
+     * @Annotation\Type("\Laminas\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-pdf-label","help-block":"txt-challenge-pdf-help-block"})
      *
      * @var Pdf
