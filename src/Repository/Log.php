@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
@@ -13,7 +12,6 @@ declare(strict_types=1);
 
 namespace General\Repository;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
@@ -33,7 +31,7 @@ class Log extends EntityRepository
         $queryBuilder->select('general_entity_log');
         $queryBuilder->from(Entity\Log::class, 'general_entity_log');
 
-        if (! empty($filter['search'])) {
+        if (!empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_log.event', ':like'),
@@ -44,9 +42,12 @@ class Log extends EntityRepository
             $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->neq('general_entity_log.errorType', $queryBuilder->expr()->literal('E_USER_DEPRECATED'))
+        );
+
         $direction = 'DESC';
-        if (
-            isset($filter['direction'])
+        if (isset($filter['direction'])
             && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
@@ -65,7 +66,7 @@ class Log extends EntityRepository
             default:
                 $queryBuilder->addOrderBy('general_entity_log.id', 'DESC');
         }
-
+        print $queryBuilder->getQuery()->getSQL();
         return $queryBuilder;
     }
 
