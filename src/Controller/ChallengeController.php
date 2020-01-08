@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
@@ -250,7 +251,8 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the icon when the tmp is empty and there is not icon at all
-                if (empty($fileData['icon']['tmp_name']) && null !== $challenge->getIcon()
+                if (
+                    empty($fileData['icon']['tmp_name']) && null !== $challenge->getIcon()
                     && null === $challenge->getIcon()->getId()
                 ) {
                     $challenge->setIcon(null);
@@ -277,10 +279,10 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
-                if (empty($fileData['image']['tmp_name'])
+                if (
+                    empty($fileData['image']['tmp_name'])
                     && null !== $challenge->getImage()
                     && null === $challenge->getImage()->getId()
-
                 ) {
                     $challenge->setImage(null);
                 }
@@ -299,7 +301,8 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the pdf when the tmp is empty and there is not pdf at all
-                if (empty($fileData['pdf']['tmp_name'])
+                if (
+                    empty($fileData['pdf']['tmp_name'])
                     && null !== $challenge->getPdf()
                     && null === $challenge->getPdf()->getId()
                 ) {

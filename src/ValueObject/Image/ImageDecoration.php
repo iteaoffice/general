@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace General\ValueObject\Image;
 
 use Thumbor\Url\Builder;
+
 use function sprintf;
 
 final class ImageDecoration
@@ -14,8 +15,8 @@ final class ImageDecoration
 
     private static string $imageTemplate = '<img src="%s" class="img-fluid" alt="%s">';
     private string $show;
-    private ? int $width;
-    private ? int $height;
+    private ?int $width;
+    private ?int $height;
 
     public function __construct(
         string $show = self::SHOW_IMAGE,
@@ -27,7 +28,7 @@ final class ImageDecoration
         $this->height = $height;
     }
 
-    public static function fromArray(array $params) : ImageDecoration
+    public static function fromArray(array $params): ImageDecoration
     {
         return new self(
             $params['show'] ?? self::SHOW_IMAGE,
@@ -36,7 +37,7 @@ final class ImageDecoration
         );
     }
 
-    public function parse(Builder $builder) : string
+    public function parse(Builder $builder): string
     {
         if (null !== $this->width || null !== $this->height) {
             $builder

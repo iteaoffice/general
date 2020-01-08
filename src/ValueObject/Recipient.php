@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  */
@@ -8,6 +9,7 @@ declare(strict_types=1);
 namespace General\ValueObject;
 
 use Laminas\Validator\EmailAddress;
+
 use function count;
 use function sprintf;
 

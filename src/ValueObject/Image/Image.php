@@ -9,7 +9,7 @@ use Laminas\Router\RouteStackInterface;
 
 final class Image
 {
-    private ImageRoute      $imageRoute;
+    private ImageRoute $imageRoute;
     private ImageDecoration $imageDecoration;
 
     public function __construct(ImageRoute $imageRoute, ImageDecoration $imageDecoration)

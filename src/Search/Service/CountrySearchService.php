@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -22,6 +23,7 @@ use Search\Service\AbstractSearchService;
 use Search\Service\SearchServiceInterface;
 use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
+
 use function in_array;
 
 /**

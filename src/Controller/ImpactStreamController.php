@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
@@ -22,6 +23,7 @@ use setasign\Fpdi\TcpdfFpdi;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Paginator\Paginator;
+
 use function count;
 use function explode;
 use function sprintf;
@@ -70,10 +72,11 @@ final class ImpactStreamController extends AbstractActionController
     {
         /** @var Challenge $challenge */
         foreach ($this->generalService->parseChallengesByResult($result) as $challenge) {
-            if (! array_key_exists(
-                'challenge_' . $challenge->getSequence(),
-                $this->challenge
-            )
+            if (
+                ! array_key_exists(
+                    'challenge_' . $challenge->getSequence(),
+                    $this->challenge
+                )
                 && null !== $challenge->getPdf()
             ) {
                 $fileName = self::parseTempFile('challenge', $challenge->getId());

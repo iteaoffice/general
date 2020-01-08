@@ -10,8 +10,8 @@ use Laminas\Router\RouteStackInterface;
 
 final class ImageRoute
 {
-    private string  $route;
-    private array   $routeParams;
+    private string $route;
+    private array $routeParams;
 
     public function __construct(string $route, array $routeParams)
     {

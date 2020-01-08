@@ -8,7 +8,7 @@ use Laminas\Router\RouteStackInterface;
 
 final class Link
 {
-    private LinkRoute      $linkRoute;
+    private LinkRoute $linkRoute;
     private LinkDecoration $linkDecoration;
 
     public function __construct(LinkRoute $linkRoute, LinkDecoration $linkDecoration)

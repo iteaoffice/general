@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Jield webdev copyright message placeholder
  *
@@ -17,6 +18,7 @@ namespace General\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
+
 use function in_array;
 
 /**

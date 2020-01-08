@@ -24,15 +24,15 @@ final class LinkDecoration
 
     private static string $iconTemplate = '<i class="fa %s fa-fw"></i>';
     private static string $linkTemplate = '<a href="%%s"%s%s>%s</a>';
-    private static array  $defaultIcons = [
+    private static array $defaultIcons = [
         self::ACTION_NEW => 'fa-plus',
         self::ACTION_EDIT => 'fa-pencil-square-o',
         self::ACTION_DELETE => 'fa-trash'
     ];
 
-    private string   $show;
+    private string $show;
     private LinkText $linkText;
-    private ? string  $icon;
+    private ?string $icon;
 
     public function __construct(
         string $show = self::SHOW_TEXT,
@@ -45,7 +45,7 @@ final class LinkDecoration
         $this->icon = $icon ?? self::$defaultIcons[(string)$action] ?? null;
     }
 
-    public static function fromArray(array $params) : LinkDecoration
+    public static function fromArray(array $params): LinkDecoration
     {
         return new self(
             ($params['show'] ?? self::SHOW_TEXT),

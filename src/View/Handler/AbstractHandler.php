@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -10,6 +11,7 @@
  * @license     https://itea3.org/license.txt proprietary
  *
  */
+
 declare(strict_types=1);
 
 namespace General\View\Handler;

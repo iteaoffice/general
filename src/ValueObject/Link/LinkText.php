@@ -13,7 +13,7 @@ final class LinkText
 
     private string $text;
     private string $title;
-    private int    $maxLength = self::DEFAULT_MAX_LENGTH;
+    private int $maxLength = self::DEFAULT_MAX_LENGTH;
 
     public function __construct(
         ?string $text = null,

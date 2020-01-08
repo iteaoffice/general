@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Jield copyright message placeholder.
  *
@@ -27,6 +28,7 @@ use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Plugin\Identity\Identity;
 use Laminas\Paginator\Paginator;
 use Laminas\View\Model\ViewModel;
+
 use function defined;
 
 /**

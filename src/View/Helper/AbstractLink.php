@@ -14,8 +14,8 @@ use Laminas\Router\RouteStackInterface;
 abstract class AbstractLink
 {
     protected TranslatorInterface $translator;
-    private AssertionService    $assertionService;
-    private Authorize           $authorizeService;
+    private AssertionService $assertionService;
+    private Authorize $authorizeService;
     private RouteStackInterface $router;
     private ModuleOptions $generalModuleOptions;
 

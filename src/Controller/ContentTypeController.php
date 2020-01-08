@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Jield copyright message placeholder.
  *

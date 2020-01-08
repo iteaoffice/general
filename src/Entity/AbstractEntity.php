@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -14,6 +15,7 @@ namespace General\Entity;
 
 use InvalidArgumentException;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+
 use function array_slice;
 
 /**

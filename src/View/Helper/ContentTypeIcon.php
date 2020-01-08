@@ -15,6 +15,7 @@ namespace General\View\Helper;
 
 use General\Entity\ContentType;
 use General\Service\GeneralService;
+
 use function sprintf;
 
 /**

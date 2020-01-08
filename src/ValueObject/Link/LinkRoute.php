@@ -8,15 +8,15 @@ use Laminas\Router\RouteStackInterface;
 
 final class LinkRoute
 {
-    private string  $route;
-    private array   $routeParams;
-    private ? array  $queryParams;
-    private ? string $fragment;
+    private string $route;
+    private array $routeParams;
+    private ?array $queryParams;
+    private ?string $fragment;
 
     public function __construct(
-        string  $route,
-        array   $routeParams = [],
-        ?array  $queryParams = null,
+        string $route,
+        array $routeParams = [],
+        ?array $queryParams = null,
         ?string $fragment = null
     ) {
         $this->route       = $route;
@@ -25,7 +25,7 @@ final class LinkRoute
         $this->fragment    = $fragment;
     }
 
-    public static function fromArray(array $params) : LinkRoute
+    public static function fromArray(array $params): LinkRoute
     {
         return new self(
             ($params['route'] ?? ''),
@@ -35,7 +35,7 @@ final class LinkRoute
         );
     }
 
-    public function parse(RouteStackInterface $router, string $serverUrl = '') : string
+    public function parse(RouteStackInterface $router, string $serverUrl = ''): string
     {
         return $serverUrl . $router->assemble(
             $this->routeParams,

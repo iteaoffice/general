@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -20,6 +21,7 @@ namespace General\Navigation\Invokable;
 use Admin\Navigation\Invokable\AbstractNavigationInvokable;
 use General\Entity\Log;
 use Laminas\Navigation\Page\Mvc;
+
 use function substr;
 
 /**
