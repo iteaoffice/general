@@ -66,7 +66,7 @@ class Log extends EntityRepository
             default:
                 $queryBuilder->addOrderBy('general_entity_log.id', 'DESC');
         }
-        print $queryBuilder->getQuery()->getSQL();
+
         return $queryBuilder;
     }
 
