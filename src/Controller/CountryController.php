@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Jield copyright message placeholder.
  *
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -13,74 +14,112 @@ declare(strict_types=1);
 namespace General\Controller;
 
 use Content\Entity\Route;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
 use General\Controller\Plugin\GetFilter;
 use General\Entity\Country;
-use General\Form\CountryFilter;
-use General\Service\FormService;
+use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use General\Service\FormService;
+use Search\Form\SearchResult;
+use Search\Paginator\Adapter\SolariumPaginator;
+use Solarium\QueryType\Select\Query\Query as SolariumQuery;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
+
+use function http_build_query;
+use function implode;
+use function sprintf;
 
 /**
- * Class CountryController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class CountryController extends AbstractActionController
 {
-    /**
-     * @var CountryService
-     */
-    private $countryService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private CountryService $countryService;
+    private CountrySearchService $countrySearchService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         CountryService $countryService,
+        CountrySearchService $countrySearchService,
         FormService $formService,
         TranslatorInterface $translator
     ) {
         $this->countryService = $countryService;
+        $this->countrySearchService = $countrySearchService;
         $this->formService = $formService;
         $this->translator = $translator;
     }
 
     public function listAction(): ViewModel
     {
-        $page = $this->params()->fromRoute('page', 1);
-        $filterPlugin = $this->getFilter();
-        $contactQuery = $this->countryService->findFiltered(Country::class, $filterPlugin->getFilter());
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $page = $this->params('page', 1);
+        $form = new SearchResult();
+        $data = array_merge(
+            [
+                'order'     => '',
+                'direction' => '',
+                'query'     => '',
+                'facet'     => [],
+            ],
+            $request->getQuery()->toArray()
+        );
+        $searchFields = [
+            'country',
+            'country_search',
+            'country_iso3',
+            'country_cd',
+        ];
 
-        $paginator
-            = new Paginator(new PaginatorAdapter(new ORMPaginator($contactQuery, false)));
-        $paginator::setDefaultItemCountPerPage(($page === 'all') ? PHP_INT_MAX : 20);
+        if ($request->isGet()) {
+            $this->countrySearchService->setSearch($data['query'], $searchFields, $data['order'], $data['direction']);
+            if (isset($data['facet'])) {
+                foreach ($data['facet'] as $facetField => $values) {
+                    $quotedValues = [];
+                    foreach ($values as $value) {
+                        $quotedValues[] = sprintf('"%s"', $value);
+                    }
+
+                    $this->countrySearchService->addFilterQuery(
+                        $facetField,
+                        implode(' ' . SolariumQuery::QUERY_OPERATOR_OR . ' ', $quotedValues)
+                    );
+                }
+            }
+
+            $form->addSearchResults(
+                $this->countrySearchService->getQuery()->getFacetSet(),
+                $this->countrySearchService->getResultSet()->getFacetSet()
+            );
+            $form->setData($data);
+        }
+
+        $paginator = new Paginator(
+            new SolariumPaginator($this->countrySearchService->getSolrClient(), $this->countrySearchService->getQuery())
+        );
+        $paginator::setDefaultItemCountPerPage(($page === 'all') ? 1000 : 25);
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        $form = new CountryFilter();
-        $form->setData(['filter' => $filterPlugin->getFilter()]);
 
         return new ViewModel(
             [
-                'paginator'     => $paginator,
-                'form'          => $form,
-                'encodedFilter' => urlencode($filterPlugin->getHash()),
-                'order'         => $filterPlugin->getOrder(),
-                'direction'     => $filterPlugin->getDirection(),
+                'form'           => $form,
+                'order'          => $data['order'],
+                'direction'      => $data['direction'],
+                'query'          => $data['query'],
+                'badges'         => $form->getBadges(),
+                'arguments'      => http_build_query($form->getFilteredData()),
+                'paginator'      => $paginator,
+                'countryService' => $this->countryService
             ]
         );
     }
@@ -105,7 +144,7 @@ final class CountryController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/country/list');
+                return $this->redirect()->toRoute('zfcadmin/country/list');
             }
 
             if ($form->isValid()) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Jield webdev copyright message placeholder
  *
@@ -18,6 +19,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
+use function in_array;
+
 /**
  * Class WebInfo
  *
@@ -25,11 +28,6 @@ use General\Entity;
  */
 class WebInfo extends EntityRepository
 {
-    /**
-     * @param array|null $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter = null): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -47,11 +45,11 @@ class WebInfo extends EntityRepository
         }
 
         $direction = 'ASC';
-        if (isset($filter['direction']) && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)) {
+        if (isset($filter['direction']) && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)) {
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'info';
         }
 
@@ -72,17 +70,9 @@ class WebInfo extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyWebInfoFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
     {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_web_info.info', ':like'),
@@ -93,7 +83,7 @@ class WebInfo extends EntityRepository
             );
 
 
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         return $queryBuilder;

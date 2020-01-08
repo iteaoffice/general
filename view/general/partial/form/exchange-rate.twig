@@ -1,15 +1,13 @@
 {% do form.prepare() %}
-
-
 {{ form().openTag(form)|raw }}
 
 
 
 <div class="form-group row">
-    <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-currency") }}</label>
+    <label class="col-sm-3 col-form-label">{{ translate("txt-currency") }}</label>
 
     <div class="col-sm-9">
-        <p class="form-control-static form-control-plaintext">{{ currencyLink(currency,'view','name') }}</p>
+        <p class="form-control-plaintext">{{ currencyLink(currency,'view','name') }}</p>
     </div>
 </div>
 
@@ -21,7 +19,7 @@
 {{ formelement(form.get('csrf')) }}
 
 <div class="form-group row">
-    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+    <div class="offset-sm-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {% if form.has('delete') %}
             {{ ztbformelement(form.get('delete')) }}

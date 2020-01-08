@@ -1,38 +1,54 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    General
- *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2018 ITEA Office (https://itea3.org)
- * @license     https://itea3.org/license.txt proprietary
- *
- * @link        http://github.com/iteaoffice/general for the canonical source repository
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
+
 declare(strict_types=1);
 
 namespace General\Service;
 
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
+use DateTime;
 use Deeplink\Entity\Target;
 use Deeplink\Service\DeeplinkService;
+use Exception;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
+use General\Options\ModuleOptions;
 use General\ValueObject;
+use InvalidArgumentException;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\View\Helper\Url;
+use Laminas\View\HelperPluginManager;
 use Mailing\Entity\Mailing;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Publication\Entity\Publication;
-use Zend\Authentication\AuthenticationService;
-use Zend\View\Helper\Url;
-use Zend\View\HelperPluginManager;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use ZfcTwig\View\TwigRenderer;
+
+use function array_merge;
+use function array_unique;
+use function base64_encode;
+use function count;
+use function defined;
+use function file_exists;
+use function file_get_contents;
+use function is_bool;
+use function preg_match_all;
+use function preg_replace;
+use function sprintf;
+use function str_replace;
+use function stream_get_contents;
+use function strip_tags;
+use function substr;
 
 /**
  * Class FormService
@@ -41,67 +57,36 @@ use ZfcTwig\View\TwigRenderer;
  */
 class EmailService
 {
-    private $config;
-    /**
-     * @var ContactService
-     */
-    private $contactService;
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var DeeplinkService
-     */
-    private $deeplinkService;
-    /**
-     * @var AuthenticationService
-     */
-    private $authenticationService;
-    /**
-     * @var TwigRenderer
-     */
-    private $renderer;
-    /**
-     * @var HelperPluginManager
-     */
-    private $viewHelperManager;
-
-    /** @var Client */
-    private $client;
-
-    /** @var Template */
-    private $template;
-
-    /** @var \Mailing\Entity\Contact */
-    private $mailingContact;
-
-    private $templateVariables = [];
+    private array $config;
+    private ContactService $contactService;
+    private GeneralService $generalService;
+    private DeeplinkService $deeplinkService;
+    private AuthenticationService $authenticationService;
+    private TwigRenderer $renderer;
+    private HelperPluginManager $viewHelperManager;
+    private ModuleOptions $moduleOptions;
+    private Client $client;
+    private Template $template;
+    private ?\Mailing\Entity\Contact $mailingContact = null;
+    private array $templateVariables = [];
     /** @var ValueObject\Attachment[] */
-    private $attachments = [];
+    private array $attachments = [];
     /** @var ValueObject\Attachment[] */
-    private $inlinedAttachments = [];
-    /** @var ValueObject\Recipient */
-    private $from;
+    private array $inlinedAttachments = [];
+    private ?ValueObject\Recipient $from;
     /** @var ValueObject\Recipient[] */
-    private $to = [];
+    private array $to = [];
     /** @var ValueObject\Recipient[] */
-    private $cc = [];
+    private array $cc = [];
     /** @var ValueObject\Recipient[] */
-    private $bcc = [];
+    private array $bcc = [];
     /** @var ValueObject\Header[] */
-    private $headers = [];
-
-    /** @var string */
-    private $emailContent;
-    /** @var string */
-    private $textPart;
-    /** @var string */
-    private $htmlPart;
-    /** @var string */
-    private $emailSubject;
-    /** @var string */
-    private $emailCampaign;
+    private array $headers = [];
+    private string $emailContent;
+    private string $textPart;
+    private string $htmlPart;
+    private string $emailSubject;
+    private string $emailCampaign;
 
     public function __construct(
         array $config,
@@ -110,19 +95,20 @@ class EmailService
         DeeplinkService $deeplinkService,
         AuthenticationService $authenticationService,
         TwigRenderer $renderer,
-        HelperPluginManager $viewHelperManager
+        HelperPluginManager $viewHelperManager,
+        ModuleOptions $moduleOptions
     ) {
-        $this->config = $config;
         $this->contactService = $contactService;
         $this->generalService = $generalService;
         $this->deeplinkService = $deeplinkService;
         $this->authenticationService = $authenticationService;
         $this->renderer = $renderer;
         $this->viewHelperManager = $viewHelperManager;
+        $this->moduleOptions = $moduleOptions;
 
         $this->client = new Client(
-            $config['email']['relay']['username'],
-            $config['email']['relay']['password'],
+            $config['email']['relay']['username'] ?? '',
+            $config['email']['relay']['password'] ?? '',
             true,
             ['version' => 'v3.1']
         );
@@ -138,6 +124,8 @@ class EmailService
         $this->emailContent = $mailing->getMailHtml();
         $this->emailSubject = $mailing->getMailSubject();
         $this->emailCampaign = $mailing->getMailing();
+
+        $this->templateVariables['subject'] = $mailing->getMailSubject();
     }
 
     private function resetEmailContent(): void
@@ -162,10 +150,10 @@ class EmailService
                 if ($this->authenticationService->hasIdentity()) {
                     $owner = $this->authenticationService->getIdentity();
                 }
-                // no break
+            // no break
             case '_owner':
                 if (null === $owner) {
-                    throw new \InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
+                    throw new InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
                 }
 
                 $this->from = new ValueObject\Recipient($owner->parseFullName(), $owner->getEmail());
@@ -190,7 +178,7 @@ class EmailService
         $webInfo = $this->generalService->findWebInfoByInfo($webInfoName);
 
         if (null === $webInfo) {
-            throw new \InvalidArgumentException(sprintf('The requested template %s cannot be found', $webInfoName));
+            throw new InvalidArgumentException(sprintf('The requested template %s cannot be found', $webInfoName));
         }
 
         $this->setSender($webInfo->getSender(), $this->authenticationService->getIdentity());
@@ -225,45 +213,14 @@ class EmailService
                 ['content' => $message]
             );
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
     private function createTwigTemplate(string $content): string
     {
-        /*
-        * Replace first the content of the mailing with the required (new) short tags
-        */
-        $content = preg_replace(
-            [
-                '~\[parent::getContact\(\)::firstname\]~',
-                '~\[parent::getContact\(\)::parseLastname\(\)\]~',
-                '~\[parent::getContact\(\)::parseFullname\(\)\]~',
-                '~\[parent::getContact\(\)::getContactOrganisation\(\)::parseOrganisationWithBranch\(\)\]~',
-                '~\[parent::getContact\(\)::country\]~',
-            ],
-            [
-                "[firstname]",
-                "[lastname]",
-                "[fullname]",
-                "[organisation]",
-                "[country]",
-            ],
-            $content
-        );
-
-        $content = \preg_replace(
-            [
-                '~\[(.*?)\]~',
-            ],
-            [
-                '{{ $1|raw }}',
-            ],
-            $content
-        );
-
-        $twigRenderer = new \Twig_Environment(new \Twig_Loader_Array(['email_template' => $content]));
+        $twigRenderer = new Environment(new ArrayLoader(['email_template' => $content]));
 
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
@@ -327,7 +284,7 @@ class EmailService
             $key
         );
 
-        $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink, 'link');
+        $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink);
     }
 
     public function setUnsubscribe(string $unsubscribe): void
@@ -345,7 +302,7 @@ class EmailService
         $emailMessage->setEmailAddress($this->to[0]->toArray()['Email']);
         $emailMessage->setSubject($this->emailSubject);
         $emailMessage->setMessage($this->htmlPart);
-        $emailMessage->setAmountOfAttachments(\count($this->attachments));
+        $emailMessage->setAmountOfAttachments(count($this->attachments));
 
         //Inject the mailing contact
         if (null !== $this->mailingContact) {
@@ -368,7 +325,7 @@ class EmailService
             $this->textPart,
             $this->htmlPart,
             $emailMessage->getIdentifier(),
-            $this->config['deeplink']['serverUrl'] . $link,
+            $this->moduleOptions->getServerUrl() . $link,
             'enabled',
             'enabled',
             $this->emailCampaign,
@@ -382,20 +339,20 @@ class EmailService
 
         $response = $this->client->post(Resources::$Email, ['body' => $body->toArray()]);
 
-        if (!$response->success()) {
+        if (! $response->success()) {
             //Update the email message
             $emailMessage->setLatestEvent('not_sent');
-            $emailMessage->setDateLatestEvent(new \DateTime());
+            $emailMessage->setDateLatestEvent(new DateTime());
 
             //Update the mailingContact
             if (null !== $this->mailingContact) {
-                $this->mailingContact->setDateSent(new \DateTime());
+                $this->mailingContact->setDateSent(new DateTime());
             }
 
             $emailEvent = new EmailMessageEvent();
             $emailEvent->setEmailMessage($emailMessage);
             $emailEvent->setEvent('not_sent');
-            $emailEvent->setTime(new \DateTime());
+            $emailEvent->setTime(new DateTime());
             $emailEvent->setMessageId(0);
             $emailEvent->setEmail('');
             $emailEvent->setCampaign('');
@@ -407,12 +364,12 @@ class EmailService
 
         //Update the email message
         $emailMessage->setLatestEvent('sent_to_mailjet');
-        $emailMessage->setDateLatestEvent(new \DateTime());
+        $emailMessage->setDateLatestEvent(new DateTime());
 
         $emailEvent = new EmailMessageEvent();
         $emailEvent->setEmailMessage($emailMessage);
         $emailEvent->setEvent('sent_to_mailjet');
-        $emailEvent->setTime(new \DateTime());
+        $emailEvent->setTime(new DateTime());
         $emailEvent->setMessageId(0);
         $emailEvent->setEmail('');
         $emailEvent->setCampaign('');
@@ -424,18 +381,18 @@ class EmailService
 
     private function renderEmailContent(): void
     {
-        $message = $this->createTwigTemplate($this->emailContent);
+        $message = $this->createTwigTemplate((string)$this->emailContent);
 
         try {
             $htmlPart = $this->renderer->render(
                 $this->template->getTemplate(),
-                \array_merge(['content' => $message], $this->templateVariables)
+                array_merge(['content' => $message], $this->templateVariables)
             );
             $textPart = $this->renderer->render(
                 'plain',
-                ['content' => \strip_tags($message)]
+                ['content' => strip_tags($message)]
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $htmlPart = $textPart = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
         }
 
@@ -446,33 +403,33 @@ class EmailService
 
         foreach ($this->templateVariables as $key => $replace) {
             //Do not replace booleans or \DateTime instances
-            if (\is_bool($replace) || $replace instanceof \DateTime) {
+            if (is_bool($replace) || $replace instanceof DateTime) {
                 continue;
             }
-            $this->emailSubject = \str_replace(\sprintf('[%s]', $key), $replace, $this->emailSubject);
+            $this->emailSubject = str_replace(sprintf('[%s]', $key), $replace, $this->emailSubject);
         }
     }
 
     private function embedImagesAsAttachment(string &$htmlPart): void
     {
         $matches = [];
-        \preg_match_all("#src=['\"]([^'\"]+)#i", $htmlPart, $matches);
+        preg_match_all("#src=['\"]([^'\"]+)#i", $htmlPart, $matches);
 
-        $matches = \array_unique($matches[1]);
+        $matches = array_unique($matches[1]);
 
-        if (\count($matches) > 0) {
+        if (count($matches) > 0) {
             foreach ($matches as $key => $filename) {
-                if ($filename && \file_exists($filename)) {
+                if ($filename && file_exists($filename)) {
                     $id = md5_file($filename);
 
-                    $this->inlinedAttachments = new ValueObject\Attachment(
+                    $this->inlinedAttachments[] = new ValueObject\Attachment(
                         $this->mimeByExtension($filename),
-                        \substr($id, 0, 10),
-                        \file_get_contents($filename),
+                        substr($id, 0, 10),
+                        file_get_contents($filename),
                         $id
                     );
 
-                    $htmlPart = \str_replace($filename, 'cid:' . $id, $htmlPart);
+                    $htmlPart = str_replace($filename, 'cid:' . $id, $htmlPart);
                 }
             }
         }
@@ -506,7 +463,7 @@ class EmailService
 
         foreach ($this->to as $singleTo) {
             $toValue = $singleTo->toArray();
-            if (!\defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
+            if (! defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
                 $toValue['Email'] = 'info@jield.nl';
             }
             $to[] = $toValue;
@@ -575,7 +532,7 @@ class EmailService
         $this->attachments[] = new ValueObject\Attachment(
             $publication->getContentType()->getContentType(),
             $publication->getOriginal(),
-            \base64_encode(\stream_get_contents($publication->getObject()->first()->getObject()))
+            base64_encode(stream_get_contents($publication->getObject()->first()->getObject()))
         );
     }
 
@@ -593,7 +550,7 @@ class EmailService
 
     public function setTemplateVariable(string $variable, $value): void
     {
-        if (!\is_bool($value) && !$value instanceof \DateTime) {
+        if (! is_bool($value) && ! $value instanceof DateTime) {
             $value = (string)$value;
         }
 
@@ -602,6 +559,6 @@ class EmailService
 
     private function underscore(string $name): string
     {
-        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+        return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));
     }
 }

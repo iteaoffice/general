@@ -1,5 +1,4 @@
 {% do form.prepare() %}
-
 {{ form().openTag(form)|raw }}
 
 {% set country = form.get('general_entity_challenge') %}
@@ -10,8 +9,8 @@
 {{ ztbformelement(country.get('sequence')) }}
 {{ ztbformelement(country.get('sources')) }}
 {{ ztbformelement(country.get('abstract')) }}
-{{ ztbformelement(country.get('description')) }}
 {{ ztbformelement(country.get('html')) }}
+{{ ztbformelement(country.get('backgroundImage')) }}
 {{ ztbformelement(country.get('css')) }}
 {{ ztbformelement(country.get('backgroundColor')) }}
 {{ ztbformelement(country.get('frontColor')) }}
@@ -19,10 +18,10 @@
 
 {% if challenge.icon %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-icon") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-icon") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
+            <p class="form-control-plaintext">{{ challengeIcon(challenge, 100) }}</p>
         </div>
     </div>
 {% endif %}
@@ -31,10 +30,10 @@
 
 {% if challenge.image %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-image") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-image") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
+            <p class="form-control-plaintext">{{ challengeImage(challenge, 200) }}</p>
         </div>
     </div>
 {% endif %}
@@ -44,10 +43,20 @@
 
 {% if challenge.pdf %}
     <div class="form-group row">
-        <label class="col-md-3 form-control-label control-label col-form-label">{{ translate("txt-current-pdf") }}</label>
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
-            <p class="form-control-static form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
+            <p class="form-control-plaintext">{{ challengeLink(challenge,'download-pdf','text') }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% if challenge.backgroundImage %}
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-background-image") }}</label>
+
+        <div class="col-sm-9">
+            <p class="form-control-plaintext">{{ image(challenge.backgroundImage, 200, null, false, false, 2) }}</p>
         </div>
     </div>
 {% endif %}
@@ -57,7 +66,7 @@
 {{ formelement(form.get('csrf')) }}
 
 <div class="form-group row">
-    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+    <div class="offset-sm-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}
     </div>
@@ -65,8 +74,30 @@
 
 {{ form().closeTag()|raw }}
 
-<style type="text/css">
-    textarea {
-        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-    }
-</style>
+{% do headScript().appendFile('assets/js/codemirror.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/css.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/htmlmixed.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/javascript.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/xml.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/selection-pointer.js', 'text/javascript') %}
+{% do headScript().appendFile('assets/js/codemirror/matchbrackets.js', 'text/javascript') %}
+{% do headLink().appendStylesheet('assets/css/codemirror.css') %}
+
+<script type="text/javascript">
+    var htmlEditor = CodeMirror.fromTextArea(document.getElementById("html_challenge"), {
+        mode: "text/html",
+        lineNumbers: true,
+        selectionPointer: true,
+        lineWrapping: true,
+        matchBrackets: true
+    });
+    htmlEditor.setSize(null, 600);
+    var cssEditor = CodeMirror.fromTextArea(document.getElementById("css_challenge"), {
+        mode: "css",
+        lineNumbers: true,
+        selectionPointer: true,
+        lineWrapping: true,
+        matchBrackets: true
+    });
+    cssEditor.setSize(null, 600);
+</script>

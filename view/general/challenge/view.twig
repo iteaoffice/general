@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-challenge-%s")|format(challenge)) %}
 
-<h1 class="display-4">{{ translate("txt-challenge-%s")|format(challenge) }} {{ challengeLink(challenge,'edit','button') }}</h1>
+<h1>{{ translate("txt-challenge-%s")|format(challenge) }} {{ challengeLink(challenge,'edit','button') }}</h1>
 
 <div class="row">
     <div class="col-md-8">
@@ -13,7 +13,7 @@
             <dd>{{ challenge.sequence }}</dd>
 
             <dt>{{ translate("txt-challenge-type") }}</dt>
-            <dd>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</dd>
+            <dd>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</dd>
 
             <dt>{{ translate("txt-challenge-sources") }}</dt>
             <dd>{{ challenge.sources }}</dd>
@@ -45,21 +45,21 @@
                 <dd>{{ translate("txt-challenge-is-active-in-every-call") }}</dd>
             {% endfor %}
 
-            <dt>{{ translate('txt-ideas') }}</dt>
+            <dt>{{ translate("txt-ideas") }}</dt>
             {% for ideaChallenge in challenge.ideaChallenge %}
                 <dd>{{ ideaLink(ideaChallenge.idea,'view-admin','name') }}</dd>
             {% else %}
                 <dd>{{ translate("txt-no-ideas-for-this-challenge") }}</dd>
             {% endfor %}
 
-            <dt>{{ translate('txt-projects') }}</dt>
+            <dt>{{ translate("txt-projects") }}</dt>
             {% for projectChallenge in challenge.projectChallenge %}
                 <dd>{{ projectLink(projectChallenge.project,'view-admin','name') }}</dd>
             {% else %}
                 <dd>{{ translate("txt-no-projects-for-this-challenge") }}</dd>
             {% endfor %}
 
-            <dt>{{ translate('txt-booths') }}</dt>
+            <dt>{{ translate("txt-booths") }}</dt>
             {% for boothChallenge in challenge.boothChallenge %}
                 <dd>{{ boothLink(boothChallenge.booth,'view','name') }}</dd>
             {% else %}
@@ -74,19 +74,19 @@
 
         {{ challengeIcon(challenge, 100) }}
 
+        <h3>{{ translate("txt-background-image") }}</h3>
+
+        {{ image(challenge.backgroundImage, 200, null, false, false, 2) }}
+
         <h3>{{ translate("txt-challenge-image") }}</h3>
 
         {{ challengeImage(challenge, 200) }}
 
 
         {% if challenge.pdf %}
-            <h3>{{ translate('txt-current-pdf') }}</h3>
+            <h3>{{ translate("txt-current-pdf") }}</h3>
             {{ challengeLink(challenge,'download-pdf','text') }}
         {% endif %}
     </div>
 </div>
-
-<h2>{{ translate("txt-challenge-description") }}</h2>
-{{ challenge.description|raw }}
-
 

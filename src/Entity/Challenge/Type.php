@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
@@ -20,30 +16,31 @@ namespace General\Entity\Challenge;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use General\Entity\AbstractEntity;
-use Zend\Form\Annotation;
+use General\Entity\Challenge;
+use Laminas\Form\Annotation;
 
 /**
  * Project.
  *
  * @ORM\Table(name="challenge_type")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge\Type")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("challenge_type")
  */
 class Type extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="type_id", type="integer", nullable=false)
+     * @ORM\Column(name="type_id", type="integer", options={"unsigned":true})
      * @ORM\Id
-     * @Annotation\Type("\Zend\Form\Element\Hidden")
+     * @Annotation\Type("\Laminas\Form\Element\Hidden")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @var integer
+     * @var int
      */
     private $id;
     /**
      * @ORM\Column(name="type", type="string", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-type-label", "help-block":"txt-challenge-type-type-help-block"})
      *
      * @var string
@@ -51,68 +48,33 @@ class Type extends AbstractEntity
     private $type;
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Annotation\Type("\Zend\Form\Element\Textarea")
+     * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-type-description-label", "help-block":"txt-challenge-type-description-help-block"})
      *
      * @var string
      */
     private $description;
     /**
-     * @ORM\Column(name="sequence", type="integer", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-sequence-label", "help-block":"txt-challenge-type-sequence-help-block"})
      *
-     * @var integer
+     * @var int
      */
     private $sequence;
     /**
      * @ORM\OneToMany(targetEntity="General\Entity\Challenge", cascade={"persist"}, mappedBy="type")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Challenge[]|Collections\ArrayCollection
+     * @var Challenge[]|Collections\ArrayCollection
      */
     private $challenge;
-
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->challenge = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
 
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
 
     /**
      * Force the Type to a string.
@@ -205,7 +167,7 @@ class Type extends AbstractEntity
     }
 
     /**
-     * @return Collections\ArrayCollection|\General\Entity\Challenge[]
+     * @return Collections\ArrayCollection|Challenge[]
      */
     public function getChallenge()
     {
@@ -213,7 +175,7 @@ class Type extends AbstractEntity
     }
 
     /**
-     * @param Collections\ArrayCollection|\General\Entity\Challenge[] $challenge
+     * @param Collections\ArrayCollection|Challenge[] $challenge
      *
      * @return Type
      */

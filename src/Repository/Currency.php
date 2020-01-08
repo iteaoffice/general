@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  Contact
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -16,6 +17,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
+use function in_array;
+
 /**
  * Class Currency
  *
@@ -23,11 +26,6 @@ use General\Entity;
  */
 class Currency extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -39,13 +37,14 @@ class Currency extends EntityRepository
         }
 
         $direction = 'ASC';
-        if (isset($filter['direction'])
-            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+        if (
+            isset($filter['direction'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
 
-        if (!array_key_exists('order', $filter)) {
+        if (! array_key_exists('order', $filter)) {
             $filter['order'] = 'name';
         }
 
@@ -69,21 +68,13 @@ class Currency extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * SubSelect builder which limits the results of webInfos to only the active (Approved and FPP).
-     *
-     * @param QueryBuilder $queryBuilder
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function applyFilter(
         QueryBuilder $queryBuilder,
         array $filter
     ): QueryBuilder {
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_currency.name', ':like'));
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
+            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
         return $queryBuilder;

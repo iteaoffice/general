@@ -1,17 +1,16 @@
 {% do headTitle().append(translate("txt-admin")) %}
-{% do headTitle().append(translate("txt-log-list")) %}
+{% do headTitle().append(translate("txt-errorlog-list")) %}
 
 {% do form.prepare() %}
 {{ form().openTag(form)|raw }}
 {% set filter = form.get('filter') %}
 
-<input type="hidden" name="filter[order]" value="{{ order }}">
-<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
 
 <div class="row">
 
     <div class="col-md-12">
-        <h1 class="display-4">{{ translate("txt-log-list") }}</h1>
+        <h1>{{ translate("txt-error-log-list") }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -20,23 +19,26 @@
             <div class="col-md-6">
                 <div class="input-group">
                     {{ formelement(filter.get('search')) }}
-                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+                    <div class="input-group-append input-group-btn">
+                        {{ formelement(form.get('submit')) }}
+                    </div>
+                </div>
             </div>
         </div>
 
         {% if paginator.pageRange > 0 %}
-            <table class="table table-hover table-striped table-condensed table-sm">
+            <table class="table table-hover table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'event', 'text': translate('txt-event')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'date', 'text': translate('txt-date')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'type', 'text': translate('txt-log-type')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'event', 'text': translate("txt-event")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'date', 'text': translate("txt-date")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/log/list', 'criteria': 'type', 'text': translate("txt-log-type")} %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for log in paginator.getCurrentItems() %}
                     <tr>
-                        <td>{{ generalLogLink(log,'view', 'event') }}</td>
+                        <td>{{ generalLogLink(log) }}</td>
                         <td>{{ log.date }}</td>
                         <td>{{ log.errorType }}</td>
                     </tr>
@@ -47,7 +49,7 @@
 
             <input type="submit" name="submit" class="btn btn-danger" value="{{ translate("txt-truncate-log") }}">
 
-            {% include 'general/partial/pagination-control' %}
+            {% include 'application/partial/pagination-control' %}
         {% else %}
             {{ ztbalert().info(translate("txt-no-logs-could-be-found"))|raw }}
         {% endif %}

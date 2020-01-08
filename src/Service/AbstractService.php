@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        http://github.com/iteaoffice/project for the canonical source repository
@@ -29,27 +25,13 @@ use General\Entity\AbstractEntity;
  */
 abstract class AbstractService
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    protected EntityManager $entityManager;
 
-    /**
-     * AbstractService constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param string $entity
-     * @param array  $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(string $entity, array $filter): QueryBuilder
     {
         return $this->entityManager->getRepository($entity)->findFiltered(
@@ -58,22 +40,11 @@ abstract class AbstractService
         );
     }
 
-    /**
-     * @param string $entity
-     *
-     * @return array|AbstractEntity[]
-     */
     public function findAll(string $entity): array
     {
         return $this->entityManager->getRepository($entity)->findAll();
     }
 
-    /**
-     * @param string $entity
-     * @param int    $id
-     *
-     * @return null|AbstractEntity
-     */
     public function find(string $entity, int $id): ?AbstractEntity
     {
         return $this->entityManager->getRepository($entity)->find($id);
@@ -86,7 +57,7 @@ abstract class AbstractService
 
     public function save(AbstractEntity $entity): AbstractEntity
     {
-        if (!$this->entityManager->contains($entity)) {
+        if (! $this->entityManager->contains($entity)) {
             $this->entityManager->persist($entity);
         }
 

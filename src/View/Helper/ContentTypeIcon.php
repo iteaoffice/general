@@ -6,7 +6,7 @@
  * @category   General
  *
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright  Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -16,31 +16,26 @@ namespace General\View\Helper;
 use General\Entity\ContentType;
 use General\Service\GeneralService;
 
-/**
- * Create a link to an project.
- *
- * @category   General
- */
-final class ContentTypeIcon extends AbstractViewHelper
-{
-    /**
-     * @var GeneralService
-     */
-    private $generalSerivce;
+use function sprintf;
 
-    public function __construct(GeneralService $generalSerivce)
+/**
+ * Class ContentTypeIcon
+ *
+ * @package General\View\Helper
+ */
+final class ContentTypeIcon
+{
+    private GeneralService $generalService;
+
+    public function __construct(GeneralService $generalService)
     {
-        $this->generalSerivce = $generalSerivce;
+        $this->generalService = $generalService;
     }
 
-    public function __invoke(ContentType $contentType = null, string $contentTypeName = null)
+    public function __invoke(ContentType $contentType = null, string $contentTypeName = null): ?string
     {
-        if (null === $contentType && null !== $contentType) {
-            $contentType = $this->generalSerivce->findContentTypeByContentTypeName($contentTypeName);
-        }
-
         if (null === $contentType && null !== $contentTypeName) {
-            $contentType = $this->generalSerivce->findContentTypeByContentTypeDescription($contentTypeName);
+            $contentType = $this->generalService->findContentTypeByContentTypeName($contentTypeName);
         }
 
         if (null === $contentType) {
@@ -78,6 +73,7 @@ final class ContentTypeIcon extends AbstractViewHelper
             case 'application/msword':
                 $class = 'fa-file-word-o';
                 break;
+            default:
             case 'application/octet-stream':
             case 'application/csv':
             case 'text/xml':
@@ -86,8 +82,6 @@ final class ContentTypeIcon extends AbstractViewHelper
             case 'video/mp4':
                 $class = 'fa-file-video-o';
                 break;
-            default:
-                return sprintf('%s not found', $contentType->getContentType());
         }
 
         return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());

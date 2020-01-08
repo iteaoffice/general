@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -6,27 +7,28 @@
  *
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2018 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  */
+
 declare(strict_types=1);
 
 namespace General\View\Handler;
 
 use Content\Entity\Content;
-use Zend\Authentication\AuthenticationService;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\Router\Http\RouteMatch;
-use Zend\View\Helper\AbstractHelper;
-use Zend\View\Helper\HeadMeta;
-use Zend\View\Helper\HeadStyle;
-use Zend\View\Helper\HeadTitle;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\Router\Http\RouteMatch;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Helper\HeadMeta;
+use Laminas\View\Helper\HeadStyle;
+use Laminas\View\Helper\HeadTitle;
+use Laminas\View\Helper\Placeholder\Container;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -36,34 +38,13 @@ use ZfcTwig\View\TwigRenderer;
  */
 abstract class AbstractHandler extends AbstractHelper
 {
-    /**
-     * @var HelperPluginManager
-     */
-    protected $helperPluginManager;
-    /**
-     * @var RouteMatch
-     */
-    protected $routeMatch;
-    /**
-     * @var TwigRenderer
-     */
-    protected $renderer;
-    /**
-     * @var Response
-     */
-    protected $response;
-    /**
-     * @var Request
-     */
-    protected $request;
-    /**
-     * @var AuthenticationService
-     */
-    protected $authenticationService;
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected HelperPluginManager $helperPluginManager;
+    protected RouteMatch $routeMatch;
+    protected TwigRenderer $renderer;
+    protected Response $response;
+    protected Request $request;
+    protected AuthenticationService $authenticationService;
+    protected TranslatorInterface $translator;
 
     public function __construct(
         Application $application,
@@ -86,15 +67,15 @@ abstract class AbstractHandler extends AbstractHelper
     public function extractContentParam(Content $content): array
     {
         $params = [
-            'id'     => null,
+            'id' => null,
             'docRef' => null,
-            'year'   => null,
-            'page'   => 1,
-            'limit'  => null,
+            'year' => null,
+            'page' => 1,
+            'limit' => null,
         ];
 
         foreach ($content->getContentParam() as $contentParam) {
-            if (!empty($contentParam->getParameterId())) {
+            if (! empty($contentParam->getParameterId())) {
                 $params[$contentParam->getParameter()->getParam()] = $contentParam->getParameterId();
             }
         }
@@ -115,51 +96,34 @@ abstract class AbstractHandler extends AbstractHelper
         return $params;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDocRef(): bool
     {
         return null !== $this->getDocRef();
     }
 
-    /**
-     * @return null|string
-     */
     public function getDocRef(): ?string
     {
         return $this->routeMatch->getParam('routeMatch');
     }
 
     /**
-     * @return HeadTitle|AbstractContainer
+     * @return HeadTitle|Container
      */
     public function getHeadTitle(): HeadTitle
     {
         return $this->helperPluginManager->get('headTitle');
     }
 
-    /**
-     * @return HeadMeta
-     */
     public function getHeadMeta(): HeadMeta
     {
         return $this->helperPluginManager->get('headMeta');
     }
 
-    /**
-     * @return HeadStyle
-     */
     public function getHeadStyle(): HeadStyle
     {
         return $this->helperPluginManager->get('headStyle');
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
     public function translate($string): string
     {
         return $this->translator->translate($string);

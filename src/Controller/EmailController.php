@@ -1,17 +1,19 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
 
 namespace General\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
@@ -20,30 +22,21 @@ use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
 use General\Form\EmailFilter;
 use General\Service\GeneralService;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class EmailController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class EmailController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
+    private GeneralService $generalService;
+    private EntityManager $entityManager;
 
     public function __construct(
         GeneralService $generalService,
@@ -95,7 +88,7 @@ final class EmailController extends AbstractActionController
         $events = Json::decode($this->getRequest()->getContent());
 
         foreach ($events as $data) {
-            if (!isset($data->CustomID)) {
+            if (! isset($data->CustomID)) {
                 continue;
             }
 
@@ -111,7 +104,7 @@ final class EmailController extends AbstractActionController
             $emailMessageEvent = new EmailMessageEvent();
             $emailMessageEvent->setEmail($data->email);
 
-            $dateTime = new \DateTime();
+            $dateTime = new DateTime();
             $emailMessageEvent->setTime($dateTime->setTimestamp($data->time));
             $emailMessageEvent->setEmailMessage($emailMessage);
             $emailMessageEvent->setEvent($data->event);
@@ -145,7 +138,7 @@ final class EmailController extends AbstractActionController
 
             //Store the latest status in the emailMessage
             $emailMessage->setLatestEvent($data->event);
-            $emailMessage->setDateLatestEvent(new \DateTime());
+            $emailMessage->setDateLatestEvent(new DateTime());
             $this->generalService->save($emailMessage);
         }
 

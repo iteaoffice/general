@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -25,39 +21,24 @@ use General\Entity\Challenge;
 use General\Form\ChallengeFilter;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\Validator\File\MimeType;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\Validator\File\MimeType;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class ChallengeController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class ChallengeController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
+    private EntityManager $entityManager;
 
     public function __construct(
         GeneralService $generalService,
@@ -106,7 +87,7 @@ final class ChallengeController extends AbstractActionController
         return new ViewModel(['challenge' => $challenge]);
     }
 
-    public function newAction(): ViewModel
+    public function newAction()
     {
         $data = array_merge_recursive(
             $this->getRequest()->getPost()->toArray(),
@@ -118,7 +99,7 @@ final class ChallengeController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/challenge/list');
+                return $this->redirect()->toRoute('zfcadmin/challenge/list');
             }
 
             if ($form->isValid()) {
@@ -130,7 +111,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['icon']['tmp_name'])) {
+                if (! empty($fileData['icon']['tmp_name'])) {
                     $icon = $challenge->getIcon();
                     if (null === $icon) {
                         $icon = new Challenge\Icon();
@@ -153,7 +134,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['image']['tmp_name'])) {
+                if (! empty($fileData['image']['tmp_name'])) {
                     $image = $challenge->getImage();
                     if (null === $image) {
                         $image = new Challenge\Image();
@@ -177,7 +158,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['pdf']['tmp_name'])) {
+                if (! empty($fileData['pdf']['tmp_name'])) {
                     $pdf = $challenge->getPdf();
                     if (null === $pdf) {
                         $pdf = new Challenge\Pdf();
@@ -195,12 +176,12 @@ final class ChallengeController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-challenge-%s-has-successfully-been-created"),
+                        $this->translator->translate('txt-challenge-%s-has-successfully-been-created'),
                         $challenge
                     )
                 );
 
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
                     [
                         'id' => $challenge->getId(),
@@ -253,7 +234,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['icon']['tmp_name'])) {
+                if (! empty($fileData['icon']['tmp_name'])) {
                     if (null === $icon) {
                         $icon = new Challenge\Icon();
                     }
@@ -270,7 +251,8 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the icon when the tmp is empty and there is not icon at all
-                if (empty($fileData['icon']['tmp_name']) && null !== $challenge->getIcon()
+                if (
+                    empty($fileData['icon']['tmp_name']) && null !== $challenge->getIcon()
                     && null === $challenge->getIcon()->getId()
                 ) {
                     $challenge->setIcon(null);
@@ -280,7 +262,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['image']['tmp_name'])) {
+                if (! empty($fileData['image']['tmp_name'])) {
                     if (null === $image) {
                         $image = new Challenge\Image();
                     }
@@ -297,10 +279,10 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
-                if (empty($fileData['image']['tmp_name'])
+                if (
+                    empty($fileData['image']['tmp_name'])
                     && null !== $challenge->getImage()
                     && null === $challenge->getImage()->getId()
-
                 ) {
                     $challenge->setImage(null);
                 }
@@ -308,7 +290,7 @@ final class ChallengeController extends AbstractActionController
                 /**
                  * Handle the new logo (if any logo is updated)
                  */
-                if (!empty($fileData['pdf']['tmp_name'])) {
+                if (! empty($fileData['pdf']['tmp_name'])) {
                     if (null === $pdf) {
                         $pdf = new Challenge\Pdf();
                     }
@@ -319,7 +301,8 @@ final class ChallengeController extends AbstractActionController
                 }
 
                 //Remove the pdf when the tmp is empty and there is not pdf at all
-                if (empty($fileData['pdf']['tmp_name'])
+                if (
+                    empty($fileData['pdf']['tmp_name'])
                     && null !== $challenge->getPdf()
                     && null === $challenge->getPdf()->getId()
                 ) {
@@ -337,12 +320,12 @@ final class ChallengeController extends AbstractActionController
 
                 $this->flashMessenger()->addSuccessMessage(
                     sprintf(
-                        $this->translator->translate("txt-challenge-%s-has-successfully-been-updated"),
+                        $this->translator->translate('txt-challenge-%s-has-successfully-been-updated'),
                         $challenge
                     )
                 );
 
-                $this->redirect()->toRoute(
+                return $this->redirect()->toRoute(
                     'zfcadmin/challenge/view',
                     [
                         'id' => $challenge->getId(),

@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -17,9 +13,11 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Affiliation\Entity\Invoice;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 
 /**
  * CostsVersion.
@@ -30,17 +28,17 @@ use Zend\Form\Annotation;
 class ExchangeRate extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="exchange_rate_id", type="integer", nullable=false)
+     * @ORM\Column(name="exchange_rate_id", type="integer", options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
      *
-     * @var integer
+     * @var int
      */
     private $id;
     /**
-     * @ORM\Column(name="rate", type="decimal", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @ORM\Column(name="rate", type="decimal", precision=10, scale=6, nullable=false)
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-exchange-rate-rate-label","help-block":"txt-exchange-rate-rate-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-exchange-rate-rate-placeholder"})
      *
@@ -49,10 +47,10 @@ class ExchangeRate extends AbstractEntity
     private $rate;
     /**
      * @ORM\Column(name="date", type="date", nullable=false)
-     * @Annotation\Type("\Zend\Form\Element\Date")
+     * @Annotation\Type("\Laminas\Form\Element\Date")
      * @Annotation\Options({"label":"txt-exchange-rate-date-label","help-block":"txt-exchange-rate-date-help-block"})
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $date;
     /**
@@ -60,61 +58,22 @@ class ExchangeRate extends AbstractEntity
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="currency_id")
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\Currency
+     * @var Currency
      */
     private $currency;
     /**
      * @ORM\OneToMany(targetEntity="Affiliation\Entity\Invoice", cascade={"persist","remove"}, mappedBy="exchangeRate")
      * @Annotation\Exclude()
      *
-     * @var \Affiliation\Entity\Invoice[]|ArrayCollection
+     * @var Invoice[]|ArrayCollection
      */
     private $affiliationInvoice;
 
-    /**
-     * ExchangeRate constructor.
-     */
     public function __construct()
     {
         $this->affiliationInvoice = new ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
@@ -153,19 +112,19 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDate(): ?\DateTime
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      *
      * @return ExchangeRate
      */
-    public function setDate(\DateTime $date): ExchangeRate
+    public function setDate(DateTime $date): ExchangeRate
     {
         $this->date = $date;
 
@@ -193,7 +152,7 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @return \Affiliation\Entity\Invoice[]|ArrayCollection
+     * @return Invoice[]|ArrayCollection
      */
     public function getAffiliationInvoice()
     {
@@ -201,7 +160,7 @@ class ExchangeRate extends AbstractEntity
     }
 
     /**
-     * @param \Affiliation\Entity\Invoice[]|ArrayCollection $affiliationInvoice
+     * @param Invoice[]|ArrayCollection $affiliationInvoice
      *
      * @return ExchangeRate
      */

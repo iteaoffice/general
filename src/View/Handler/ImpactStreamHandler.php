@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -7,11 +8,14 @@
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2017 ITEA Office (http://itea3.org)
  */
+
 declare(strict_types=1);
 
 namespace General\View\Handler;
 
 use Content\Entity\Content;
+use DateInterval;
+use DateTime;
 use General\Service\GeneralService;
 use Project\Search\Service\ResultSearchService;
 use Project\Service\ProjectService;
@@ -19,12 +23,15 @@ use Project\Service\ResultService;
 use Search\Form\SearchResult;
 use Search\Paginator\Adapter\SolariumPaginator;
 use Solarium\QueryType\Select\Query\Query as SolariumQuery;
-use Zend\Authentication\AuthenticationService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\Paginator\Paginator;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\Paginator\Paginator;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
+
+use function array_merge;
+use function sprintf;
 
 /**
  * Class ImpactStreamHandler
@@ -33,22 +40,10 @@ use ZfcTwig\View\TwigRenderer;
  */
 final class ImpactStreamHandler extends AbstractHandler
 {
-    /**
-     * @var ResultService
-     */
-    private $resultService;
-    /**
-     * @var ResultSearchService
-     */
-    private $resultSearchService;
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var ProjectService
-     */
-    private $projectService;
+    private ResultService $resultService;
+    private ResultSearchService $resultSearchService;
+    private GeneralService $generalService;
+    private ProjectService $projectService;
 
     public function __construct(
         Application $application,
@@ -79,7 +74,7 @@ final class ImpactStreamHandler extends AbstractHandler
     {
         switch ($content->getHandler()->getHandler()) {
             case 'impactstream_index':
-                $this->getHeadTitle()->append($this->translate("txt-impact-stream"));
+                $this->getHeadTitle()->append($this->translate('txt-impact-stream'));
 
                 return $this->parseIndex();
 
@@ -95,14 +90,14 @@ final class ImpactStreamHandler extends AbstractHandler
     public function parseIndex(): string
     {
         //Set the default date on now
-        $today = new \DateTime();
+        $today = new DateTime();
 
-        $lastYear = new \DateTime();
-        $lastYear->sub(new \DateInterval('P12M'));
+        $lastYear = new DateTime();
+        $lastYear->sub(new DateInterval('P12M'));
 
         $page = $this->request->getQuery('page', 1);
         $form = new SearchResult();
-        $data = \array_merge(
+        $data = array_merge(
             [
                 'order'     => '',
                 'toDate'    => [
@@ -131,7 +126,7 @@ final class ImpactStreamHandler extends AbstractHandler
             'html'
         ];
 
-        if ($this->request->isGet()) {
+        if ($this->request->isGet() || $this->request->isHead()) {
             $dateInterval = $this->resultSearchService->parseDateInterval($data);
 
             $this->resultSearchService->setSearchImpactStream(
@@ -146,7 +141,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 foreach ($data['facet'] as $facetField => $values) {
                     $quotedValues = [];
                     foreach ($values as $value) {
-                        $quotedValues[] = \sprintf('"%s"', $value);
+                        $quotedValues[] = sprintf('"%s"', $value);
                     }
 
                     $this->resultSearchService->addFilterQuery(
@@ -173,15 +168,6 @@ final class ImpactStreamHandler extends AbstractHandler
         $paginator->setCurrentPageNumber($page);
         $paginator->setPageRange(ceil($paginator->getTotalItemCount() / $paginator::getDefaultItemCountPerPage()));
 
-        // Remove order and direction from the GET params to prevent duplication
-        $filteredData = \array_filter(
-            $data,
-            function ($key) {
-                return !\in_array($key, ['order', 'direction'], true);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-
         return $this->renderer->render(
             'cms/result/impact-stream',
             [
@@ -189,7 +175,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 'order'              => $data['order'],
                 'direction'          => $data['direction'],
                 'query'              => $data['query'],
-                'arguments'          => http_build_query($filteredData),
+                'arguments'          => http_build_query($form->getFilteredData()),
                 'paginator'          => $paginator,
                 'allChallenges'      => $this->generalService->findAllChallenges(),
                 'projectService'     => $this->projectService,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  */
@@ -7,27 +8,29 @@ declare(strict_types=1);
 
 namespace General\ValueObject;
 
+use function count;
+
 final class Email
 {
-    private $from;
-    private $to;
-    private $cc;
-    private $bcc;
+    private array $from;
+    private array $to;
+    private array $cc;
+    private array $bcc;
 
-    private $subject;
-    private $textPart;
+    private string $subject;
+    private string $textPart;
 
-    private $htmlPart;
+    private string $htmlPart;
 
-    private $customID;
-    private $eventPayload;
-    private $trackOpens;
-    private $trackClicks;
-    private $customCampaign;
+    private string $customID;
+    private string $eventPayload;
+    private string $trackOpens;
+    private string $trackClicks;
+    private string $customCampaign;
 
-    private $attachments;
-    private $inlinedAttachments;
-    private $headers;
+    private array $attachments;
+    private array $inlinedAttachments;
+    private array $headers;
 
     public function __construct(
         array $from,
@@ -65,18 +68,18 @@ final class Email
 
     public function isValid(): bool
     {
-        return \count($this->isInvalidReasons()) === 0;
+        return count($this->isInvalidReasons()) === 0;
     }
 
     public function isInvalidReasons(): array
     {
         $invalidReasons = [];
 
-        if (\count($this->from) === 0) {
+        if (count($this->from) === 0) {
             $invalidReasons[] = 'No sender given';
         }
 
-        if (\count($this->to) === 0) {
+        if (count($this->to) === 0) {
             $invalidReasons[] = 'No to given';
         }
 
@@ -103,11 +106,11 @@ final class Email
             'TrackClicks' => $this->trackClicks,
         ];
 
-        if (\count($this->cc) > 0) {
+        if (count($this->cc) > 0) {
             $return['Cc'] = $this->cc;
         }
 
-        if (\count($this->bcc) > 0) {
+        if (count($this->bcc) > 0) {
             $return['Bcc'] = $this->bcc;
         }
 
@@ -123,15 +126,15 @@ final class Email
             $return['CustomCampaign'] = $this->customCampaign;
         }
 
-        if (\count($this->headers) > 0) {
+        if (count($this->headers) > 0) {
             $return['Headers'] = $this->headers;
         }
 
-        if (\count($this->attachments) > 0) {
+        if (count($this->attachments) > 0) {
             $return['Attachments'] = $this->attachments;
         }
 
-        if (\count($this->inlinedAttachments) > 0) {
+        if (count($this->inlinedAttachments) > 0) {
             $return['InlinedAttachments'] = $this->inlinedAttachments;
         }
 

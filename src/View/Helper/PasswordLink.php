@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
  *
- * @category   General
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
  *
- * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright  Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -14,75 +14,58 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\Password;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an password.
- *
- * @category   General
+ * Class PasswordLink
+ * @package General\View\Helper
  */
-class PasswordLink extends LinkAbstract
+final class PasswordLink extends AbstractLink
 {
-    /**
-     * @param Password $password
-     * @param string $action
-     * @param string $show
-     * @param string $alternativeShow
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         Password $password = null,
-        $action = 'view',
-        $show = 'name',
-        $alternativeShow = null
+        string $action = 'view',
+        string $show = 'name'
     ): string {
-        $this->setPassword($password);
-        $this->setAction($action);
-        $this->setShow($show);
-        $this->setAlternativeShow($alternativeShow);
-        $this->addRouterParam('id', $this->getPassword()->getId());
+        $password ??= new Password();
 
-        $this->setShowOptions(
-            [
-                'description' => $this->getPassword()->getDescription(),
-            ]
-        );
+        $routeParams = [];
+        $showOptions = [];
+        if (! $password->isEmpty()) {
+            $routeParams['id'] = $password->getId();
+            $showOptions['name'] = $password->getDescription();
+        }
 
-        return $this->createLink();
-    }
-
-    /**
-     * @return string|void
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/password/list');
-                $this->setText(sprintf($this->translate('txt-password-list')));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/password/new');
-                $this->setText(sprintf($this->translate('txt-create-new-password')));
-                break;
-            case 'view':
-                $this->setRouter('zfcadmin/password/view');
-                $this->setText(sprintf($this->translate('txt-view-password-%s'), $this->getPassword()));
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/password/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-password')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/password/edit');
-                $this->setText(sprintf($this->translate('txt-edit-password-%s'), $this->getPassword()));
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/password/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-password')
+                ];
                 break;
-            default:
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        "%s is an incorrect action for %s",
-                        $this->getAction(),
-                        __CLASS__
-                    )
-                );
+            case 'view':
+                $linkParams = [
+                    'icon' => 'fa-lock',
+                    'route' => 'zfcadmin/password/view',
+                    'text' => $showOptions[$show] ?? $password->getDescription()
+                ];
+                break;
         }
+
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

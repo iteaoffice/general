@@ -5,13 +5,11 @@
 {{ form().openTag(form)|raw }}
 {% set filter = form.get('filter') %}
 
-<input type="hidden" name="filter[order]" value="{{ order }}">
-<input type="hidden" name="filter[direction]" value="{{ direction }}">
 
 <div class="row">
 
     <div class="col-md-10">
-        <h1 class="display-4">{{ translate("txt-challenge-list") }} {{ challengeLink(null, 'new','button') }}</h1>
+        <h1>{{ translate("txt-challenge-list") }} {{ challengeLink(null, 'new','button') }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -20,32 +18,40 @@
             <div class="col-md-6">
                 <div class="input-group">
                     {{ formelement(filter.get('search')) }}
-                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+                    <div class="input-group-append input-group-btn">
+                        {{ formelement(form.get('submit')) }}
+                    </div>
+                </div>
             </div>
         </div>
 
         {% if paginator.pageRange > 0 %}
-            <table class="table table-hover table-striped table-condensed table-sm">
+            <table class="table table-hover table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'challenge', 'text': translate('txt-challenge')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'challenge', 'text': translate("txt-challenge")} %}</th>
                     <th>{{ translate("txt-type") }}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'sequence', 'text': translate('txt-sequence')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'sequence', 'text': translate("txt-sequence")} %}</th>
                     <th>{{ translate("txt-program-call") }}</th>
                     <th>{{ translate("txt-amount-of-projects") }}</th>
                     <th>{{ translate("txt-amount-of-booths") }}</th>
                     <th>{{ translate("txt-pdf") }}</th>
                 </tr>
                 </thead>
+                <tfoot>
+                <tr>
+                    <td colspan="8"></td>
+                </tr>
+                </tfoot>
                 <tbody>
                 {% for challenge in paginator.getCurrentItems() %}
                     <tr>
-                        <td>{{ challenge.id }} {{ challengeLink(challenge,'edit', 'icon') }}</td>
-                        <td>{{ challengeLink(challenge,'view-admin','name') }}
-                            <div class="pull-right">{{ challengeLink(challenge,'view','icon') }}</div>
+                        <td><small class="text-muted">{{ challenge.id }}</small></td>
+                        <td>{{ challengeLink(challenge,'view-admin','name') }} {{ challengeLink(challenge,'edit', 'icon') }}
+                            <span class="pull-right">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
-                        <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view-admin','name') }}{% endif %}</td>
+                        <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>
                         <td>{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }} {% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}</td>
                         <td>{{ challenge.projectChallenge.count() }}</td>
@@ -55,7 +61,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% include 'general/partial/pagination-control' %}
+            {% include 'application/partial/pagination-control' %}
         {% else %}
             {{ ztbalert().info(translate("txt-no-challenges-could-be-found"))|raw }}
         {% endif %}
@@ -64,13 +70,11 @@
         <div class="well well-sm">
             <fieldset>
 
-                {{ ztbformelement(filter.get('type')) }}
-                {{ ztbformelement(filter.get('call')) }}
+                {{ ztbformelement(filter.get('type'), true) }}
+                {{ ztbformelement(filter.get('call'), true) }}
 
-                <div class="form-group row">
-                    {{ ztbformelement(form.get('submit')) }}
-                    {{ ztbformelement(form.get('clear')) }}
-                </div>
+                {{ ztbformelement(form.get('submit')) }}
+                {{ ztbformelement(form.get('clear')) }}
             </fieldset>
         </div>
     </div>

@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  Contact
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -13,21 +14,18 @@ declare(strict_types=1);
 namespace General\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
+use function in_array;
+
 /**
  * Class ContentType
+ *
  * @package General\Repository
  */
 class ContentType extends EntityRepository
 {
-    /**
-     * @param array $filter
-     *
-     * @return QueryBuilder
-     */
     public function findFiltered(array $filter): QueryBuilder
     {
         $queryBuilder = $this->_em->createQueryBuilder();
@@ -36,8 +34,9 @@ class ContentType extends EntityRepository
 
 
         $direction = 'DESC';
-        if (isset($filter['direction'])
-            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+        if (
+            isset($filter['direction'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -62,9 +61,6 @@ class ContentType extends EntityRepository
         return $queryBuilder;
     }
 
-    /**
-     * @return array
-     */
     public function findContentTypeByImage(): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

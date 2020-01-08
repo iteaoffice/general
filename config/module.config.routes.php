@@ -5,7 +5,7 @@
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 use General\Controller;
@@ -13,59 +13,69 @@ use General\Controller;
 return [
     'router' => [
         'routes' => [
-            'image'         => [
+            'image' => [
                 'child_routes' => [
-                    'country-flag'    => [
-                        'type'    => 'Segment',
+                    'country-flag' => [
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/f/[:id].[:ext]',
+                            'route' => '/f/[:id].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => Controller\ImageController::class,
-                                'action'     => 'flag',
+                                'action' => 'flag',
                             ],
                         ],
                     ],
-                    'challenge-icon'  => [
-                        'type'    => 'Segment',
+                    'challenge-icon' => [
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/ci/[:id]-[:last-update].[:ext]',
+                            'route' => '/ci/[:id]-[:last-update].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => Controller\ImageController::class,
-                                'action'     => 'challenge-icon',
+                                'action' => 'challenge-icon',
                             ],
                         ],
                     ],
                     'challenge-image' => [
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/cim/[:id]-[:last-update].[:ext]',
+                            'route' => '/cim/[:id]-[:last-update].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => Controller\ImageController::class,
-                                'action'     => 'challenge-image',
+                                'action' => 'challenge-image',
+                            ],
+                        ],
+                    ],
+                    'asset' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/a/[:name]',
+                            'defaults' => [
+                                'controller' => Controller\ImageController::class,
+                                'action' => 'asset',
                             ],
                         ],
                     ],
                 ],
             ],
-            'country'       => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/country',
+            'country' => [
+                'type' => 'Literal',
+                'priority' => 1000,
+                'options' => [
+                    'route' => '/country',
                     'defaults' => [
                         'controller' => Controller\CountryController::class,
-                        'action'     => 'country',
+                        'action' => 'country',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes'  => [
+                'child_routes' => [
                     'code' => [
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/code/[:cd]',
+                            'route' => '/code/[:cd]',
                             'defaults' => [
                                 'action' => 'code',
                             ],
@@ -74,39 +84,39 @@ return [
                 ],
             ],
             'impact-stream' => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/impact-stream',
+                'type' => 'Literal',
+                'priority' => 1000,
+                'options' => [
+                    'route' => '/impact-stream',
                     'defaults' => [
                         'controller' => Controller\ImpactStreamController::class,
-                        'action'     => 'impact-stream',
+                        'action' => 'impact-stream',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes'  => [
-                    'download'          => [
-                        'type'    => 'Segment',
+                'child_routes' => [
+                    'download' => [
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/download.html',
+                            'route' => '/download.html',
                             'defaults' => [
                                 'action' => 'download',
                             ],
                         ],
                     ],
                     'download-selected' => [
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/download/selected.html',
+                            'route' => '/download/selected.html',
                             'defaults' => [
                                 'action' => 'download-selected',
                             ],
                         ],
                     ],
-                    'download-single'   => [
-                        'type'    => 'Segment',
+                    'download-single' => [
+                        'type' => 'Segment',
                         'options' => [
-                            'route'    => '/download/[:docRef].pdf',
+                            'route' => '/download/[:docRef].pdf',
                             'defaults' => [
                                 'action' => 'download-single',
                             ],
@@ -114,22 +124,44 @@ return [
                     ],
                 ],
             ],
-            'email'         => [
-                'type'          => 'Literal',
-                'priority'      => 1000,
-                'options'       => [
-                    'route'    => '/email',
+            'challenge' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/challenge',
+                    'defaults' => [
+                        'controller' => Controller\ChallengeController::class,
+                        'action' => 'list',
+                    ],
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'download-pdf' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/download/[:id].pdf',
+                            'defaults' => [
+                                'action' => 'download-pdf',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'email' => [
+                'type' => 'Literal',
+                'priority' => 1000,
+                'options' => [
+                    'route' => '/email',
                     'defaults' => [
                         'controller' => Controller\EmailController::class,
-                        'action'     => 'index',
+                        'action' => 'index',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes'  => [
+                'child_routes' => [
                     'event' => [
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => [
-                            'route'    => '/event.json',
+                            'route' => '/event.json',
                             'defaults' => [
                                 'action' => 'event',
                             ],

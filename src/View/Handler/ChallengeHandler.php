@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
@@ -7,6 +8,7 @@
  * @author     Johan van der Heide <johan.van.der.heide@itea3.org>
  * @copyright  Copyright (c) 2004-2017 ITEA Office (http://itea3.org)
  */
+
 declare(strict_types=1);
 
 namespace General\View\Handler;
@@ -15,11 +17,11 @@ use Content\Entity\Content;
 use General\Entity\Challenge;
 use General\Service\GeneralService;
 use Project\Service\ProjectService;
-use Zend\Authentication\AuthenticationService;
-use Zend\Http\Response;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Application;
-use Zend\View\HelperPluginManager;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Application;
+use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
@@ -29,14 +31,8 @@ use ZfcTwig\View\TwigRenderer;
  */
 final class ChallengeHandler extends AbstractHandler
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var ProjectService
-     */
-    private $projectService;
+    private GeneralService $generalService;
+    private ProjectService $projectService;
 
     public function __construct(
         Application $application,
@@ -59,8 +55,12 @@ final class ChallengeHandler extends AbstractHandler
         $this->projectService = $projectService;
     }
 
-    public function __invoke(Content $content): ?string
+    public function __invoke(Content $content = null)
     {
+        if (null === $content) {
+            return $this;
+        }
+
         $params = $this->extractContentParam($content);
 
         $challenge = $this->getChallengeByParams($params);
@@ -73,10 +73,10 @@ final class ChallengeHandler extends AbstractHandler
                     return 'The selected challenge cannot be found';
                 }
 
-                $this->getHeadTitle()->append($this->translate("txt-challenge"));
+                $this->getHeadTitle()->append($this->translate('txt-challenge'));
                 $this->getHeadTitle()->append($challenge->getChallenge());
 
-                if (!empty($challenge->getCss())) {
+                if (! empty($challenge->getCss())) {
                     $this->getHeadStyle()->appendStyle($challenge->getCss());
                 }
 
@@ -86,7 +86,7 @@ final class ChallengeHandler extends AbstractHandler
                 return $this->parseChallengeList();
             default:
                 return sprintf(
-                    "No handler available for <code>%s</code> in class <code>%s</code>",
+                    'No handler available for <code>%s</code> in class <code>%s</code>',
                     $content->getHandler()->getHandler(),
                     __CLASS__
                 );
@@ -125,5 +125,12 @@ final class ChallengeHandler extends AbstractHandler
         $challenge = $this->generalService->findAll(Challenge::class);
 
         return $this->renderer->render('cms/challenge/list', ['challenge' => $challenge]);
+    }
+
+    public function parseChallengeListFrontpage(): string
+    {
+        $challenge = $this->generalService->findAll(Challenge::class);
+
+        return $this->renderer->render('cms/challenge/list-frontpage', ['challenge' => $challenge]);
     }
 }

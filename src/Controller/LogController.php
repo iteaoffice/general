@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  Application
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -19,33 +20,21 @@ use General\Controller\Plugin\GetFilter;
 use General\Entity\Log;
 use General\Form\EmailFilter;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class LogController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class LogController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GeneralService $generalService;
+    private EntityManager $entityManager;
+    private TranslatorInterface $translator;
 
     public function __construct(
         GeneralService $generalService,
@@ -57,7 +46,7 @@ final class LogController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    public function listAction(): ViewModel
+    public function listAction()
     {
         $page = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getFilter();
@@ -76,8 +65,10 @@ final class LogController extends AbstractActionController
             $this->generalService->truncateLog();
 
             $this->flashMessenger()->addSuccessMessage(
-                $this->translator->translate("txt-log-has-been-truncated-successfully")
+                $this->translator->translate('txt-log-has-been-truncated-successfully')
             );
+
+            return $this->redirect()->toRoute('zfcadmin/log/list');
         }
 
         return new ViewModel(

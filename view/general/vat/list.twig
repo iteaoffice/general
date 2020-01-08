@@ -5,31 +5,33 @@
 {{ form().openTag(form)|raw }}
 {% set filter = form.get('filter') %}
 
-<input type="hidden" name="filter[order]" value="{{ order }}">
-<input type="hidden" name="filter[direction]" value="{{ direction }}">
 
-<h1 class="display-4">{{ translate("txt-vat-list") }} {{ vatLink(null, 'new','button') }}</h1>
+
+<h1>{{ translate("txt-vat-list") }} {{ vatLink(null, 'new','button') }}</h1>
 
 <div class="row">
     <div class="col-md-6">
         <p class="lead">{{ translate("txt-vat-list-explanation") }}</p>
     </div>
     <div class="col-md-6">
-        <div class="input-group">
-            {{ formelement(filter.get('search')) }}
-            <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
-    </div>
+                <div class="input-group">
+                    {{ formelement(filter.get('search')) }}
+                    <div class="input-group-append input-group-btn">
+                        {{ formelement(form.get('submit')) }}
+                    </div>
+                </div>
+            </div>
 </div>
 
 {% if paginator.pageRange > 0 %}
-    <table class="table table-hover table-striped table-condensed table-sm">
+    <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'code', 'text': translate('txt-code')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'percentage', 'text': translate('txt-percentage')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'date-start', 'text': translate('txt-date-start')} %}</th>
-            <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'country', 'text': translate('txt-country')} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'code', 'text': translate("txt-code")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'percentage', 'text': translate("txt-percentage")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'date-start', 'text': translate("txt-date-start")} %}</th>
+            <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/vat/list', 'criteria': 'country', 'text': translate("txt-country")} %}</th>
             <th>{{ translate("txt-amount-of-vat-types") }}</th>
             <th>{{ translate("txt-amount-of-vat-dimension") }}</th>
         </tr>
@@ -37,8 +39,8 @@
         <tbody>
         {% for vat in paginator.getCurrentItems() %}
             <tr>
-                <td>{{ vat.id }} {{ vatLink(vat,'edit', 'icon') }}</td>
-                <td>{{ vatLink(vat,'view','code') }}</td>
+                <td><small class="text-muted">{{ vat.id }} </small></td>
+                <td>{{ vatLink(vat,'view','code') }} {{ vatLink(vat,'edit', 'icon') }}</td>
                 <td>{{ vat.percentage }} %</td>
                 <td>{{ vat.dateStart|string_date }}</td>
                 <td>{{ countryLink(vat.country,'view-admin','name') }}</td>
@@ -48,7 +50,7 @@
         {% endfor %}
         </tbody>
     </table>
-    {% include 'general/partial/pagination-control' %}
+    {% include 'application/partial/pagination-control' %}
 {% else %}
     {{ ztbalert().info(translate("txt-no-vat-could-be-found"))|raw }}
 {% endif %}

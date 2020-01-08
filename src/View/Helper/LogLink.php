@@ -1,17 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        https://github.com/iteaoffice/general for the canonical source repository
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -19,86 +14,29 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\Log;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an log.
- *
- * @category   General
+ * Class LogLink
+ * @package General\View\Helper
  */
-class LogLink extends LinkAbstract
+final class LogLink extends AbstractLink
 {
-    /**
-     * @var Log
-     */
-    protected $log;
-
-    /**
-     * @param Log    $log
-     * @param string $action
-     * @param string $show
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public function __invoke(
-        Log $log = null,
-        $action = 'view',
-        $show = 'name'
-    ): string {
-        $this->setLog($log);
-        $this->setAction($action);
-        $this->setShow($show);
-
-        $this->addRouterParam('id', $this->getLog()->getId());
-        $this->setShowOptions(
-            [
-                'event' => \substr($this->getLog()->getEvent(), 0, 50),
-            ]
-        );
-
-
-        return $this->createLink();
-    }
-
-    /**
-     * @return Log
-     */
-    public function getLog(): Log
+    public function __invoke(Log $log): string
     {
-        if (\is_null($this->log)) {
-            $this->log = new Log();
-        }
+        $routeParams = [];
+        $routeParams['id'] = $log->getId();
 
-        return $this->log;
-    }
+        $linkParams = [
+            'icon' => 'fa-link',
+            'route' => 'zfcadmin/log/view',
+            'text' => $log->getEvent(),
+        ];
 
-    /**
-     * @param Log $log
-     */
-    public function setLog($log): void
-    {
-        $this->log = $log;
-    }
+        $linkParams['action'] = 'view';
+        $linkParams['show'] = 'text';
+        $linkParams['routeParams'] = $routeParams;
 
-    /**
-     * Parse the action.
-     *
-     * @throws \Exception
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/log/list');
-                $this->setText($this->translate("txt-log-message-list"));
-                break;
-            case 'view':
-                $this->setRouter('zfcadmin/log/view');
-                $this->setText(sprintf($this->translate("txt-view-log-message-%s"), $this->getLog()));
-                break;
-            default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
-        }
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

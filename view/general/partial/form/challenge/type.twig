@@ -1,5 +1,4 @@
 {% do form.prepare() %}
-
 {{ form().openTag(form)|raw }}
 {% set type = form.get('general_entity_challenge_type') %}
 
@@ -11,7 +10,7 @@
 {{ ztbformelement(form.get('csrf')) }}
 
 <div class="form-group row">
-    <div class="offset-md-3 col-sm-offset-3 col-sm-9">
+    <div class="offset-sm-3 col-sm-9">
         {{ formelement(form.get('submit')) }}
         {{ formelement(form.get('cancel')) }}
         {% if form.has('delete') %}

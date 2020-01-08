@@ -1,12 +1,12 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-country-%s")|format(country)) %}
 
-<h1 class="display-4">{{ translate("txt-country-%s")|format(country) }} {{ countryLink(country,'edit','button') }}</h1>
+<h1>{{ translate("txt-country-%s")|format(country) }} {{ countryLink(country,'edit','button') }}</h1>
 
 <h2>{{ translate("txt-country-information") }}</h2>
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-country-name") }}</dt>
-    <dd>{{ country.country }} {{ countryFlag(country) }}</dd>
+    <dd>{{ country.country }} {{ countryFlag(country, 20) }}</dd>
     <dt>{{ translate("txt-country-iso3") }}</dt>
     <dd>{{ country.iso3 }}</dd>
     <dt>{{ translate("txt-country-cd") }}</dt>
@@ -21,13 +21,13 @@
     <dd>{% if country.eureka %}YES{% else %}NO{% endif %}</dd>
     <dt>{{ translate("txt-itac") }}</dt>
     <dd>{% if country.itac %}YES{% else %}NO{% endif %}</dd>
-    <dt>{{ translate('txt-vat') }}</dt>
+    <dt>{{ translate("txt-vat") }}</dt>
     {% for vat in country.vat %}
         <dd>{{ vat }}</dd>
     {% else %}
         <dd>{{ translate("txt-no-vat-known") }}</dd>
     {% endfor %}
-    <dt>{{ translate('txt-funder') }}</dt>
+    <dt>{{ translate("txt-funder") }}</dt>
     {% for funder in country.funder %}
         <dd>{{ contactLink(funder.contact,'view-admin','name') }}</dd>
     {% else %}

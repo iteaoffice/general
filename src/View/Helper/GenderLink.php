@@ -1,17 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        https://github.com/iteaoffice/general for the canonical source repository
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -19,91 +14,59 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\Gender;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an gender.
- *
- * @category   General
+ * Class GenderLink
+ * @package General\View\Helper
  */
-class GenderLink extends LinkAbstract
+final class GenderLink extends AbstractLink
 {
-    /**
-     * @var Gender
-     */
-    protected $gender;
-
-    /**
-     * @param Gender $gender
-     * @param string $action
-     * @param string $show
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         Gender $gender = null,
-        $action = 'view',
-        $show = 'name'
-    ) {
-        $this->setGender($gender);
-        $this->setAction($action);
-        $this->setShow($show);
+        string $action = 'view',
+        string $show = 'name'
+    ): string {
+        $gender ??= new Gender();
 
-        if (!\is_null($gender)) {
-            $this->addRouterParam('id', $gender->getId());
-            $this->setShowOptions(
-                [
-                    'name' => $gender->getName(),
-                ]
-            );
+        $routeParams = [];
+        $showOptions = [];
+        if (! $gender->isEmpty()) {
+            $routeParams['id'] = $gender->getId();
+            $showOptions['name'] = $gender->getName();
+            $showOptions['attention'] = $gender->getAttention();
         }
 
-        return $this->createLink();
-    }
-
-    /**
-     * Parse the action.
-     *
-     * @throws \Exception
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/gender/list');
-                $this->setText($this->translate("txt-gender-list"));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/gender/new');
-                $this->setText($this->translate("txt-new-gender"));
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/gender/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-gender')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/gender/edit');
-                $this->setText(sprintf($this->translate("txt-edit-gender-%s"), $this->getGender()));
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/gender/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-gender')
+                ];
                 break;
             case 'view':
-                $this->setRouter('zfcadmin/gender/view');
-                $this->setText(sprintf($this->translate("txt-view-gender-%s"), $this->getGender()));
+                $linkParams = [
+                    'icon' => 'fa-link',
+                    'route' => 'zfcadmin/gender/view',
+                    'text' => $showOptions[$show] ?? $gender->getName()
+                ];
                 break;
-            default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
 
-    /**
-     * @return Gender
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
 
-    /**
-     * @param Gender $gender
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

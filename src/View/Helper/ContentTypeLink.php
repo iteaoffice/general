@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
+ *
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -14,80 +14,60 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\ContentType;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an equipment.
- *
- * @category    ContentType
+ * Class ContentTypeLink
+ * @package General\View\Helper
  */
-class ContentTypeLink extends LinkAbstract
+final class ContentTypeLink extends AbstractLink
 {
-    /**
-     * @param ContentType $contentType
-     * @param             $action
-     * @param             $show
-     *
-     * @return null|string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         ContentType $contentType = null,
-        $action = 'view',
-        $show = 'name'
-    ) {
-        $this->setContentType($contentType);
-        $this->setAction($action);
-        $this->setShow($show);
+        string $action = 'view',
+        string $show = 'name'
+    ): string {
+        $contentType ??= new ContentType();
 
-        $this->setShowOptions(
-            [
-                'name'            => $this->getContentType(),
-                'extension'       => $this->getContentType()->getExtension(),
-                'description'     => $this->getContentType()->getDescription(),
-                'content-type'    => $this->getContentType()->getContentType(),
-                'alternativeShow' => $this->getAlternativeShow(),
-            ]
-        );
-        $this->addRouterParam('id', $this->getContentType()->getId());
+        $routeParams = [];
+        $showOptions = [];
+        if (! $contentType->isEmpty()) {
+            $routeParams['id'] = $contentType->getId();
+            $showOptions['name'] = $contentType->getContentType();
+            $showOptions['extension'] = $contentType->getExtension();
+            $showOptions['description'] = $contentType->getDescription();
+        }
 
-        return $this->createLink();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/content-type/list');
-                $this->setText(sprintf($this->translate('txt-content-type-list')));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/content-type/new');
-                $this->setText(sprintf($this->translate('txt-create-new-content-type')));
-                break;
-            case 'view':
-                $this->setRouter('zfcadmin/content-type/view');
-                $this->setText(
-                    sprintf(
-                        $this->translate('txt-view-content-type-%s'),
-                        $this->getContentType()->getDescription()
-                    )
-                );
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/content-type/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-content-type')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/content-type/edit');
-                $this->setText(
-                    sprintf(
-                        $this->translate('txt-edit-content-type-%s'),
-                        $this->getContentType()->getDescription()
-                    )
-                );
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/content-type/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-content-type')
+                ];
                 break;
-            default:
-                throw new \Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));
+            case 'view':
+                $linkParams = [
+                    'icon' => 'fa-link',
+                    'route' => 'zfcadmin/content-type/view',
+                    'text' => $showOptions[$show] ?? $contentType->getDescription()
+                ];
+                break;
         }
+
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

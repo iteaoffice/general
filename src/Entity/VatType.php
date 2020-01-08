@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA copyright message placeholder.
  *
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -14,17 +15,16 @@ namespace General\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Invoice\Entity\Invoice;
+use Invoice\Entity\Vat\Dimension;
+use Laminas\Form\Annotation;
+use Organisation\Entity\Financial;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="vat_type")
  * @ORM\Entity(repositoryClass="General\Repository\VatType")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("vat_type")
- *
- * @category General
  */
 class VatType extends AbstractEntity
 {
@@ -34,7 +34,7 @@ class VatType extends AbstractEntity
     public const VAT_TYPE_NON_EU = 4;
 
     /**
-     * @ORM\Column(name="type_id",type="integer",nullable=false)
+     * @ORM\Column(name="type_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -44,7 +44,7 @@ class VatType extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="type",type="string",length=30, unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-vat-type"})
      *
      * @var string
@@ -52,7 +52,7 @@ class VatType extends AbstractEntity
     private $type;
     /**
      * @ORM\Column(name="description",type="string",length=64)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-description"})
      *
      * @var string
@@ -60,9 +60,7 @@ class VatType extends AbstractEntity
     private $description;
     /**
      * @ORM\ManyToOne(targetEntity="General\Entity\Vat", inversedBy="type", cascade={"persist"})
-     * @ORM\JoinColumns({
      * @ORM\JoinColumn(name="vat_id", referencedColumnName="vat_id", nullable=false)
-     * })
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
      * @Annotation\Options({
      *      "target_class":"General\Entity\Vat",
@@ -78,34 +76,31 @@ class VatType extends AbstractEntity
      * )
      * @Annotation\Attributes({"label":"txt-vat"})
      *
-     * @var \General\Entity\Vat
+     * @var Vat
      */
     private $vat;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Invoice", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Invoice[]
+     * @var Invoice[]
      */
     private $invoice;
     /**
      * @ORM\OneToMany(targetEntity="Invoice\Entity\Vat\Dimension", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Invoice\Entity\Vat\Dimension[]|Collections\ArrayCollection
+     * @var Dimension[]|Collections\ArrayCollection
      */
     private $dimension;
     /**
      * @ORM\ManyToMany(targetEntity="Organisation\Entity\Financial", cascade={"persist"}, mappedBy="vatType")
      * @Annotation\Exclude()
      *
-     * @var \Organisation\Entity\Financial[]|Collections\ArrayCollection
+     * @var Financial[]|Collections\ArrayCollection
      */
     private $organisationFinancial;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->invoice = new Collections\ArrayCollection();
@@ -113,158 +108,85 @@ class VatType extends AbstractEntity
         $this->organisationFinancial = new Collections\ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(?int $id): VatType
     {
         $this->id = $id;
+        return $this;
     }
 
-    /**
-     * @return \Invoice\Entity\Invoice[]
-     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): VatType
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): VatType
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getVat(): ?Vat
+    {
+        return $this->vat;
+    }
+
+    public function setVat(?Vat $vat): VatType
+    {
+        $this->vat = $vat;
+        return $this;
+    }
+
     public function getInvoice()
     {
         return $this->invoice;
     }
 
-    /**
-     * @param \Invoice\Entity\Invoice[] $invoice
-     */
-    public function setInvoice($invoice)
+    public function setInvoice($invoice): VatType
     {
         $this->invoice = $invoice;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return \General\Entity\Vat
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param \General\Entity\Vat $vat
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[]
-     */
     public function getDimension()
     {
         return $this->dimension;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Invoice\Entity\Vat\Dimension[] $dimension
-     */
-    public function setDimension($dimension)
+    public function setDimension($dimension): VatType
     {
         $this->dimension = $dimension;
+        return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|\Organisation\Entity\Financial[]
-     */
     public function getOrganisationFinancial()
     {
         return $this->organisationFinancial;
     }
 
-    /**
-     * @param Collections\ArrayCollection|\Organisation\Entity\Financial[] $organisationFinancial
-     */
-    public function setOrganisationFinancial($organisationFinancial)
+    public function setOrganisationFinancial($organisationFinancial): VatType
     {
         $this->organisationFinancial = $organisationFinancial;
+        return $this;
     }
 }

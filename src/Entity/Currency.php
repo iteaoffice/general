@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  General
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -14,14 +15,13 @@ namespace General\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Project\Entity\Contract;
+use Laminas\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="currency")
  * @ORM\Entity(repositoryClass="General\Repository\Currency")
- * @Annotation\Hydrator("Zend\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
  * @Annotation\Name("currency")
  *
  * @category General
@@ -29,7 +29,7 @@ use Zend\Form\Annotation;
 class Currency extends AbstractEntity
 {
     /**
-     * @ORM\Column(name="currency_id",type="integer",nullable=false)
+     * @ORM\Column(name="currency_id",type="integer",options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @Annotation\Exclude()
@@ -39,7 +39,7 @@ class Currency extends AbstractEntity
     private $id;
     /**
      * @ORM\Column(name="name",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-name-label","help-block":"txt-currency-name-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-name-placeholder"})
      *
@@ -48,7 +48,7 @@ class Currency extends AbstractEntity
     private $name;
     /**
      * @ORM\Column(name="iso4217",type="string",unique=true)
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-iso4217-label","help-block":"txt-currency-iso4217-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-iso4217-placeholder"})
      *
@@ -57,7 +57,7 @@ class Currency extends AbstractEntity
     private $iso4217;
     /**
      * @ORM\Column(name="symbol",type="string")
-     * @Annotation\Type("\Zend\Form\Element\Text")
+     * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-currency-symbol-label","help-block":"txt-currency-symbol-help-block"})
      * @Annotation\Attributes({"placeholder":"txt-currency-symbol-placeholder"})
      *
@@ -69,73 +69,28 @@ class Currency extends AbstractEntity
      * @ORM\OrderBy({"date" = "DESC"})
      * @Annotation\Exclude()
      *
-     * @var \General\Entity\ExchangeRate[]|ArrayCollection
+     * @var ExchangeRate[]|ArrayCollection
      */
     private $exchangeRate;
     /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Contract", cascade={"persist"}, mappedBy="currency")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Contract[]|ArrayCollection
+     * @var Contract[]|ArrayCollection
      */
     private $contract;
 
-
-    /**
-     * Currency constructor.
-     */
     public function __construct()
     {
         $this->contract = new ArrayCollection();
         $this->exchangeRate = new ArrayCollection();
     }
 
-    /**
-     * Magic Getter.
-     *
-     * @param $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    /**
-     * Magic Setter.
-     *
-     * @param $property
-     * @param $value
-     */
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        return isset($this->$property);
-    }
-
-    /**
-     * toString returns the name.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
@@ -214,7 +169,7 @@ class Currency extends AbstractEntity
     }
 
     /**
-     * @return ArrayCollection|\Project\Entity\Contract[]
+     * @return ArrayCollection|Contract[]
      */
     public function getContract()
     {
@@ -222,7 +177,7 @@ class Currency extends AbstractEntity
     }
 
     /**
-     * @param ArrayCollection|\Project\Entity\Contract[] $contract
+     * @param ArrayCollection|Contract[] $contract
      *
      * @return Currency
      */

@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -20,21 +16,16 @@ namespace General\InputFilter;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Validator\UniqueObject;
 use General\Entity\Challenge;
-use Zend\InputFilter\InputFilter;
-use Zend\Validator\File\Extension;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\File\Extension;
 
 /**
  * Class ChallengeFilter
  *
  * @package General\InputFilter
  */
-class ChallengeFilter extends InputFilter
+final class ChallengeFilter extends InputFilter
 {
-    /**
-     * ChallengeFilter constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();
@@ -70,6 +61,12 @@ class ChallengeFilter extends InputFilter
         $inputFilter->add(
             [
                 'name'     => 'type',
+                'required' => false,
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'backgroundImage',
                 'required' => false,
             ]
         );

@@ -1,14 +1,17 @@
 <?php
+
 /**
  * ITEA Office copyright message placeholder
  *
  * @category    General
  * @package     Config
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
+
+use BjyAuthorize\Guard\Route;
 
 return [
     'bjyauthorize' => [
@@ -18,10 +21,11 @@ return [
             /* If this guard is specified here (i.e. it is enabled], it will block
              * access to all routes unless they are specified here.
              */
-            'BjyAuthorize\Guard\Route' => [
+            Route::class => [
                 ['route' => 'image/country-flag', 'roles' => []],
                 ['route' => 'image/challenge-icon', 'roles' => []],
                 ['route' => 'image/challenge-image', 'roles' => []],
+                ['route' => 'challenge/download-pdf', 'roles' => []],
 
                 ['route' => 'country/code', 'roles' => []],
                 ['route' => 'impact-stream/download', 'roles' => []],

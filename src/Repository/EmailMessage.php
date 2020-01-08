@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -21,6 +17,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
 
+use function in_array;
+
 /**
  * @category    General
  */
@@ -33,7 +31,7 @@ class EmailMessage extends EntityRepository
         $queryBuilder->from(Entity\EmailMessage::class, 'general_entity_email_message');
         $queryBuilder->leftJoin('general_entity_email_message.contact', 'contact_entity_contact');
 
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('contact_entity_contact.firstName', ':like'),
@@ -45,7 +43,7 @@ class EmailMessage extends EntityRepository
             $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
         }
 
-        if (!empty($filter['latestEvent'])) {
+        if (! empty($filter['latestEvent'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()
                     ->in('general_entity_email_message.latestEvent', $filter['latestEvent'])
@@ -54,8 +52,9 @@ class EmailMessage extends EntityRepository
 
 
         $direction = 'DESC';
-        if (isset($filter['direction'])
-            && \in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+        if (
+            isset($filter['direction'])
+            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }

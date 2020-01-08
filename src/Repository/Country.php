@@ -1,11 +1,12 @@
 <?php
+
 /**
  * ITEA Office all rights reserved
  *
  * @category  Contact
  *
  * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -13,11 +14,15 @@ declare(strict_types=1);
 namespace General\Repository;
 
 use Affiliation\Service\AffiliationService;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
+use InvalidArgumentException;
 use Program\Entity\Call\Call;
 use Project\Entity\Project;
+
+use function array_merge;
 
 /**
  * Class Country
@@ -26,85 +31,13 @@ use Project\Entity\Project;
  */
 class Country extends EntityRepository
 {
-    public function findFiltered(array $filter): QueryBuilder
-    {
-        $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('general_entity_country');
-        $queryBuilder->from(Entity\Country::class, 'general_entity_country');
-
-        if (null !== $filter) {
-            $queryBuilder = $this->applyFilter($queryBuilder, $filter);
-        }
-
-        $direction = 'ASC';
-        if (isset($filter['direction'])
-            && \in_array(\strtoupper($filter['direction']), ['ASC', 'DESC'], true)
-        ) {
-            $direction = \strtoupper($filter['direction']);
-        }
-
-        if (!\array_key_exists('order', $filter)) {
-            $filter['order'] = 'id';
-        }
-
-        switch ($filter['order']) {
-            case 'id':
-                $queryBuilder->addOrderBy('general_entity_country.id', $direction);
-                break;
-            case 'name':
-                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
-                break;
-            case 'iso3':
-                $queryBuilder->addOrderBy('general_entity_country.iso3', $direction);
-                break;
-            case 'cd':
-                $queryBuilder->addOrderBy('general_entity_country.cd', $direction);
-                break;
-            case 'numcode':
-                $queryBuilder->addOrderBy('general_entity_country.numcode', $direction);
-                break;
-            default:
-                $queryBuilder->addOrderBy('general_entity_country.country', $direction);
-        }
-
-        return $queryBuilder;
-    }
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param array        $filter
-     *
-     * @return QueryBuilder
-     */
-    public function applyFilter(QueryBuilder $queryBuilder, array $filter): QueryBuilder
-    {
-        if (!empty($filter['search'])) {
-            $queryBuilder->andWhere($queryBuilder->expr()->like('general_entity_country.country', ':like'));
-            $queryBuilder->setParameter('like', sprintf("%%%s%%", $filter['search']));
-        }
-
-        if (!empty($filter['eu'])) {
-            $queryBuilder->innerJoin('general_entity_country.eu', 'eu');
-        }
-
-        if (!empty($filter['eureka'])) {
-            $queryBuilder->innerJoin('general_entity_country.eureka', 'eureka');
-        }
-
-        if (!empty($filter['itac'])) {
-            $queryBuilder->innerJoin('general_entity_country.itac', 'itac');
-        }
-
-        return $queryBuilder;
-    }
-
     public function findCountryByCall(Call $call, int $which): array
     {
         $queryBuilder = $this->getQueryBuilderForCountryByWhich($which);
 
-        $queryBuilder->andWhere('project_entity_project.call = ?10');
-        $queryBuilder->setParameter(10, $call);
-        $queryBuilder->addOrderBy('general_entity_country.iso3', 'ASC');
+        $queryBuilder->andWhere('project_entity_project.call = :call');
+        $queryBuilder->setParameter('call', $call);
+        $queryBuilder->addOrderBy('general_entity_country.iso3', Criteria::ASC);
 
         return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
@@ -131,7 +64,7 @@ class Country extends EntityRepository
 
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Incorrect value (%s) for which', $which));
+                throw new InvalidArgumentException(sprintf('Incorrect value (%s) for which', $which));
         }
 
         return $queryBuilder;
@@ -143,7 +76,7 @@ class Country extends EntityRepository
         $queryBuilder->andWhere('affiliation_entity_affiliation.project = ?1');
         $queryBuilder->setParameter(1, $project);
 
-        $queryBuilder->addOrderBy('general_entity_country.country', 'ASC');
+        $queryBuilder->addOrderBy('general_entity_country.country', Criteria::ASC);
 
         return $queryBuilder->getQuery()->useQueryCache(true)->getResult();
     }
@@ -173,7 +106,7 @@ class Country extends EntityRepository
         }
 
 
-        return \array_merge($euCountries, $restOfWorld);
+        return array_merge($euCountries, $restOfWorld);
     }
 
     public function findForFormNoEmptyOption(): array
@@ -196,8 +129,7 @@ class Country extends EntityRepository
             }
         }
 
-
-        return \array_merge($euCountries, $restOfWorld);
+        return array_merge($euCountries, $restOfWorld);
     }
 
     public function findCountryInProjectLog(): array
@@ -206,7 +138,7 @@ class Country extends EntityRepository
         $queryBuilder->select('general_entity_country');
         $queryBuilder->from(Entity\Country::class, 'general_entity_country');
         $queryBuilder->innerJoin('general_entity_country.projectLog', 'project_entity_log');
-        $queryBuilder->orderBy('general_entity_country.country', 'ASC');
+        $queryBuilder->orderBy('general_entity_country.country', Criteria::ASC);
 
         return $queryBuilder->getQuery()->getArrayResult();
     }

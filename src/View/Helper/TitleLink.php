@@ -1,17 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
- * @link        https://github.com/iteaoffice/general for the canonical source repository
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -19,91 +14,59 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\Title;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an title.
- *
- * @category   General
+ * Class TitleLink
+ * @package General\View\Helper
  */
-class TitleLink extends LinkAbstract
+final class TitleLink extends AbstractLink
 {
-    /**
-     * @var Title
-     */
-    protected $title;
-
-    /**
-     * @param Title $title
-     * @param string $action
-     * @param string $show
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
     public function __invoke(
         Title $title = null,
-        $action = 'view',
-        $show = 'name'
-    ) {
-        $this->setTitle($title);
-        $this->setAction($action);
-        $this->setShow($show);
+        string $action = 'view',
+        string $show = 'name'
+    ): string {
+        $title ??= new Title();
 
-        if (!\is_null($title)) {
-            $this->addRouterParam('id', $title->getId());
-            $this->setShowOptions(
-                [
-                    'name' => $title->getName(),
-                ]
-            );
+        $routeParams = [];
+        $showOptions = [];
+        if (! $title->isEmpty()) {
+            $routeParams['id'] = $title->getId();
+            $showOptions['name'] = $title->getName();
+            $showOptions['attention'] = $title->getAttention();
         }
 
-        return $this->createLink();
-    }
-
-    /**
-     * Parse the action.
-     *
-     * @throws \Exception
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/title/list');
-                $this->setText($this->translate("txt-title-list"));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/title/new');
-                $this->setText($this->translate("txt-new-title"));
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/title/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-title')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/title/edit');
-                $this->setText(sprintf($this->translate("txt-edit-title-%s"), $this->getTitle()));
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/title/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-title')
+                ];
                 break;
             case 'view':
-                $this->setRouter('zfcadmin/title/view');
-                $this->setText(sprintf($this->translate("txt-view-title-%s"), $this->getTitle()));
+                $linkParams = [
+                    'icon' => 'fa-link',
+                    'route' => 'zfcadmin/title/view',
+                    'text' => $showOptions[$show] ?? $title->getName()
+                ];
                 break;
-            default:
-                throw new \Exception(sprintf("%s is an incorrect action for %s", $this->getAction(), __CLASS__));
         }
-    }
 
-    /**
-     * @return Title
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
 
-    /**
-     * @param Title $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

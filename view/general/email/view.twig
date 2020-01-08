@@ -1,7 +1,11 @@
+{% do headScript().appendFile("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js",'text/javascript') %}
+{% do headLink().appendStylesheet("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github-gist.min.css") %}
+{% do inlineScript().appendScript("hljs.initHighlightingOnLoad();",'text/javascript') %}
+
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-email-message-%s")|format(emailMessage)) %}
 
-<h1 class="display-4">{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
+<h1>{{ translate("txt-email-message-%s")|format(emailMessage) }}</h1>
 
 <h2>{{ translate("txt-email-message-information") }}</h2>
 <dl class="dl-horizontal">
@@ -9,35 +13,30 @@
     <dd>{{ emailMessage.identifier }}</dd>
 
     {% if emailMessage.contact %}
-        <dt>{{ translate('txt-contact') }}</dt>
+        <dt>{{ translate("txt-contact") }}</dt>
         <dd>{{ contactLink(emailMessage.contact,'view-admin','name') }}</dd>
     {% endif %}
 
     {% if emailMessage.emailAddress %}
-        <dt>{{ translate('txt-email-address') }}</dt>
+        <dt>{{ translate("txt-email-address") }}</dt>
         <dd>{{ emailMessage.emailAddress }}</dd>
     {% endif %}
     {% if emailMessage.cc %}
-        <dt>{{ translate('txt-cc') }}</dt>
+        <dt>{{ translate("txt-cc") }}</dt>
         <dd>{{ emailMessage.cc }}</dd>
     {% endif %}
     {% if emailMessage.bcc %}
-        <dt>{{ translate('txt-bcc') }}</dt>
+        <dt>{{ translate("txt-bcc") }}</dt>
         <dd>{{ emailMessage.bcc }}</dd>
     {% endif %}
 
     {% if emailMessage.mailingContact %}
-        <dt>{{ translate('txt-mailing') }}</dt>
+        <dt>{{ translate("txt-mailing") }}</dt>
         <dd>{{ mailingLink(emailMessage.mailingContact.mailing,'view','name') }} {{ mailingContactLink(emailMessage.mailingContact,'view','icon') }}</dd>
     {% endif %}
 
     <dt>{{ translate("txt-email-message-subject") }}</dt>
     <dd>{{ emailMessage.subject }}</dd>
-
-    <dt>{{ translate("txt-email-message-message") }}</dt>
-    <dd>
-        <pre style="height: 350px">{{ emailMessage.message }}</pre>
-    </dd>
 
     {% if emailMessage.latestEvent %}
         <dt>{{ translate("txt-email-latest-event") }}</dt>
@@ -46,14 +45,14 @@
 
     {% if emailMessage.dateLatestEvent %}
         <dt>{{ translate("txt-email-latest-event-date") }}</dt>
-        <dd>{{ emailMessage.dateLatestEvent|time_diff }}</dd>
+        <dd>{{ emailMessage.dateLatestEvent|string_date }}</dd>
     {% endif %}
 </dl>
 
 {% if emailMessage.event.count() > 0 %}
     <h2>{{ translate("txt-email-tracking") }}</h2>
 
-    <table class="table table-hover table-striped table-condensed table-sm">
+    <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
             <th>{{ translate("txt-id") }}</th>
@@ -88,3 +87,7 @@
         </tbody>
     </table>
 {% endif %}
+
+<h2>{{ translate("txt-email-message-message") }}</h2>
+
+<pre>            <code class="html">{{ emailMessage.message }}</code>        </pre>

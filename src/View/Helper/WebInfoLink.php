@@ -1,12 +1,12 @@
 <?php
 
 /**
- * ITEA Office all rights reserved
- *
- * @category    General
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
+ *
+ * @link        http://github.com/iteaoffice/general for the canonical source repository
  */
 
 declare(strict_types=1);
@@ -14,64 +14,58 @@ declare(strict_types=1);
 namespace General\View\Helper;
 
 use General\Entity\WebInfo;
+use General\ValueObject\Link\Link;
 
 /**
- * Create a link to an equipment.
- *
- * @category    WebInfo
+ * Class WebInfoLink
+ * @package General\View\Helper
  */
-class WebInfoLink extends LinkAbstract
+final class WebInfoLink extends AbstractLink
 {
-    /**
-     * @param WebInfo $webInfo
-     * @param         $action
-     * @param         $show
-     *
-     * @return null|string
-     *
-     * @throws \Exception
-     */
-    public function __invoke(WebInfo $webInfo = null, $action = 'view', $show = 'name')
-    {
-        $this->setWebInfo($webInfo);
-        $this->setAction($action);
-        $this->setShow($show);
+    public function __invoke(
+        WebInfo $webInfo = null,
+        string $action = 'view',
+        string $show = 'name'
+    ): string {
+        $webInfo ??= new WebInfo();
 
-        $this->setShowOptions(
-            [
-                'name'            => $this->getWebInfo(),
-                'alternativeShow' => $this->getAlternativeShow(),
-            ]
-        );
-        $this->addRouterParam('id', $this->getWebInfo()->getId());
+        $routeParams = [];
+        $showOptions = [];
+        if (! $webInfo->isEmpty()) {
+            $routeParams['id'] = $webInfo->getId();
+            $showOptions['name'] = $webInfo->getInfo();
+        }
 
-        return $this->createLink();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function parseAction(): void
-    {
-        switch ($this->getAction()) {
-            case 'list':
-                $this->setRouter('zfcadmin/web-info/list');
-                $this->setText(sprintf($this->translate('txt-web-info-list')));
-                break;
+        switch ($action) {
             case 'new':
-                $this->setRouter('zfcadmin/web-info/new');
-                $this->setText(sprintf($this->translate('txt-create-new-web-info')));
-                break;
-            case 'view':
-                $this->setRouter('zfcadmin/web-info/view');
-                $this->setText(sprintf($this->translate('txt-view-web-info-%s'), $this->getWebInfo()));
+                $linkParams = [
+                    'icon' => 'fa-plus',
+                    'route' => 'zfcadmin/web-info/new',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-new-web-info')
+                ];
                 break;
             case 'edit':
-                $this->setRouter('zfcadmin/web-info/edit');
-                $this->setText(sprintf($this->translate('txt-edit-web-info-%s'), $this->getWebInfo()));
+                $linkParams = [
+                    'icon' => 'fa-pencil-square-o',
+                    'route' => 'zfcadmin/web-info/edit',
+                    'text' => $showOptions[$show]
+                        ?? $this->translator->translate('txt-edit-web-info')
+                ];
                 break;
-            default:
-                throw new \Exception(sprintf('%s is an incorrect action for %s', $this->getAction(), __CLASS__));
+            case 'view':
+                $linkParams = [
+                    'icon' => 'fa-link',
+                    'route' => 'zfcadmin/web-info/view',
+                    'text' => $showOptions[$show] ?? $webInfo->getInfo()
+                ];
+                break;
         }
+
+        $linkParams['action'] = $action;
+        $linkParams['show'] = $show;
+        $linkParams['routeParams'] = $routeParams;
+
+        return $this->parse(Link::fromArray($linkParams));
     }
 }

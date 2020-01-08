@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Jield copyright message placeholder.
  *
  * @category    Admin
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  */
 
 declare(strict_types=1);
@@ -19,34 +20,22 @@ use General\Entity\Currency;
 use General\Form\CurrencyFilter;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class CurrencyController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  *
  */
 final class CurrencyController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         GeneralService $generalService,
@@ -109,7 +98,7 @@ final class CurrencyController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/currency/list');
+                return $this->redirect()->toRoute('zfcadmin/currency/list');
             }
 
             if ($form->isValid()) {
@@ -121,7 +110,7 @@ final class CurrencyController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-currency-%s-has-been-created-successfully"),
+                            $this->translator->translate('txt-currency-%s-has-been-created-successfully'),
                             $currency->getName()
                         )
                     );
@@ -146,7 +135,7 @@ final class CurrencyController extends AbstractActionController
 
         $form = $this->formService->prepare($currency, $data);
 
-        if (!$this->generalService->canDeleteCurrency($currency)) {
+        if (! $this->generalService->canDeleteCurrency($currency)) {
             $form->remove('delete');
         }
 
@@ -161,7 +150,7 @@ final class CurrencyController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-currency-%s-has-been-deleted-successfully"),
+                            $this->translator->translate('txt-currency-%s-has-been-deleted-successfully'),
                             $currency->getName()
                         )
                     );
@@ -183,7 +172,7 @@ final class CurrencyController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-currency-%s-has-been-updated-successfully"),
+                            $this->translator->translate('txt-currency-%s-has-been-updated-successfully'),
                             $currency->getName()
                         )
                     );

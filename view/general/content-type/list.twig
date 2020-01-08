@@ -5,13 +5,12 @@
 {{ form().openTag(form)|raw }}
 {% set filter = form.get('filter') %}
 
-<input type="hidden" name="filter[order]" value="{{ order }}">
-<input type="hidden" name="filter[direction]" value="{{ direction }}">
+
 
 <div class="row">
 
     <div class="col-md-10">
-        <h1 class="display-4">{{ translate("txt-content-type-list") }}</h1>
+        <h1>{{ translate("txt-content-type-list") }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -20,33 +19,36 @@
             <div class="col-md-6">
                 <div class="input-group">
                     {{ formelement(filter.get('search')) }}
-                    <span class="input-group-btn">{{ formelement(form.get('submit')) }}</span></div>
+                    <div class="input-group-append input-group-btn">
+                        {{ formelement(form.get('submit')) }}
+                    </div>
+                </div>
             </div>
         </div>
 
 
         {% if paginator.pageRange > 0 %}
-            <table class="table table-hover table-striped table-condensed table-sm">
+            <table class="table table-hover table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'id', 'text': translate('txt-id')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'description', 'text': translate('txt-description')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'content-type', 'text': translate('txt-content-type')} %}</th>
-                    <th>{% include 'general/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'extension', 'text': translate('txt-extension')} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'description', 'text': translate("txt-description")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'content-type', 'text': translate("txt-content-type")} %}</th>
+                    <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/content-type/list', 'criteria': 'extension', 'text': translate("txt-extension")} %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for contentType in paginator.getCurrentItems() %}
                     <tr>
                         <td>{{ contentType.id }} {{ contentTypeLink(contentType,'edit', 'icon') }}</td>
-                        <td>{{ contentTypeLink(contentType,'view','description') }} </td>
+                        <td>{{ contentTypeLink(contentType,'view','name') }} </td>
                         <td>{{ contentTypeLink(contentType,'view','content-type') }} </td>
                         <td>{{ contentTypeLink(contentType,'view','extension') }} </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% include 'general/partial/pagination-control' %}
+            {% include 'application/partial/pagination-control' %}
         {% else %}
             {{ ztbalert().info(translate("txt-no-content-type-could-be-found"))|raw }}
         {% endif %}
@@ -56,10 +58,8 @@
             <fieldset>
 
 
-                <div class="form-group row">
-                    {{ ztbformelement(form.get('submit')) }}
+                                   {{ ztbformelement(form.get('submit')) }}
                     {{ ztbformelement(form.get('clear')) }}
-                </div>
             </fieldset>
         </div>
     </div>

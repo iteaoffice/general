@@ -1,7 +1,7 @@
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-vat-%s")|format(vat)) %}
 
-<h1 class="display-4">{{ translate("txt-vat-%s")|format(vat) }} {{ vatLink(vat,'edit','button') }}</h1>
+<h1>{{ translate("txt-vat-%s")|format(vat) }} {{ vatLink(vat,'edit','button') }}</h1>
 
 <h2>{{ translate("txt-vat-information") }}</h2>
 <dl class="dl-horizontal">
@@ -15,9 +15,9 @@
     <dd>{{ vat.dateStart|string_date }}</dd>
 
 
-    <dt>{{ translate('txt-vat-types') }}</dt>
+    <dt>{{ translate("txt-vat-types") }}</dt>
     {% for vatType in vat.type %}
-        <dd>{{ vatTypeLink(vatType,'view','type') }}</dd>
+        <dd>{{ vatTypeLink(vatType,'view','name') }}</dd>
     {% else %}
         <dd>{{ translate("txt-types-for-this-vat") }}</dd>
     {% endfor %}

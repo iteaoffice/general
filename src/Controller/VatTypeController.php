@@ -1,13 +1,9 @@
 <?php
+
 /**
- * ITEA Office all rights reserved
- *
- * PHP Version 7
- *
- * @category    Project
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2004-2017 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
  *
  * @link        https://github.com/iteaoffice/general for the canonical source repository
@@ -25,33 +21,21 @@ use General\Entity\VatType;
 use General\Form\VatFilter;
 use General\Service\FormService;
 use General\Service\GeneralService;
-use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 /**
- * Class VatTypeController
- *
- * @package General\Controller
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
 final class VatTypeController extends AbstractActionController
 {
-    /**
-     * @var GeneralService
-     */
-    private $generalService;
-    /**
-     * @var FormService
-     */
-    private $formService;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private GeneralService $generalService;
+    private FormService $formService;
+    private TranslatorInterface $translator;
 
     public function __construct(
         GeneralService $generalService,
@@ -109,7 +93,7 @@ final class VatTypeController extends AbstractActionController
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
-                $this->redirect()->toRoute('zfcadmin/vat/list');
+                return $this->redirect()->toRoute('zfcadmin/vat/list');
             }
 
             if ($form->isValid()) {
@@ -119,7 +103,7 @@ final class VatTypeController extends AbstractActionController
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage(
                         sprintf(
-                            $this->translator->translate("txt-vat-type-%s-has-been-created-successfully"),
+                            $this->translator->translate('txt-vat-type-%s-has-been-created-successfully'),
                             $vatType->getType()
                         )
                     );
@@ -157,13 +141,12 @@ final class VatTypeController extends AbstractActionController
 
                 $this->generalService->save($vatType);
 
-                $this->flashMessenger()->setNamespace('info')
-                    ->addMessage(
-                        sprintf(
-                            $this->translator->translate("txt-vat-type-%s-has-been-updated-successfully"),
-                            $vatType->getType()
-                        )
-                    );
+                $this->flashMessenger()->addInfoMessage(
+                    sprintf(
+                        $this->translator->translate('txt-vat-type-%s-has-been-updated-successfully'),
+                        $vatType->getType()
+                    )
+                );
 
                 return $this->redirect()->toRoute(
                     'zfcadmin/vat-type/view',
