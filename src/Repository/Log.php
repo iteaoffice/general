@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
@@ -31,7 +32,7 @@ class Log extends EntityRepository
         $queryBuilder->select('general_entity_log');
         $queryBuilder->from(Entity\Log::class, 'general_entity_log');
 
-        if (!empty($filter['search'])) {
+        if (! empty($filter['search'])) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->like('general_entity_log.event', ':like'),
@@ -47,7 +48,8 @@ class Log extends EntityRepository
         );
 
         $direction = 'DESC';
-        if (isset($filter['direction'])
+        if (
+            isset($filter['direction'])
             && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
         ) {
             $direction = strtoupper($filter['direction']);
