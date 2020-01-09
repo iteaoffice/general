@@ -101,6 +101,8 @@ final class LinkDecoration
                 break;
         }
 
+
+
         return sprintf(
             self::$linkTemplate,
             ((empty($this->linkText->getTitle())) ? '' : sprintf(' title="%s"', $this->linkText->getTitle())),
