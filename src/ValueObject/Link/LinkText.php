@@ -43,12 +43,12 @@ final class LinkText
 
     public function getTitle(): string
     {
-        return str_replace('%', '&percnt;', $this->title);
+        return str_replace('%', '&percnt;', htmlentities($this->title));
     }
 
     public function parse(): string
     {
-        $text = str_replace('%', '&percnt;', $this->text);
+        $text = str_replace('%', '&percnt;', htmlentities($this->text));
 
         return (mb_strlen($text) > $this->maxLength)
             ? trim(mb_substr($text, 0, $this->maxLength)) . '&hellip;'
