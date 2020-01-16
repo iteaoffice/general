@@ -26,10 +26,10 @@ abstract class AbstractLink
         TranslatorInterface $translator,
         ModuleOptions $generalModuleOptions
     ) {
-        $this->assertionService = $assertionService;
-        $this->authorizeService = $authorizeService;
-        $this->router = $router;
-        $this->translator = $translator;
+        $this->assertionService     = $assertionService;
+        $this->authorizeService     = $authorizeService;
+        $this->router               = $router;
+        $this->translator           = $translator;
         $this->generalModuleOptions = $generalModuleOptions;
     }
 
