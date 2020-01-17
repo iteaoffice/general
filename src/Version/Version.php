@@ -17,5 +17,5 @@ namespace General\Version;
  */
 final class Version
 {
-    public const VERSION = '5.0.3';
+    public const VERSION = '5.0.4-dev';
 }
