@@ -1,7 +1,9 @@
 <?php
+
 /**
  * You do not need to edit below this line
  */
+
 return [
     'email' => [
         'defaults' => [
@@ -25,5 +27,3 @@ return [
         'assets' => __DIR__ . '/../../../../styles/' . (defined("ITEAOFFICE_HOST") ? ITEAOFFICE_HOST : 'test') . '/img'
     ]
 ];
-
-

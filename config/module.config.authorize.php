@@ -23,6 +23,7 @@ return [
              */
             Route::class => [
                 ['route' => 'image/country-flag', 'roles' => []],
+                ['route' => 'image/asset', 'roles' => []],
                 ['route' => 'image/challenge-icon', 'roles' => []],
                 ['route' => 'image/challenge-image', 'roles' => []],
                 ['route' => 'challenge/download-pdf', 'roles' => []],

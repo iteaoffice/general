@@ -53,25 +53,25 @@ abstract class AbstractHandler extends AbstractHelper
         AuthenticationService $authenticationService,
         TranslatorInterface $translator
     ) {
-        $this->helperPluginManager = $helperPluginManager;
-        $this->renderer = $renderer;
+        $this->helperPluginManager   = $helperPluginManager;
+        $this->renderer              = $renderer;
         $this->authenticationService = $authenticationService;
-        $this->translator = $translator;
+        $this->translator            = $translator;
 
         //Take the last remaining properties from the application
         $this->routeMatch = $application->getMvcEvent()->getRouteMatch();
-        $this->response = $application->getMvcEvent()->getResponse();
-        $this->request = $application->getMvcEvent()->getRequest();
+        $this->response   = $application->getMvcEvent()->getResponse();
+        $this->request    = $application->getMvcEvent()->getRequest();
     }
 
     public function extractContentParam(Content $content): array
     {
         $params = [
-            'id' => null,
+            'id'     => null,
             'docRef' => null,
-            'year' => null,
-            'page' => 1,
-            'limit' => null,
+            'year'   => null,
+            'page'   => 1,
+            'limit'  => null,
         ];
 
         foreach ($content->getContentParam() as $contentParam) {
@@ -90,7 +90,6 @@ abstract class AbstractHandler extends AbstractHelper
         //Convert the ints to ints (it they are null
         null === $params['id'] ?: $params['id'] = (int)$params['id'];
         null === $params['year'] ?: $params['year'] = (int)$params['year'];
-        null === $params['page'] ?: $params['page'] = (int)$params['page'];
         null === $params['limit'] ?: $params['limit'] = (int)$params['limit'];
 
         return $params;
