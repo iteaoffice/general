@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ITEA Office all rights reserved
  *
@@ -18,5 +17,5 @@ namespace General\Version;
  */
 final class Version
 {
-    public const VERSION = '5.0.2-DEV';
+    public const VERSION = '5.0.3';
 }
