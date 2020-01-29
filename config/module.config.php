@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace General;
 
-use Admin\Navigation\Factory\NavigationInvokableFactory;
+use General\Navigation\Factory\NavigationInvokableFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Gedmo\Sluggable\SluggableListener;
@@ -66,25 +66,23 @@ $config = [
             'challengeIcon'     => View\Helper\Challenge\ChallengeIcon::class,
             'challengeImage'    => View\Helper\Challenge\ChallengeImage::class,
             'challengeTypeLink' => View\Helper\Challenge\TypeLink::class,
-
-            'countryMap'       => View\Helper\Country\CountryMap::class,
-            'countryFlag'      => View\Helper\Country\CountryFlag::class,
-            'countryLink'      => View\Helper\Country\CountryLink::class,
-            'currencyLink'     => View\Helper\CurrencyLink::class,
-            'exchangeRateLink' => View\Helper\ExchangeRateLink::class,
-            'passwordLink'     => View\Helper\PasswordLink::class,
-            'emailMessageLink' => View\Helper\EmailMessageLink::class,
-            'generalLogLink'   => View\Helper\LogLink::class,
-            'vatLink'          => View\Helper\VatLink::class,
-            'genderLink'       => View\Helper\GenderLink::class,
-            'titleLink'        => View\Helper\TitleLink::class,
-            'vatTypeLink'      => View\Helper\VatTypeLink::class,
-            'challengeLink'    => View\Helper\Challenge\ChallengeLink::class,
-            'webInfoLink'      => View\Helper\WebInfoLink::class,
-            'contentTypeLink'  => View\Helper\ContentTypeLink::class,
-            'contentTypeIcon'  => View\Helper\ContentTypeIcon::class,
-
-            'countryselect' => Form\View\Helper\CountrySelect::class
+            'countryMap'        => View\Helper\Country\CountryMap::class,
+            'countryFlag'       => View\Helper\Country\CountryFlag::class,
+            'countryLink'       => View\Helper\Country\CountryLink::class,
+            'currencyLink'      => View\Helper\CurrencyLink::class,
+            'exchangeRateLink'  => View\Helper\ExchangeRateLink::class,
+            'passwordLink'      => View\Helper\PasswordLink::class,
+            'emailMessageLink'  => View\Helper\EmailMessageLink::class,
+            'generalLogLink'    => View\Helper\LogLink::class,
+            'vatLink'           => View\Helper\VatLink::class,
+            'genderLink'        => View\Helper\GenderLink::class,
+            'titleLink'         => View\Helper\TitleLink::class,
+            'vatTypeLink'       => View\Helper\VatTypeLink::class,
+            'challengeLink'     => View\Helper\Challenge\ChallengeLink::class,
+            'webInfoLink'       => View\Helper\WebInfoLink::class,
+            'contentTypeLink'   => View\Helper\ContentTypeLink::class,
+            'contentTypeIcon'   => View\Helper\ContentTypeIcon::class,
+            'countryselect'     => Form\View\Helper\CountrySelect::class
         ],
         'invokables' => [
             Form\View\Helper\CountrySelect::class
@@ -112,7 +110,6 @@ $config = [
             View\Helper\ContentTypeLink::class          => View\Factory\LinkHelperFactory::class,
             View\Helper\Country\CountryMap::class       => ConfigAbstractFactory::class,
             View\Helper\ContentTypeIcon::class          => ConfigAbstractFactory::class,
-
         ],
     ],
     'service_manager'    => [
@@ -142,6 +139,7 @@ $config = [
             Navigation\Invokable\VatLabel::class           => NavigationInvokableFactory::class,
             Navigation\Invokable\VatTypeLabel::class       => NavigationInvokableFactory::class,
             Navigation\Invokable\WebInfoLabel::class       => NavigationInvokableFactory::class,
+            Navigation\Service\NavigationService::class    => Navigation\Factory\NavigationServiceFactory::class,
         ],
         'invokables' => [
             InputFilter\PasswordFilter::class,
