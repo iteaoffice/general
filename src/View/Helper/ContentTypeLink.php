@@ -41,7 +41,7 @@ final class ContentTypeLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/content-type/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-content-type')
@@ -49,7 +49,7 @@ final class ContentTypeLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/content-type/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-content-type')
@@ -57,7 +57,7 @@ final class ContentTypeLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/content-type/view',
                     'text' => $showOptions[$show] ?? $contentType->getDescription()
                 ];

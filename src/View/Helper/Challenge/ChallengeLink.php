@@ -42,7 +42,7 @@ final class ChallengeLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/challenge/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-challenge')
@@ -50,7 +50,7 @@ final class ChallengeLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/challenge/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-challenge')
@@ -58,14 +58,14 @@ final class ChallengeLink extends AbstractLink
                 break;
             case 'view-admin':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/challenge/view',
                     'text' => $showOptions[$show] ?? $challenge->getChallenge()
                 ];
                 break;
             case 'download-pdf':
                 $linkParams = [
-                    'icon' => 'fa-file-pdf-0',
+                    'icon' => 'far fa-file-pdf-o',
                     'route' => 'challenge/download-pdf',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-download-pdf')
@@ -73,7 +73,7 @@ final class ChallengeLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => Route::parseRouteName(Route::DEFAULT_ROUTE_CHALLENGE),
                     'text' => $showOptions[$show] ?? $challenge->getChallenge()
                 ];

@@ -40,7 +40,7 @@ final class TitleLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/title/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-title')
@@ -48,7 +48,7 @@ final class TitleLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/title/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-title')
@@ -56,7 +56,7 @@ final class TitleLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/title/view',
                     'text' => $showOptions[$show] ?? $title->getName()
                 ];

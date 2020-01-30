@@ -39,7 +39,7 @@ final class CurrencyLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/currency/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-currency')
@@ -47,7 +47,7 @@ final class CurrencyLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/currency/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-currency')
@@ -55,7 +55,7 @@ final class CurrencyLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/currency/view',
                     'text' => $showOptions[$show] ?? $currency->getIso4217()
                 ];

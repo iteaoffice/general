@@ -46,44 +46,44 @@ final class ContentTypeIcon
             case 'image/jpeg':
             case 'image/tiff':
             case 'image/png':
-                $class = ' fa-file-image-o';
+                $class = 'far fa-file-image';
                 break;
             case 'application/pdf':
             case 'application/postscript':
-                $class = 'fa-file-pdf-o';
+                $class = 'far fa-file-pdf';
                 break;
             case 'application/zip':
             case 'application/x-zip-compressed':
-                $class = 'fa-file-archive-o';
+                $class = 'far fa-file-archive';
                 break;
             case 'application/vnd.ms-excel':
             case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
             case 'application/vnd.ms-excel.sheet.macroEnabled.12':
-                $class = 'fa-file-excel-o';
+                $class = 'far fa-file-excel';
                 break;
             case 'application/mspowerpoint':
             case 'application/vnd.ms-powerpoint':
             case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
             case 'application/vnd.openxmlformats-officedocument.presentationml.template':
             case 'application/vnd.openxmlformats-officedocument.presentationml.slideshow':
-                $class = 'fa-file-powerpoint-o';
+                $class = 'far fa-file-powerpoint';
                 break;
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
             case 'application/msword':
-                $class = 'fa-file-word-o';
+                $class = 'far fa-file-word';
                 break;
             default:
             case 'application/octet-stream':
             case 'application/csv':
             case 'text/xml':
-                $class = 'fa-file-o';
+                $class = 'far fa-file';
                 break;
             case 'video/mp4':
-                $class = 'fa-file-video-o';
+                $class = 'far fa-file-video';
                 break;
         }
 
-        return sprintf('<i class="fa %s" title="%s"></i> ', $class, $contentType->getDescription());
+        return sprintf('<i class="%s" title="%s"></i> ', $class, $contentType->getDescription());
     }
 }

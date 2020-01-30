@@ -39,7 +39,7 @@ final class VatLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/vat/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-vat')
@@ -47,7 +47,7 @@ final class VatLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/vat/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-vat')
@@ -55,7 +55,7 @@ final class VatLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/vat/view',
                     'text' => $showOptions[$show] ?? $vat->getCode()
                 ];

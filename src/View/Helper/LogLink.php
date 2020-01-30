@@ -28,7 +28,7 @@ final class LogLink extends AbstractLink
         $routeParams['id'] = $log->getId();
 
         $linkParams = [
-            'icon' => 'fa-link',
+            'icon' => 'fas fa-link',
             'route' => 'zfcadmin/log/view',
             'text' => $log->getEvent(),
         ];

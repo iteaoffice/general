@@ -39,7 +39,7 @@ final class PasswordLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/password/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-password')
@@ -47,7 +47,7 @@ final class PasswordLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/password/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-password')

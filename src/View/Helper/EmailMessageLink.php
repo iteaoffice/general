@@ -24,17 +24,17 @@ final class EmailMessageLink extends AbstractLink
 {
     public function __invoke(EmailMessage $emailMessage): string
     {
-        $routeParams = [];
+        $routeParams       = [];
         $routeParams['id'] = $emailMessage->getId();
 
         $linkParams = [
-            'icon' => 'fa-envelope-o',
+            'icon'  => 'far fa-envelope',
             'route' => 'zfcadmin/email/view',
-            'text' => $emailMessage->getSubject(),
+            'text'  => $emailMessage->getSubject(),
         ];
 
-        $linkParams['action'] = 'view';
-        $linkParams['show'] = 'text';
+        $linkParams['action']      = 'view';
+        $linkParams['show']        = 'text';
         $linkParams['routeParams'] = $routeParams;
 
         return $this->parse(Link::fromArray($linkParams));

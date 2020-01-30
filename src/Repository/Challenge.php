@@ -20,7 +20,7 @@ use General\Entity;
 use function in_array;
 
 /**
-* Class Challenge
+ * Class Challenge
  * @package General\Repository
  */
 class Challenge extends EntityRepository
@@ -30,8 +30,7 @@ class Challenge extends EntityRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder->select('general_entity_challenge');
         $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
-        $queryBuilder->leftJoin('general_entity_challenge.type', 'general_entity_challenge_type');
-        $queryBuilder->leftJoin('general_entity_challenge.call', 'program_entity_call_call');
+
 
         if (null !== $filter) {
             $queryBuilder = $this->applyFilter($queryBuilder, $filter);
@@ -75,10 +74,12 @@ class Challenge extends EntityRepository
         }
 
         if (isset($filter['type'])) {
+            $queryBuilder->leftJoin('general_entity_challenge.type', 'general_entity_challenge_type');
             $queryBuilder->andWhere($queryBuilder->expr()->in('general_entity_challenge_type.id', $filter['type']));
         }
 
         if (isset($filter['call'])) {
+            $queryBuilder->leftJoin('general_entity_challenge.call', 'program_entity_call_call');
             $queryBuilder->andWhere($queryBuilder->expr()->in('program_entity_call_call.id', $filter['call']));
         }
 

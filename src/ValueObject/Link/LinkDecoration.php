@@ -22,12 +22,12 @@ final class LinkDecoration
     private const ACTION_EDIT   = 'edit';
     private const ACTION_DELETE = 'delete';
 
-    private static string $iconTemplate = '<i class="fa %s fa-fw"></i>';
+    private static string $iconTemplate = '<i class="%s"></i>';
     private static string $linkTemplate = '<a href="%%s"%s%s>%s</a>';
     private static array $defaultIcons = [
-        self::ACTION_NEW    => 'fa-plus',
-        self::ACTION_EDIT   => 'fa-pencil-square-o',
-        self::ACTION_DELETE => 'fa-trash'
+        self::ACTION_NEW    => 'fas fa-plus',
+        self::ACTION_EDIT   => 'far fa-edit',
+        self::ACTION_DELETE => 'far fa-trash-alt'
     ];
 
     private string $show;

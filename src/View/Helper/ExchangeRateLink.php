@@ -39,7 +39,7 @@ final class ExchangeRateLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/currency/exchange-rate/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-exchange-rate')
@@ -47,7 +47,7 @@ final class ExchangeRateLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/currency/exchange-rate/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-exchange-rate')

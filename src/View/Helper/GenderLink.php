@@ -40,7 +40,7 @@ final class GenderLink extends AbstractLink
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fa-plus',
+                    'icon' => 'fas fa-plus',
                     'route' => 'zfcadmin/gender/new',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-gender')
@@ -48,7 +48,7 @@ final class GenderLink extends AbstractLink
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'fa-pencil-square-o',
+                    'icon' => 'far fa-edit',
                     'route' => 'zfcadmin/gender/edit',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-gender')
@@ -56,7 +56,7 @@ final class GenderLink extends AbstractLink
                 break;
             case 'view':
                 $linkParams = [
-                    'icon' => 'fa-link',
+                    'icon' => 'fas fa-link',
                     'route' => 'zfcadmin/gender/view',
                     'text' => $showOptions[$show] ?? $gender->getName()
                 ];

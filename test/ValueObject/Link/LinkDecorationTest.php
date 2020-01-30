@@ -29,31 +29,31 @@ class LinkDecorationTest extends TestCase
 
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_ICON, $linkText, null, 'fa-plus');
         $this->assertEquals(
-            '<a href="%s" title="test"><i class="fa fa-plus fa-fw"></i></a>',
+            '<a href="%s" title="test"><i class="fa-plus"></i></a>',
             $linkDecoration->parse()
         );
 
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_ICON_AND_TEXT, $linkText, null, 'fa-plus');
         $this->assertEquals(
-            '<a href="%s" title="test"><i class="fa fa-plus fa-fw"></i> test</a>',
+            '<a href="%s" title="test"><i class="fa-plus"></i> test</a>',
             $linkDecoration->parse()
         );
 
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_BUTTON, $linkText, 'new');
         $this->assertEquals(
-            '<a href="%s" title="test" class="btn btn-primary"><i class="fa fa-plus fa-fw"></i> test</a>',
+            '<a href="%s" title="test" class="btn btn-primary"><i class="fas fa-plus"></i> test</a>',
             $linkDecoration->parse()
         );
 
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_ICON, $linkText, 'edit');
         $this->assertEquals(
-            '<a href="%s" title="test"><i class="fa fa-pencil-square-o fa-fw"></i></a>',
+            '<a href="%s" title="test"><i class="far fa-edit"></i></a>',
             $linkDecoration->parse()
         );
 
         $linkDecoration = new LinkDecoration(LinkDecoration::SHOW_ICON, $linkText, 'delete');
         $this->assertEquals(
-            '<a href="%s" title="test"><i class="fa fa-trash fa-fw"></i></a>',
+            '<a href="%s" title="test"><i class="far fa-trash-alt"></i></a>',
             $linkDecoration->parse()
         );
 
@@ -63,7 +63,7 @@ class LinkDecorationTest extends TestCase
             'action' => 'new'
         ]);
         $this->assertEquals(
-            '<a href="%s" title="test" class="btn btn-primary"><i class="fa fa-plus fa-fw"></i> test</a>',
+            '<a href="%s" title="test" class="btn btn-primary"><i class="fas fa-plus"></i> test</a>',
             $linkDecoration->parse()
         );
     }

@@ -5,7 +5,6 @@
 {{ form().openTag(form)|raw }}
 {% set filter = form.get('filter') %}
 
-
 <div class="row">
 
     <div class="col-md-10">
@@ -49,11 +48,11 @@
                     <tr>
                         <td><small class="text-muted">{{ challenge.id }}</small></td>
                         <td>{{ challengeLink(challenge,'view-admin','name') }} {{ challengeLink(challenge,'edit', 'icon') }}
-                            <span class="pull-right">{{ challengeLink(challenge,'view','icon') }}</span>
+                            <span class="float-right">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
                         <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>
-                        <td>{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }} {% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}</td>
+                        <td>{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }}<br>{% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}</td>
                         <td>{{ challenge.projectChallenge.count() }}</td>
                         <td>{{ challenge.boothChallenge.count() }}</td>
                         <td>{% if challenge.pdf %}{{ challengeLink(challenge,'download-pdf','icon') }}{% endif %}</td>
