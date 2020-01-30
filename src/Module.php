@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace General;
 
+use General\Navigation\Service\NavigationService;
+use Laminas\EventManager\EventInterface;
+use Laminas\EventManager\EventManager;
 use Laminas\ModuleManager\Feature;
+use Laminas\Mvc\MvcEvent;
 
 final class Module implements Feature\ConfigProviderInterface
 {

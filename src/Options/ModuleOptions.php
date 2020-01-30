@@ -20,10 +20,22 @@ use Laminas\Stdlib\AbstractOptions;
  */
 class ModuleOptions extends AbstractOptions implements ImageOptionsInterface, ServerOptionsInterface
 {
-    protected string $thumborServer = 'https://image.itea3.org';
-    protected string $thumborSecret = 'mKiWlumnpbX1YWpW6lbm';
-    protected string $assets = '../../../styles/itea/img';
-    protected string $serverUrl = 'https://itea3.org';
+    protected string $thumborServer                = 'https://image.itea3.org';
+    protected string $thumborSecret                = 'mKiWlumnpbX1YWpW6lbm';
+    protected string $assets                       = '../../../styles/itea/img';
+    protected string $serverUrl                    = 'https://itea3.org';
+    protected string $communityNavigationContainer = 'Laminas\Navigation\Community';
+
+    public function getCommunityNavigationContainer(): string
+    {
+        return $this->communityNavigationContainer;
+    }
+
+    public function setCommunityNavigationContainer(string $communityNavigationContainer): ModuleOptions
+    {
+        $this->communityNavigationContainer = $communityNavigationContainer;
+        return $this;
+    }
 
     public function getServerUrl(): string
     {
