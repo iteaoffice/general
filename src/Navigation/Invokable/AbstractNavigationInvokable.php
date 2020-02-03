@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace General\Navigation\Invokable;
 
-use General\Navigation\Service\NavigationService;
 use Doctrine\Common\Collections\ArrayCollection;
+use General\Navigation\Service\NavigationService;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\Navigation\Page\Mvc;
 
@@ -28,7 +28,7 @@ abstract class AbstractNavigationInvokable implements NavigationInvokableInterfa
     protected TranslatorInterface $translator;
 
     public function __construct(
-        NavigationService   $navigationService,
+        NavigationService $navigationService,
         TranslatorInterface $translator
     )
     {

@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace General\Navigation\Service;
 
-use General\Navigation\Invokable\NavigationInvokableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Psr\Container\ContainerInterface;
+use General\Navigation\Invokable\NavigationInvokableInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\Mvc;
 use Laminas\Router\Http\RouteMatch;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
+
 use function class_exists;
 use function defined;
 use function is_array;
@@ -40,10 +41,10 @@ final class NavigationService
 
     public function __construct(
         ContainerInterface $container,
-        EntityManager      $entityManager,
-        Navigation         $adminNavigation,
-        Navigation         $communityNavigation,
-        ?RouteMatch        $routeMatch
+        EntityManager $entityManager,
+        Navigation $adminNavigation,
+        Navigation $communityNavigation,
+        ?RouteMatch $routeMatch
     )
     {
         $this->container           = $container;
@@ -99,8 +100,7 @@ final class NavigationService
                             ]);
                             if (null === $entity) {
                                 if (defined('ITEAOFFICE_ENVIRONMENT')
-                                    && (ITEAOFFICE_ENVIRONMENT === 'development'))
-                                {
+                                    && (ITEAOFFICE_ENVIRONMENT === 'development')) {
                                     print sprintf(
                                         "Can not load '%s' by '%s' via '%s' value(%s)",
                                         $entityClass,
@@ -120,15 +120,6 @@ final class NavigationService
         }
     }
 
-    /**
-     * @return ArrayCollection
-     * @deprecated We want to pass the entities during the invocation of the invokable
-     */
-    public function getEntities(): ArrayCollection // Needed by AbstractNavigationInvokable
-    {
-        return $this->entities;
-    }
-
     private function updateNavigation(Mvc $page): void
     {
         $page->setVisible();
@@ -145,7 +136,7 @@ final class NavigationService
                     } else {
                         throw new RuntimeException('Can\'t invoke callable ' . $invokable);
                     }
-                // Not found
+                    // Not found
                 } else {
                     throw new RuntimeException('Servicemanager can\'t find invokable ' . $invokable);
                 }
@@ -159,5 +150,14 @@ final class NavigationService
             $parentPage->setParams(array_merge($parentPage->getParams(), $routeParams));
             $this->updateNavigation($parentPage);
         }
+    }
+
+    /**
+     * @return ArrayCollection
+     * @deprecated We want to pass the entities during the invocation of the invokable
+     */
+    public function getEntities(): ArrayCollection // Needed by AbstractNavigationInvokable
+    {
+        return $this->entities;
     }
 }

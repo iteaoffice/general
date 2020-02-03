@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace General\Navigation\Invokable;
 
-use General\Navigation\Invokable\AbstractNavigationInvokable;
 use General\Entity\Gender;
 use Laminas\Navigation\Page\Mvc;
 
