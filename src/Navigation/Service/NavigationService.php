@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityManager;
 use General\Navigation\Invokable\NavigationInvokableInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\Mvc;
-use Laminas\Router\Http\RouteMatch;
+use Laminas\Router\RouteMatch;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
@@ -30,14 +30,14 @@ use function is_array;
  * Class NavigationService
  * @package General\Navigation\Service
  */
-final class NavigationService
+class NavigationService
 {
     private ContainerInterface $container;
-    private EntityManager      $entityManager;
-    private Navigation         $adminNavigation;
-    private Navigation         $communityNavigation;
-    private ?RouteMatch        $routeMatch = null;
-    private ArrayCollection    $entities;
+    private EntityManager $entityManager;
+    private Navigation $adminNavigation;
+    private Navigation $communityNavigation;
+    private ?RouteMatch $routeMatch = null;
+    private ArrayCollection $entities;
 
     public function __construct(
         ContainerInterface $container,
@@ -45,8 +45,7 @@ final class NavigationService
         Navigation $adminNavigation,
         Navigation $communityNavigation,
         ?RouteMatch $routeMatch
-    )
-    {
+    ) {
         $this->container           = $container;
         $this->entityManager       = $entityManager;
         $this->adminNavigation     = $adminNavigation;
@@ -99,8 +98,10 @@ final class NavigationService
                                 $routeParam => $this->routeMatch->getParam($routeParamKey),
                             ]);
                             if (null === $entity) {
-                                if (defined('ITEAOFFICE_ENVIRONMENT')
-                                    && (ITEAOFFICE_ENVIRONMENT === 'development')) {
+                                if (
+                                    defined('ITEAOFFICE_ENVIRONMENT')
+                                    && (ITEAOFFICE_ENVIRONMENT === 'development')
+                                ) {
                                     print sprintf(
                                         "Can not load '%s' by '%s' via '%s' value(%s)",
                                         $entityClass,

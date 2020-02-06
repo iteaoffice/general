@@ -35,7 +35,7 @@ final class ContentTypeIcon
     public function __invoke(ContentType $contentType = null, string $contentTypeName = null): ?string
     {
         if (null === $contentType && null !== $contentTypeName) {
-            $contentType = $this->generalService->findContentTypeByContentTypeName($contentTypeName);
+            $contentType = $this->generalService->findContentTypeByContentTypeDescription($contentTypeName);
         }
 
         if (null === $contentType) {

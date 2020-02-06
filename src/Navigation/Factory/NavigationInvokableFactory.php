@@ -29,8 +29,7 @@ final class NavigationInvokableFactory implements FactoryInterface
         ContainerInterface $container,
         $requestedName,
         array $options = null
-    ): AbstractNavigationInvokable
-    {
+    ): AbstractNavigationInvokable {
         return new $requestedName(
             $container->get(NavigationService::class),
             $container->get(TranslatorInterface::class)

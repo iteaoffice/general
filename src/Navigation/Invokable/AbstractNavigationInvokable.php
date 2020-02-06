@@ -24,14 +24,13 @@ use Laminas\Navigation\Page\Mvc;
  */
 abstract class AbstractNavigationInvokable implements NavigationInvokableInterface
 {
-    protected NavigationService   $navigationService;
+    protected NavigationService $navigationService;
     protected TranslatorInterface $translator;
 
     public function __construct(
         NavigationService $navigationService,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->navigationService = $navigationService;
         $this->translator        = $translator;
     }
