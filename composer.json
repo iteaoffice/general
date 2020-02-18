@@ -30,7 +30,7 @@
     "laminas/laminas-navigation": "^2.9.0",
     "laminas/laminas-math": "^3.1.1",
     "jield-webdev/bjy-authorize": "^2.1.0",
-    "doctrine/doctrine-orm-module": "@stable",
+    "doctrine/doctrine-orm-module": "3.*",
     "mailjet/mailjet-apiv3-php": "1.4.*"
   },
   "require-dev": {
