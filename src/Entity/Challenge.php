@@ -27,7 +27,7 @@ use Laminas\Form\Annotation;
 /**
  * @ORM\Table(name="challenge")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("general_challenge")
  *
  * @category General

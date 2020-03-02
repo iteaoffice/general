@@ -24,7 +24,7 @@ class ModuleOptions extends AbstractOptions implements ImageOptionsInterface, Se
     protected string $thumborSecret                = 'mKiWlumnpbX1YWpW6lbm';
     protected string $assets                       = '../../../styles/itea/img';
     protected string $serverUrl                    = 'https://itea3.org';
-    protected string $communityNavigationContainer = 'Laminas\Navigation\Community';
+    protected string $communityNavigationContainer = 'Laminas\Navigation\Community2';
 
     public function getCommunityNavigationContainer(): string
     {

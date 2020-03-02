@@ -23,7 +23,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="gender")
  * @ORM\Entity(repositoryClass="General\Repository\Gender")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("general_gender")
  *
  * @category General

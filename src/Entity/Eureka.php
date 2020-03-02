@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="country_eureka")
  * @ORM\Entity
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("country_eu")
  *
  * @category General

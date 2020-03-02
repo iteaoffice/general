@@ -14,10 +14,10 @@ use Laminas\Router\RouteStackInterface;
 abstract class AbstractLink
 {
     protected TranslatorInterface $translator;
+    protected ModuleOptions $generalModuleOptions;
     private AssertionService $assertionService;
     private Authorize $authorizeService;
     private RouteStackInterface $router;
-    private ModuleOptions $generalModuleOptions;
 
     public function __construct(
         AssertionService $assertionService,

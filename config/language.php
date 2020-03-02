@@ -1,4 +1,5 @@
 <?php
+
 _('txt-country');
 _('txt-since');
 _('txt-vat-code');

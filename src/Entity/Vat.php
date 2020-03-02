@@ -27,7 +27,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="vat")
  * @ORM\Entity(repositoryClass="General\Repository\Vat")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("vat")
  *
  * @category General

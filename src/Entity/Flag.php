@@ -17,14 +17,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Laminas\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="country_flag")
  * @ORM\Entity
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("country_flag")
- *
- * @category General
  */
 class Flag extends AbstractEntity
 {
@@ -56,65 +52,36 @@ class Flag extends AbstractEntity
      */
     private $object;
 
-
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Flag
-     */
-    public function setId($id): Flag
+    public function setId(?int $id): Flag
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return Country
-     */
-    public function getCountry(): Country
+    public function getCountry(): ?Country
     {
         return $this->country;
     }
 
-    /**
-     * @param Country $country
-     *
-     * @return Flag
-     */
-    public function setCountry($country): Flag
+    public function setCountry(?Country $country): Flag
     {
         $this->country = $country;
-
         return $this;
     }
 
-    /**
-     * @return resource
-     */
     public function getObject()
     {
         return $this->object;
     }
 
-    /**
-     * @param resource $object
-     *
-     * @return Flag
-     */
     public function setObject($object): Flag
     {
         $this->object = $object;
-
         return $this;
     }
 }

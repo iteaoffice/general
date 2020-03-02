@@ -27,7 +27,7 @@ use Mailing\Entity\Contact;
  *
  * @ORM\Table(name="email_message")
  * @ORM\Entity(repositoryClass="General\Repository\EmailMessage")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("email_message")
  */
 class EmailMessage extends AbstractEntity

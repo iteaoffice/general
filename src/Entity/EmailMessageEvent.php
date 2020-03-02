@@ -20,7 +20,7 @@ use Laminas\Form\Annotation;
 /**
  * @ORM\Table(name="email_message_event")
  * @ORM\Entity
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("email_message_event")
  */
 class EmailMessageEvent extends AbstractEntity

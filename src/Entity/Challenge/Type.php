@@ -24,7 +24,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="challenge_type")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge\Type")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("challenge_type")
  */
 class Type extends AbstractEntity

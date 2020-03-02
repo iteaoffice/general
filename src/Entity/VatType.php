@@ -23,7 +23,7 @@ use Organisation\Entity\Financial;
 /**
  * @ORM\Table(name="vat_type")
  * @ORM\Entity(repositoryClass="General\Repository\VatType")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("vat_type")
  */
 class VatType extends AbstractEntity

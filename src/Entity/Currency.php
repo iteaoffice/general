@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
 /**
  * @ORM\Table(name="currency")
  * @ORM\Entity(repositoryClass="General\Repository\Currency")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("currency")
  *
  * @category General

@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
 /**
  * @ORM\Table(name="web_info")
  * @ORM\Entity(repositoryClass="General\Repository\WebInfo")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("web_info")
  */
 class WebInfo extends AbstractEntity

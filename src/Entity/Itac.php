@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="country_itac")
  * @ORM\Entity
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("country_itac")
  *
  * @category General

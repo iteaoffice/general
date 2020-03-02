@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
 /**
  * @ORM\Table(name="title")
  * @ORM\Entity(repositoryClass="General\Repository\Title")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("general_gender")
  */
 class Title extends AbstractEntity

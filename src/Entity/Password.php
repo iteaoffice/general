@@ -21,7 +21,7 @@ use Laminas\Form\Annotation;
  *
  * @ORM\Table(name="password")
  * @ORM\Entity(repositoryClass="General\Repository\Password")
- * @Annotation\Hydrator("Laminas\Hydrator\ObjectProperty")
+ * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("password")
  */
 class Password extends AbstractEntity
