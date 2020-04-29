@@ -21,10 +21,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Laminas\Form\Annotation;
 use Laminas\Math\Rand;
 use Mailing\Entity\Contact;
+use Mailing\Entity\Sender;
+use Mailing\Entity\Template;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="email_message")
  * @ORM\Entity(repositoryClass="General\Repository\EmailMessage")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
@@ -71,6 +71,20 @@ class EmailMessage extends AbstractEntity
      */
     private $mailingContact;
     /**
+     * @ORM\ManyToOne(targetEntity="Mailing\Entity\Template", inversedBy="emailMessage", cascade={"persist"})
+     * @ORM\JoinColumn(name="mailtemplate_id", referencedColumnName="mailtemplate_id", nullable=true)
+     *
+     * @var Template
+     */
+    private $template;
+    /**
+     * @ORM\ManyToOne(targetEntity="Mailing\Entity\Sender", inversedBy="emailMessage", cascade={"persist"})
+     * @ORM\JoinColumn(name="sender_id", referencedColumnName="sender_id", nullable=true)
+     *
+     * @var Sender
+     */
+    private $sender;
+    /**
      * @ORM\Column(name="email_address",type="string")
      *
      * @var string
@@ -83,15 +97,21 @@ class EmailMessage extends AbstractEntity
      */
     private $subject;
     /**
-     * @ORM\Column(name="cc",type="string", nullable=true)
+     * @ORM\Column(name="`to`",type="array", nullable=true)
      *
-     * @var string
+     * @var array
+     */
+    private $to;
+    /**
+     * @ORM\Column(name="`cc`",type="array", nullable=true)
+     *
+     * @var array
      */
     private $cc;
     /**
-     * @ORM\Column(name="bcc",type="string", nullable=true)
+     * @ORM\Column(name="`bcc`",type="array", nullable=true)
      *
-     * @var string
+     * @var array
      */
     private $bcc;
     /**
@@ -125,8 +145,8 @@ class EmailMessage extends AbstractEntity
 
     public function __construct()
     {
-        $this->identifier = sha1(Rand::getString(30));
-        $this->event = new ArrayCollection();
+        $this->identifier          = sha1(Rand::getString(30));
+        $this->event               = new ArrayCollection();
         $this->amountOfAttachments = 0;
     }
 
@@ -212,23 +232,23 @@ class EmailMessage extends AbstractEntity
         return $this;
     }
 
-    public function getCc(): ?string
+    public function getCc(): ?array
     {
         return $this->cc;
     }
 
-    public function setCc(?string $cc): EmailMessage
+    public function setCc(?array $cc): EmailMessage
     {
         $this->cc = $cc;
         return $this;
     }
 
-    public function getBcc(): ?string
+    public function getBcc(): ?array
     {
         return $this->bcc;
     }
 
-    public function setBcc(?string $bcc): EmailMessage
+    public function setBcc(?array $bcc): EmailMessage
     {
         $this->bcc = $bcc;
         return $this;
@@ -286,6 +306,39 @@ class EmailMessage extends AbstractEntity
     public function setDateLatestEvent(?DateTime $dateLatestEvent): EmailMessage
     {
         $this->dateLatestEvent = $dateLatestEvent;
+        return $this;
+    }
+
+    public function getTemplate(): ?Template
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?Template $template): EmailMessage
+    {
+        $this->template = $template;
+        return $this;
+    }
+
+    public function getSender(): ?Sender
+    {
+        return $this->sender;
+    }
+
+    public function setSender(?Sender $sender): EmailMessage
+    {
+        $this->sender = $sender;
+        return $this;
+    }
+
+    public function getTo(): array
+    {
+        return $this->to;
+    }
+
+    public function setTo(array $to): EmailMessage
+    {
+        $this->to = $to;
         return $this;
     }
 }

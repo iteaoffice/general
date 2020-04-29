@@ -19,14 +19,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Laminas\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="gender")
  * @ORM\Entity(repositoryClass="General\Repository\Gender")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("general_gender")
- *
- * @category General
  */
 class Gender extends AbstractEntity
 {

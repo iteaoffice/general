@@ -103,8 +103,6 @@ _('txt-content-type-label');
 _('txt-content-type-help-block');
 _('txt-content-type-extension-label');
 _('txt-content-type-extension-help-block');
-_('txt-plain');
-_('txt-not-plain');
 _('txt-web-info-info-label');
 _('txt-web-info-info-placeholder');
 _('txt-web-info-info-help-block');

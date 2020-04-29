@@ -10,8 +10,8 @@ namespace General\ValueObject;
 
 final class Body
 {
-    private $messages;
-    private $sandboxMode;
+    private array $messages;
+    private bool $sandboxMode;
 
     public function __construct(array $messages = [], bool $sandboxMode = false)
     {

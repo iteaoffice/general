@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace General\Repository;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
@@ -28,24 +29,22 @@ class Log extends EntityRepository
 {
     public function findFiltered(array $filter): QueryBuilder
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
-        $queryBuilder->select('general_entity_log');
-        $queryBuilder->from(Entity\Log::class, 'general_entity_log');
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('general_entity_log');
+        $qb->from(Entity\Log::class, 'general_entity_log');
 
         if (! empty($filter['search'])) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->like('general_entity_log.event', ':like'),
-                    $queryBuilder->expr()->like('general_entity_log.url', ':like'),
-                    $queryBuilder->expr()->like('general_entity_log.file', ':like')
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('general_entity_log.event', ':like'),
+                    $qb->expr()->like('general_entity_log.url', ':like'),
+                    $qb->expr()->like('general_entity_log.file', ':like')
                 )
             );
-            $queryBuilder->setParameter('like', sprintf('%%%s%%', $filter['search']));
+            $qb->setParameter('like', sprintf('%%%s%%', $filter['search']));
         }
 
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->neq('general_entity_log.errorType', $queryBuilder->expr()->literal('E_USER_DEPRECATED'))
-        );
+        $qb->andWhere($qb->expr()->neq('general_entity_log.errorType', $qb->expr()->literal('E_USER_DEPRECATED')));
 
         $direction = 'DESC';
         if (
@@ -57,19 +56,19 @@ class Log extends EntityRepository
 
         switch ($filter['order']) {
             case 'id':
-                $queryBuilder->addOrderBy('general_entity_log.id', $direction);
+                $qb->addOrderBy('general_entity_log.id', $direction);
                 break;
             case 'date':
-                $queryBuilder->addOrderBy('general_entity_log.date', $direction);
+                $qb->addOrderBy('general_entity_log.date', $direction);
                 break;
             case 'event':
-                $queryBuilder->addOrderBy('general_entity_log.event', $direction);
+                $qb->addOrderBy('general_entity_log.event', $direction);
                 break;
             default:
-                $queryBuilder->addOrderBy('general_entity_log.id', 'DESC');
+                $qb->addOrderBy('general_entity_log.id', Criteria::DESC);
         }
 
-        return $queryBuilder;
+        return $qb;
     }
 
     public function truncateLog(): void

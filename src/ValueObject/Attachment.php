@@ -10,10 +10,10 @@ namespace General\ValueObject;
 
 final class Attachment
 {
-    private $contentType;
-    private $fileName;
-    private $base64Content;
-    private $contentId;
+    private string $contentType;
+    private string $fileName;
+    private string $base64Content;
+    private ?string $contentId;
 
     public function __construct(string $contentType, string $fileName, string $base64Content, ?string $contentId = null)
     {

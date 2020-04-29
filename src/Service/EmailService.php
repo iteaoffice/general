@@ -15,10 +15,14 @@ use Contact\Service\ContactService;
 use DateTime;
 use Deeplink\Entity\Target;
 use Deeplink\Service\DeeplinkService;
+use Doctrine\ORM\EntityManager;
 use Exception;
+use General\Builder;
 use General\Entity\EmailMessage;
 use General\Entity\EmailMessageEvent;
+use General\Options\EmailOptions;
 use General\Options\ModuleOptions;
+use General\Validator;
 use General\ValueObject;
 use InvalidArgumentException;
 use Laminas\Authentication\AuthenticationService;
@@ -27,6 +31,7 @@ use Laminas\View\HelperPluginManager;
 use Mailing\Entity\Mailing;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
+use Mailing\Service\MailingService;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Publication\Entity\Publication;
@@ -57,14 +62,16 @@ use function substr;
  */
 class EmailService
 {
-    private array $config;
     private ContactService $contactService;
     private GeneralService $generalService;
+    private MailingService $mailingService;
     private DeeplinkService $deeplinkService;
     private AuthenticationService $authenticationService;
     private TwigRenderer $renderer;
     private HelperPluginManager $viewHelperManager;
     private ModuleOptions $moduleOptions;
+    private EmailOptions $emailOptions;
+    private EntityManager $entityManager;
     private Client $client;
     private Template $template;
     private ?\Mailing\Entity\Contact $mailingContact = null;
@@ -86,62 +93,94 @@ class EmailService
     private string $textPart;
     private string $htmlPart;
     private string $emailSubject;
-    private string $emailCampaign;
+    private ?string $emailCampaign;
 
     public function __construct(
-        array $config,
+        EmailOptions $emailOptions,
+        EntityManager $entityManager,
         ContactService $contactService,
         GeneralService $generalService,
+        MailingService $mailingService,
         DeeplinkService $deeplinkService,
         AuthenticationService $authenticationService,
         TwigRenderer $renderer,
         HelperPluginManager $viewHelperManager,
         ModuleOptions $moduleOptions
     ) {
-        $this->contactService = $contactService;
-        $this->generalService = $generalService;
-        $this->deeplinkService = $deeplinkService;
+        $this->emailOptions          = $emailOptions;
+        $this->entityManager         = $entityManager;
+        $this->contactService        = $contactService;
+        $this->generalService        = $generalService;
+        $this->mailingService        = $mailingService;
+        $this->deeplinkService       = $deeplinkService;
         $this->authenticationService = $authenticationService;
-        $this->renderer = $renderer;
-        $this->viewHelperManager = $viewHelperManager;
-        $this->moduleOptions = $moduleOptions;
+        $this->renderer              = $renderer;
+        $this->viewHelperManager     = $viewHelperManager;
+        $this->moduleOptions         = $moduleOptions;
 
         $this->client = new Client(
-            $config['email']['relay']['username'] ?? '',
-            $config['email']['relay']['password'] ?? '',
+            $emailOptions->getUsername(),
+            $emailOptions->getPassword(),
             true,
             ['version' => 'v3.1']
         );
     }
 
+    public function createNewWebInfoEmailBuilder(string $key): Builder\WebInfoEmailBuilder
+    {
+        return new Builder\WebInfoEmailBuilder(
+            $key,
+            $this->emailOptions,
+            $this->generalService,
+            $this->mailingService,
+            $this->contactService,
+            $this->deeplinkService
+        );
+    }
+
+    public function createNewMailingMailBuilder(Mailing $mailing): Builder\MailingEmailBuilder
+    {
+        return new Builder\MailingEmailBuilder(
+            $mailing,
+            $this->emailOptions,
+            $this->moduleOptions,
+            $this->mailingService,
+            $this->contactService,
+            $this->deeplinkService
+        );
+    }
+
+    /** @deprecated */
     public function setMailing(Mailing $mailing): void
     {
         $this->resetEmailContent();
 
         $this->setSender($mailing->getSender(), $mailing->getContact());
 
-        $this->template = $mailing->getTemplate();
-        $this->emailContent = $mailing->getMailHtml();
-        $this->emailSubject = $mailing->getMailSubject();
+        $this->template      = $mailing->getTemplate();
+        $this->emailContent  = $mailing->getMailHtml();
+        $this->emailSubject  = $mailing->getMailSubject();
         $this->emailCampaign = $mailing->getMailing();
 
         $this->templateVariables['subject'] = $mailing->getMailSubject();
     }
 
+    /** @deprecated */
     private function resetEmailContent(): void
     {
-        $this->from = null;
-        $this->attachments = [];
+        $this->from               = null;
+        $this->attachments        = [];
         $this->inlinedAttachments = [];
-        $this->templateVariables = [];
-        $this->to = [];
-        $this->cc = [];
-        $this->bcc = [];
-        $this->headers = [];
-        $this->textPart = '';
-        $this->htmlPart = '';
+        $this->templateVariables  = [];
+        $this->to                 = [];
+        $this->cc                 = [];
+        $this->bcc                = [];
+        $this->headers            = [];
+        $this->textPart           = '';
+        $this->htmlPart           = '';
     }
 
+    /** @deprecated */
     public function setSender(Sender $sender, Contact $owner = null): void
     {
         switch ($sender->getEmail()) {
@@ -156,21 +195,22 @@ class EmailService
                     throw new InvalidArgumentException(sprintf('Owner cannot be empty for %s', $sender->getEmail()));
                 }
 
-                $this->from = new ValueObject\Recipient($owner->parseFullName(), $owner->getEmail());
+                $this->from = new ValueObject\Recipient($owner->getEmail(), $owner->parseFullName());
 
-                $this->templateVariables['sender_name'] = $owner->parseFullName();
-                $this->templateVariables['sender_email'] = $owner->getEmail();
+                $this->templateVariables['sender_name']      = $owner->parseFullName();
+                $this->templateVariables['sender_email']     = $owner->getEmail();
                 $this->templateVariables['sender_signature'] = $this->contactService->parseSignature($owner);
                 break;
             default:
-                $this->from = new ValueObject\Recipient($sender->getSender(), $sender->getEmail());
+                $this->from = new ValueObject\Recipient($sender->getEmail(), $sender->getSender());
 
-                $this->templateVariables['sender_name'] = $sender->getSender();
+                $this->templateVariables['sender_name']  = $sender->getSender();
                 $this->templateVariables['sender_email'] = $sender->getEmail();
                 break;
         }
     }
 
+    /** @deprecated */
     public function setWebInfo(string $webInfoName): void
     {
         $this->resetEmailContent();
@@ -183,22 +223,25 @@ class EmailService
 
         $this->setSender($webInfo->getSender(), $this->authenticationService->getIdentity());
 
-        $this->template = $webInfo->getTemplate();
-        $this->emailContent = $webInfo->getContent();
-        $this->emailSubject = $webInfo->getSubject();
+        $this->template      = $webInfo->getTemplate();
+        $this->emailContent  = $webInfo->getContent();
+        $this->emailSubject  = $webInfo->getSubject();
         $this->emailCampaign = $webInfo->getInfo();
     }
 
+    /** @deprecated */
     public function setSubject(string $subject): void
     {
         $this->emailSubject = $subject;
     }
 
+    /** @deprecated */
     public function setEmailContent(string $content): void
     {
         $this->emailContent = $content;
     }
 
+    /** @deprecated */
     public function cannotRenderMailingReason(Mailing $mailing): ?string
     {
         if (null === $mailing->getMailHtml()) {
@@ -218,6 +261,7 @@ class EmailService
         }
     }
 
+    /** @deprecated */
     private function createTwigTemplate(string $content): string
     {
         $twigRenderer = new Environment(new ArrayLoader(['email_template' => $content]));
@@ -225,7 +269,7 @@ class EmailService
         return $twigRenderer->render('email_template', $this->templateVariables);
     }
 
-
+    /** @deprecated */
     public function addAttachment(string $contentType, string $fileName, string $content): void
     {
         $this->attachments[] = new ValueObject\Attachment(
@@ -235,46 +279,52 @@ class EmailService
         );
     }
 
+    /** @deprecated */
     public function addTo(Contact $contact): void
     {
-        $this->to[] = new ValueObject\Recipient($contact->parseFullName(), $contact->getEmail());
+        $this->to[] = new ValueObject\Recipient($contact->getEmail(), $contact->parseFullName());
 
         $this->updateTemplateVarsWithContact($contact);
     }
 
+    /** @deprecated */
     private function updateTemplateVarsWithContact(Contact $contact): void
     {
         $this->templateVariables['attention'] = $this->contactService->parseAttention($contact);
         $this->templateVariables['firstname'] = $contact->getFirstName();
-        $this->templateVariables['lastname'] = trim(
+        $this->templateVariables['lastname']  = trim(
             sprintf('%s %s', $contact->getMiddleName(), $contact->getLastName())
         );
-        $this->templateVariables['fullname'] = $contact->parseFullName();
-        $this->templateVariables['email'] = $contact->getEmail();
+        $this->templateVariables['fullname']  = $contact->parseFullName();
+        $this->templateVariables['email']     = $contact->getEmail();
 
         if ($this->contactService->hasOrganisation($contact)) {
-            $this->templateVariables['country'] = (string)$this->contactService->parseCountry($contact)->getCountry();
+            $this->templateVariables['country']      = (string)$this->contactService->parseCountry($contact)->getCountry();
             $this->templateVariables['organisation'] = $this->contactService->parseOrganisation($contact);
         }
 
         $this->templateVariables['signature'] = $this->contactService->parseSignature($contact);
     }
 
+    /** @deprecated */
     public function addToEmailAddress(string $emailAddress): void
     {
-        $this->to[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+        $this->to[] = new ValueObject\Recipient($emailAddress);
     }
 
+    /** @deprecated */
     public function addCCEmailAddress(string $emailAddress): void
     {
-        $this->cc[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+        $this->cc[] = new ValueObject\Recipient($emailAddress);
     }
 
+    /** @deprecated */
     public function addBCCEmailAddress(string $emailAddress): void
     {
-        $this->bcc[] = new ValueObject\Recipient($emailAddress, $emailAddress);
+        $this->bcc[] = new ValueObject\Recipient($emailAddress);
     }
 
+    /** @deprecated */
     public function setDeeplink(Target $target, Contact $contact, ?string $key = null): void
     {
         $deeplink = $this->deeplinkService->createDeeplink(
@@ -287,6 +337,7 @@ class EmailService
         $this->templateVariables['deeplink'] = $this->deeplinkService->parseDeeplinkUrl($deeplink);
     }
 
+    /** @deprecated */
     public function setUnsubscribe(string $unsubscribe): void
     {
         $this->templateVariables['unsubscribe'] = $unsubscribe;
@@ -294,6 +345,78 @@ class EmailService
         $this->headers[] = new ValueObject\Header('List-Unsubscribe', '<' . trim($unsubscribe) . '>');
     }
 
+    public function sendBuilder(Builder\EmailBuilder $emailBuilder): bool
+    {
+        $emailBuilder->renderEmail();
+
+        $validator = new Validator\EmailValidator($emailBuilder);
+
+        if (! $validator->isValid()) {
+            var_dump($validator->getCannotSendEmailReasons());
+            return false;
+        }
+
+
+        $emailMessage = $this->registerEmailMessage($emailBuilder);
+
+        $emailMessageEvent = new EmailMessageEvent();
+        $emailMessageEvent->setEmailMessage($emailMessage);
+
+        $response = $this->client->post(
+            Resources::$Email,
+            ['body' => $emailBuilder->getMailjetBody($emailMessage->getIdentifier())->toArray()]
+        );
+
+        if (! $response->success()) {
+            //Update the email message
+            $emailMessage->setLatestEvent('sending_failed');
+            $emailMessageEvent->setEvent('sending_failed');
+        }
+
+        if ($response->success()) {
+            //Update the email message
+            $emailMessage->setLatestEvent('sent_to_mailjet');
+            $emailMessageEvent->setEvent('sent_to_mailjet');
+        }
+
+        $emailMessage->setDateLatestEvent(new DateTime());
+
+        $emailMessageEvent->setTime(new DateTime());
+        $emailMessageEvent->setMessageId(0);
+        $emailMessageEvent->setError($response->getReasonPhrase());
+        $this->entityManager->persist($emailMessageEvent);
+
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    private function registerEmailMessage(Builder\EmailBuilder $emailBuilder): EmailMessage
+    {
+        $emailMessage = new EmailMessage();
+        $emailMessage->setEmailAddress($emailBuilder->getFirstEmailAddress());
+        $emailMessage->setSubject($emailBuilder->getSubject());
+        $emailMessage->setMessage($emailBuilder->getHtmlPart());
+        $emailMessage->setAmountOfAttachments($emailBuilder->getAmountOfAttachments());
+
+        $emailMessage->setSender($emailBuilder->getSender());
+        $emailMessage->setTemplate($emailBuilder->getTemplate());
+        $emailMessage->setTo($emailBuilder->getTo());
+        $emailMessage->setCc($emailBuilder->getCC());
+        $emailMessage->setBcc($emailBuilder->getBCC());
+        $emailMessage->setContact($emailMessage->getContact());
+
+        if ($emailBuilder->getMailingContact()) {
+            $emailMessage->setMailingContact($emailBuilder->getMailingContact());
+        }
+
+        $this->entityManager->persist($emailMessage);
+
+        return $emailMessage;
+    }
+
+    /** @deprecated */
     public function send(): bool
     {
         $this->renderEmailContent();
@@ -312,11 +435,11 @@ class EmailService
         $this->generalService->save($emailMessage);
 
         $urlHelper = $this->viewHelperManager->get(Url::class);
-        $link = $urlHelper('email/event', ['customId' => $emailMessage->getIdentifier()]);
+        $link      = $urlHelper('email/event', ['customId' => $emailMessage->getIdentifier()]);
 
         $messages = [];
 
-        $message = new ValueObject\Email(
+        $message    = new ValueObject\Email(
             $this->from->toArray(),
             $this->getTo(),
             $this->getCC(),
@@ -333,6 +456,7 @@ class EmailService
             $this->getInlinedAttachments(),
             $this->getHeaders()
         );
+
         $messages[] = $message->toArray();
 
         $body = new ValueObject\Body($messages);
@@ -379,6 +503,7 @@ class EmailService
         return true;
     }
 
+    /** @deprecated */
     private function renderEmailContent(): void
     {
         $message = $this->createTwigTemplate((string)$this->emailContent);
@@ -388,10 +513,7 @@ class EmailService
                 $this->template->getTemplate(),
                 array_merge(['content' => $message], $this->templateVariables)
             );
-            $textPart = $this->renderer->render(
-                'plain',
-                ['content' => strip_tags($message)]
-            );
+            $textPart = strip_tags($htmlPart);
         } catch (Exception $e) {
             $htmlPart = $textPart = sprintf('Something went wrong with the merge. Error message: %s', $e->getMessage());
         }
@@ -457,6 +579,7 @@ class EmailService
         return $type;
     }
 
+    /** @deprecated */
     private function getTo(): array
     {
         $to = [];
@@ -472,6 +595,7 @@ class EmailService
         return $to;
     }
 
+    /** @deprecated */
     private function getCC(): ?array
     {
         $cc = [];
@@ -482,6 +606,7 @@ class EmailService
         return $cc;
     }
 
+    /** @deprecated */
     private function getBCC(): ?array
     {
         $bcc = [];
@@ -492,6 +617,7 @@ class EmailService
         return $bcc;
     }
 
+    /** @deprecated */
     private function getAttachments(): ?array
     {
         $attachments = [];
@@ -502,6 +628,7 @@ class EmailService
         return $attachments;
     }
 
+    /** @deprecated */
     private function getInlinedAttachments(): ?array
     {
         $inlinedAttachments = [];
@@ -512,7 +639,8 @@ class EmailService
         return $inlinedAttachments;
     }
 
-    private function getHeaders(): ?array
+    /** @deprecated */
+    private function getHeaders(): array
     {
         $headers = [];
         foreach ($this->headers as $singleHeader) {
@@ -522,11 +650,13 @@ class EmailService
         return $headers;
     }
 
+    /** @deprecated */
     public function setFrom(string $name, string $email): void
     {
-        $this->from = new ValueObject\Recipient($name, $email);
+        $this->from = new ValueObject\Recipient($email, $name);
     }
 
+    /** @deprecated */
     public function addPublication(Publication $publication): void
     {
         $this->attachments[] = new ValueObject\Attachment(
@@ -536,11 +666,13 @@ class EmailService
         );
     }
 
+    /** @deprecated */
     public function setMailingContact(\Mailing\Entity\Contact $mailingContact): void
     {
         $this->mailingContact = $mailingContact;
     }
 
+    /** @deprecated */
     public function addTemplateVariables(array $variables): void
     {
         foreach ($variables as $variable => $value) {
@@ -548,6 +680,7 @@ class EmailService
         }
     }
 
+    /** @deprecated */
     public function setTemplateVariable(string $variable, $value): void
     {
         if (! is_bool($value) && ! $value instanceof DateTime) {
@@ -557,6 +690,7 @@ class EmailService
         $this->templateVariables[$this->underscore($variable)] = $value;
     }
 
+    /** @deprecated */
     private function underscore(string $name): string
     {
         return strtolower(preg_replace('/(.)([A-Z])/', '$1_$2', $name));

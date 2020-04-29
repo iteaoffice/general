@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use Application\Twig\TemplateInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Laminas\Form\Annotation;
 use Mailing\Entity\Sender;
 use Mailing\Entity\Template;
-use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="web_info")
@@ -24,17 +27,8 @@ use Laminas\Form\Annotation;
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("web_info")
  */
-class WebInfo extends AbstractEntity
+class WebInfo extends AbstractEntity implements TemplateInterface
 {
-    public const PLAIN = 1;
-    public const NOT_PLAIN = 0;
-
-    protected static array $plainTemplates
-        = [
-            self::PLAIN => 'txt-plain',
-            self::NOT_PLAIN => 'txt-not-plain',
-        ];
-
     /**
      * @ORM\Column(name="info_id", type="integer", options={"unsigned":true})
      * @ORM\Id
@@ -44,6 +38,22 @@ class WebInfo extends AbstractEntity
      */
     private $id;
     /**
+     * @ORM\Column(name="date_created", type="datetime",nullable=false)
+     * @Gedmo\Timestampable(on="create")
+     * @Annotation\Exclude()
+     *
+     * @var DateTime
+     */
+    private $dateCreated;
+    /**
+     * @ORM\Column(name="last_update", type="datetime",nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     * @Annotation\Exclude()
+     *
+     * @var DateTime
+     */
+    private $lastUpdate;
+    /**
      * @ORM\Column(name="info", type="string", length=64, nullable=false)
      * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Attributes({"label":"txt-web-info-info-label","placeholder":"txt-web-info-info-placeholder"})
@@ -52,12 +62,6 @@ class WebInfo extends AbstractEntity
      * @var string
      */
     private $info;
-    /**
-     * @ORM\Column(name="plain", type="smallint", nullable=false)
-     * @Annotation\Exclude()
-     * @var int
-     */
-    private $plain;
     /**
      * @ORM\Column(name="subject", type="string", nullable=true)
      * @Annotation\Type("\Laminas\Form\Element\Text")
@@ -85,7 +89,7 @@ class WebInfo extends AbstractEntity
      *      "find_method":{
      *          "name":"findBy",
      *          "params": {
-     *              "criteria":{"personal":0},
+     *              "criteria":{},
      *              "orderBy":{
      *                  "sender":"ASC"}
      *              }
@@ -117,36 +121,30 @@ class WebInfo extends AbstractEntity
      */
     private $template;
 
-    public function __construct()
+    public function parseSourceContent(): string
     {
-        $this->plain = self::NOT_PLAIN;
+        return $this->content;
     }
 
-    public static function getPlainTemplates(): array
+    public function parseName(): string
     {
-        return self::$plainTemplates;
+        return $this->info;
+    }
+
+    public function getLastUpdate(): ?DateTime
+    {
+        return $this->lastUpdate;
+    }
+
+    public function setLastUpdate(?DateTime $lastUpdate): WebInfo
+    {
+        $this->lastUpdate = $lastUpdate;
+        return $this;
     }
 
     public function __toString(): string
     {
         return (string)$this->info;
-    }
-
-
-    public function getPlain(bool $textual = false)
-    {
-        if ($textual) {
-            return self::$plainTemplates[$this->plain];
-        }
-
-        return $this->plain;
-    }
-
-    public function setPlain($plain)
-    {
-        $this->plain = $plain;
-
-        return $this;
     }
 
     public function getId()
@@ -212,6 +210,17 @@ class WebInfo extends AbstractEntity
     public function setTemplate(Template $template): WebInfo
     {
         $this->template = $template;
+        return $this;
+    }
+
+    public function getDateCreated(): ?DateTime
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?DateTime $dateCreated): WebInfo
+    {
+        $this->dateCreated = $dateCreated;
         return $this;
     }
 }

@@ -59,13 +59,13 @@ class EmailMessageEvent extends AbstractEntity
      */
     private $messageId;
     /**
-     * @ORM\Column(name="email",type="string",nullable=false)
+     * @ORM\Column(name="email",type="string",nullable=true)
      *
      * @var string
      */
     private $email;
     /**
-     * @ORM\Column(name="campaign",type="string",nullable=false)
+     * @ORM\Column(name="campaign",type="string",nullable=true)
      *
      * @var string
      */

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace General;
 
-use General\Navigation\Factory\NavigationInvokableFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Gedmo\Sluggable\SluggableListener;
@@ -22,6 +21,7 @@ use General\Controller;
 use General\Factory;
 use General\InputFilter;
 use General\Navigation;
+use General\Navigation\Factory\NavigationInvokableFactory;
 use General\Options;
 use General\Service;
 use General\View;
@@ -115,6 +115,7 @@ $config = [
     'service_manager'    => [
         'factories'  => [
             Options\ModuleOptions::class                   => Factory\ModuleOptionsFactory::class,
+            Options\EmailOptions::class                    => Factory\EmailOptionsFactory::class,
             InputFilter\ChallengeFilter::class             => ConfigAbstractFactory::class,
             InputFilter\Challenge\TypeFilter::class        => ConfigAbstractFactory::class,
             InputFilter\CountryFilter::class               => ConfigAbstractFactory::class,

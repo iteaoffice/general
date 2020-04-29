@@ -15,12 +15,12 @@ use function sprintf;
 
 final class Recipient
 {
-    private string $name;
+    private ?string $name;
     private string $email;
 
-    public function __construct(string $name, string $email)
+    public function __construct(string $email, string $name = null)
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->email = $email;
     }
 
@@ -42,10 +42,10 @@ final class Recipient
         return $invalidReasons;
     }
 
-    public function toArray(): array
+    public function toArray(bool $isDevelopment = false, string $fromEmail = ''): array
     {
         return [
-            'Email' => $this->email,
+            'Email' => $isDevelopment ? $fromEmail : $this->email,
             'Name'  => $this->name,
         ];
     }

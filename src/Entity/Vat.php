@@ -23,14 +23,10 @@ use Invoice\Entity\Vat\Dimension;
 use Laminas\Form\Annotation;
 
 /**
- * Entity for the General.
- *
  * @ORM\Table(name="vat")
  * @ORM\Entity(repositoryClass="General\Repository\Vat")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("vat")
- *
- * @category General
  */
 class Vat extends AbstractEntity
 {
@@ -127,11 +123,11 @@ class Vat extends AbstractEntity
 
     public function __construct()
     {
-        $this->type = new Collections\ArrayCollection();
+        $this->type       = new Collections\ArrayCollection();
         $this->invoiceRow = new Collections\ArrayCollection();
-        $this->deskCosts = new Collections\ArrayCollection();
+        $this->deskCosts  = new Collections\ArrayCollection();
         $this->optionCost = new Collections\ArrayCollection();
-        $this->dimension = new Collections\ArrayCollection();
+        $this->dimension  = new Collections\ArrayCollection();
     }
 
     public function __toString(): string
