@@ -108,24 +108,21 @@ abstract class EmailBuilder
         switch ($sender) {
             case $sender->isLoggedInContact():
             case $sender->isOwner():
-                if (null === $ownerOrLoggedInContact) {
-                    throw new InvalidArgumentException(
-                        'When selecting LoggedInContact or Owner as sender, the contact has to be set'
+                if (null !== $ownerOrLoggedInContact) {
+                    $this->setTemplateVariables(
+                        [
+                            'sender_email' => $ownerOrLoggedInContact->getEmail(),
+                            'sender_name'  => $ownerOrLoggedInContact->getDisplayName()
+                        ]
+                    );
+
+                    //Create a default from
+                    $this->fromEmail = $ownerOrLoggedInContact->getEmail();
+                    $this->from      = new ValueObject\Recipient(
+                        $ownerOrLoggedInContact->getEmail(),
+                        $ownerOrLoggedInContact->getDisplayName(),
                     );
                 }
-                $this->setTemplateVariables(
-                    [
-                        'sender_email' => $ownerOrLoggedInContact->getEmail(),
-                        'sender_name'  => $ownerOrLoggedInContact->getDisplayName()
-                    ]
-                );
-
-                //Create a default from
-                $this->fromEmail = $ownerOrLoggedInContact->getEmail();
-                $this->from      = new ValueObject\Recipient(
-                    $ownerOrLoggedInContact->getEmail(),
-                    $ownerOrLoggedInContact->getDisplayName(),
-                );
                 break;
             case null:
             default:

@@ -122,14 +122,14 @@ final class ChallengeHandler extends AbstractHandler
 
     private function parseChallengeList(): string
     {
-        $challenge = $this->generalService->findAll(Challenge::class);
+        $challenge = $this->generalService->findActiveForCallsChallenges();
 
         return $this->renderer->render('cms/challenge/list', ['challenge' => $challenge]);
     }
 
     public function parseChallengeListFrontpage(): string
     {
-        $challenge = $this->generalService->findAll(Challenge::class);
+        $challenge = $this->generalService->findActiveForCallsChallenges();
 
         return $this->renderer->render('cms/challenge/list-frontpage', ['challenge' => $challenge]);
     }

@@ -35,12 +35,13 @@
                     <th>{{ translate("txt-program-call") }}</th>
                     <th>{{ translate("txt-amount-of-projects") }}</th>
                     <th>{{ translate("txt-amount-of-booths") }}</th>
+                    <th>{{ translate("txt-amount-of-ideas") }}</th>
                     <th>{{ translate("txt-pdf") }}</th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="8"></td>
+                    <td colspan="9"></td>
                 </tr>
                 </tfoot>
                 <tbody>
@@ -52,9 +53,11 @@
                         </td>
                         <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>
-                        <td>{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }}<br>{% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}</td>
+                        <td>{% if challenge.type.isActiveForCalls() %}{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }}
+                                <br>{% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}{% endif %}</td>
                         <td>{{ challenge.projectChallenge.count() }}</td>
                         <td>{{ challenge.boothChallenge.count() }}</td>
+                        <td>{{ challenge.ideaChallenge.count() }}</td>
                         <td>{% if challenge.pdf %}{{ challengeLink(challenge,'download-pdf','icon') }}{% endif %}</td>
                     </tr>
                 {% endfor %}

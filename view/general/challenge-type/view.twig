@@ -8,10 +8,16 @@
     <dd>{{ type.id }}</dd>
     <dt>{{ translate("txt-type") }}</dt>
     <dd>{{ type.type }}</dd>
+    <dt>{{ translate("txt-active-for-calls") }}</dt>
+    <dd>{{ translate(type.getActiveForCallsText()) }}</dd>
     <dt>{{ translate("txt-description") }}</dt>
     <dd>{{ type.description }}</dd>
     <dt>{{ translate("txt-sequence") }}</dt>
     <dd>{{ type.sequence }}</dd>
     <dt>{{ translate("txt-amount-of-challenges") }}</dt>
     <dd>{{ type.challenge.count() }}</dd>
+    {% for challenge in type.challenge %}
+        {% if loop.first %}<dt>{{ translate("txt-challenge") }}</dt>{% endif %}
+        <dd>{{ challengeLink(challenge,'view-admin') }}</dd>
+    {% endfor %}
 </dl>

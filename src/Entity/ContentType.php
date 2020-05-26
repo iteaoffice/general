@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Event\Entity\Exhibition\Floorplan;
 use General\Entity\Challenge\Icon;
 use Invoice\Entity\Reminder;
+use Laminas\Form\Annotation;
 use Organisation\Entity\Logo;
 use Organisation\Entity\Parent\Doa;
 use Organisation\Entity\UpdateLogo;
@@ -33,7 +34,6 @@ use Project\Entity\Poster\Poster;
 use Project\Entity\Report\Item;
 use Project\Entity\Result\Result;
 use Publication\Entity\Publication;
-use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="contenttype")
@@ -41,11 +41,11 @@ use Laminas\Form\Annotation;
  */
 class ContentType extends AbstractEntity
 {
-    public const TYPE_UNKNOWN = 0;
-    public const TYPE_PDF = 1;
+    public const TYPE_UNKNOWN     = 0;
+    public const TYPE_PDF         = 1;
     public const TYPE_OFFICE_2007 = 16;
-    public const TYPE_EXCEL = 13;
-    public const TYPE_EXCEL_2007 = 19;
+    public const TYPE_EXCEL       = 13;
+    public const TYPE_EXCEL_2007  = 19;
     public const TYPE_EXCEL_MACRO = 143;
 
     /**
@@ -212,6 +212,13 @@ class ContentType extends AbstractEntity
      */
     private $ideaImage;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Message\Document", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Idea\Message\Document[]|Collections\ArrayCollection
+     */
+    private $ideaMessageDocument;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -305,36 +312,37 @@ class ContentType extends AbstractEntity
 
     public function __construct()
     {
-        $this->projectLogo = new Collections\ArrayCollection();
-        $this->contentImage = new Collections\ArrayCollection();
-        $this->pressArticle = new Collections\ArrayCollection();
-        $this->programNna = new Collections\ArrayCollection();
-        $this->programDoa = new Collections\ArrayCollection();
-        $this->parentDoa = new Collections\ArrayCollection();
-        $this->organisationLogo = new Collections\ArrayCollection();
+        $this->projectLogo             = new Collections\ArrayCollection();
+        $this->contentImage            = new Collections\ArrayCollection();
+        $this->pressArticle            = new Collections\ArrayCollection();
+        $this->programNna              = new Collections\ArrayCollection();
+        $this->programDoa              = new Collections\ArrayCollection();
+        $this->parentDoa               = new Collections\ArrayCollection();
+        $this->organisationLogo        = new Collections\ArrayCollection();
         $this->organisationUpdateLogos = new Collections\ArrayCollection();
-        $this->contactDnd = new Collections\ArrayCollection();
-        $this->contactPhoto = new Collections\ArrayCollection();
-        $this->publication = new Collections\ArrayCollection();
-        $this->badgeAttachment = new Collections\ArrayCollection();
-        $this->result = new Collections\ArrayCollection();
-        $this->workpackageDocument = new Collections\ArrayCollection();
-        $this->poster = new Collections\ArrayCollection();
-        $this->pca = new Collections\ArrayCollection();
-        $this->ideaDocument = new Collections\ArrayCollection();
-        $this->ideaImage = new Collections\ArrayCollection();
-        $this->projectReportItem = new Collections\ArrayCollection();
-        $this->projectDocument = new Collections\ArrayCollection();
-        $this->versionDocument = new Collections\ArrayCollection();
-        $this->contractDocument = new Collections\ArrayCollection();
+        $this->contactDnd              = new Collections\ArrayCollection();
+        $this->contactPhoto            = new Collections\ArrayCollection();
+        $this->publication             = new Collections\ArrayCollection();
+        $this->badgeAttachment         = new Collections\ArrayCollection();
+        $this->result                  = new Collections\ArrayCollection();
+        $this->workpackageDocument     = new Collections\ArrayCollection();
+        $this->poster                  = new Collections\ArrayCollection();
+        $this->pca                     = new Collections\ArrayCollection();
+        $this->ideaDocument            = new Collections\ArrayCollection();
+        $this->ideaImage               = new Collections\ArrayCollection();
+        $this->ideaMessageDocument     = new Collections\ArrayCollection();
+        $this->projectReportItem       = new Collections\ArrayCollection();
+        $this->projectDocument         = new Collections\ArrayCollection();
+        $this->versionDocument         = new Collections\ArrayCollection();
+        $this->contractDocument        = new Collections\ArrayCollection();
         $this->contractVersionDocument = new Collections\ArrayCollection();
-        $this->challengeIcon = new Collections\ArrayCollection();
-        $this->challengeImage = new Collections\ArrayCollection();
-        $this->calendarDocument = new Collections\ArrayCollection();
-        $this->loi = new Collections\ArrayCollection();
-        $this->meetingFloorplan = new Collections\ArrayCollection();
-        $this->exhibitionFloorplan = new Collections\ArrayCollection();
-        $this->reminder = new Collections\ArrayCollection();
+        $this->challengeIcon           = new Collections\ArrayCollection();
+        $this->challengeImage          = new Collections\ArrayCollection();
+        $this->calendarDocument        = new Collections\ArrayCollection();
+        $this->loi                     = new Collections\ArrayCollection();
+        $this->meetingFloorplan        = new Collections\ArrayCollection();
+        $this->exhibitionFloorplan     = new Collections\ArrayCollection();
+        $this->reminder                = new Collections\ArrayCollection();
     }
 
     public function __toString(): string
@@ -736,6 +744,17 @@ class ContentType extends AbstractEntity
     public function setReminder($reminder): ContentType
     {
         $this->reminder = $reminder;
+        return $this;
+    }
+
+    public function getIdeaMessageDocument()
+    {
+        return $this->ideaMessageDocument;
+    }
+
+    public function setIdeaMessageDocument($ideaMessageDocument): ContentType
+    {
+        $this->ideaMessageDocument = $ideaMessageDocument;
         return $this;
     }
 }

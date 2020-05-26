@@ -71,14 +71,21 @@ class NavigationService
             //@todo: try to figure out why this does not work for the facebook but does work for the publications
             if (($page instanceof Mvc) && ($page->getRoute() !== 'community/contact/facebook/view')) {
                 // Set active
-                $page->setActive();
-
-                // Merge all route params with navigation params
-                $routeParams = $this->routeMatch->getParams();
-                $page->setParams(array_merge($page->getParams(), $routeParams));
 
                 // Custom navigation params from module.config.navigation.php
                 $pageCustomParams = $page->get('params');
+
+                //We dont want to set a page to active when
+                //var_dump($page->get('notAutoActive'));
+                if (! $page->get('notAutoActive')) {
+                    $page->setActive();
+                }
+
+
+
+                // Merge all route params with navigation params
+                $routeParams = $this->routeMatch->getParams();
+                $page->setParams(array_merge($routeParams, $page->getParams()));
 
                 // Load entity instances when defined
                 if (isset($pageCustomParams['entities']) && is_array($pageCustomParams['entities'])) {

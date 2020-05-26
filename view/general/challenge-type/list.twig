@@ -29,18 +29,22 @@
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/type/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/type/list', 'criteria': 'type', 'text': translate("txt-type")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/type/list', 'criteria': 'sequence', 'text': translate("txt-sequence")} %}</th>
+            <th>{{ translate("txt-active-for-calls") }}</th>
             <th>{{ translate("txt-amount-of-challenges") }}</th>
         </tr>
         </thead>
         <tfoot>
-            <tr><td colspan="4"></td></tr>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
         </tfoot>
         <tbody>
         {% for challengeType in paginator.getCurrentItems() %}
             <tr>
-                <td><small>{{ challengeType.id }}</small></td>
+                <td><small class="text-muted">{{ challengeType.id }}</small></td>
                 <td>{{ challengeTypeLink(challengeType,'view','name') }} {{ challengeTypeLink(challengeType,'edit','icon') }}</td>
                 <td>{{ challengeType.sequence }}</td>
+                <td>{% if challengeType.isActiveForCalls() %}<i class="fas fa-check text-succes"></i>{% endif %}</td>
                 <td>{{ challengeType.challenge.count() }}</td>
             </tr>
         {% endfor %}

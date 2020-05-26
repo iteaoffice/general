@@ -187,6 +187,8 @@ final class ChallengeController extends AbstractActionController
                         'id' => $challenge->getId(),
                     ]
                 );
+            } else {
+                var_dump($form->getInputFilter()->getMessages());
             }
         }
 

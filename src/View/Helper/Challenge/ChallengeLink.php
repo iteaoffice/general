@@ -65,7 +65,7 @@ final class ChallengeLink extends AbstractLink
                 break;
             case 'download-pdf':
                 $linkParams = [
-                    'icon' => 'far fa-file-pdf-o',
+                    'icon' => 'far fa-file-pdf',
                     'route' => 'challenge/download-pdf',
                     'text' => $showOptions[$show]
                         ?? $this->translator->translate('txt-download-pdf')

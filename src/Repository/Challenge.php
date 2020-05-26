@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace General\Repository;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use General\Entity;
@@ -36,10 +37,10 @@ class Challenge extends EntityRepository
             $queryBuilder = $this->applyFilter($queryBuilder, $filter);
         }
 
-        $direction = 'DESC';
+        $direction = Criteria::DESC;
         if (
             isset($filter['direction'])
-            && in_array(strtoupper($filter['direction']), ['ASC', 'DESC'], true)
+            && in_array(strtoupper($filter['direction']), [Criteria::ASC, Criteria::DESC], true)
         ) {
             $direction = strtoupper($filter['direction']);
         }
@@ -85,5 +86,29 @@ class Challenge extends EntityRepository
 
 
         return $queryBuilder;
+    }
+
+    public function findNotActiveForCallsChallenges(): array
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('general_entity_challenge');
+        $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
+        $queryBuilder->join('general_entity_challenge.type', 'general_entity_challenge_type');
+        $queryBuilder->where('general_entity_challenge_type.activeForCalls = :active');
+        $queryBuilder->setParameter('active', Entity\Challenge\Type::NOT_ACTIVE_FOR_CALLS);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findActiveForCallsChallenges(): array
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder->select('general_entity_challenge');
+        $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
+        $queryBuilder->join('general_entity_challenge.type', 'general_entity_challenge_type');
+        $queryBuilder->where('general_entity_challenge_type.activeForCalls = :active');
+        $queryBuilder->setParameter('active', Entity\Challenge\Type::ACTIVE_FOR_CALLS);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

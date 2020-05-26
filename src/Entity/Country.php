@@ -17,19 +17,20 @@ use Contact\Entity\Address;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Evaluation\Entity\Evaluation;
+use Event\Entity\Meeting\Quota;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Laminas\Form\Annotation;
 use News\Entity\Magazine\Article;
 use Organisation\Entity\Organisation;
 use Program\Entity\Funder;
 use Project\Entity\Contract;
 use Project\Entity\Rationale;
-use Laminas\Form\Annotation;
 
 /**
  * @ORM\Table(name="country")
  * @ORM\Entity(repositoryClass="General\Repository\Country")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
- * @Annotation\Name("general_gender")
+ * @Annotation\Name("country")
  */
 class Country extends AbstractEntity
 {
@@ -200,20 +201,28 @@ class Country extends AbstractEntity
      * @var Article[]|Collections\ArrayCollection
      */
     private $magazineArticle;
+    /**
+     * @ORM\OneToMany(targetEntity="Event\Entity\Meeting\Quota", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var Quota[]|Collections\ArrayCollection()
+     */
+    private $meetingQuota;
 
     public function __construct()
     {
-        $this->address = new Collections\ArrayCollection();
-        $this->organisation = new Collections\ArrayCollection();
-        $this->rationale = new Collections\ArrayCollection();
-        $this->vat = new Collections\ArrayCollection();
-        $this->funder = new Collections\ArrayCollection();
-        $this->evaluation = new Collections\ArrayCollection();
+        $this->address              = new Collections\ArrayCollection();
+        $this->organisation         = new Collections\ArrayCollection();
+        $this->rationale            = new Collections\ArrayCollection();
+        $this->vat                  = new Collections\ArrayCollection();
+        $this->funder               = new Collections\ArrayCollection();
+        $this->evaluation           = new Collections\ArrayCollection();
         $this->changeRequestCountry = new Collections\ArrayCollection();
-        $this->projectLog = new Collections\ArrayCollection();
-        $this->callCountry = new Collections\ArrayCollection();
-        $this->contract = new Collections\ArrayCollection();
-        $this->magazineArticle = new Collections\ArrayCollection();
+        $this->projectLog           = new Collections\ArrayCollection();
+        $this->callCountry          = new Collections\ArrayCollection();
+        $this->contract             = new Collections\ArrayCollection();
+        $this->magazineArticle      = new Collections\ArrayCollection();
+        $this->meetingQuota         = new Collections\ArrayCollection();
     }
 
     public function isItac(): bool
@@ -489,6 +498,17 @@ class Country extends AbstractEntity
     public function setMagazineArticle($magazineArticle): Country
     {
         $this->magazineArticle = $magazineArticle;
+        return $this;
+    }
+
+    public function getMeetingQuota()
+    {
+        return $this->meetingQuota;
+    }
+
+    public function setMeetingQuota($meetingQuota): Country
+    {
+        $this->meetingQuota = $meetingQuota;
         return $this;
     }
 }

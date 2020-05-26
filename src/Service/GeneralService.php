@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace General\Service;
 
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use General\Entity;
 use General\Repository;
 use Program\Entity\Call\Call;
@@ -39,13 +40,10 @@ class GeneralService extends AbstractService
         $repository->truncateLog();
     }
 
-    /**
-     * @return Entity\Challenge[]
-     */
-    public function findAllChallenges(): array
+    public function findActiveForCallsChallenges(): array
     {
         return $this->entityManager->getRepository(Entity\Challenge::class)
-            ->findBy([], ['challenge' => 'ASC']);
+            ->findActiveForCallsChallenges();
     }
 
     public function findActiveExchangeRate(Entity\Currency $currency, DateTime $dateTime = null): ?Entity\ExchangeRate
@@ -137,7 +135,7 @@ class GeneralService extends AbstractService
         return $currency->getContract()->isEmpty();
     }
 
-    public function findChallengeById(int $id): Entity\Challenge
+    public function findChallengeById(int $id): ?Entity\Challenge
     {
         return $this->entityManager->getRepository(Entity\Challenge::class)->find($id);
     }

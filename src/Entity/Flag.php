@@ -37,7 +37,7 @@ class Flag extends AbstractEntity
      * @ORM\OneToOne(targetEntity="General\Entity\Country", cascade={"persist"}, inversedBy="flag")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="country_id", nullable=false)
      * @Annotation\Type("DoctrineORMModule\Form\Element\EntitySelect")
-     * @Annotation\Options({"target_class":"General\Entity\Flag"})
+     * @Annotation\Options({"target_class":"General\Entity\Country"})
      * @Annotation\Attributes({"label":"txt-country"})
      *
      * @var Country

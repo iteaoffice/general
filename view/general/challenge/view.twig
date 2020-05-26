@@ -1,3 +1,7 @@
+{% do headScript().appendFile("//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js",'text/javascript') %}
+{% do inlineScript().appendScript("hljs.initHighlightingOnLoad();",'text/javascript') %}
+{% do headLink().appendStylesheet("//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/github-gist.min.css") %}
+
 {% do headTitle().append(translate("txt-admin")) %}
 {% do headTitle().append(translate("txt-challenge-%s")|format(challenge)) %}
 
@@ -15,17 +19,25 @@
             <dt>{{ translate("txt-challenge-type") }}</dt>
             <dd>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</dd>
 
-            <dt>{{ translate("txt-challenge-sources") }}</dt>
-            <dd>{{ challenge.sources }}</dd>
+            {% if challenge.sources %}
+                <dt>{{ translate("txt-challenge-sources") }}</dt>
+                <dd>{{ challenge.sources }}</dd>
+            {% endif %}
 
             <dt>{{ translate("txt-abstract") }}</dt>
             <dd>{{ challenge.abstract|default(translate("txt-no-abstract")) }}</dd>
 
-            <dt>{{ translate("txt-html") }}</dt>
-            <dd><code>{{ challenge.html|default(translate("txt-no-html"))|nl2br }}</code></dd>
+            {% if challenge.html %}
+                <dt>{{ translate("txt-html") }}</dt>
+                <dd>
+                    <pre><code class="html">{{ challenge.html }}</code></pre>
+                </dd>
+            {% endif %}
 
-            <dt>{{ translate("txt-css") }}</dt>
-            <dd><code>{{ challenge.css|default(translate("txt-no-css"))|nl2br }}</code></dd>
+            {% if challenge.css %}
+                <dt>{{ translate("txt-css") }}</dt>
+                <dd><pre><code class="css">{{ challenge.css }}</code></pre></dd>
+            {% endif %}
 
             <dt>{{ translate("txt-front-color") }}</dt>
             <dd>{{ challenge.frontColor }}</dd>
@@ -70,21 +82,27 @@
         </dl>
     </div>
     <div class="col-md-4">
-        <h3>{{ translate("txt-challenge-icon") }}</h3>
+        {% if challenge.icon %}
+            <h3>{{ translate("txt-challenge-icon") }}</h3>
 
-        {{ challengeIcon(challenge, 100) }}
+            {{ challengeIcon(challenge, 100) }}
+        {% endif %}
 
-        <h3>{{ translate("txt-background-image") }}</h3>
+        {% if challenge.backgroundImage %}
+            <h3 class="pt-2">{{ translate("txt-background-image") }}</h3>
 
-        {{ image(challenge.backgroundImage, 200, null, false, false, 2) }}
+            {{ image(challenge.backgroundImage, 200, null, false, false, 2) }}
+        {% endif %}
 
-        <h3>{{ translate("txt-challenge-image") }}</h3>
+        {% if challenge.image %}
+            <h3 class="pt-2">{{ translate("txt-challenge-image") }}</h3>
 
-        {{ challengeImage(challenge, 200) }}
+            {{ challengeImage(challenge, 200) }}
+        {% endif %}
 
 
         {% if challenge.pdf %}
-            <h3>{{ translate("txt-current-pdf") }}</h3>
+            <h3 class="pt-2">{{ translate("txt-current-pdf") }}</h3>
             {{ challengeLink(challenge,'download-pdf','text') }}
         {% endif %}
     </div>

@@ -20,17 +20,16 @@ use General\Entity\Challenge\Icon;
 use General\Entity\Challenge\Image;
 use General\Entity\Challenge\Pdf;
 use General\Entity\Challenge\Type;
-use Program\Entity\Call\Call;
-use Project\Entity\Result\Result;
 use Laminas\Form\Annotation;
+use Program\Entity\Call\Call;
+use Project\Entity\Idea\Tool;
+use Project\Entity\Result\Result;
 
 /**
  * @ORM\Table(name="challenge")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
  * @Annotation\Name("general_challenge")
- *
- * @category General
  */
 class Challenge extends AbstractEntity
 {
@@ -169,6 +168,20 @@ class Challenge extends AbstractEntity
      */
     private $result;
     /**
+     * @ORM\ManyToMany(targetEntity="Project\Entity\Idea\Tool", cascade={"persist"}, mappedBy="challenge")
+     * @Annotation\Exclude()
+     *
+     * @var Tool[]|Collections\ArrayCollection
+     */
+    private $tool;
+    /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Tool", cascade={"persist"}, mappedBy="pinnedChallenge")
+     * @Annotation\Exclude()
+     *
+     * @var Tool[]|Collections\ArrayCollection
+     */
+    private $toolPinned;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
@@ -207,7 +220,7 @@ class Challenge extends AbstractEntity
      */
     private $pdf;
     /**
-     * @ORM\ManyToMany(targetEntity="Program\Entity\Call\Call", inversedBy="challenge", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="Program\Entity\Call\Call", inversedBy="challenge")
      * @ORM\OrderBy({"call"="ASC"})
      * @ORM\JoinTable(name="challenge_call",
      *            joinColumns={@ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id")},
@@ -235,12 +248,14 @@ class Challenge extends AbstractEntity
 
     public function __construct()
     {
-        $this->result = new Collections\ArrayCollection();
-        $this->call = new Collections\ArrayCollection();
+        $this->result           = new Collections\ArrayCollection();
+        $this->call             = new Collections\ArrayCollection();
         $this->projectChallenge = new Collections\ArrayCollection();
-        $this->boothChallenge = new Collections\ArrayCollection();
-        $this->ideaChallenge = new Collections\ArrayCollection();
-        $this->sequence = 1;
+        $this->boothChallenge   = new Collections\ArrayCollection();
+        $this->ideaChallenge    = new Collections\ArrayCollection();
+        $this->tool             = new Collections\ArrayCollection();
+        $this->toolPinned       = new Collections\ArrayCollection();
+        $this->sequence         = 1;
     }
 
     public function __toString(): string
@@ -498,6 +513,28 @@ class Challenge extends AbstractEntity
     public function setBackgroundImage(int $backgroundImage): Challenge
     {
         $this->backgroundImage = $backgroundImage;
+        return $this;
+    }
+
+    public function getTool()
+    {
+        return $this->tool;
+    }
+
+    public function setTool($tool): Challenge
+    {
+        $this->tool = $tool;
+        return $this;
+    }
+
+    public function getToolPinned()
+    {
+        return $this->toolPinned;
+    }
+
+    public function setToolPinned($toolPinned): Challenge
+    {
+        $this->toolPinned = $toolPinned;
         return $this;
     }
 }

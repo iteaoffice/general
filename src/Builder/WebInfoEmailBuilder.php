@@ -45,17 +45,14 @@ final class WebInfoEmailBuilder extends EmailBuilder
             throw new InvalidArgumentException(sprintf('Web Info email with key "%s" cannot be found', $webInfoKey));
         }
 
+        $this->setSender($webInfo->getSender());
         $this->webInfo = $webInfo;
     }
 
     public function renderEmail(): void
     {
-        $this->setFrom($this->webInfo->getSender()->getSender(), $this->webInfo->getSender()->getEmail());
-
         $this->emailCampaign = (string)$this->webInfo->getInfo();
         $this->template      = $this->webInfo->getTemplate();
-
-        $this->setSender($this->webInfo->getSender());
 
         $this->renderSubject($this->webInfo->getSubject());
         $this->renderBody($this->webInfo->getContent());

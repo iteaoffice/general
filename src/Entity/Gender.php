@@ -26,9 +26,6 @@ use Laminas\Form\Annotation;
  */
 class Gender extends AbstractEntity
 {
-    /**
-     * Constant for the default gender.
-     */
     public const GENDER_UNKNOWN = 3;
     /**
      * @ORM\Column(name="gender_id",type="integer",options={"unsigned":true})

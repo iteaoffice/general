@@ -87,7 +87,7 @@ abstract class AbstractHandler extends AbstractHelper
             }
         }
 
-        //Convert the ints to ints (it they are null
+        //Convert the ints to ints (if they are not null)
         null === $params['id'] ?: $params['id'] = (int)$params['id'];
         null === $params['year'] ?: $params['year'] = (int)$params['year'];
         null === $params['limit'] ?: $params['limit'] = (int)$params['limit'];

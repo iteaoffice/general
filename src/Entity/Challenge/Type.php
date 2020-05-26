@@ -20,8 +20,6 @@ use General\Entity\Challenge;
 use Laminas\Form\Annotation;
 
 /**
- * Project.
- *
  * @ORM\Table(name="challenge_type")
  * @ORM\Entity(repositoryClass="General\Repository\Challenge\Type")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")
@@ -29,6 +27,15 @@ use Laminas\Form\Annotation;
  */
 class Type extends AbstractEntity
 {
+    public const NOT_ACTIVE_FOR_CALLS = 0;
+    public const ACTIVE_FOR_CALLS     = 1;
+
+    protected static array $activeForCallsTemplates
+        = [
+            self::NOT_ACTIVE_FOR_CALLS => 'txt-not-active-for-calls',
+            self::ACTIVE_FOR_CALLS     => 'txt-active-for-calls',
+        ];
+
     /**
      * @ORM\Column(name="type_id", type="integer", options={"unsigned":true})
      * @ORM\Id
@@ -42,6 +49,7 @@ class Type extends AbstractEntity
      * @ORM\Column(name="type", type="string", nullable=false)
      * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-type-label", "help-block":"txt-challenge-type-type-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-type-type-placeholder"})
      *
      * @var string
      */
@@ -50,6 +58,7 @@ class Type extends AbstractEntity
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Annotation\Type("\Laminas\Form\Element\Textarea")
      * @Annotation\Options({"label":"txt-challenge-type-description-label", "help-block":"txt-challenge-type-description-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-type-description-placeholder"})
      *
      * @var string
      */
@@ -58,6 +67,7 @@ class Type extends AbstractEntity
      * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
      * @Annotation\Type("\Laminas\Form\Element\Text")
      * @Annotation\Options({"label":"txt-challenge-type-sequence-label", "help-block":"txt-challenge-type-sequence-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-type-sequence-placeholder"})
      *
      * @var int
      */
@@ -69,120 +79,105 @@ class Type extends AbstractEntity
      * @var Challenge[]|Collections\ArrayCollection
      */
     private $challenge;
+    /**
+     * @ORM\Column(name="active_for_calls", type="smallint", nullable=false)
+     * @Annotation\Type("Laminas\Form\Element\Radio")
+     * @Annotation\Attributes({"array":"activeForCallsTemplates"})
+     * @Annotation\Options({"label":"txt-general-challenge-type-active-for-calls-label", "help-block":"txt-challenge-type-active-for-calls-help-block"})
+     *
+     * @var int
+     */
+    private $activeForCalls;
+
     public function __construct()
     {
-        $this->challenge = new Collections\ArrayCollection();
+        $this->challenge      = new Collections\ArrayCollection();
+        $this->activeForCalls = self::ACTIVE_FOR_CALLS;
     }
 
+    public static function getActiveForCallsTemplates(): array
+    {
+        return self::$activeForCallsTemplates;
+    }
 
+    public function isActiveForCalls(): bool
+    {
+        return $this->activeForCalls === self::ACTIVE_FOR_CALLS;
+    }
 
-    /**
-     * Force the Type to a string.
-     *
-     * @return string
-     */
     public function __toString(): string
     {
-        return (string)$this->type;
+        return $this->type;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Type
-     */
-    public function setId($id): Type
+    public function setId(?int $id): Type
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Type
-     */
-    public function setType(string $type): Type
+    public function setType(?string $type): Type
     {
         $this->type = $type;
-
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return Type
-     */
-    public function setDescription(string $description): Type
+    public function setDescription(?string $description): Type
     {
         $this->description = $description;
-
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSequence(): ?int
     {
         return $this->sequence;
     }
 
-    /**
-     * @param int $sequence
-     *
-     * @return Type
-     */
-    public function setSequence($sequence): Type
+    public function setSequence(?int $sequence): Type
     {
         $this->sequence = $sequence;
-
         return $this;
     }
 
-    /**
-     * @return Collections\ArrayCollection|Challenge[]
-     */
     public function getChallenge()
     {
         return $this->challenge;
     }
 
-    /**
-     * @param Collections\ArrayCollection|Challenge[] $challenge
-     *
-     * @return Type
-     */
     public function setChallenge($challenge): Type
     {
         $this->challenge = $challenge;
-
         return $this;
+    }
+
+    public function getActiveForCalls(): ?int
+    {
+        return $this->activeForCalls;
+    }
+
+    public function setActiveForCalls(?int $activeForCalls): Type
+    {
+        $this->activeForCalls = $activeForCalls;
+        return $this;
+    }
+
+    public function getActiveForCallsText(): string
+    {
+        return self::$activeForCallsTemplates[$this->activeForCalls] ?? '';
     }
 }

@@ -72,15 +72,6 @@ final class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
-                'name'     => 'description',
-                'required' => true,
-                'filters'  => [
-                    ['name' => 'StringTrim'],
-                ],
-            ]
-        );
-        $inputFilter->add(
-            [
                 'name'     => 'sources',
                 'required' => false,
                 'filters'  => [
@@ -128,11 +119,10 @@ final class ChallengeFilter extends InputFilter
                 ],
             ]
         );
-
         $inputFilter->add(
             [
                 'name'     => 'icon',
-                'required' => true,
+                'required' => false,
             ]
         );
         $inputFilter->add(
@@ -144,7 +134,7 @@ final class ChallengeFilter extends InputFilter
         $inputFilter->add(
             [
                 'name'       => 'pdf',
-                'required'   => true,
+                'required'   => false,
                 'validators' => [
                     [
                         'name'    => Extension::class,
@@ -155,7 +145,6 @@ final class ChallengeFilter extends InputFilter
                 ],
             ]
         );
-
         $this->add($inputFilter, 'general_entity_challenge');
     }
 }

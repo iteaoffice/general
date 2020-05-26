@@ -1,20 +1,20 @@
 {% do form.prepare() %}
 {{ form().openTag(form)|raw }}
 
-{% set country = form.get('general_entity_challenge') %}
+{% set challenge = form.get('general_entity_challenge') %}
 
-{{ ztbformelement(country.get('id')) }}
-{{ ztbformelement(country.get('challenge')) }}
-{{ ztbformelement(country.get('type')) }}
-{{ ztbformelement(country.get('sequence')) }}
-{{ ztbformelement(country.get('sources')) }}
-{{ ztbformelement(country.get('abstract')) }}
-{{ ztbformelement(country.get('html')) }}
-{{ ztbformelement(country.get('backgroundImage')) }}
-{{ ztbformelement(country.get('css')) }}
-{{ ztbformelement(country.get('backgroundColor')) }}
-{{ ztbformelement(country.get('frontColor')) }}
-{{ ztbformelement(country.get('call')) }}
+{{ ztbformelement(challenge.get('id')) }}
+{{ ztbformelement(challenge.get('challenge')) }}
+{{ ztbformelement(challenge.get('type')) }}
+{{ ztbformelement(challenge.get('sequence')) }}
+{{ ztbformelement(challenge.get('sources')) }}
+{{ ztbformelement(challenge.get('abstract')) }}
+{{ ztbformelement(challenge.get('html')) }}
+{{ ztbformelement(challenge.get('backgroundImage')) }}
+{{ ztbformelement(challenge.get('css')) }}
+{{ ztbformelement(challenge.get('backgroundColor')) }}
+{{ ztbformelement(challenge.get('frontColor')) }}
+{{ ztbformelement(challenge.get('call')) }}
 
 {% if challenge.icon %}
     <div class="form-group row">
@@ -26,7 +26,7 @@
     </div>
 {% endif %}
 
-{{ ztbformelement(country.get('icon')) }}
+{{ ztbformelement(challenge.get('icon')) }}
 
 {% if challenge.image %}
     <div class="form-group row">
@@ -39,7 +39,7 @@
 {% endif %}
 
 
-{{ ztbformelement(country.get('image')) }}
+{{ ztbformelement(challenge.get('image')) }}
 
 {% if challenge.pdf %}
     <div class="form-group row">
@@ -61,7 +61,7 @@
     </div>
 {% endif %}
 
-{{ ztbformelement(country.get('pdf')) }}
+{{ ztbformelement(challenge.get('pdf')) }}
 
 {{ formelement(form.get('csrf')) }}
 
