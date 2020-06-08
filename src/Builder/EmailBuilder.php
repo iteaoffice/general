@@ -301,6 +301,11 @@ abstract class EmailBuilder
         return $this;
     }
 
+    public function getTemplateVariables(): ?ArrayCollection
+    {
+        return $this->templateVariables;
+    }
+
     public function setTemplateVariable($key, $value): EmailBuilder
     {
         $this->templateVariables->set($key, $value);
@@ -460,6 +465,9 @@ abstract class EmailBuilder
             $email,
             $key
         );
+
+        //Create a templateVariable has_deeplink which is true, so we can parse an additional message
+        $this->setTemplateVariable('has_deeplink', true);
 
         $this->setTemplateVariable(
             $templateVariable,

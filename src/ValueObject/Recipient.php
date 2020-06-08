@@ -44,6 +44,8 @@ final class Recipient
 
     public function toArray(bool $isDevelopment = false, string $fromEmail = ''): array
     {
+        $isDevelopment = false;
+
         return [
             'Email' => $isDevelopment ? $fromEmail : $this->email,
             'Name'  => $this->name,

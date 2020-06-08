@@ -177,7 +177,7 @@ final class ImpactStreamHandler extends AbstractHandler
                 'query'              => $data['query'],
                 'arguments'          => http_build_query($form->getFilteredData()),
                 'paginator'          => $paginator,
-                'allChallenges'      => $this->generalService->findAllChallenges(),
+                'allChallenges'      => $this->generalService->findActiveForCallsChallenges(),
                 'projectService'     => $this->projectService,
                 'resultService'      => $this->resultService,
                 'highlighting'       => $paginator->getCurrentItems()->getHighlighting(),

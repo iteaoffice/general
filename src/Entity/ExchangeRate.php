@@ -20,8 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Laminas\Form\Annotation;
 
 /**
- * CostsVersion.
- *
  * @ORM\Table(name="currency_exchange_rate")
  * @ORM\Entity
  */
@@ -79,11 +77,6 @@ class ExchangeRate extends AbstractEntity
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ExchangeRate
-     */
     public function setId(int $id): ExchangeRate
     {
         $this->id = $id;
@@ -91,39 +84,23 @@ class ExchangeRate extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getRate()
     {
         return $this->rate;
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return ExchangeRate
-     */
-    public function setRate(float $rate): ExchangeRate
+    public function setRate($rate): ExchangeRate
     {
         $this->rate = $rate;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @param DateTime $date
-     *
-     * @return ExchangeRate
-     */
     public function setDate(DateTime $date): ExchangeRate
     {
         $this->date = $date;
@@ -131,19 +108,11 @@ class ExchangeRate extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Currency
-     */
     public function getCurrency(): ?Currency
     {
         return $this->currency;
     }
 
-    /**
-     * @param Currency $currency
-     *
-     * @return ExchangeRate
-     */
     public function setCurrency(Currency $currency): ExchangeRate
     {
         $this->currency = $currency;
@@ -151,19 +120,12 @@ class ExchangeRate extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Invoice[]|ArrayCollection
-     */
+
     public function getAffiliationInvoice()
     {
         return $this->affiliationInvoice;
     }
 
-    /**
-     * @param Invoice[]|ArrayCollection $affiliationInvoice
-     *
-     * @return ExchangeRate
-     */
     public function setAffiliationInvoice($affiliationInvoice): ExchangeRate
     {
         $this->affiliationInvoice = $affiliationInvoice;

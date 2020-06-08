@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace General\View\Helper;
 
+use General\Entity\Currency;
 use General\Entity\ExchangeRate;
 use General\ValueObject\Link\Link;
 
@@ -25,38 +26,43 @@ final class ExchangeRateLink extends AbstractLink
     public function __invoke(
         ExchangeRate $exchangeRate = null,
         string $action = 'view',
-        string $show = 'name'
+        string $show = 'name',
+        Currency $currency = null
     ): string {
         $exchangeRate ??= new ExchangeRate();
 
         $routeParams = [];
         $showOptions = [];
         if (! $exchangeRate->isEmpty()) {
-            $routeParams['id'] = $exchangeRate->getId();
+            $routeParams['id']   = $exchangeRate->getId();
             $showOptions['name'] = $exchangeRate->getRate();
+        }
+
+        if (null !== $currency) {
+            $routeParams['currencyId'] = $currency->getId();
         }
 
         switch ($action) {
             case 'new':
                 $linkParams = [
-                    'icon' => 'fas fa-plus',
+                    'icon'  => 'fas fa-plus',
                     'route' => 'zfcadmin/currency/exchange-rate/new',
-                    'text' => $showOptions[$show]
+                    'text'  => $showOptions[$show]
                         ?? $this->translator->translate('txt-new-exchange-rate')
                 ];
                 break;
             case 'edit':
                 $linkParams = [
-                    'icon' => 'far fa-edit',
+                    'icon'  => 'far fa-edit',
                     'route' => 'zfcadmin/currency/exchange-rate/edit',
-                    'text' => $showOptions[$show]
+                    'text'  => $showOptions[$show]
                         ?? $this->translator->translate('txt-edit-exchange-rate')
                 ];
                 break;
         }
 
-        $linkParams['action'] = $action;
-        $linkParams['show'] = $show;
+        $linkParams['action']      = $action;
+        $linkParams['show']        = $show;
         $linkParams['routeParams'] = $routeParams;
 
         return $this->parse(Link::fromArray($linkParams));

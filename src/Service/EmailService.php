@@ -586,9 +586,9 @@ class EmailService
 
         foreach ($this->to as $singleTo) {
             $toValue = $singleTo->toArray();
-            if (! defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
-                $toValue['Email'] = 'info@jield.nl';
-            }
+            // if (! defined('ITEAOFFICE_ENVIRONMENT') || 'development' === ITEAOFFICE_ENVIRONMENT) {
+            //    $toValue['Email'] = 'info@jield.nl';
+            // }
             $to[] = $toValue;
         }
 

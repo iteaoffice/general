@@ -120,6 +120,7 @@ $config = [
             InputFilter\Challenge\TypeFilter::class        => ConfigAbstractFactory::class,
             InputFilter\CountryFilter::class               => ConfigAbstractFactory::class,
             InputFilter\GenderFilter::class                => ConfigAbstractFactory::class,
+            InputFilter\ExchangeRateFilter::class          => Factory\InputFilterFactory::class,
             InputFilter\TitleFilter::class                 => ConfigAbstractFactory::class,
             InputFilter\WebInfoFilter::class               => ConfigAbstractFactory::class,
             Service\GeneralService::class                  => ConfigAbstractFactory::class,

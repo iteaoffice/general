@@ -6,7 +6,6 @@
 {% set filter = form.get('filter') %}
 
 
-
 <h1>{{ translate("txt-web-info-list") }} {{ webInfoLink(null, 'new','button') }}</h1>
 
 <div class="row">
@@ -14,13 +13,13 @@
         <p class="lead">{{ translate("txt-web-info-list-explanation") }}</p>
     </div>
     <div class="col-md-6">
-                <div class="input-group">
-                    {{ formelement(filter.get('search')) }}
-                    <div class="input-group-append input-group-btn">
-                        {{ formelement(form.get('submit')) }}
-                    </div>
-                </div>
+        <div class="input-group">
+            {{ formelement(filter.get('search')) }}
+            <div class="input-group-append input-group-btn">
+                {{ formelement(form.get('submit')) }}
             </div>
+        </div>
+    </div>
 </div>
 
 
@@ -28,15 +27,22 @@
     <table class="table table-hover table-striped table-sm">
         <thead>
         <tr>
+            <th>{{ translate("txt-id") }}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'name', 'text': translate("txt-name")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'subject', 'text': translate("txt-subject")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'sender', 'text': translate("txt-sender")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/web-info/list', 'criteria': 'template', 'text': translate("txt-template")} %}</th>
         </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+        </tfoot>
         <tbody>
         {% for webInfo in paginator.getCurrentItems() %}
             <tr>
+                <td><small class="text-muted">{{ webInfo.id }}</small></td>
                 <td>{{ webInfoLink(webInfo,'view','name') }} {{ webInfoLink(webInfo,'edit', 'icon') }}</td>
                 <td>{{ webInfo.subject }}</td>
                 <td>{{ senderLink(webInfo.sender,'view','name') }}</td>

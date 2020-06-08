@@ -219,6 +219,13 @@ class ContentType extends AbstractEntity
      */
     private $ideaMessageDocument;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Status\Document", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var \Project\Entity\Idea\Status\Document[]|Collections\ArrayCollection
+     */
+    private $ideaStatusDocument;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -331,6 +338,7 @@ class ContentType extends AbstractEntity
         $this->ideaDocument            = new Collections\ArrayCollection();
         $this->ideaImage               = new Collections\ArrayCollection();
         $this->ideaMessageDocument     = new Collections\ArrayCollection();
+        $this->ideaStatusDocument      = new Collections\ArrayCollection();
         $this->projectReportItem       = new Collections\ArrayCollection();
         $this->projectDocument         = new Collections\ArrayCollection();
         $this->versionDocument         = new Collections\ArrayCollection();
@@ -755,6 +763,17 @@ class ContentType extends AbstractEntity
     public function setIdeaMessageDocument($ideaMessageDocument): ContentType
     {
         $this->ideaMessageDocument = $ideaMessageDocument;
+        return $this;
+    }
+
+    public function getIdeaStatusDocument()
+    {
+        return $this->ideaStatusDocument;
+    }
+
+    public function setIdeaStatusDocument($ideaStatusDocument): ContentType
+    {
+        $this->ideaStatusDocument = $ideaStatusDocument;
         return $this;
     }
 }
