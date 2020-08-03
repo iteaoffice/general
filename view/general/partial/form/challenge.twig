@@ -41,6 +41,32 @@
 
 {{ ztbformelement(challenge.get('image')) }}
 
+
+{% if challenge.ideaPosterIcon %}
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-idea-poster-icon") }}</label>
+
+        <div class="col-sm-9">
+            <p class="form-control-plaintext">{{ challengeIdeaPosterIcon(challenge, 100) }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{{ ztbformelement(challenge.get('ideaPosterIcon')) }}
+
+{% if challenge.image %}
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">{{ translate("txt-current-idea-poster-image") }}</label>
+
+        <div class="col-sm-9">
+            <p class="form-control-plaintext">{{ challengeIdeaPosterImage(challenge, 200) }}</p>
+        </div>
+    </div>
+{% endif %}
+
+
+{{ ztbformelement(challenge.get('ideaPosterImage')) }}
+
 {% if challenge.pdf %}
     <div class="form-group row">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-pdf") }}</label>

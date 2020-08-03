@@ -506,6 +506,13 @@ abstract class EmailBuilder
         return $this->mailingContact;
     }
 
+    /**
+     * @param string $route
+     * @param Contact $user
+     * @param null $key
+     *
+     * @deprecated  use addDeeplink instead
+     */
     public function setDeeplink(string $route, Contact $user, $key = null): void
     {
         if (! $this->personal) {

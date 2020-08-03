@@ -212,6 +212,22 @@ class Challenge extends AbstractEntity
      */
     private $icon;
     /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Idea\Poster\Image", cascade={"persist","remove"}, mappedBy="challenge")
+     * @Annotation\Type("\Laminas\Form\Element\File")
+     * @Annotation\Options({"label":"txt-challenge-idea-poster-image-label","help-block":"txt-challenge-image-help-block"})
+     *
+     * @var Challenge\Idea\Poster\Image
+     */
+    private $ideaPosterImage;
+    /**
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Idea\Poster\Icon", cascade={"persist","remove"}, mappedBy="challenge")
+     * @Annotation\Type("\Laminas\Form\Element\File")
+     * @Annotation\Options({"label":"txt-challenge-idea-poster-icon-label","help-block":"txt-challenge-icon-help-block"})
+     *
+     * @var Challenge\Idea\Poster\Icon
+     */
+    private $ideaPosterIcon;
+    /**
      * @ORM\OneToOne(targetEntity="General\Entity\Challenge\Pdf", cascade={"persist","remove"}, mappedBy="challenge")
      * @Annotation\Type("\Laminas\Form\Element\File")
      * @Annotation\Options({"label":"txt-challenge-pdf-label","help-block":"txt-challenge-pdf-help-block"})
@@ -505,7 +521,7 @@ class Challenge extends AbstractEntity
         return $this;
     }
 
-    public function getBackgroundImage()
+    public function getBackgroundImage(): ?int
     {
         return $this->backgroundImage;
     }
@@ -535,6 +551,28 @@ class Challenge extends AbstractEntity
     public function setToolPinned($toolPinned): Challenge
     {
         $this->toolPinned = $toolPinned;
+        return $this;
+    }
+
+    public function getIdeaPosterImage(): ?Challenge\Idea\Poster\Image
+    {
+        return $this->ideaPosterImage;
+    }
+
+    public function setIdeaPosterImage(?Challenge\Idea\Poster\Image $ideaPosterImage): Challenge
+    {
+        $this->ideaPosterImage = $ideaPosterImage;
+        return $this;
+    }
+
+    public function getIdeaPosterIcon(): ?Challenge\Idea\Poster\Icon
+    {
+        return $this->ideaPosterIcon;
+    }
+
+    public function setIdeaPosterIcon(?Challenge\Idea\Poster\Icon $ideaPosterIcon): Challenge
+    {
+        $this->ideaPosterIcon = $ideaPosterIcon;
         return $this;
     }
 }

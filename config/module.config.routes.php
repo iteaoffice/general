@@ -38,6 +38,28 @@ return [
                             ],
                         ],
                     ],
+                    'challenge-idea-poster-icon' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/cipi/[:id]-[:last-update].[:ext]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action' => 'challenge-idea-poster-icon',
+                            ],
+                        ],
+                    ],
+                    'challenge-idea-poster-image' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/cipim/[:id]-[:last-update].[:ext]',
+                            'defaults' => [
+                                //Explicitly add the controller here as the assets are collected
+                                'controller' => Controller\ImageController::class,
+                                'action' => 'challenge-idea-poster-image',
+                            ],
+                        ],
+                    ],
                     'challenge-image' => [
                         'type' => 'Segment',
                         'options' => [

@@ -18,6 +18,7 @@ use DoctrineModule\Validator\UniqueObject;
 use General\Entity\Challenge;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\File\Extension;
+use Laminas\Validator\File\IsImage;
 
 /**
  * Class ChallengeFilter
@@ -121,8 +122,46 @@ final class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
+                'name'     => 'image',
+                'required' => false,
+                'validators' => [
+                    [
+                        'name'    => IsImage::class
+                    ],
+                ],
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'     => 'icon',
                 'required' => false,
+                'validators' => [
+                    [
+                        'name'    => IsImage::class
+                    ],
+                ],
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'ideaPosterimage',
+                'required' => false,
+                'validators' => [
+                    [
+                        'name'    => IsImage::class
+                    ],
+                ],
+            ]
+        );
+        $inputFilter->add(
+            [
+                'name'     => 'ideaPosterIcon',
+                'required' => false,
+                'validators' => [
+                    [
+                        'name'    => IsImage::class
+                    ],
+                ],
             ]
         );
         $inputFilter->add(

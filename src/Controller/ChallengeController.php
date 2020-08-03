@@ -47,14 +47,14 @@ final class ChallengeController extends AbstractActionController
         EntityManager $entityManager
     ) {
         $this->generalService = $generalService;
-        $this->formService = $formService;
-        $this->translator = $translator;
-        $this->entityManager = $entityManager;
+        $this->formService    = $formService;
+        $this->translator     = $translator;
+        $this->entityManager  = $entityManager;
     }
 
     public function listAction(): ViewModel
     {
-        $page = $this->params()->fromRoute('page', 1);
+        $page         = $this->params()->fromRoute('page', 1);
         $filterPlugin = $this->getFilter();
         $contactQuery = $this->generalService->findFiltered(Challenge::class, $filterPlugin->getFilter());
 
@@ -108,16 +108,9 @@ final class ChallengeController extends AbstractActionController
 
                 $fileData = $this->params()->fromFiles()['general_entity_challenge'];
 
-                /**
-                 * Handle the new logo (if any logo is updated)
-                 */
                 if (! empty($fileData['icon']['tmp_name'])) {
-                    $icon = $challenge->getIcon();
-                    if (null === $icon) {
-                        $icon = new Challenge\Icon();
-                        $icon->setChallenge($challenge);
-                    }
-
+                    $icon = new Challenge\Icon();
+                    $icon->setChallenge($challenge);
                     $icon->setIcon(file_get_contents($fileData['icon']['tmp_name']));
 
                     $fileTypeValidator = new MimeType();
@@ -125,22 +118,16 @@ final class ChallengeController extends AbstractActionController
                     $icon->setContentType(
                         $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
                     );
+                    $challenge->setIcon($icon);
                 }
 
-                //Remove the icon when the tmp is empty and there is not icon at all
                 if (empty($fileData['icon']['tmp_name'])) {
                     $challenge->setIcon(null);
                 }
-                /**
-                 * Handle the new logo (if any logo is updated)
-                 */
-                if (! empty($fileData['image']['tmp_name'])) {
-                    $image = $challenge->getImage();
-                    if (null === $image) {
-                        $image = new Challenge\Image();
-                        $image->setChallenge($challenge);
-                    }
 
+                if (! empty($fileData['image']['tmp_name'])) {
+                    $image = new Challenge\Image();
+                    $image->setChallenge($challenge);
                     $image->setImage(file_get_contents($fileData['image']['tmp_name']));
 
                     $fileTypeValidator = new MimeType();
@@ -148,6 +135,7 @@ final class ChallengeController extends AbstractActionController
                     $image->setContentType(
                         $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
                     );
+                    $challenge->setImage($image);
                 }
 
                 //Remove the image when the tmp is empty and there is not image at all
@@ -155,15 +143,48 @@ final class ChallengeController extends AbstractActionController
                     $challenge->setImage(null);
                 }
 
-                /**
-                 * Handle the new logo (if any logo is updated)
-                 */
+                if (! empty($fileData['ideaPosterIcon']['tmp_name'])) {
+                    $icon = new Challenge\Idea\Poster\Icon();
+                    $icon->setChallenge($challenge);
+                    $icon->setIcon(file_get_contents($fileData['ideaPosterIcon']['tmp_name']));
+
+                    $fileTypeValidator = new MimeType();
+                    $fileTypeValidator->isValid($fileData['ideaPosterIcon']);
+                    $icon->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
+                    $challenge->setIdeaPosterIcon($icon);
+                }
+
+                if (empty($fileData['ideaPosterIcon']['tmp_name'])) {
+                    $challenge->setIdeaPosterIcon(null);
+                }
+
+                if (! empty($fileData['ideaPosterImage']['tmp_name'])) {
+                    $image = new Challenge\Idea\Poster\Image();
+                    $image->setChallenge($challenge);
+                    $image->setImage(file_get_contents($fileData['image']['tmp_name']));
+
+                    $fileTypeValidator = new MimeType();
+                    $fileTypeValidator->isValid($fileData['image']);
+                    $image->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
+                    $challenge->setIdeaPosterImage($image);
+                }
+
+                if (empty($fileData['ideaPosterImage']['tmp_name'])) {
+                    $challenge->setIdeaPosterImage(null);
+                }
+
+                //Remove the image when the tmp is empty and there is not image at all
+                if (empty($fileData['ideaPosterIcon']['tmp_name'])) {
+                    $challenge->setIdeaPosterImage(null);
+                }
+
                 if (! empty($fileData['pdf']['tmp_name'])) {
-                    $pdf = $challenge->getPdf();
-                    if (null === $pdf) {
-                        $pdf = new Challenge\Pdf();
-                        $pdf->setChallenge($challenge);
-                    }
+                    $pdf = new Challenge\Pdf();
+                    $pdf->setChallenge($challenge);
                     $pdf->setPdf(file_get_contents($fileData['pdf']['tmp_name']));
                 }
 
@@ -187,8 +208,6 @@ final class ChallengeController extends AbstractActionController
                         'id' => $challenge->getId(),
                     ]
                 );
-            } else {
-                var_dump($form->getInputFilter()->getMessages());
             }
         }
 
@@ -201,9 +220,11 @@ final class ChallengeController extends AbstractActionController
         $challenge = $this->generalService->find(Challenge::class, (int)$this->params('id'));
 
         //Store the icon, image, pdf for later use
-        $pdf = $challenge->getPdf();
-        $image = $challenge->getImage();
-        $icon = $challenge->getIcon();
+        $pdf             = $challenge->getPdf();
+        $image           = $challenge->getImage();
+        $icon            = $challenge->getIcon();
+        $ideaPosterImage = $challenge->getIdeaPosterImage();
+        $ideaPosterIcon  = $challenge->getIdeaPosterIcon();
 
         $data = array_merge_recursive(
             $this->getRequest()->getPost()->toArray(),
@@ -211,10 +232,6 @@ final class ChallengeController extends AbstractActionController
         );
 
         $form = $this->formService->prepare($challenge, $data);
-
-        //We do not need the icon and the PDF right now
-        $form->getInputFilter()->get('general_entity_challenge')->get('icon')->setRequired(false);
-        $form->getInputFilter()->get('general_entity_challenge')->get('pdf')->setRequired(false);
 
         if ($this->getRequest()->isPost()) {
             if (isset($data['cancel'])) {
@@ -260,10 +277,55 @@ final class ChallengeController extends AbstractActionController
                     $challenge->setIcon(null);
                 }
 
+                if (! empty($fileData['ideaPosterImage']['tmp_name'])) {
+                    if (null === $ideaPosterImage) {
+                        $ideaPosterImage = new Challenge\Idea\Poster\Image();
+                    }
+                    $ideaPosterImage->setChallenge($challenge);
+                    $ideaPosterImage->setImage(file_get_contents($fileData['ideaPosterImage']['tmp_name']));
 
-                /**
-                 * Handle the new logo (if any logo is updated)
-                 */
+                    $fileTypeValidator = new MimeType();
+                    $fileTypeValidator->isValid($fileData['ideaPosterImage']);
+                    $ideaPosterImage->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
+
+                    $challenge->setIdeaPosterImage($ideaPosterImage);
+                }
+
+                //Remove the image when the tmp is empty and there is not image at all
+                if (
+                    empty($fileData['ideaPosterImage']['tmp_name'])
+                    && null !== $challenge->getIdeaPosterImage()
+                    && null === $challenge->getIdeaPosterImage()->getId()
+                ) {
+                    $challenge->setIdeaPosterImage(null);
+                }
+
+                if (! empty($fileData['ideaPosterIcon']['tmp_name'])) {
+                    if (null === $ideaPosterIcon) {
+                        $ideaPosterIcon = new Challenge\Idea\Poster\Icon();
+                    }
+                    $ideaPosterIcon->setChallenge($challenge);
+                    $ideaPosterIcon->setIcon(file_get_contents($fileData['ideaPosterIcon']['tmp_name']));
+
+                    $fileTypeValidator = new MimeType();
+                    $fileTypeValidator->isValid($fileData['ideaPosterIcon']);
+                    $ideaPosterIcon->setContentType(
+                        $this->generalService->findContentTypeByContentTypeName($fileTypeValidator->type)
+                    );
+
+                    $challenge->setIdeaPosterIcon($ideaPosterIcon);
+                }
+
+                //Remove the icon when the tmp is empty and there is not icon at all
+                if (
+                    empty($fileData['ideaPosterIcon']['tmp_name']) && null !== $challenge->getIdeaPosterIcon()
+                    && null === $challenge->getIdeaPosterIcon()->getId()
+                ) {
+                    $challenge->setIdeaPosterIcon(null);
+                }
+
                 if (! empty($fileData['image']['tmp_name'])) {
                     if (null === $image) {
                         $image = new Challenge\Image();
@@ -288,6 +350,7 @@ final class ChallengeController extends AbstractActionController
                 ) {
                     $challenge->setImage(null);
                 }
+
 
                 /**
                  * Handle the new logo (if any logo is updated)

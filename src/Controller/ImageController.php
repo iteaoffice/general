@@ -17,8 +17,7 @@ declare(strict_types=1);
 namespace General\Controller;
 
 use General\Controller\Plugin\GetFilter;
-use General\Entity\Challenge\Icon;
-use General\Entity\Challenge\Image;
+use General\Entity\Challenge;
 use General\Entity\Country;
 use General\Options\ModuleOptions;
 use General\Service\GeneralService;
@@ -27,9 +26,6 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 /**
- * The index of the system.
- *
- * @category Content
  * @method GetFilter getFilter()
  * @method FlashMessenger flashMessenger()
  */
@@ -41,7 +37,7 @@ final class ImageController extends AbstractActionController
     public function __construct(GeneralService $generalService, ModuleOptions $options)
     {
         $this->generalService = $generalService;
-        $this->options = $options;
+        $this->options        = $options;
     }
 
     public function assetAction(): Response
@@ -96,8 +92,8 @@ final class ImageController extends AbstractActionController
         /** @var Response $response */
         $response = $this->getResponse();
 
-        /** @var Icon $icon */
-        $icon = $this->generalService->find(Icon::class, (int)$this->params('id'));
+        /** @var Challenge\Icon $icon */
+        $icon = $this->generalService->find(Challenge\Icon::class, (int)$this->params('id'));
 
         if (null === $icon) {
             return $response->setStatusCode(Response::STATUS_CODE_404);
@@ -119,8 +115,54 @@ final class ImageController extends AbstractActionController
         /** @var Response $response */
         $response = $this->getResponse();
 
-        /** @var Image $image */
-        $image = $this->generalService->find(Image::class, (int)$this->params('id'));
+        /** @var Challenge\Image $image */
+        $image = $this->generalService->find(Challenge\Image::class, (int)$this->params('id'));
+
+        if (null === $image) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
+        }
+
+        $response->getHeaders()
+            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Pragma: public')
+            ->addHeaderLine('Content-Type: image/png');
+
+        $response->setContent(stream_get_contents($image->getImage()));
+
+        return $response;
+    }
+
+    public function challengeIdeaPosterIconAction(): Response
+    {
+        /** @var Response $response */
+        $response = $this->getResponse();
+
+        /** @var Challenge\Idea\Poster\Icon $icon */
+        $icon = $this->generalService->find(Challenge\Idea\Poster\Icon::class, (int)$this->params('id'));
+
+        if (null === $icon) {
+            return $response->setStatusCode(Response::STATUS_CODE_404);
+        }
+
+        $response->getHeaders()
+            ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
+            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Pragma: public')
+            ->addHeaderLine('Content-Type: image/png');
+
+        $response->setContent(stream_get_contents($icon->getIcon()));
+
+        return $response;
+    }
+
+    public function challengeIdeaPosterImageAction(): Response
+    {
+        /** @var Response $response */
+        $response = $this->getResponse();
+
+        /** @var Challenge\Idea\Poster\Image $image */
+        $image = $this->generalService->find(Challenge\Idea\Poster\Image::class, (int)$this->params('id'));
 
         if (null === $image) {
             return $response->setStatusCode(Response::STATUS_CODE_404);

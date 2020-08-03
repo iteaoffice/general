@@ -64,109 +64,58 @@ class Image extends AbstractEntity
      */
     private $challenge;
 
-    /**
-     * @param $property
-     *
-     * @return bool
-     */
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Image
-     */
-    public function setId(int $id): Image
+    public function setId(?int $id): Image
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return ContentType
-     */
-    public function getContentType(): ContentType
+    public function getContentType(): ?ContentType
     {
         return $this->contentType;
     }
 
-    /**
-     * @param ContentType $contentType
-     *
-     * @return Image
-     */
-    public function setContentType(ContentType $contentType): Image
+    public function setContentType(?ContentType $contentType): Image
     {
         $this->contentType = $contentType;
-
         return $this;
     }
 
-    /**
-     * @return resource
-     */
     public function getImage()
     {
         return $this->image;
     }
 
-    /**
-     * @param string $image
-     *
-     * @return Image
-     */
-    public function setImage(string $image): Image
+    public function setImage($image): Image
     {
         $this->image = $image;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateUpdated(): DateTime
+    public function getDateUpdated(): ?DateTime
     {
         return $this->dateUpdated;
     }
 
-    /**
-     * @param DateTime $dateUpdated
-     *
-     * @return Image
-     */
-    public function setDateUpdated(DateTime $dateUpdated): Image
+    public function setDateUpdated(?DateTime $dateUpdated): Image
     {
         $this->dateUpdated = $dateUpdated;
-
         return $this;
     }
 
-    /**
-     * @return Challenge
-     */
-    public function getChallenge(): Challenge
+    public function getChallenge(): ?Challenge
     {
         return $this->challenge;
     }
 
-    /**
-     * @param Challenge $challenge
-     *
-     * @return Image
-     */
-    public function setChallenge(Challenge $challenge): Image
+    public function setChallenge(?Challenge $challenge): Image
     {
         $this->challenge = $challenge;
-
         return $this;
     }
 }

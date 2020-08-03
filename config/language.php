@@ -64,6 +64,8 @@ _('txt-challenge-image-label');
 _('txt-challenge-image-help-block');
 _('txt-challenge-icon-label');
 _('txt-challenge-icon-help-block');
+_('txt-challenge-idea-poster-image-label');
+_('txt-challenge-idea-poster-icon-label');
 _('txt-challenge-pdf-label');
 _('txt-challenge-pdf-help-block');
 _('txt-challenge-program-call-label');

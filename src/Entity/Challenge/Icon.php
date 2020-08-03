@@ -64,100 +64,58 @@ class Icon extends AbstractEntity
      */
     private $challenge;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Icon
-     */
-    public function setId(int $id): Icon
+    public function setId(?int $id): Icon
     {
         $this->id = $id;
-
         return $this;
     }
 
-    /**
-     * @return ContentType
-     */
-    public function getContentType(): ContentType
+    public function getContentType(): ?ContentType
     {
         return $this->contentType;
     }
 
-    /**
-     * @param ContentType $contentType
-     *
-     * @return Icon
-     */
-    public function setContentType(ContentType $contentType): Icon
+    public function setContentType(?ContentType $contentType): Icon
     {
         $this->contentType = $contentType;
-
         return $this;
     }
 
-    /**
-     * @return resource
-     */
     public function getIcon()
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     *
-     * @return Icon
-     */
-    public function setIcon(string $icon): Icon
+    public function setIcon($icon): Icon
     {
         $this->icon = $icon;
-
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateUpdated(): DateTime
+    public function getDateUpdated(): ?DateTime
     {
         return $this->dateUpdated;
     }
 
-    /**
-     * @param DateTime $dateUpdated
-     *
-     * @return Icon
-     */
-    public function setDateUpdated(DateTime $dateUpdated): Icon
+    public function setDateUpdated(?DateTime $dateUpdated): Icon
     {
         $this->dateUpdated = $dateUpdated;
-
         return $this;
     }
 
-    /**
-     * @return Challenge
-     */
-    public function getChallenge(): Challenge
+    public function getChallenge(): ?Challenge
     {
         return $this->challenge;
     }
 
-    /**
-     * @param Challenge $challenge
-     *
-     * @return Icon
-     */
-    public function setChallenge(Challenge $challenge): Icon
+    public function setChallenge(?Challenge $challenge): Icon
     {
         $this->challenge = $challenge;
-
         return $this;
     }
 }

@@ -29,6 +29,7 @@ use Program\Entity\Nda;
 use Project\Entity\Contract\Document;
 use Project\Entity\Contract\VersionDocument;
 use Project\Entity\Idea\Image;
+use Project\Entity\Idea\Poster\Attachment;
 use Project\Entity\Pca;
 use Project\Entity\Poster\Poster;
 use Project\Entity\Report\Item;
@@ -226,6 +227,13 @@ class ContentType extends AbstractEntity
      */
     private $ideaStatusDocument;
     /**
+     * @ORM\OneToMany(targetEntity="Project\Entity\Idea\Poster\Attachment", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var Attachment[]|Collections\ArrayCollection
+     */
+    private $ideaPosterAttachment;
+    /**
      * @ORM\OneToMany(targetEntity="Project\Entity\Pca", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -282,6 +290,20 @@ class ContentType extends AbstractEntity
      */
     private $challengeIcon;
     /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Idea\Poster\Image", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var Challenge\Idea\Poster\Image[]|Collections\ArrayCollection
+     */
+    private $challengeIdeaPosterImage;
+    /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Challenge\Idea\Poster\Icon", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var Challenge\Idea\Poster\Icon[]|Collections\ArrayCollection
+     */
+    private $challengeIdeaPosterIcon;
+    /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -319,43 +341,55 @@ class ContentType extends AbstractEntity
 
     public function __construct()
     {
-        $this->projectLogo             = new Collections\ArrayCollection();
-        $this->contentImage            = new Collections\ArrayCollection();
-        $this->pressArticle            = new Collections\ArrayCollection();
-        $this->programNna              = new Collections\ArrayCollection();
-        $this->programDoa              = new Collections\ArrayCollection();
-        $this->parentDoa               = new Collections\ArrayCollection();
-        $this->organisationLogo        = new Collections\ArrayCollection();
-        $this->organisationUpdateLogos = new Collections\ArrayCollection();
-        $this->contactDnd              = new Collections\ArrayCollection();
-        $this->contactPhoto            = new Collections\ArrayCollection();
-        $this->publication             = new Collections\ArrayCollection();
-        $this->badgeAttachment         = new Collections\ArrayCollection();
-        $this->result                  = new Collections\ArrayCollection();
-        $this->workpackageDocument     = new Collections\ArrayCollection();
-        $this->poster                  = new Collections\ArrayCollection();
-        $this->pca                     = new Collections\ArrayCollection();
-        $this->ideaDocument            = new Collections\ArrayCollection();
-        $this->ideaImage               = new Collections\ArrayCollection();
-        $this->ideaMessageDocument     = new Collections\ArrayCollection();
-        $this->ideaStatusDocument      = new Collections\ArrayCollection();
-        $this->projectReportItem       = new Collections\ArrayCollection();
-        $this->projectDocument         = new Collections\ArrayCollection();
-        $this->versionDocument         = new Collections\ArrayCollection();
-        $this->contractDocument        = new Collections\ArrayCollection();
-        $this->contractVersionDocument = new Collections\ArrayCollection();
-        $this->challengeIcon           = new Collections\ArrayCollection();
-        $this->challengeImage          = new Collections\ArrayCollection();
-        $this->calendarDocument        = new Collections\ArrayCollection();
-        $this->loi                     = new Collections\ArrayCollection();
-        $this->meetingFloorplan        = new Collections\ArrayCollection();
-        $this->exhibitionFloorplan     = new Collections\ArrayCollection();
-        $this->reminder                = new Collections\ArrayCollection();
+        $this->projectLogo              = new Collections\ArrayCollection();
+        $this->contentImage             = new Collections\ArrayCollection();
+        $this->pressArticle             = new Collections\ArrayCollection();
+        $this->programNna               = new Collections\ArrayCollection();
+        $this->programDoa               = new Collections\ArrayCollection();
+        $this->parentDoa                = new Collections\ArrayCollection();
+        $this->organisationLogo         = new Collections\ArrayCollection();
+        $this->organisationUpdateLogos  = new Collections\ArrayCollection();
+        $this->contactDnd               = new Collections\ArrayCollection();
+        $this->contactPhoto             = new Collections\ArrayCollection();
+        $this->publication              = new Collections\ArrayCollection();
+        $this->badgeAttachment          = new Collections\ArrayCollection();
+        $this->result                   = new Collections\ArrayCollection();
+        $this->workpackageDocument      = new Collections\ArrayCollection();
+        $this->poster                   = new Collections\ArrayCollection();
+        $this->pca                      = new Collections\ArrayCollection();
+        $this->ideaDocument             = new Collections\ArrayCollection();
+        $this->ideaImage                = new Collections\ArrayCollection();
+        $this->ideaMessageDocument      = new Collections\ArrayCollection();
+        $this->ideaStatusDocument       = new Collections\ArrayCollection();
+        $this->ideaPosterAttachment     = new Collections\ArrayCollection();
+        $this->projectReportItem        = new Collections\ArrayCollection();
+        $this->projectDocument          = new Collections\ArrayCollection();
+        $this->versionDocument          = new Collections\ArrayCollection();
+        $this->contractDocument         = new Collections\ArrayCollection();
+        $this->contractVersionDocument  = new Collections\ArrayCollection();
+        $this->challengeIcon            = new Collections\ArrayCollection();
+        $this->challengeImage           = new Collections\ArrayCollection();
+        $this->challengeIdeaPosterIcon  = new Collections\ArrayCollection();
+        $this->challengeIdeaPosterImage = new Collections\ArrayCollection();
+        $this->calendarDocument         = new Collections\ArrayCollection();
+        $this->loi                      = new Collections\ArrayCollection();
+        $this->meetingFloorplan         = new Collections\ArrayCollection();
+        $this->exhibitionFloorplan      = new Collections\ArrayCollection();
+        $this->reminder                 = new Collections\ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return (string)$this->contentType;
+        return (string)$this->description;
+    }
+
+    public function isImage(): bool
+    {
+        return in_array($this->contentType, [
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+        ], true);
     }
 
     public function getId()
@@ -700,6 +734,28 @@ class ContentType extends AbstractEntity
         return $this;
     }
 
+    public function getChallengeIdeaPosterImage()
+    {
+        return $this->challengeIdeaPosterImage;
+    }
+
+    public function setChallengeIdeaPosterImage($challengeIdeaPosterImage): ContentType
+    {
+        $this->challengeIdeaPosterImage = $challengeIdeaPosterImage;
+        return $this;
+    }
+
+    public function getChallengeIdeaPosterIcon()
+    {
+        return $this->challengeIdeaPosterIcon;
+    }
+
+    public function setChallengeIdeaPosterIcon($challengeIdeaPosterIcon): ContentType
+    {
+        $this->challengeIdeaPosterIcon = $challengeIdeaPosterIcon;
+        return $this;
+    }
+
     public function getCalendarDocument()
     {
         return $this->calendarDocument;
@@ -774,6 +830,17 @@ class ContentType extends AbstractEntity
     public function setIdeaStatusDocument($ideaStatusDocument): ContentType
     {
         $this->ideaStatusDocument = $ideaStatusDocument;
+        return $this;
+    }
+
+    public function getIdeaPosterAttachment()
+    {
+        return $this->ideaPosterAttachment;
+    }
+
+    public function setIdeaPosterAttachment($ideaPosterAttachment): ContentType
+    {
+        $this->ideaPosterAttachment = $ideaPosterAttachment;
         return $this;
     }
 }

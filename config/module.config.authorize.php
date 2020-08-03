@@ -26,6 +26,8 @@ return [
                 ['route' => 'image/asset', 'roles' => []],
                 ['route' => 'image/challenge-icon', 'roles' => []],
                 ['route' => 'image/challenge-image', 'roles' => []],
+                ['route' => 'image/challenge-idea-poster-image', 'roles' => []],
+                ['route' => 'image/challenge-idea-poster-icon', 'roles' => []],
                 ['route' => 'challenge/download-pdf', 'roles' => []],
 
                 ['route' => 'country/code', 'roles' => []],
