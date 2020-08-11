@@ -129,12 +129,12 @@ $(function () {
     });
 EOT;
         $this->viewHelperManager->get('headlink')->prependStylesheet(
-            'assets/' . ITEAOFFICE_HOST
+            'assets/' . (getenv('ITEAOFFICE_HOST') ?? 'itea')
             . '/css/jvectormap.css',
             'screen'
         );
         $this->viewHelperManager->get('headscript')->appendFile(
-            'assets/' . ITEAOFFICE_HOST . '/js/jvectormap.js',
+            'assets/' . (getenv('ITEAOFFICE_HOST') ?? 'itea') . '/js/jvectormap.js',
             'text/javascript'
         );
         $this->viewHelperManager->get('headscript')->appendScript($jQuery);
