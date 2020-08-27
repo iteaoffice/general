@@ -67,6 +67,7 @@ abstract class EmailBuilder
     private array $inlinedAttachments = [];
     /** @var ValueObject\Header[] */
     private array $headers = [];
+    private ?ValueObject\Recipient $replyTo = null;
     private DeeplinkService $deeplinkService;
     private ContactService $contactService;
 
@@ -161,7 +162,8 @@ abstract class EmailBuilder
             $this->emailCampaign,
             $this->getAttachments(),
             $this->getInlinedAttachments(),
-            $this->getHeaders()
+            $this->getHeaders(),
+            $this->getReplyTo()
         );
         $messages[] = $message->toArray();
 
@@ -228,6 +230,18 @@ abstract class EmailBuilder
         return $headers;
     }
 
+    public function getReplyTo(): ?ValueObject\Recipient
+    {
+        return $this->replyTo;
+    }
+
+    public function setReplyTo(?string $replyTo): void
+    {
+        $this->replyTo = new ValueObject\Recipient(
+            $replyTo,
+        );
+    }
+
     public function addAttachment(string $contentType, string $fileName, string $content): void
     {
         $this->attachments[] = new ValueObject\Attachment(
@@ -292,20 +306,6 @@ abstract class EmailBuilder
         return $this;
     }
 
-    public function setTemplateVariables(array $variables): EmailBuilder
-    {
-        foreach ($variables as $key => $value) {
-            $this->setTemplateVariable($key, $value);
-        }
-
-        return $this;
-    }
-
-    public function getTemplateVariables(): ?ArrayCollection
-    {
-        return $this->templateVariables;
-    }
-
     public function setTemplateVariable($key, $value): EmailBuilder
     {
         $this->templateVariables->set($key, $value);
@@ -323,6 +323,20 @@ abstract class EmailBuilder
 
         if ($to->isValid()) {
             $this->to[] = $to;
+        }
+
+        return $this;
+    }
+
+    public function getTemplateVariables(): ?ArrayCollection
+    {
+        return $this->templateVariables;
+    }
+
+    public function setTemplateVariables(array $variables): EmailBuilder
+    {
+        foreach ($variables as $key => $value) {
+            $this->setTemplateVariable($key, $value);
         }
 
         return $this;

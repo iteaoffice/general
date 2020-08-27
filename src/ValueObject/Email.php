@@ -32,6 +32,8 @@ final class Email
     private array $inlinedAttachments;
     private array $headers;
 
+    private ?Recipient $replyTo;
+
     public function __construct(
         array $from,
         array $to,
@@ -47,23 +49,25 @@ final class Email
         string $customCampaign = '',
         array $attachments = [],
         array $inlinedAttachments = [],
-        array $headers = []
+        array $headers = [],
+        Recipient $replyTo = null
     ) {
-        $this->from = $from;
-        $this->to = $to;
-        $this->cc = $cc;
-        $this->bcc = $bcc;
-        $this->subject = $subject;
-        $this->textPart = $textPart;
-        $this->htmlPart = $htmlPart;
-        $this->customID = $customID;
-        $this->eventPayload = $eventPayload;
-        $this->trackOpens = $trackOpens;
-        $this->trackClicks = $trackClicks;
-        $this->customCampaign = $customCampaign;
-        $this->attachments = $attachments;
+        $this->from               = $from;
+        $this->to                 = $to;
+        $this->cc                 = $cc;
+        $this->bcc                = $bcc;
+        $this->subject            = $subject;
+        $this->textPart           = $textPart;
+        $this->htmlPart           = $htmlPart;
+        $this->customID           = $customID;
+        $this->eventPayload       = $eventPayload;
+        $this->trackOpens         = $trackOpens;
+        $this->trackClicks        = $trackClicks;
+        $this->customCampaign     = $customCampaign;
+        $this->attachments        = $attachments;
         $this->inlinedAttachments = $inlinedAttachments;
-        $this->headers = $headers;
+        $this->headers            = $headers;
+        $this->replyTo            = $replyTo;
     }
 
     public function isValid(): bool
@@ -136,6 +140,10 @@ final class Email
 
         if (count($this->inlinedAttachments) > 0) {
             $return['InlinedAttachments'] = $this->inlinedAttachments;
+        }
+
+        if (null !== $this->replyTo) {
+            $return['ReplyTo'] = $this->replyTo->toArray();
         }
 
         return $return;
