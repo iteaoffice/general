@@ -89,6 +89,11 @@ class GeneralService extends AbstractService
         return $this->entityManager->getRepository(Entity\WebInfo::class)->findOneBy(['info' => $info]);
     }
 
+    public function findContentTypeById(int $id): ?Entity\ContentType
+    {
+        return $this->entityManager->getRepository(Entity\ContentType::class)->find($id);
+    }
+
     public function findContentTypeByContentTypeName(string $contentTypeName): Entity\ContentType
     {
         /** @var Entity\ContentType $contentType */
