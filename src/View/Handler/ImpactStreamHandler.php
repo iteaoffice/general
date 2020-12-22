@@ -95,7 +95,7 @@ final class ImpactStreamHandler extends AbstractHandler
         $lastYear = new DateTime();
         $lastYear->sub(new DateInterval('P12M'));
 
-        $page = $this->request->getQuery('page', 1);
+        $page = $this->routeMatch->getParam('page', 1);
         $form = new SearchResult();
         $data = array_merge(
             [

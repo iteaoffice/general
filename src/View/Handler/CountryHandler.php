@@ -30,9 +30,8 @@ use Program\Service\ProgramService;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class ProjectHandler
- *
- * @package Project\View\Handler
+ * Class CountryHandler
+ * @package General\View\Handler
  */
 final class CountryHandler extends AbstractHandler
 {

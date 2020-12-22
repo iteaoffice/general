@@ -25,9 +25,8 @@ use Laminas\View\HelperPluginManager;
 use ZfcTwig\View\TwigRenderer;
 
 /**
- * Class ProjectHandler
- *
- * @package Project\View\Handler
+ * Class ChallengeHandler
+ * @package General\View\Handler
  */
 final class ChallengeHandler extends AbstractHandler
 {

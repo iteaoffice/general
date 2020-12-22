@@ -154,10 +154,10 @@ class Challenge extends AbstractEntity
      */
     private $frontColor;
     /**
-     * @ORM\OneToMany(targetEntity="Project\Entity\Challenge", cascade={"persist"}, mappedBy="challenge")
+     * @ORM\OneToMany(targetEntity="Project\Entity\Project\Challenge", cascade={"persist"}, mappedBy="challenge")
      * @Annotation\Exclude()
      *
-     * @var \Project\Entity\Challenge[]|Collections\ArrayCollection
+     * @var \Project\Entity\Project\Challenge[]|Collections\ArrayCollection
      */
     private $projectChallenge;
     /**
