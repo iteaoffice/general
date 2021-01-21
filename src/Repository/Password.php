@@ -1,14 +1,11 @@
 <?php
 
 /**
- * Jield webdev copyright message placeholder
+ * ITEA Office all rights reserved
  *
- * @category    General
- * @package     Repository
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   @copyright Copyright (c) 2004-2017 ITEA Office (http://itea3.org)
- * @license     http://jield.net/license.txt proprietary
- * @link        http://jield.net
+ * @copyright   Copyright (c) 2021 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
  */
 
 declare(strict_types=1);

@@ -3,22 +3,15 @@
 /**
  * ITEA Office all rights reserved
  *
- * PHP Version 7
- *
- * @category    Program
- *
  * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright   Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @copyright   Copyright (c) 2021 ITEA Office (https://itea3.org)
  * @license     https://itea3.org/license.txt proprietary
- *
- * @link        http://github.com/iteaoffice/project for the canonical source repository
  */
 
 declare(strict_types=1);
 
 namespace General;
 
-use Affiliation\Service\AffiliationService;
 use Contact\Service\ContactService;
 use Deeplink\Service\DeeplinkService;
 use Doctrine\ORM\EntityManager;
@@ -143,8 +136,7 @@ return [
         Service\CountryService::class              => [
             EntityManager::class,
             CountrySearchService::class,
-            ProjectService::class,
-            AffiliationService::class
+            ProjectService::class
         ],
         InputFilter\ChallengeFilter::class         => [
             EntityManager::class

@@ -17,6 +17,7 @@ use Admin\Entity\User;
 use Contact\Entity\Contact;
 use Contact\Service\ContactService;
 use DateTime;
+use Deeplink\Entity\Deeplink;
 use Deeplink\Service\DeeplinkService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -462,7 +463,7 @@ abstract class EmailBuilder
         return $this;
     }
 
-    public function addDeeplink(string $route, string $templateVariable = 'deeplink', Contact $contact = null, string $email = null, $key = null): void
+    public function addDeeplink(string $route, string $templateVariable, ?Contact $contact, string $email = null, $key = null): Deeplink
     {
         if (! $this->personal) {
             throw new InvalidArgumentException('It is not possible to add a deeplink for a non-personal email');
@@ -490,6 +491,8 @@ abstract class EmailBuilder
                 LinkDecoration::SHOW_RAW
             )
         );
+
+        return $deeplink;
     }
 
     abstract public function renderEmail(): void;

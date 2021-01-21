@@ -25,7 +25,7 @@ use Mailing\Service\MailingService;
  * Class TransactionalEmailBuilder
  * @package General\Builder
  */
-final class WebInfoEmailBuilder extends EmailBuilder
+class WebInfoEmailBuilder extends EmailBuilder
 {
     private WebInfo $webInfo;
 

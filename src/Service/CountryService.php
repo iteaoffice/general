@@ -3,16 +3,16 @@
 /**
  * ITEA Office all rights reserved
  *
- * @category  Content
- *
- * @author    Johan van der Heide <johan.van.der.heide@itea3.org>
- * @copyright Copyright (c) 2019 ITEA Office (https://itea3.org)
+ * @author      Johan van der Heide <johan.van.der.heide@itea3.org>
+ * @copyright   Copyright (c) 2021 ITEA Office (https://itea3.org)
+ * @license     https://itea3.org/license.txt proprietary
  */
 
 declare(strict_types=1);
 
 namespace General\Service;
 
+use Affiliation\Entity\Affiliation;
 use Affiliation\Service\AffiliationService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -40,19 +40,16 @@ class CountryService extends AbstractService implements SearchUpdateInterface
 {
     private CountrySearchService $countrySearchService;
     private ProjectService $projectService;
-    private AffiliationService $affiliationService;
 
     public function __construct(
         EntityManager $entityManager,
         CountrySearchService $countrySearchService,
-        ProjectService $projectService,
-        AffiliationService $affiliationService
+        ProjectService $projectService
     ) {
         parent::__construct($entityManager);
 
         $this->countrySearchService = $countrySearchService;
-        $this->projectService = $projectService;
-        $this->affiliationService = $affiliationService;
+        $this->projectService       = $projectService;
     }
 
     /**
@@ -91,7 +88,6 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         return $this->entityManager->getRepository(Entity\Country::class)->findOneBy(['cd' => strtoupper($cd)]);
     }
 
-
     public function findCountryByCall(
         Call $call,
         int $which = AffiliationService::WHICH_ONLY_ACTIVE
@@ -101,12 +97,33 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         return $repository->findCountryByCall($call, $which);
     }
 
-
+    /**
+     * Duplicate of AffiliationService::findAffiliationCountriesByProjectAndWhich to avoid circulare dependencies
+     *
+     * @param Project $project
+     * @param int $which
+     * @return array
+     */
     public function getAffiliationCountries(
         Project $project,
-        $which = AffiliationService::WHICH_ONLY_ACTIVE
+        int $which = AffiliationService::WHICH_ONLY_ACTIVE
     ): array {
-        return $this->affiliationService->findAffiliationCountriesByProjectAndWhich($project, $which);
+        $repository = $this->entityManager->getRepository(Affiliation::class);
+
+        /**
+         * @var $affiliations Affiliation[]
+         */
+        $affiliations = $repository->findAffiliationByProjectAndWhich($project, $which);
+        $result       = [];
+        foreach ($affiliations as $affiliation) {
+            $country = $affiliation->getOrganisation()->getCountry();
+
+            $result[$country->getCountry()] = $country;
+        }
+
+        ksort($result);
+
+        return $result;
     }
 
     public function findCountryByProject(
@@ -130,7 +147,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
 
     public function updateCollectionInSearchEngine(bool $clearIndex = false): void
     {
-        $countries = $this->findAll(Entity\Country::class);
+        $countries  = $this->findAll(Entity\Country::class);
         $collection = [];
 
         /** @var Entity\Country $country */
@@ -149,7 +166,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
     public function prepareSearchUpdate($country): AbstractQuery
     {
         $searchClient = new Client();
-        $update = $searchClient->createUpdate();
+        $update       = $searchClient->createUpdate();
 
         /** @var Document $countryDocument */
         $countryDocument = $update->createDocument();
@@ -172,7 +189,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
         $countryDocument->setField('is_eureka_text', $country->isEureka() ? 'Yes' : 'No');
 
         //Find all the projects and partners
-        $projects = [];
+        $projects     = [];
         $affiliations = [];
 
         foreach ($country->getOrganisation() as $organisation) {
@@ -186,10 +203,10 @@ class CountryService extends AbstractService implements SearchUpdateInterface
                     continue;
                 }
 
-                $projectId = $project->getId();
+                $projectId     = $project->getId();
                 $affiliationId = $affiliation->getId();
 
-                $projects[$projectId] = $projectId;
+                $projects[$projectId]                                   = $projectId;
                 $affiliations[$affiliation->getOrganisation()->getId()] = $affiliationId;
             }
         }
