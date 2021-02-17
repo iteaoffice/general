@@ -75,12 +75,9 @@ class NavigationService
                 $pageCustomParams = $page->get('params');
 
                 //We dont want to set a page to active when
-                //var_dump($page->get('notAutoActive'));
                 if (! $page->get('notAutoActive')) {
                     $page->setActive();
                 }
-
-
 
                 // Merge all route params with navigation params
                 $routeParams = $this->routeMatch->getParams();

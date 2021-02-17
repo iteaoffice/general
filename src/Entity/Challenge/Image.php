@@ -20,8 +20,6 @@ use General\Entity\Challenge;
 use General\Entity\ContentType;
 
 /**
- * ProjectImage.
- *
  * @ORM\Table(name="challenge_image")
  * @ORM\Entity
  */

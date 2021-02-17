@@ -163,6 +163,13 @@ class ContentType extends AbstractEntity
      */
     private $organisationUpdateLogos;
     /**
+     * @ORM\OneToMany(targetEntity="Cluster\Entity\Cluster\Logo", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var \Cluster\Entity\Cluster\Logo[]|Collections\ArrayCollection
+     */
+    private $clusterLogo;
+    /**
      * @ORM\OneToMany(targetEntity="Publication\Entity\Publication", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -355,6 +362,7 @@ class ContentType extends AbstractEntity
         $this->parentDoa                      = new Collections\ArrayCollection();
         $this->organisationLogo               = new Collections\ArrayCollection();
         $this->organisationUpdateLogos        = new Collections\ArrayCollection();
+        $this->clusterLogo                    = new Collections\ArrayCollection();
         $this->contactDnd                     = new Collections\ArrayCollection();
         $this->contactPhoto                   = new Collections\ArrayCollection();
         $this->publication                    = new Collections\ArrayCollection();
@@ -859,6 +867,17 @@ class ContentType extends AbstractEntity
     public function setWorkpackageDeliverableDocument($workpackageDeliverableDocument): ContentType
     {
         $this->workpackageDeliverableDocument = $workpackageDeliverableDocument;
+        return $this;
+    }
+
+    public function getClusterLogo()
+    {
+        return $this->clusterLogo;
+    }
+
+    public function setClusterLogo($clusterLogo): ContentType
+    {
+        $this->clusterLogo = $clusterLogo;
         return $this;
     }
 }
