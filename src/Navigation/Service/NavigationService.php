@@ -88,11 +88,13 @@ class NavigationService
                     foreach ($pageCustomParams['entities'] as $routeParam => $entityClass) {
                         // The routeParam can be aliased
                         $routeParamKey = $routeParam;
-                        if (
-                            isset($pageCustomParams['routeParam'])
-                            && array_key_exists($routeParam, $pageCustomParams['routeParam'])
-                        ) {
+                        if (isset($pageCustomParams['routeParam']) && array_key_exists($routeParam, $pageCustomParams['routeParam'])) {
                             $routeParamKey = $pageCustomParams['routeParam'][$routeParam];
+                        }
+
+                        //When we have a property we want to match on, we overrule the routeParam witht his
+                        if (isset($pageCustomParams['property'])) {
+                            $routeParam = $pageCustomParams['property'];
                         }
 
                         if (null !== $entityClass && class_exists($entityClass)) {
