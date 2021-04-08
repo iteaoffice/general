@@ -142,7 +142,7 @@ class ContentType extends AbstractEntity
      */
     private $contactDnd;
     /**
-     * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade="persist", mappedBy="contentType")
+     * @ORM\OneToMany(targetEntity="Contact\Entity\Photo", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
      * @var Photo[]|Collections\ArrayCollection

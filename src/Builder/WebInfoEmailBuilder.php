@@ -46,6 +46,7 @@ class WebInfoEmailBuilder extends EmailBuilder
         }
 
         $this->setSender($webInfo->getSender());
+
         $this->webInfo = $webInfo;
     }
 

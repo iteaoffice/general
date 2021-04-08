@@ -52,7 +52,7 @@ class Pdf extends AbstractEntity
      */
     private $dateEnd;
     /**
-     * @ORM\OneToOne(targetEntity="General\Entity\Challenge", inversedBy="pdf", cascade="persist")
+     * @ORM\OneToOne(targetEntity="General\Entity\Challenge", inversedBy="pdf", cascade={"persist"})
      * @ORM\JoinColumn(name="challenge_id", referencedColumnName="challenge_id", nullable=false)
      *
      * @var Challenge
