@@ -25,7 +25,7 @@ abstract class AbstractImage
         RouteStackInterface $router,
         ModuleOptions $moduleOptions
     ) {
-        $this->router = $router;
+        $this->router        = $router;
         $this->moduleOptions = $moduleOptions;
     }
 

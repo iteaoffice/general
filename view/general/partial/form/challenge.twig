@@ -17,7 +17,7 @@
 {{ ztbformelement(challenge.get('call')) }}
 
 {% if challenge.icon %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-icon") }}</label>
 
         <div class="col-sm-9">
@@ -29,7 +29,7 @@
 {{ ztbformelement(challenge.get('icon')) }}
 
 {% if challenge.image %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-image") }}</label>
 
         <div class="col-sm-9">
@@ -43,7 +43,7 @@
 
 
 {% if challenge.ideaPosterIcon %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-idea-poster-icon") }}</label>
 
         <div class="col-sm-9">
@@ -55,7 +55,7 @@
 {{ ztbformelement(challenge.get('ideaPosterIcon')) }}
 
 {% if challenge.image %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-idea-poster-image") }}</label>
 
         <div class="col-sm-9">
@@ -68,7 +68,7 @@
 {{ ztbformelement(challenge.get('ideaPosterImage')) }}
 
 {% if challenge.pdf %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-pdf") }}</label>
 
         <div class="col-sm-9">
@@ -78,7 +78,7 @@
 {% endif %}
 
 {% if challenge.backgroundImage %}
-    <div class="form-group row">
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">{{ translate("txt-current-background-image") }}</label>
 
         <div class="col-sm-9">
@@ -91,7 +91,7 @@
 
 {{ formelement(form.get('csrf')) }}
 
-<div class="form-group row">
+<div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
         {{ ztbformelement(form.get('submit')) }}
         {{ ztbformelement(form.get('cancel')) }}

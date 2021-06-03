@@ -45,7 +45,20 @@ final class ImageDecoration
         );
     }
 
-    public function parse(Builder $builder): string
+    public function parse(string $imageUrl): string
+    {
+        if ($this->show === self::SHOW_RAW) {
+            return (string)$imageUrl;
+        }
+
+        return sprintf(
+            self::$imageTemplate,
+            (string)$imageUrl,
+            'Alt'
+        );
+    }
+
+    public function parseBuilder(Builder $builder): string
     {
         if (null !== $this->width || null !== $this->height) {
             $builder

@@ -15,7 +15,7 @@ namespace General\Entity;
 use DateTime;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use Event\Entity\DeskCosts;
+use Event\Entity\Registration\Desk\Costs;
 use Event\Entity\Meeting\OptionCost;
 use Invoice\Entity\Row;
 use Invoice\Entity\Vat\Dimension;
@@ -99,10 +99,10 @@ class Vat extends AbstractEntity
      */
     private $invoiceRow;
     /**
-     * @ORM\OneToMany(targetEntity="Event\Entity\DeskCosts", cascade={"persist"}, mappedBy="vat")
+     * @ORM\OneToMany(targetEntity="Event\Entity\Registration\Desk\Costs", cascade={"persist"}, mappedBy="vat")
      * @Annotation\Exclude()
      *
-     * @var DeskCosts[]
+     * @var \Event\Entity\Registration\Desk\Costs[]|Collections\ArrayCollection
      */
     private $deskCosts;
     /**

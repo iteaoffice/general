@@ -22,7 +22,7 @@ final class Image
 
     public function __construct(ImageRoute $imageRoute, ImageDecoration $imageDecoration)
     {
-        $this->imageRoute = $imageRoute;
+        $this->imageRoute      = $imageRoute;
         $this->imageDecoration = $imageDecoration;
     }
 
@@ -33,6 +33,10 @@ final class Image
 
     public function parse(RouteStackInterface $router, ModuleOptions $moduleOptions): string
     {
-        return $this->imageDecoration->parse($this->imageRoute->parse($router, $moduleOptions));
+        if (! $this->imageRoute::isThumbor()) {
+            return $this->imageDecoration->parse($this->imageRoute->parse($router, $moduleOptions));
+        }
+
+        return $this->imageDecoration->parseBuilder($this->imageRoute->parseBuilder($router, $moduleOptions));
     }
 }

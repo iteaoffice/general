@@ -23,7 +23,7 @@ use Laminas\Form\View\Helper\FormSelect;
  */
 final class CountrySelect extends FormSelect
 {
-    public function __invoke(ElementInterface $element = null, bool $inline = false)
+    public function __invoke(ElementInterface $element = null)
     {
         $this->view->headLink()->appendStylesheet('/assets/css/bootstrap-select.min.css');
         $this->view->headLink()->appendStylesheet('/assets/css/ajax-bootstrap-select.min.css');
