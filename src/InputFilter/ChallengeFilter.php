@@ -121,44 +121,50 @@ final class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
-                'name'     => 'image',
-                'required' => false,
+                'name'       => 'image',
+                'required'   => false,
                 'validators' => [
                     [
-                        'name'    => IsImage::class
+                        'name' => IsImage::class
                     ],
                 ],
             ]
         );
         $inputFilter->add(
             [
-                'name'     => 'icon',
-                'required' => false,
+                'name'       => 'icon',
+                'required'   => false,
                 'validators' => [
                     [
-                        'name'    => IsImage::class
+                        'name' => IsImage::class
+                    ],
+                    [
+                        'name'    => Extension::class,
+                        'options' => [
+                            'extension' => ['svg'],
+                        ],
                     ],
                 ],
             ]
         );
         $inputFilter->add(
             [
-                'name'     => 'ideaPosterimage',
-                'required' => false,
+                'name'       => 'ideaPosterimage',
+                'required'   => false,
                 'validators' => [
                     [
-                        'name'    => IsImage::class
+                        'name' => IsImage::class
                     ],
                 ],
             ]
         );
         $inputFilter->add(
             [
-                'name'     => 'ideaPosterIcon',
-                'required' => false,
+                'name'       => 'ideaPosterIcon',
+                'required'   => false,
                 'validators' => [
                     [
-                        'name'    => IsImage::class
+                        'name' => IsImage::class
                     ],
                 ],
             ]

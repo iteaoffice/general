@@ -42,6 +42,7 @@ use Publication\Entity\Publication;
 class ContentType extends AbstractEntity
 {
     public const TYPE_UNKNOWN     = 0;
+    public const TYPE_SVG         = 9;
     public const TYPE_PDF         = 1;
     public const TYPE_OFFICE_2007 = 16;
     public const TYPE_EXCEL       = 13;
@@ -317,6 +318,20 @@ class ContentType extends AbstractEntity
      */
     private $challengeIdeaPosterIcon;
     /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\AdvisoryBoard\Solution\Image", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var \Organisation\Entity\AdvisoryBoard\Solution\Image[]|Collections\ArrayCollection
+     */
+    private $advisoryBoardSolutionImage;
+    /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\AdvisoryBoard\City\Image", cascade={"persist"}, mappedBy="contentType")
+     * @Annotation\Exclude()
+     *
+     * @var \Organisation\Entity\AdvisoryBoard\City\Image[]|Collections\ArrayCollection
+     */
+    private $advisoryBoardCityImage;
+    /**
      * @ORM\OneToMany(targetEntity="Calendar\Entity\Document", cascade={"persist"}, mappedBy="contentType")
      * @Annotation\Exclude()
      *
@@ -386,6 +401,8 @@ class ContentType extends AbstractEntity
         $this->challengeImage                 = new Collections\ArrayCollection();
         $this->challengeIdeaPosterIcon        = new Collections\ArrayCollection();
         $this->challengeIdeaPosterImage       = new Collections\ArrayCollection();
+        $this->advisoryBoardCityImage    = new Collections\ArrayCollection();
+        $this->advisoryBoardSolutionImage    = new Collections\ArrayCollection();
         $this->calendarDocument               = new Collections\ArrayCollection();
         $this->loi                            = new Collections\ArrayCollection();
         $this->meetingFloorplan               = new Collections\ArrayCollection();
@@ -405,6 +422,11 @@ class ContentType extends AbstractEntity
             'image/jpeg',
             'image/png',
         ], true);
+    }
+
+    public function isSVG(): bool
+    {
+        return $this->id === self::TYPE_SVG;
     }
 
     public function getId()
@@ -878,6 +900,28 @@ class ContentType extends AbstractEntity
     public function setClusterLogo($clusterLogo): ContentType
     {
         $this->clusterLogo = $clusterLogo;
+        return $this;
+    }
+
+    public function getAdvisoryBoardSolutionImage()
+    {
+        return $this->advisoryBoardSolutionImage;
+    }
+
+    public function setAdvisoryBoardSolutionImage($advisoryBoardSolutionImage): ContentType
+    {
+        $this->advisoryBoardSolutionImage = $advisoryBoardSolutionImage;
+        return $this;
+    }
+
+    public function getAdvisoryBoardCityImage()
+    {
+        return $this->advisoryBoardCityImage;
+    }
+
+    public function setAdvisoryBoardCityImage($advisoryBoardCityImage): ContentType
+    {
+        $this->advisoryBoardCityImage = $advisoryBoardCityImage;
         return $this;
     }
 }

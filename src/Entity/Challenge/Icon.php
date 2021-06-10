@@ -63,6 +63,18 @@ class Icon extends AbstractEntity
      */
     private $challenge;
 
+    public function parseSVG(): string
+    {
+        $svg = stream_get_contents($this->icon);
+        rewind($this->icon);
+        return $svg;
+    }
+
+    public function isSVG(): bool
+    {
+        return $this->contentType->isSVG();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

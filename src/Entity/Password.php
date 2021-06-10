@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Laminas\Form\Annotation;
 
 /**
- * WebInfo.
- *
  * @ORM\Table(name="password")
  * @ORM\Entity(repositoryClass="General\Repository\Password")
  * @Annotation\Hydrator("Laminas\Hydrator\ObjectPropertyHydrator")

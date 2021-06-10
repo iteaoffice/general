@@ -33,19 +33,35 @@ final class ChallengeIcon extends AbstractImage
             return '';
         }
 
-        $linkParams = [];
-        $linkParams['route'] = 'image/challenge-icon';
-        $linkParams['width'] = $width;
-        $linkParams['show'] = $show;
+        if ($show === ImageDecoration::SHOW_RAW) {
+            return $challenge->getIcon()->parseSVG();
+        }
 
-        $routeParams = [
-            'id' => $icon->getId(),
-            'ext' => $icon->getContentType()->getExtension(),
-            'last-update' => $icon->getDateUpdated()->getTimestamp(),
-        ];
+        if ($show === ImageDecoration::SHOW_IMAGE) {
+            $linkParams = [];
+            $linkParams['route'] = 'image/challenge-icon';
+            $linkParams['show'] = $show;
+            $linkParams['width'] = $width;
 
-        $linkParams['routeParams'] = $routeParams;
+            $routeParams = [
+                'id' => $challenge->getIcon()->getId(),
+                'ext' => 'svg',
+                'last-update' => $challenge->getIcon()->getDateUpdated()->getTimestamp(),
+            ];
 
-        return $this->parse(Image::fromArray($linkParams));
+            $linkParams['routeParams'] = $routeParams;
+
+            return $this->parse(Image::fromArray($linkParams));
+        }
+
+        return str_replace(
+            ['<svg', '#999999', 'st0'],
+            [
+                '<svg width="' . $width . '" class="rounded-circle" style="background-color: ' . $challenge->getBackgroundColor() . '"',
+                $challenge->getFrontColor(),
+                'st_' . $challenge->getId()
+            ],
+            $challenge->getIcon()->parseSVG()
+        );
     }
 }

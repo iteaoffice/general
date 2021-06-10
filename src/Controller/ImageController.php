@@ -45,10 +45,16 @@ final class ImageController extends AbstractActionController
             DIRECTORY_SEPARATOR .
             $this->params('name');
 
+        $contentType = mime_content_type($requestedFile);
+        if ($contentType === 'image/svg') {
+            $contentType = 'image/svg+xml';
+        }
+
         if (file_exists($requestedFile)) {
             $response->getHeaders()
                 ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-                ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+                ->addHeaderLine('Cache-Control: max-age=36000')
+                ->addHeaderLine('Content-Type: ' . $contentType)
                 ->addHeaderLine('Pragma: public');
 
             $response->setContent(file_get_contents($requestedFile));
@@ -73,7 +79,7 @@ final class ImageController extends AbstractActionController
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Cache-Control: max-age=36000')
             ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: image/png');
 
@@ -94,13 +100,16 @@ final class ImageController extends AbstractActionController
             return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
+        $iconContent = stream_get_contents($icon->getIcon());
+
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Cache-Control: max-age=36000')
             ->addHeaderLine('Pragma: public')
+            ->addHeaderLine('etag: "' . sha1($iconContent) . '"')
             ->addHeaderLine('Content-Type: ' . $icon->getContentType()->getContentType());
 
-        $response->setContent(stream_get_contents($icon->getIcon()));
+        $response->setContent($iconContent);
 
         return $response;
     }
@@ -119,7 +128,7 @@ final class ImageController extends AbstractActionController
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Cache-Control: max-age=36000')
             ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: ' . $image->getContentType()->getContentType());
 
@@ -142,7 +151,7 @@ final class ImageController extends AbstractActionController
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Cache-Control: max-age=36000')
             ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: ' . $icon->getContentType()->getContentType());
 
@@ -165,7 +174,7 @@ final class ImageController extends AbstractActionController
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
-            ->addHeaderLine('Cache-Control: max-age=36000, must-revalidate')
+            ->addHeaderLine('Cache-Control: max-age=36000')
             ->addHeaderLine('Pragma: public')
             ->addHeaderLine('Content-Type: ' . $image->getContentType()->getContentType());
 

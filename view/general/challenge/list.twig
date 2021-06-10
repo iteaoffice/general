@@ -49,7 +49,7 @@
                     <tr>
                         <td><small class="text-muted">{{ challenge.id }}</small></td>
                         <td>{{ challengeLink(challenge,'view-admin','name') }} {{ challengeLink(challenge,'edit', 'icon') }}
-                            <span class="float-right">{{ challengeLink(challenge,'view','icon') }}</span>
+                            <span class="float-end">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
                         <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
                         <td>{{ challenge.sequence }}</td>

@@ -207,6 +207,13 @@ class Country extends AbstractEntity
      * @var Quota[]|Collections\ArrayCollection()
      */
     private $meetingQuota;
+    /**
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\AdvisoryBoard\City", cascade={"persist"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \Organisation\Entity\AdvisoryBoard\City[]|Collections\ArrayCollection()
+     */
+    private $advisoryBoardCities;
 
     public function __construct()
     {
@@ -222,6 +229,7 @@ class Country extends AbstractEntity
         $this->contract             = new Collections\ArrayCollection();
         $this->magazineArticle      = new Collections\ArrayCollection();
         $this->meetingQuota         = new Collections\ArrayCollection();
+        $this->advisoryBoardCities  = new Collections\ArrayCollection();
     }
 
     public function isItac(): bool
@@ -508,6 +516,17 @@ class Country extends AbstractEntity
     public function setMeetingQuota($meetingQuota): Country
     {
         $this->meetingQuota = $meetingQuota;
+        return $this;
+    }
+
+    public function getAdvisoryBoardCities()
+    {
+        return $this->advisoryBoardCities;
+    }
+
+    public function setAdvisoryBoardCities($advisoryBoardCities): Country
+    {
+        $this->advisoryBoardCities = $advisoryBoardCities;
         return $this;
     }
 }

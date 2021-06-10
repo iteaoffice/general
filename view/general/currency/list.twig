@@ -30,7 +30,7 @@
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'name', 'text': translate("txt-name")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'iso4217', 'text': translate("txt-iso4217")} %}</th>
             <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/currency/list', 'criteria': 'symbol', 'text': translate("txt-symbol")} %}</th>
-            <th class="text-right">{{ translate("txt-exchange-rate") }}</th>
+            <th class="text-end">{{ translate("txt-exchange-rate") }}</th>
         </tr>
         </thead>
         <tfoot>
@@ -45,7 +45,7 @@
                 <td>{{ currencyLink(currency,'view','name') }} {{ currencyLink(currency,'edit', 'icon') }}</td>
                 <td>{{ currency.iso4217 }}</td>
                 <td>{{ currency.symbol }}</td>
-                <td class="text-monospace text-right">{{ generalService.findActiveExchangeRate(currency).rate }}</td>
+                <td class="text-monospace text-end">{{ generalService.findActiveExchangeRate(currency).rate }}</td>
             </tr>
         {% endfor %}
         </tbody>
