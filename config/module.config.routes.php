@@ -29,7 +29,7 @@ return [
                     'challenge-icon' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/ci/[:id]-[:last-update].[:ext]',
+                            'route' => '/ci/[:type]/[:id]-[:last-update].[:ext]',
                             'defaults' => [
                                 //Explicitly add the controller here as the assets are collected
                                 'controller' => Controller\ImageController::class,

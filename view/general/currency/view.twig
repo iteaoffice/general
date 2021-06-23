@@ -36,7 +36,7 @@
                 <td><small class="text-muted">{{ loop.index }}</small></td>
                 <td>{{ exchangeRate.date|date('d-m-Y') }} {{ exchangeRateLink(exchangeRate,'edit','icon') }}</td>
                 <td>{{ currency.symbol }} {{ exchangeRate.rate }} {% if currentExchangeRate.id == exchangeRate.id %}
-                        <span class="badge badge-success">{{ translate("txt-active") }}</span>{% endif %}</td>
+                        <span class="badge bg-success">{{ translate("txt-active") }}</span>{% endif %}</td>
 
                 {% set newRow = "[new Date(%s, %s, %s), %s]"|format(exchangeRate.date|date('Y'),exchangeRate.date|date('m')-1,exchangeRate.date|date('j'), exchangeRate.rate ) %}
             </tr>

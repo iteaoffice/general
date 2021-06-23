@@ -100,12 +100,17 @@ final class ImageController extends AbstractActionController
             return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
+        $type = $this->params('type');
         $iconContent = stream_get_contents($icon->getIcon());
+
+        if ($type === 'color') {
+            $iconContent = str_replace('#999999', $icon->getChallenge()->getBackgroundColor(), $iconContent);
+        }
 
         $response->getHeaders()
             ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
             ->addHeaderLine('Cache-Control: max-age=36000')
-            ->addHeaderLine('Pragma: public')
+            ->addHeaderLine('Pragma: cache')
             ->addHeaderLine('etag: "' . sha1($iconContent) . '"')
             ->addHeaderLine('Content-Type: ' . $icon->getContentType()->getContentType());
 

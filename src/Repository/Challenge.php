@@ -94,6 +94,7 @@ class Challenge extends EntityRepository
         $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
         $queryBuilder->join('general_entity_challenge.type', 'general_entity_challenge_type');
         $queryBuilder->where('general_entity_challenge_type.activeForCalls = :active');
+        $queryBuilder->addOrderBy('general_entity_challenge.sequence', Criteria::ASC);
         $queryBuilder->setParameter('active', Entity\Challenge\Type::NOT_ACTIVE_FOR_CALLS);
 
         return $queryBuilder->getQuery()->getResult();
@@ -106,6 +107,7 @@ class Challenge extends EntityRepository
         $queryBuilder->from(Entity\Challenge::class, 'general_entity_challenge');
         $queryBuilder->join('general_entity_challenge.type', 'general_entity_challenge_type');
         $queryBuilder->where('general_entity_challenge_type.activeForCalls = :active');
+        $queryBuilder->addOrderBy('general_entity_challenge.sequence', Criteria::ASC);
         $queryBuilder->setParameter('active', Entity\Challenge\Type::ACTIVE_FOR_CALLS);
 
         return $queryBuilder->getQuery()->getResult();

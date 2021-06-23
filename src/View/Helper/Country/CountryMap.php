@@ -47,7 +47,7 @@ final class CountryMap extends AbstractHelper
         $pointer = $clickable ? 'pointer' : 'default';
         $clickable = $clickable ? 'true' : 'false';
         $colorMin = $options['colorMin'] ?? '#005C00';
-        $colorMax = $options['colorMax'] ?? '#00a651';
+        $colorMax = $options['colorMax'] ?? '#000082';
         $regionFill = $options['regionFill'] ?? '#C5C7CA';
         $height = $options['height'] ?? '400px';
         $tipData = $options['tipData'] ?? null;

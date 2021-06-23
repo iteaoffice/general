@@ -25,7 +25,8 @@ final class ChallengeIcon extends AbstractImage
     public function __invoke(
         Challenge $challenge,
         int $width = null,
-        string $show = ImageDecoration::SHOW_IMAGE
+        string $show = ImageDecoration::SHOW_IMAGE,
+        string $type = 'gray'
     ): string {
         $icon = $challenge->getIcon();
 
@@ -33,35 +34,32 @@ final class ChallengeIcon extends AbstractImage
             return '';
         }
 
-        if ($show === ImageDecoration::SHOW_RAW) {
-            return $challenge->getIcon()->parseSVG();
+        if ($show === 'icon') {
+            return str_replace(
+                ['<svg', '#999999', 'st0'],
+                [
+                    '<svg width="' . $width . '" class="rounded-circle" style="background-color: ' . $challenge->getBackgroundColor() . '"',
+                    $challenge->getFrontColor(),
+                    'st_' . $challenge->getId()
+                ],
+                $challenge->getIcon()->parseSVG()
+            );
         }
 
-        if ($show === ImageDecoration::SHOW_IMAGE) {
-            $linkParams = [];
-            $linkParams['route'] = 'image/challenge-icon';
-            $linkParams['show'] = $show;
-            $linkParams['width'] = $width;
+        $linkParams          = [];
+        $linkParams['route'] = 'image/challenge-icon';
+        $linkParams['show']  = $show;
+        $linkParams['width'] = $width;
 
-            $routeParams = [
-                'id' => $challenge->getIcon()->getId(),
-                'ext' => 'svg',
-                'last-update' => $challenge->getIcon()->getDateUpdated()->getTimestamp(),
-            ];
+        $routeParams = [
+            'id'          => $challenge->getIcon()->getId(),
+            'ext'         => 'svg',
+            'type'        => $type,
+            'last-update' => $challenge->getIcon()->getDateUpdated()->getTimestamp(),
+        ];
 
-            $linkParams['routeParams'] = $routeParams;
+        $linkParams['routeParams'] = $routeParams;
 
-            return $this->parse(Image::fromArray($linkParams));
-        }
-
-        return str_replace(
-            ['<svg', '#999999', 'st0'],
-            [
-                '<svg width="' . $width . '" class="rounded-circle" style="background-color: ' . $challenge->getBackgroundColor() . '"',
-                $challenge->getFrontColor(),
-                'st_' . $challenge->getId()
-            ],
-            $challenge->getIcon()->parseSVG()
-        );
+        return $this->parse(Image::fromArray($linkParams));
     }
 }
