@@ -46,7 +46,7 @@
         </tbody>
     </table>
 {% else %}
-    {{ ztbalert().warning(translate("txt-no-exchange-rate-could-be-found-for-%s")|format(currency))|raw }}
+    {{ lbs5alert().warning(translate("txt-no-exchange-rate-could-be-found-for-%s")|format(currency))|raw }}
 {% endif %}
 
 {{ exchangeRateLink(null, 'new', 'button', currency) }}

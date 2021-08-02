@@ -59,6 +59,11 @@ final class ImageController extends AbstractActionController
 
             $response->setContent(file_get_contents($requestedFile));
 
+            //Save the file on the server (only svg)
+            if ($contentType === 'image/svg+xml') {
+                file_put_contents(__DIR__ . '/../../../../../public/img/a/' . $this->params('name'), file_get_contents($requestedFile));
+            }
+
             return $response;
         }
 
@@ -100,7 +105,7 @@ final class ImageController extends AbstractActionController
             return $response->setStatusCode(Response::STATUS_CODE_404);
         }
 
-        $type = $this->params('type');
+        $type        = $this->params('type');
         $iconContent = stream_get_contents($icon->getIcon());
 
         if ($type === 'color') {
