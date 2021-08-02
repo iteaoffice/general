@@ -3,8 +3,8 @@
 /**
  * Jield BV all rights reserved
  *
- * @author    Johan van der Heide <info@jield.nl>
- * @copyright Copyright (c) 2020 Jield BV (https://jield.nl)
+ * @author      Dr. ir. Johan van der Heide <info@jield.nl>
+ * @copyright   Copyright (c) 2021 Jield BV (https://jield.nl)
  */
 
 declare(strict_types=1);
@@ -13,11 +13,11 @@ namespace General\ValueObject;
 
 use Contact\Entity\Contact;
 use DateTime;
-use DateTimeZone;
-use Eluceo\iCal\Component\Calendar;
-use Eluceo\iCal\Component\Event;
-use Eluceo\iCal\Property\Event\Attendees;
-use Eluceo\iCal\Property\Event\Organizer;
+use Eluceo\iCal\Domain\ValueObject\EmailAddress;
+use Eluceo\iCal\Domain\ValueObject\Location;
+use Eluceo\iCal\Domain\ValueObject\TimeSpan;
+use Eluceo\iCal\Presentation\Component;
+use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 
@@ -54,7 +54,7 @@ final class Ical
 
     public function toMimePart(): Part
     {
-        $part = new Part($this->getCalendar()->render());
+        $part = new Part((string)$this->getCalendar());
         $part->setType('text/calendar');
         $part->setDisposition(Mime::DISPOSITION_ATTACHMENT);
         $part->setEncoding(Mime::ENCODING_BASE64);
@@ -63,53 +63,31 @@ final class Ical
         return $part;
     }
 
-    private function getCalendar(): Calendar
+    private function getCalendar(): Component
     {
-        $timeZone = new DateTimeZone('Europe/Amsterdam');
+        $event = new \Eluceo\iCal\Domain\Entity\Event();
 
-        $startDate = clone $this->startDate;
-        $startDate->setTimezone($timeZone);
-        $endDate = clone $this->endDate;
-        $endDate->setTimezone($timeZone);
+        $event->setLocation(new Location($this->location));
 
-        $calendar = new Calendar('jield.nl');
-        $calendar->setCalId($this->id);
-        $calendar->setTimezone('Europe/Amsterdam');
-        $calendar->setMethod('REQUEST');
-        $calendar->setForceInspectOrOpen(true);
-
-        $attendees = new Attendees();
-        $attendees->add(
-            sprintf('MAILTO:%s', $this->participant->getEmail()),
-            [
-
-                'CUTYPE'       => 'CUTYPE=INDIVIDUAL',
-                'ROLE'         => 'REQ-PARTICIPANT',
-                'PARTSTAT'     => 'NEEDS-ACTION',
-                'RSVP'         => 'TRUE',
-                'CN'           => $this->participant->getDisplayName(),
-                'X-NUM-GUESTS' => 0,
-            ]
-        );
-
-        $event = new Event();
-        $event->setDtStart($startDate->setTimezone(new DateTimeZone('UTC')));
-        $event->setDtEnd($endDate->setTimezone(new DateTimeZone('UTC')));
-        $event->setLocation($this->location);
-
-        $event->setOrganizer(
-            new Organizer(
-                sprintf('MAILTO:%s', $this->organiser->getEmail()),
-                ['CN' => $this->organiser->getDisplayName()]
+        $event->setOccurrence(
+            new TimeSpan(
+                new \Eluceo\iCal\Domain\ValueObject\DateTime($this->startDate, false),
+                new \Eluceo\iCal\Domain\ValueObject\DateTime($this->endDate, false)
             )
         );
-        $event->setAttendees($attendees);
+
+        $event->setOrganizer(
+            new \Eluceo\iCal\Domain\ValueObject\Organizer(
+                new EmailAddress($this->organiser->getEmail()),
+                $this->organiser->parseFullName()
+            )
+        );
+
         $event->setSummary($this->summary);
         $event->setDescription($this->title);
-        $event->setUseUtc();
-        $event->setUseTimezone(false);
-        $calendar->addComponent($event);
 
-        return $calendar;
+        $calendar = new \Eluceo\iCal\Domain\Entity\Calendar([$event]);
+
+        return (new CalendarFactory())->createCalendar($calendar);
     }
 }
