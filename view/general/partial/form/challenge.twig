@@ -3,18 +3,19 @@
 
 {% set challenge = form.get('general_entity_challenge') %}
 
-{{ ztbformelement(challenge.get('id')) }}
-{{ ztbformelement(challenge.get('challenge')) }}
-{{ ztbformelement(challenge.get('type')) }}
-{{ ztbformelement(challenge.get('sequence')) }}
-{{ ztbformelement(challenge.get('sources')) }}
-{{ ztbformelement(challenge.get('abstract')) }}
-{{ ztbformelement(challenge.get('html')) }}
-{{ ztbformelement(challenge.get('backgroundImage')) }}
-{{ ztbformelement(challenge.get('css')) }}
-{{ ztbformelement(challenge.get('backgroundColor')) }}
-{{ ztbformelement(challenge.get('frontColor')) }}
-{{ ztbformelement(challenge.get('call')) }}
+{{ lbs5formelement(challenge.get('id')) }}
+{{ lbs5formelement(challenge.get('challenge')) }}
+{{ lbs5formelement(challenge.get('type')) }}
+{{ lbs5formelement(challenge.get('prefix')) }}
+{{ lbs5formelement(challenge.get('sequence')) }}
+{{ lbs5formelement(challenge.get('sources')) }}
+{{ lbs5formelement(challenge.get('abstract')) }}
+{{ lbs5formelement(challenge.get('html')) }}
+{{ lbs5formelement(challenge.get('backgroundImage')) }}
+{{ lbs5formelement(challenge.get('css')) }}
+{{ lbs5formelement(challenge.get('backgroundColor')) }}
+{{ lbs5formelement(challenge.get('frontColor')) }}
+{{ lbs5formelement(challenge.get('call')) }}
 
 {% if challenge.icon %}
     <div class="row mb-3">
@@ -26,7 +27,7 @@
     </div>
 {% endif %}
 
-{{ ztbformelement(challenge.get('icon')) }}
+{{ lbs5formelement(challenge.get('icon')) }}
 
 {% if challenge.image %}
     <div class="row mb-3">
@@ -39,7 +40,7 @@
 {% endif %}
 
 
-{{ ztbformelement(challenge.get('image')) }}
+{{ lbs5formelement(challenge.get('image')) }}
 
 
 {% if challenge.ideaPosterIcon %}
@@ -52,7 +53,7 @@
     </div>
 {% endif %}
 
-{{ ztbformelement(challenge.get('ideaPosterIcon')) }}
+{{ lbs5formelement(challenge.get('ideaPosterIcon')) }}
 
 {% if challenge.image %}
     <div class="row mb-3">
@@ -65,7 +66,7 @@
 {% endif %}
 
 
-{{ ztbformelement(challenge.get('ideaPosterImage')) }}
+{{ lbs5formelement(challenge.get('ideaPosterImage')) }}
 
 {% if challenge.pdf %}
     <div class="row mb-3">
@@ -87,14 +88,14 @@
     </div>
 {% endif %}
 
-{{ ztbformelement(challenge.get('pdf')) }}
+{{ lbs5formelement(challenge.get('pdf')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

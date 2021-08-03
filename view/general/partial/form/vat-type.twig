@@ -3,16 +3,16 @@
 
 {% set vat = form.get('general_entity_vattype') %}
 
-{{ ztbformelement(vat.get('type')) }}
-{{ ztbformelement(vat.get('description')) }}
-{{ ztbformelement(vat.get('vat')) }}
+{{ lbs5formelement(vat.get('type')) }}
+{{ lbs5formelement(vat.get('description')) }}
+{{ lbs5formelement(vat.get('vat')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

@@ -6,7 +6,6 @@
 {% set filter = form.get('filter') %}
 
 
-
 <div class="row">
 
     <div class="col-md-12">
@@ -59,13 +58,9 @@
     </div>
 
     <div class="col-md-12">
-        <div class="well well-sm">
-            <fieldset>
-                {{ ztbformelement(filter.get('latestEvent'), true) }}
-                                   {{ ztbformelement(form.get('submit')) }}
-                    {{ ztbformelement(form.get('clear')) }}
-            </fieldset>
-        </div>
+        {{ lbs5formelement(filter.get('latestEvent'), 'default') }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('clear')) }}
     </div>
 </div>
 

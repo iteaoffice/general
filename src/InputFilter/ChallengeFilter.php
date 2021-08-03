@@ -60,6 +60,35 @@ final class ChallengeFilter extends InputFilter
         );
         $inputFilter->add(
             [
+                'name'       => 'prefix',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
+                        ],
+                    ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Challenge::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'prefix',
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $inputFilter->add(
+            [
                 'name'     => 'type',
                 'required' => false,
             ]

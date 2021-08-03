@@ -3,23 +3,23 @@
 
 {% set webInfo = form.get('general_entity_webinfo') %}
 
-{{ ztbformelement(webInfo.get('id')) }}
-{{ ztbformelement(webInfo.get('info')) }}
-{{ ztbformelement(webInfo.get('subject')) }}
-{{ ztbformelement(webInfo.get('sender')) }}
-{{ ztbformelement(webInfo.get('template')) }}
-{{ ztbformelement(webInfo.get('content')) }}
+{{ lbs5formelement(webInfo.get('id')) }}
+{{ lbs5formelement(webInfo.get('info')) }}
+{{ lbs5formelement(webInfo.get('subject')) }}
+{{ lbs5formelement(webInfo.get('sender')) }}
+{{ lbs5formelement(webInfo.get('template')) }}
+{{ lbs5formelement(webInfo.get('content')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('submit')) }}
         {% if form.has('delete') %}
-            {{ ztbformelement(form.get('delete')) }}
+            {{ lbs5formelement(form.get('delete')) }}
         {% endif %}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

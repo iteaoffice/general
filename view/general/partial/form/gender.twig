@@ -3,17 +3,17 @@
 
 {% set gender = form.get('general_entity_gender') %}
 
-{{ ztbformelement(gender.get('id')) }}
-{{ ztbformelement(gender.get('name')) }}
-{{ ztbformelement(gender.get('attention')) }}
-{{ ztbformelement(gender.get('salutation')) }}
+{{ lbs5formelement(gender.get('id')) }}
+{{ lbs5formelement(gender.get('name')) }}
+{{ lbs5formelement(gender.get('attention')) }}
+{{ lbs5formelement(gender.get('salutation')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

@@ -3,17 +3,17 @@
 
 {% set title = form.get('general_entity_title') %}
 
-{{ ztbformelement(title.get('id')) }}
-{{ ztbformelement(title.get('name')) }}
-{{ ztbformelement(title.get('attention')) }}
-{{ ztbformelement(title.get('salutation')) }}
+{{ lbs5formelement(title.get('id')) }}
+{{ lbs5formelement(title.get('name')) }}
+{{ lbs5formelement(title.get('attention')) }}
+{{ lbs5formelement(title.get('salutation')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

@@ -3,19 +3,19 @@
 
 {% set country = form.get('general_entity_country') %}
 
-{{ ztbformelement(country.get('id')) }}
-{{ ztbformelement(country.get('country')) }}
-{{ ztbformelement(country.get('cd')) }}
-{{ ztbformelement(country.get('iso3')) }}
-{{ ztbformelement(country.get('numcode')) }}
-{{ ztbformelement(country.get('countryVat')) }}
+{{ lbs5formelement(country.get('id')) }}
+{{ lbs5formelement(country.get('country')) }}
+{{ lbs5formelement(country.get('cd')) }}
+{{ lbs5formelement(country.get('iso3')) }}
+{{ lbs5formelement(country.get('numcode')) }}
+{{ lbs5formelement(country.get('countryVat')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

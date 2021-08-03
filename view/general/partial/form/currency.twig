@@ -3,16 +3,16 @@
 
 {% set currency = form.get('general_entity_currency') %}
 
-{{ ztbformelement(currency.get('name')) }}
-{{ ztbformelement(currency.get('iso4217')) }}
-{{ ztbformelement(currency.get('symbol')) }}
+{{ lbs5formelement(currency.get('name')) }}
+{{ lbs5formelement(currency.get('iso4217')) }}
+{{ lbs5formelement(currency.get('symbol')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-2 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

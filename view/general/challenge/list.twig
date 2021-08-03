@@ -31,6 +31,7 @@
                     <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'id', 'text': translate("txt-id")} %}</th>
                     <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'challenge', 'text': translate("txt-challenge")} %}</th>
                     <th>{{ translate("txt-type") }}</th>
+                    <th>{{ translate("txt-prefix") }}</th>
                     <th>{% include 'application/partial/sortable-table-header' with {'route': 'zfcadmin/challenge/list', 'criteria': 'sequence', 'text': translate("txt-sequence")} %}</th>
                     <th>{{ translate("txt-program-call") }}</th>
                     <th>{{ translate("txt-amount-of-projects") }}</th>
@@ -39,11 +40,6 @@
                     <th>{{ translate("txt-pdf") }}</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    <td colspan="9"></td>
-                </tr>
-                </tfoot>
                 <tbody>
                 {% for challenge in paginator.getCurrentItems() %}
                     <tr>
@@ -52,6 +48,7 @@
                             <span class="float-end">{{ challengeLink(challenge,'view','icon') }}</span>
                         </td>
                         <td>{% if challenge.type %}{{ challengeTypeLink(challenge.type,'view','name') }}{% endif %}</td>
+                        <td>{{ challenge.prefix }}</td>
                         <td>{{ challenge.sequence }}</td>
                         <td>{% if challenge.type.isActiveForCalls() %}{% for call in challenge.call %}{{ callLink(call,'view-admin','name') }}
                                 <br>{% else %}{{ translate("txt-active-in-all-calls") }}{% endfor %}{% endif %}</td>
@@ -69,16 +66,11 @@
         {% endif %}
     </div>
     <div class="col-md-2">
-        <div class="well well-sm">
-            <fieldset>
+        {{ lbs5formelement(filter.get('type'), 'default') }}
+        {{ lbs5formelement(filter.get('call'), 'default') }}
 
-                {{ ztbformelement(filter.get('type'), true) }}
-                {{ ztbformelement(filter.get('call'), true) }}
-
-                {{ ztbformelement(form.get('submit')) }}
-                {{ ztbformelement(form.get('clear')) }}
-            </fieldset>
-        </div>
+        {{ lbs5formelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('clear')) }}
     </div>
 </div>
 

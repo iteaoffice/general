@@ -13,18 +13,18 @@
 
 {% set currency = form.get('general_entity_exchangerate') %}
 
-{{ ztbformelement(currency.get('rate')) }}
-{{ ztbformelement(currency.get('date')) }}
+{{ lbs5formelement(currency.get('rate')) }}
+{{ lbs5formelement(currency.get('date')) }}
 
 {{ formelement(form.get('csrf')) }}
 
 <div class="row mb-3">
     <div class="offset-sm-3 col-sm-9">
-        {{ ztbformelement(form.get('submit')) }}
+        {{ lbs5formelement(form.get('submit')) }}
         {% if form.has('delete') %}
-            {{ ztbformelement(form.get('delete')) }}
+            {{ lbs5formelement(form.get('delete')) }}
         {% endif %}
-        {{ ztbformelement(form.get('cancel')) }}
+        {{ lbs5formelement(form.get('cancel')) }}
     </div>
 </div>
 

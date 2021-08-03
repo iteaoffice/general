@@ -59,6 +59,15 @@ class Challenge extends AbstractEntity
      */
     private $docRef;
     /**
+     * @ORM\Column(name="prefix", type="string", nullable=false, unique=true)
+     * @Annotation\Type("\Laminas\Form\Element\Text")
+     * @Annotation\Options({"label":"txt-challenge-prefix-label","help-block":"txt-challenge-prefix-help-block"})
+     * @Annotation\Attributes({"placeholder":"txt-challenge-prefix-placeholder"})
+     *
+     * @var string
+     */
+    private $prefix;
+    /**
      * @ORM\Column(name="sequence", type="integer", options={"unsigned":true})
      * @Annotation\Type("\Laminas\Form\Element\Number")
      * @Annotation\Options({"label":"txt-challenge-sequence-label","help-block":"txt-challenge-sequence-help-block"})
@@ -572,6 +581,17 @@ class Challenge extends AbstractEntity
     public function setIdeaPosterIcon(?Challenge\Idea\Poster\Icon $ideaPosterIcon): Challenge
     {
         $this->ideaPosterIcon = $ideaPosterIcon;
+        return $this;
+    }
+
+    public function getPrefix(): ?string
+    {
+        return $this->prefix;
+    }
+
+    public function setPrefix(?string $prefix): Challenge
+    {
+        $this->prefix = $prefix;
         return $this;
     }
 }
