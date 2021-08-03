@@ -45,12 +45,12 @@ final class ImageController extends AbstractActionController
             DIRECTORY_SEPARATOR .
             $this->params('name');
 
-        $contentType = mime_content_type($requestedFile);
-        if ($contentType === 'image/svg') {
-            $contentType = 'image/svg+xml';
-        }
-
         if (file_exists($requestedFile)) {
+            $contentType = mime_content_type($requestedFile);
+            if ($contentType === 'image/svg') {
+                $contentType = 'image/svg+xml';
+            }
+
             $response->getHeaders()
                 ->addHeaderLine('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 36000))
                 ->addHeaderLine('Cache-Control: max-age=36000')
@@ -67,7 +67,7 @@ final class ImageController extends AbstractActionController
             return $response;
         }
 
-        return $response;
+        return $response->setStatusCode(Response::STATUS_CODE_404);
     }
 
     public function flagAction(): Response
