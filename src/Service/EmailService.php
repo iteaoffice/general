@@ -436,9 +436,6 @@ class EmailService
 
         $this->generalService->save($emailMessage);
 
-        $urlHelper = $this->viewHelperManager->get(Url::class);
-        $link      = $urlHelper('email/event', ['customId' => $emailMessage->getIdentifier()]);
-
         $messages = [];
 
         $message    = new ValueObject\Email(
@@ -450,7 +447,7 @@ class EmailService
             $this->textPart,
             $this->htmlPart,
             $emailMessage->getIdentifier(),
-            $this->moduleOptions->getServerUrl() . $link,
+            $this->moduleOptions->getServerUrl() . '/email/event.json',
             'enabled',
             'enabled',
             $this->emailCampaign,
