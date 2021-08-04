@@ -7,10 +7,14 @@
 <dl class="dl-horizontal">
     <dt>{{ translate("txt-password-description") }}</dt>
     <dd>{{ password.description }}</dd>
-    <dt>{{ translate("txt-password-website") }}</dt>
-    <dd><a href="{{ password.website }}">{{ password.website }}</a></dd>
-    <dt>{{ translate("txt-password-account") }}</dt>
-    <dd>{{ password.account }}</dd>
+    {% if password.website %}
+        <dt>{{ translate("txt-password-website") }}</dt>
+        <dd><a href="{{ password.website }}">{{ password.website }}</a></dd>
+    {% endif %}
+    {% if password.account %}
+        <dt>{{ translate("txt-password-account") }}</dt>
+        <dd>{{ password.account }}</dd>
+    {% endif %}
     <dt>{{ translate("txt-password-username") }}</dt>
     <dd>{{ password.username }}</dd>
     <dt>{{ translate("txt-password-password") }}</dt>
