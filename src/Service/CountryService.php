@@ -98,7 +98,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
     }
 
     /**
-     * Duplicate of AffiliationService::findAffiliationCountriesByProjectAndWhich to avoid circulare dependencies
+     * Duplicate of AffiliationService::findAffiliationCountriesByProjectAndWhich to avoid circular dependencies
      *
      * @param Project $project
      * @param int $which

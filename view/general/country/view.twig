@@ -13,8 +13,10 @@
     <dd>{{ country.cd }}</dd>
     <dt>{{ translate("txt-country-num-code") }}</dt>
     <dd>{{ country.numCode }}</dd>
-    <dt>{{ translate("txt-country-vat") }}</dt>
-    <dd>{{ country.countryVat }}</dd>
+    {% if country.countryVat %}
+        <dt>{{ translate("txt-country-vat") }}</dt>
+        <dd>{{ country.countryVat }}</dd>
+    {% endif %}
     <dt>{{ translate("txt-eu") }}</dt>
     <dd>{% if country.eu %}YES{% else %}NO{% endif %}</dd>
     <dt>{{ translate("txt-eureka") }}</dt>
@@ -34,3 +36,40 @@
         <dd>{{ translate("txt-no-vat-known") }}</dd>
     {% endfor %}
 </dl>
+
+<h2>{{ translate("txt-uploaded-videos") }}</h2>
+{% if not country.videos.isEmpty() %}
+    <table class="table table-sm table-striped">
+        <thead>
+        <tr>
+            <th>{{ translate("txt-id") }}</th>
+            <th>{{ translate("txt-video") }}</th>
+            <th>{{ translate("txt-title") }}</th>
+            <th>{{ translate("txt-type") }}</th>
+            <th>{{ translate("txt-description") }}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for countryVideo in country.videos %}
+            <tr>
+                <td><small class="text-muted">{{ countryVideo.video.id }}</small></td>
+                <td>{{ videoLink(countryVideo.video,'view', 'name') }} {{ countryVideoLink(countryVideo,'edit', 'icon') }}</td>
+                <td>{{ countryVideo.title }}</td>
+                <td>{{ translate(countryVideo.getTypeText()) }}</td>
+                <td>{{ countryVideo.description }}</td>
+                <td><img src="{{ countryVideo.video.parseThumbnail('xs') }}"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    {{ lbs5alert().info(translate("txt-no-videos-linked"))|raw }}
+{% endif %}
+
+{{ countryVideoLink(null, 'new', 'button', country) }}

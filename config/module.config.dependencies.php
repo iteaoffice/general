@@ -59,6 +59,11 @@ return [
             FormService::class,
             TranslatorInterface::class
         ],
+        Controller\Country\VideoController::class        => [
+            CountryService::class,
+            FormService::class,
+            TranslatorInterface::class
+        ],
         Controller\CurrencyController::class       => [
             GeneralService::class,
             FormService::class,

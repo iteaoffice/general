@@ -234,6 +234,47 @@ return [
                                     ],
                                 ],
                             ],
+                            'video'       => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'    => '/video',
+                                    'defaults' => [
+                                        'controller' => Controller\Country\VideoController::class,
+                                        'action'     => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes'  => [
+                                    'new'  => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/new/country-[:country].html',
+                                            'defaults' => [
+                                                'action' => 'new',
+                                            ],
+                                        ],
+                                    ],
+                                    'view' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/view/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'view',
+                                            ],
+                                        ],
+                                    ],
+                                    'edit' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/edit/[:id].html',
+                                            'defaults' => [
+                                                'action' => 'edit',
+                                            ],
+                                        ],
+
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'currency'     => [

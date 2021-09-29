@@ -1,0 +1,29 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-%s")|format(video.country)) %}
+{% do headTitle().append(translate("txt-video")) %}
+
+
+<h1>{{ video.title }} {{ countryVideoLink(video,'edit','button') }}</h1>
+
+<dl class="dl-horizontal">
+    <dt>{{ translate("txt-country") }}</dt>
+    <dd>{{ countryLink(video.country,'view-admin') }}</dd>
+    <dt>{{ translate("txt-title") }}</dt>
+    <dd>{{ video.title }}</dd>
+    {% if video.description %}
+        <dt>{{ translate("txt-description") }}</dt>
+        <dd>{{ video.description }}</dd>
+    {% endif %}
+    <dt>{{ translate("txt-video") }}</dt>
+    <dd>{{ videoLink(video.video,'view','name') }}</dd>
+</dl>
+
+<h2>{{ translate("txt-thubmnail") }}</h2>
+
+<img src="{{ video.video.parseThumbnail('md') }}">
+
+
+<h2>{{ translate("txt-embed") }}</h2>
+{{ video.video.embed.html|raw }}
+
+

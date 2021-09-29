@@ -1,0 +1,7 @@
+{% do headTitle().append(translate("txt-admin")) %}
+{% do headTitle().append(translate("txt-%s")|format(country)) %}
+{% do headTitle().append(translate("txt-new-video")) %}
+
+<h1>{{ translate("txt-new-video-of-%s")|format(country) }}</h1>
+
+{% include 'general/partial/form/country/video' %}

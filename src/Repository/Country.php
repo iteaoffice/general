@@ -91,7 +91,7 @@ class Country extends EntityRepository
 
         //Fake a country
         $country = new Entity\Country();
-        $country->setCountry('--- Select a country');
+        $country->setCountry('-- Select a country');
 
         $euCountries = [0 => $country];
         $restOfWorld = [];

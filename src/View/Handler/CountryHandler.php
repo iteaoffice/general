@@ -134,8 +134,8 @@ final class CountryHandler extends AbstractHandler
     {
         $mapOptions = [
             'clickable' => true,
-            'colorMin'  => '#005C00',
-            'colorMax'  => '#00a651',
+            'colorMin'  => '#d9d9d9',
+            'colorMax'  => '#000082',
             'focusOn'   => ['x' => 0.5, 'y' => 0.5, 'scale' => 1.1], // Slight zoom
             'height'    => '600px',
         ];

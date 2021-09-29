@@ -50,6 +50,9 @@ return [
     'general/country/view' => __DIR__ . '/./view/general/country/view.twig',
     'general/country/new' => __DIR__ . '/./view/general/country/new.twig',
     'general/country/list' => __DIR__ . '/./view/general/country/list.twig',
+    'general/country/video/view' => __DIR__ . '/./view/general/country/video/view.twig',
+    'general/country/video/new' => __DIR__ . '/./view/general/country/video/new.twig',
+    'general/country/video/edit' => __DIR__ . '/./view/general/country/video/edit.twig',
     'general/country/edit' => __DIR__ . '/./view/general/country/edit.twig',
     'general/partial/form/exchange-rate' => __DIR__ . '/./view/general/partial/form/exchange-rate.twig',
     'general/partial/form/web-info' => __DIR__ . '/./view/general/partial/form/web-info.twig',
@@ -61,6 +64,7 @@ return [
     'general/partial/form/password' => __DIR__ . '/./view/general/partial/form/password.twig',
     'general/partial/form/title' => __DIR__ . '/./view/general/partial/form/title.twig',
     'general/partial/form/content-type' => __DIR__ . '/./view/general/partial/form/content-type.twig',
+    'general/partial/form/country/video' => __DIR__ . '/./view/general/partial/form/country/video.twig',
     'general/partial/form/vat-type' => __DIR__ . '/./view/general/partial/form/vat-type.twig',
     'general/partial/form/challenge' => __DIR__ . '/./view/general/partial/form/challenge.twig',
 ];

@@ -58,9 +58,7 @@ use function strip_tags;
 use function substr;
 
 /**
- * Class FormService
  *
- * @package Application\Service
  */
 class EmailService
 {

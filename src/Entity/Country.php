@@ -152,6 +152,13 @@ class Country extends AbstractEntity
      */
     private $flag;
     /**
+     * @ORM\OneToMany(targetEntity="General\Entity\Country\Video", cascade={"all"}, mappedBy="country")
+     * @Annotation\Exclude()
+     *
+     * @var \General\Entity\Country\Video[]|Collections\ArrayCollection
+     */
+    private $videos;
+    /**
      * @ORM\OneToMany(targetEntity="Evaluation\Entity\Evaluation", cascade={"persist"}, mappedBy="country")
      * @Annotation\Exclude()
      *
@@ -221,6 +228,7 @@ class Country extends AbstractEntity
         $this->organisation         = new Collections\ArrayCollection();
         $this->rationale            = new Collections\ArrayCollection();
         $this->vat                  = new Collections\ArrayCollection();
+        $this->videos               = new Collections\ArrayCollection();
         $this->funder               = new Collections\ArrayCollection();
         $this->evaluation           = new Collections\ArrayCollection();
         $this->changeRequestCountry = new Collections\ArrayCollection();
@@ -527,6 +535,17 @@ class Country extends AbstractEntity
     public function setAdvisoryBoardCities($advisoryBoardCities): Country
     {
         $this->advisoryBoardCities = $advisoryBoardCities;
+        return $this;
+    }
+
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    public function setVideos($videos): Country
+    {
+        $this->videos = $videos;
         return $this;
     }
 }

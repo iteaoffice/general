@@ -52,7 +52,7 @@ return [
             ],
             'config'     => [
                 'pages' => [
-                    'web-info'     => [
+                    'web-info'       => [
                         'label' => _("txt-nav-web-info-list"),
                         'route' => 'zfcadmin/web-info/list',
                         'pages' => [
@@ -87,7 +87,7 @@ return [
                             ],
                         ],
                     ],
-                    'country'      => [
+                    'country'        => [
                         'label' => _("txt-nav-country-list"),
                         'route' => 'zfcadmin/country/list',
                         'pages' => [
@@ -113,6 +113,47 @@ return [
                                             ],
                                         ],
                                     ],
+                                    'video'        => [
+                                        'route'   => 'zfcadmin/country/video/view',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities'   => [
+                                                'id' => General\Entity\Country\Video::class,
+                                            ],
+                                            'invokables' => [
+                                                General\Navigation\Invokable\Country\VideoLabel::class,
+                                            ],
+                                        ],
+                                        'pages'   => [
+                                            'edit-video' => [
+                                                'label'   => _('txt-edit-country-video'),
+                                                'route'   => 'zfcadmin/country/video/edit',
+                                                'visible' => false,
+                                                'params'  => [
+                                                    'entities'   => [
+                                                        'id' => General\Entity\Country\Video::class,
+                                                    ],
+                                                    'invokables' => [
+                                                        General\Navigation\Invokable\Country\VideoLabel::class,
+                                                    ],
+                                                ],
+                                            ],
+                                        ]
+                                    ],
+                                    'new-video'    => [
+                                        'label'   => _('txt-new-country-video'),
+                                        'route'   => 'zfcadmin/country/video/new',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities'   => [
+                                                'id' => General\Entity\Country::class,
+                                            ],
+                                            'routeParam' => [
+                                                'id' => 'country'
+                                            ]
+                                        ],
+                                    ],
+
                                 ],
                             ],
                             'country-new'  => [
@@ -122,11 +163,11 @@ return [
                             ],
                         ],
                     ],
-                    'currency'     => [
+                    'currency'       => [
                         'label' => _("txt-nav-currency-list"),
                         'route' => 'zfcadmin/currency/list',
                         'pages' => [
-                            'currency-view' => [
+                            'currency-view'      => [
                                 'route'   => 'zfcadmin/currency/view',
                                 'visible' => false,
                                 'params'  => [
@@ -150,7 +191,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'currency-new'  => [
+                            'currency-new'       => [
                                 'label'   => _("txt-new-currency"),
                                 'route'   => 'zfcadmin/currency/new',
                                 'visible' => false,
@@ -160,14 +201,14 @@ return [
                                 'route'   => 'zfcadmin/currency/exchange-rate/new',
                                 'visible' => false,
                             ],
-                            'exchange-rate-edit'  => [
+                            'exchange-rate-edit' => [
                                 'label'   => _("txt-edit-exchange-rate"),
                                 'route'   => 'zfcadmin/currency/exchange-rate/edit',
                                 'visible' => false,
                             ],
                         ],
                     ],
-                    'challenge'    => [
+                    'challenge'      => [
                         'label' => _("txt-nav-challenge-list"),
                         'route' => 'zfcadmin/challenge/list',
                         'pages' => [
@@ -202,7 +243,7 @@ return [
                             ],
                         ],
                     ],
-                    'challenge-type'          => [
+                    'challenge-type' => [
                         'label' => _("txt-nav-challenge-types"),
                         'route' => 'zfcadmin/challenge/type/list',
                         'pages' => [
@@ -236,7 +277,7 @@ return [
                             ],
                         ],
                     ],
-                    'content-type' => [
+                    'content-type'   => [
                         'label' => _("txt-content-type-list"),
                         'route' => 'zfcadmin/content-type/list',
                         'pages' => [
@@ -271,7 +312,7 @@ return [
                             ],
                         ],
                     ],
-                    'gender'       => [
+                    'gender'         => [
                         'label' => _("txt-nav-gender-list"),
                         'route' => 'zfcadmin/gender/list',
                         'pages' => [
@@ -306,7 +347,7 @@ return [
                             ],
                         ],
                     ],
-                    'title'        => [
+                    'title'          => [
                         'label' => _("txt-nav-title-list"),
                         'route' => 'zfcadmin/title/list',
                         'pages' => [
@@ -363,7 +404,7 @@ return [
                             ],
                         ],
                     ],
-                    'log' => [
+                    'log'   => [
                         'label' => _("txt-nav-log-list"),
                         'route' => 'zfcadmin/log/list',
                         'pages' => [
