@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace General\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Laminas\Form\Annotation;
+use Organisation\Entity\AdvisoryBoard\City;
 
 /**
  * @ORM\Table(name="language")
@@ -57,7 +59,7 @@ class Language extends AbstractEntity
      * @Gedmo\Timestampable(on="create")
      * @Annotation\Exclude()
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $dateCreated;
     /**
@@ -65,20 +67,25 @@ class Language extends AbstractEntity
      * @Gedmo\Timestampable(on="update")
      * @Annotation\Exclude()
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $lastUpdate;
     /**
-     * @ORM\OneToMany(targetEntity="Organisation\Entity\AdvisoryBoard\Tender", cascade={"persist"}, mappedBy="language")
+     * @ORM\OneToMany(targetEntity="Organisation\Entity\AdvisoryBoard\City", cascade={"persist"}, mappedBy="language")
      * @Annotation\Exclude()
      *
-     * @var \Organisation\Entity\AdvisoryBoard\Tender[]|Collections\ArrayCollection()
+     * @var City[]
      */
-    private $advisoryBoardTenders;
+    private $advisoryBoardCities;
 
     public function __construct()
     {
-        $this->advisoryBoardTenders = new Collections\ArrayCollection();
+        $this->advisoryBoardCities = new Collections\ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string)$this->language;
     }
 
     public function getId(): ?int
@@ -114,36 +121,36 @@ class Language extends AbstractEntity
         return $this;
     }
 
-    public function getDateCreated(): ?\DateTime
+    public function getDateCreated(): ?DateTime
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(?\DateTime $dateCreated): Language
+    public function setDateCreated(?DateTime $dateCreated): Language
     {
         $this->dateCreated = $dateCreated;
         return $this;
     }
 
-    public function getLastUpdate(): ?\DateTime
+    public function getLastUpdate(): ?DateTime
     {
         return $this->lastUpdate;
     }
 
-    public function setLastUpdate(?\DateTime $lastUpdate): Language
+    public function setLastUpdate(?DateTime $lastUpdate): Language
     {
         $this->lastUpdate = $lastUpdate;
         return $this;
     }
 
-    public function getAdvisoryBoardTenders()
+    public function getAdvisoryBoardCities()
     {
-        return $this->advisoryBoardTenders;
+        return $this->advisoryBoardCities;
     }
 
-    public function setAdvisoryBoardTenders($advisoryBoardTenders): Language
+    public function setAdvisoryBoardCities($advisoryBoardCities): Language
     {
-        $this->advisoryBoardTenders = $advisoryBoardTenders;
+        $this->advisoryBoardCities = $advisoryBoardCities;
         return $this;
     }
 }

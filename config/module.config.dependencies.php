@@ -53,13 +53,18 @@ return [
             FormService::class,
             TranslatorInterface::class
         ],
+        Controller\LanguageController::class       => [
+            GeneralService::class,
+            FormService::class,
+            TranslatorInterface::class
+        ],
         Controller\CountryController::class        => [
             CountryService::class,
             CountrySearchService::class,
             FormService::class,
             TranslatorInterface::class
         ],
-        Controller\Country\VideoController::class        => [
+        Controller\Country\VideoController::class  => [
             CountryService::class,
             FormService::class,
             TranslatorInterface::class
@@ -142,24 +147,6 @@ return [
             EntityManager::class,
             CountrySearchService::class,
             ProjectService::class
-        ],
-        InputFilter\ChallengeFilter::class         => [
-            EntityManager::class
-        ],
-        InputFilter\Challenge\TypeFilter::class    => [
-            EntityManager::class
-        ],
-        InputFilter\CountryFilter::class           => [
-            EntityManager::class
-        ],
-        InputFilter\GenderFilter::class            => [
-            EntityManager::class
-        ],
-        InputFilter\TitleFilter::class             => [
-            EntityManager::class
-        ],
-        InputFilter\WebInfoFilter::class           => [
-            EntityManager::class
         ],
         View\Handler\ImpactStreamHandler::class    => [
             'Application',

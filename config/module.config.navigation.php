@@ -163,6 +163,41 @@ return [
                             ],
                         ],
                     ],
+                    'language'      => [
+                        'label' => _("txt-nav-language-list"),
+                        'route' => 'zfcadmin/language/list',
+                        'pages' => [
+                            'language-view' => [
+                                'route'   => 'zfcadmin/language/view',
+                                'visible' => false,
+                                'params'  => [
+                                    'entities'   => [
+                                        'id' => General\Entity\Language::class,
+                                    ],
+                                    'invokables' => [
+                                        General\Navigation\Invokable\LanguageLabel::class,
+                                    ],
+                                ],
+                                'pages'   => [
+                                    'edit' => [
+                                        'label'   => _("txt-nav-edit"),
+                                        'route'   => 'zfcadmin/language/edit',
+                                        'visible' => false,
+                                        'params'  => [
+                                            'entities' => [
+                                                'id' => General\Entity\Language::class,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'new'  => [
+                                'label'   => _("txt-new-language"),
+                                'route'   => 'zfcadmin/language/new',
+                                'visible' => false,
+                            ],
+                        ],
+                    ],
                     'currency'       => [
                         'label' => _("txt-nav-currency-list"),
                         'route' => 'zfcadmin/currency/list',

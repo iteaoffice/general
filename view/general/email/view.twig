@@ -90,4 +90,6 @@
 
 <h2>{{ translate("txt-email-message-message") }}</h2>
 
-<pre>            <code class="html">{{ emailMessage.message }}</code>        </pre>
+<div class="ratio ratio-16x9 h-100">
+    <iframe id="rendered-email" srcdoc="{{ emailMessage.message }}"></iframe>
+</div>

@@ -18,9 +18,6 @@ use General\Entity\Country;
 use General\Search\Service\CountrySearchService;
 use General\Service\CountryService;
 use General\Service\FormService;
-use Search\Form\SearchResult;
-use Search\Paginator\Adapter\SolariumPaginator;
-use Solarium\QueryType\Select\Query\Query as SolariumQuery;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\I18n\Translator\TranslatorInterface;
@@ -28,6 +25,9 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Paginator\Paginator;
 use Laminas\View\Model\ViewModel;
+use Search\Form\SearchResult;
+use Search\Paginator\Adapter\SolariumPaginator;
+use Solarium\QueryType\Select\Query\Query as SolariumQuery;
 
 use function http_build_query;
 use function implode;
@@ -50,19 +50,19 @@ final class CountryController extends AbstractActionController
         FormService $formService,
         TranslatorInterface $translator
     ) {
-        $this->countryService = $countryService;
+        $this->countryService       = $countryService;
         $this->countrySearchService = $countrySearchService;
-        $this->formService = $formService;
-        $this->translator = $translator;
+        $this->formService          = $formService;
+        $this->translator           = $translator;
     }
 
     public function listAction(): ViewModel
     {
         /** @var Request $request */
-        $request = $this->getRequest();
-        $page = $this->params('page', 1);
-        $form = new SearchResult();
-        $data = array_merge(
+        $request      = $this->getRequest();
+        $page         = $this->params('page', 1);
+        $form         = new SearchResult();
+        $data         = array_merge(
             [
                 'order'     => '',
                 'direction' => '',

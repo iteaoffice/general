@@ -10,26 +10,26 @@
 
 declare(strict_types=1);
 
-namespace General\InputFilter\Challenge;
+namespace General\InputFilter;
 
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Validator\UniqueObject;
-use General\Entity;
+use General\Entity\Language;
 use Laminas\InputFilter\InputFilter;
 
 /**
- * Class TypeFilter
+ * Class TitleFilter
  *
- * @package General\InputFilter\Challenge
+ * @package General\InputFilter
  */
-class TypeFilter extends InputFilter
+final class LanguageFilter extends InputFilter
 {
     public function __construct(EntityManager $entityManager)
     {
         $inputFilter = new InputFilter();
         $inputFilter->add(
             [
-                'name'       => 'type',
+                'name'       => 'language',
                 'required'   => true,
                 'filters'    => [
                     ['name' => 'StripTags'],
@@ -47,10 +47,10 @@ class TypeFilter extends InputFilter
                     [
                         'name'    => UniqueObject::class,
                         'options' => [
-                            'object_repository' => $entityManager->getRepository(Entity\Challenge\Type::class),
+                            'object_repository' => $entityManager->getRepository(Language::class),
                             'object_manager'    => $entityManager,
                             'use_context'       => true,
-                            'fields'            => 'type',
+                            'fields'            => 'language',
                         ],
                     ],
                 ],
@@ -58,13 +58,34 @@ class TypeFilter extends InputFilter
         );
         $inputFilter->add(
             [
-                'name'     => 'description',
-                'required' => false,
-                'filters'  => [
+                'name'       => 'locale',
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StripTags'],
                     ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
+                        'name'    => 'StringLength',
+                        'options' => [
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 100,
+                        ],
+                    ],
+                    [
+                        'name'    => UniqueObject::class,
+                        'options' => [
+                            'object_repository' => $entityManager->getRepository(Language::class),
+                            'object_manager'    => $entityManager,
+                            'use_context'       => true,
+                            'fields'            => 'locale',
+                        ],
+                    ],
                 ],
             ]
         );
-        $this->add($inputFilter, 'general_entity_challenge_type');
+
+        $this->add($inputFilter, 'general_entity_language');
     }
 }

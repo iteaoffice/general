@@ -12,31 +12,31 @@ declare(strict_types=1);
 
 namespace General\Navigation\Invokable;
 
-use General\Entity\Currency;
+use General\Entity\Language;
 use Laminas\Navigation\Page\Mvc;
 
 /**
- * Class CurrencyLabel
+ * Class LanguageLabel
  *
  * @package General\Navigation\Invokable
  */
-final class CurrencyLabel extends AbstractNavigationInvokable
+final class LanguageLabel extends AbstractNavigationInvokable
 {
     public function __invoke(Mvc $page): void
     {
         $label = $this->translate('txt-nav-view');
 
-        if ($this->getEntities()->containsKey(Currency::class)) {
-            /** @var Currency $currency */
-            $currency = $this->getEntities()->get(Currency::class);
+        if ($this->getEntities()->containsKey(Language::class)) {
+            /** @var Language $language */
+            $language = $this->getEntities()->get(Language::class);
 
             $page->setParams(
                 array_merge(
                     $page->getParams(),
-                    ['id' => $currency->getId()]
+                    ['id' => $language->getId()]
                 )
             );
-            $label = (string)$currency;
+            $label = (string)$language;
         }
 
         if (null === $page->getLabel()) {
