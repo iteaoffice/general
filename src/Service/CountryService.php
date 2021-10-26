@@ -26,8 +26,11 @@ use Project\Entity\Project;
 use Project\Service\ProjectService;
 use Search\Service\SearchUpdateInterface;
 use Solarium\Client;
+use Solarium\Core\Client\Adapter\Http;
 use Solarium\Core\Query\AbstractQuery;
 use Solarium\QueryType\Update\Query\Document;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function count;
 
@@ -165,7 +168,7 @@ class CountryService extends AbstractService implements SearchUpdateInterface
      */
     public function prepareSearchUpdate($country): AbstractQuery
     {
-        $searchClient = new Client();
+        $searchClient = new Client(new Http(), new EventDispatcher(), []);
         $update       = $searchClient->createUpdate();
 
         /** @var Document $countryDocument */

@@ -21,7 +21,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": "^8.0",
     "ext-json": "*",
     "laminas/laminas-mvc": "^3.2",
     "laminas/laminas-mvc-form": "^2.1",
@@ -38,7 +38,8 @@
     "iteaoffice/testing": "^2.1",
     "iteaoffice/affiliation": "^5.1",
     "iteaoffice/search": "^2.1",
-    "iteaoffice/project": "^5.1"
+    "iteaoffice/project": "^5.1",
+    "jetbrains/phpstorm-attributes": "dev-master"
   },
   "autoload": {
     "psr-4": {
