@@ -1,5 +1,4 @@
 <?php
-
 return [
     'general/log/view' => __DIR__ . '/./view/general/log/view.twig',
     'general/log/list' => __DIR__ . '/./view/general/log/list.twig',
